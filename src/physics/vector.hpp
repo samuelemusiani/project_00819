@@ -23,5 +23,5 @@ namespace phy
 
 			double get_magnitude();
 			int get_direction();
-		};
 	};
+}
