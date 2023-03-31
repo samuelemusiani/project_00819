@@ -7,14 +7,14 @@
 
 class Menu
 {
-    private:
-        int posY;
-        int posX;
-        std::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Help", "Credits"};
-    public:
+	private:
+		int posY;
+		int posX;
+		std::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Help", "Credits"};
+	public:
 
-        Menu(int LINES, int COLS);
+		Menu(int LINES, int COLS);
 
-        void drawMenu();
-        
+		void drawMenu();
+		
 };

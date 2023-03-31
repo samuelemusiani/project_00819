@@ -26,5 +26,3 @@ bool Game::init()
 	start_color();
 	curs_set(0);
 }
-
-
