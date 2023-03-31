@@ -1,2 +1,2 @@
 # Progetto realizzato per il corso di programamzione
-## by Lele
+## by Lele, Omar
