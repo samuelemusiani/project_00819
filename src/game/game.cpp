@@ -1,21 +1,22 @@
-<<<<<<< HEAD
-#include "game/game.hpp"
+#include "game.hpp"
 
-int main()
-{	
-	Game game = Game();
-	game.run();
-=======
-#include <ncurses.h>
+Game::Game()
+{
+	this->init();
+}
 
-int main()
-{	
+void Game::run()
+{
 	initscr();			/* Start curses mode 		  */
 	printw("Hello World !!!");	/* Print Hello World		  */
 	refresh();			/* Print it on to the real screen */
 	getch();			/* Wait for user input */
 	endwin();			/* End curses mode		  */
 
->>>>>>> main
-	return 0;
+
+}
+
+bool Game::init()
+{
+
 }
