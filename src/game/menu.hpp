@@ -17,8 +17,12 @@ class Menu
 
 		Menu(int LINES, int COLS);
 
-		void drawMenu();
+		int drawMenu();
+
+		void doSelected(int x);
 
 
-		
+
+
+
 };
