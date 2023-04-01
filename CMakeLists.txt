@@ -18,6 +18,7 @@ file(GLOB_RECURSE SRC_DRAW_FILES src/draw/*.cpp)
 
 # PHYSICS:
 file(GLOB_RECURSE SRC_PHYSYCS_FILES src/physics/*.cpp)
+list(FILTER SRC_PHYSYCS_FILES EXCLUDE REGEX "test/.*" )
 
 add_executable(game src/main.cpp ${SRC_GAME_FILES} ${SRC_DRAW_FILES} ${SRC_PHYSYCS_FILES})
 
