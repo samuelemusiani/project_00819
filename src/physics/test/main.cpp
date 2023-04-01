@@ -1,14 +1,15 @@
-#include "point.test.cpp"
+#include "test.hpp"
 
 int main()
 {
 	bool generale = true;
 
-	generale = generale && point_test();
+	generale &= point_test();
+	generale &= vector_test();
 
 	if (generale)
-		std::cerr << "\033[1;32m" << "TUTTO OK!" << "\033[0m\n";
+		CERR_GREEN("TUTTO OK");
 	else
-		std::cerr << "\033[1;31m" << "ALCUNI TEST SONO FALLITI" << "\033[0m\n";
+		CERR_RED("ALCUNI TEST SONO FALLITI" );
 	return 0;
 }

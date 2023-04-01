@@ -26,7 +26,7 @@ void phy::Vector::set_magnitude(double magnitude)
 void phy::Vector::set_direction(int alpha)
 {
 
-	while (alpha < 0) alpha += 360
+	while (alpha < 0) alpha += 360;
 
 	this->alpha = alpha % 360;
 }
