@@ -9,13 +9,13 @@ make
 ```
 ## MacOS
 Per MacOS installare la libreria ncurses tramite homebrew con il comando
-'''
+```
 brew install ncurses
-'''
+```
 
 ## Linux
 Per sistemi linux installare la libreria ncurses con il seguente comando
-'''
+```
 Debian based: sudo apt install ncurses-dev
 Arch based: sudo pacman -S ncurses
-'''
+```
