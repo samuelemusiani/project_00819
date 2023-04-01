@@ -23,5 +23,7 @@ namespace phy
 			phy::Point get_position();
 			phy::Vector get_velocity();
 			phy::Vector get_acceleration();
+
+			void update(int time);
 	};
 };

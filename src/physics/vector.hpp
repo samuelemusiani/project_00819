@@ -23,5 +23,7 @@ namespace phy
 
 			double get_magnitude();
 			int get_direction();
+
+			static phy::Vector sum(phy::Vector v1, phy::Vector v2);
 	};
 }
