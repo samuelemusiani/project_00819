@@ -15,9 +15,10 @@ Game::~Game()
 void Game::run()
 {
 	//Menu::start();
+	keypad(stdscr, true);
 	Menu menu = Menu(LINES, COLS);
 	menu.drawMenu();
-	getch();
+
 }
 
 bool Game::init()
