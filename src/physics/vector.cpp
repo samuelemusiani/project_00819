@@ -51,8 +51,8 @@ phy::Vector phy::Vector::sum(phy::Vector v1, phy::Vector v2)
 	int aV2 = v2.get_direction();
 
 
-	v.set_magnitude(sqrt(mV1 * mV1 + mV2 * mV2 + 2 * mV1 * mV2 * cos(180 / phy::PI * (aV1 - aV2))));
-	v.set_direction(aV1 + atan2(mV2 * sin(180 / phy::PI * (aV2 - aV1)), mV1 + mV2 * cos(180 / phy::PI * (aV2 - aV1))));
+	v.set_magnitude(sqrt(mV1 * mV1 + mV2 * mV2 + 2 * mV1 * mV2 * cos(phy::PI / 180 * (aV1 - aV2))));
+	v.set_direction(aV1 + atan2(mV2 * sin(180 / phy::PI * (aV2 - aV1)), mV1 + mV2 * cos(phy::PI / 180 * (aV2 - aV1))));
 
 	return v;
 }
