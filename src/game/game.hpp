@@ -1,5 +1,7 @@
 #include <ncurses.h>
 #include <fstream>
+#include <iostream>
+
 
 
 class Game
@@ -10,6 +12,7 @@ class Game
 	public:
 		Game();
 		~Game();
+		void doSelected(int x);
 		void run();
 		void credits();
 

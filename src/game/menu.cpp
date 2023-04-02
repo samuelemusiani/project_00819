@@ -7,7 +7,7 @@ Menu::Menu(int LINES, int COLS) {
 	posX = COLS/2;
 	}
 
-int Menu::drawMenu()
+int Menu::drawMenu() //return the selected option
 {
 	// Disegna una box attorno allo schermo
 	box(stdscr, 0, 0);
@@ -57,27 +57,4 @@ int Menu::drawMenu()
 		}
 	}
 	return(selectedOption);
-}
-
-void Menu::doSelected(int x) //selectedOption
-{
-	switch (x) {
-		/*case x=0:
-			Game.init();
-			break;
-		case x=1:
-			Game.resume();
-			break;
-		case x=2:
-			Game.help();
-			break;*/
-		case 3:
-		{
-			Game tmp;
-			tmp.credits(); //provvisorio
-			break;
-		}
-		default:
-			break;
-	}
 }

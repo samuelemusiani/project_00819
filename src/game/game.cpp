@@ -17,8 +17,31 @@ void Game::run()
 	//Menu::start();
 	keypad(stdscr, true);
 	Menu menu = Menu(LINES, COLS);
-	menu.doSelected(menu.drawMenu());
+	Game::doSelected(menu.drawMenu()); //dobbiamo decidere come implementare le scelte
 	endwin();
+}
+
+
+void Game::doSelected(int x) //switch with 4 options
+{
+	switch (x) {
+		/*case x=0:
+			Game.init();
+			break;
+		case x=1:
+			Game.resume();
+			break;
+		case x=2:
+			Game.help();
+			break;*/
+		case 3:
+		{
+			Game::credits(); //provvisorio
+			break;
+		}
+		default:
+			break;
+	}
 }
 
 void Game::init()
@@ -48,11 +71,17 @@ void Game::credits()
 	int posY = 4;
 	int posX = 4;
 	std::ifstream fileCredits;
+	fileCredits.open("Credits.txt");
 	std::string line;
-	fileCredits.open("Credits.txt"); //open file
-	while (std::getline(fileCredits, line)) //read until end of file
+	if(fileCredits.is_open())
+	{
+		while ( fileCredits.good() ) //read until end of file
 		{
+			std::getline (fileCredits, line);
 			Draw::drawText(posY, posX, line.c_str()); //draw with drawtext every line
 			posY += 2;
 		}
+	} else mvprintw(1, 1, "Error during reading file");
+	fileCredits.close();
+	getch();
 }

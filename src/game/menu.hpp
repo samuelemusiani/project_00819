@@ -19,9 +19,6 @@ class Menu
 
 		int drawMenu();
 
-		void doSelected(int x);
-
-
 
 
 
