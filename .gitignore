@@ -2,6 +2,9 @@
 build/*
 !build/.gitkepp
 
+# This hard path is ugly but it's temporary
+src/physics/test/TEST
+
 # Prerequisites
 *.d
 
