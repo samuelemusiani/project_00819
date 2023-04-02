@@ -1,4 +1,4 @@
-#include "../../point.hpp"
+#include "../../../point.hpp"
 #include "../test.hpp"
 
 bool POINT_TEST = true;
