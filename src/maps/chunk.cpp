@@ -7,7 +7,7 @@ Chunk::Chunk()
 
 void Chunk::add_platform(int x, int y, int len)
 {
-    if(this->usedPlatforms>MAX_PLATFORMS)
+    if(this->usedPlatforms >= MAX_PLATFORMS)
         printf("Too many platforms\n");
     else
     {
