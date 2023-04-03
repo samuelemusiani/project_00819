@@ -1,6 +1,8 @@
 #Ignore build files
 build/*
 !build/.gitkepp
+.idea/*
+cmake-build-debug/*
 
 # Prerequisites
 *.d
