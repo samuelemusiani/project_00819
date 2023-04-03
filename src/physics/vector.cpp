@@ -1,5 +1,5 @@
 #include "vector.hpp"
-#include "constant.hpp"
+#include "constants.hpp"
 #include <math.h>
 
 phy::Vector::Vector() : Vector(0, 0)

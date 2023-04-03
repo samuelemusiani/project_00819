@@ -1,5 +1,5 @@
 #include "weightedBody.hpp"
-#include "constant.hpp"
+#include "constants.hpp"
 
 phy::WeightedBody::WeightedBody() : Body ()
 {
