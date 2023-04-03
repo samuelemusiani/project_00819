@@ -6,7 +6,8 @@ class Map
     private:
         Chunk possible_chunks[NUM_MAPS];
         void initialize_chunks();
-	public:
+
+    public:
         Map();
         Chunk get_chunk();
 };
