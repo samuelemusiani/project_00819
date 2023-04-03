@@ -16,7 +16,7 @@ file(GLOB_RECURSE SRC_DRAW_FILES src/draw/*.cpp)
 # MAPS:
 file(GLOB_RECURSE SRC_MAPS_FILES src/maps/*.cpp)
 
-add_executable(project_00819_BIN src/main.cpp ${SRC_GAME_FILES} ${SRC_DRAW_FILES} )
+add_executable(project_00819_BIN src/main.cpp ${SRC_GAME_FILES} ${SRC_DRAW_FILES})
 
 target_link_libraries(project_00819_BIN ${CURSES_LIBRARIES})
 target_compile_features(project_00819_BIN PRIVATE cxx_std_11)
