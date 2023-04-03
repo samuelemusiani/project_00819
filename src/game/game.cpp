@@ -15,31 +15,44 @@ Game::~Game()
 void Game::run()
 {
 	//Menu::start();
-	keypad(stdscr, true);
+	bool exit = false;
 	Menu menu = Menu(LINES, COLS);
-	Game::doSelected(menu.drawMenu()); //dobbiamo decidere come implementare le scelte
-	endwin();
+	while(!exit) {
+		if(Game::doSelected(menu.drawMenu())) exit = true;
+	}
+	Game::~Game();
 }
 
 
-void Game::doSelected(int x) //switch with 4 options
+bool Game::doSelected(int x) //switch with 4 options
 {
 	switch (x) {
 		/*case x=0:
-			Game.init();
+			Game::start();
+			return(false);
 			break;
 		case x=1:
-			Game.resume();
+			Game::resume();
+			return(false);
 			break;
 		case x=2:
-			Game.help();
+			Game::help();
+			return(false);
 			break;*/
 		case 3:
 		{
 			Game::credits(); //provvisorio
+			getch();
+			return(false);
+			break;
+		}
+		case -1:
+		{
+			return(true);
 			break;
 		}
 		default:
+			return(false);
 			break;
 	}
 }
@@ -47,6 +60,8 @@ void Game::doSelected(int x) //switch with 4 options
 void Game::init()
 {
 	initscr();
+	noecho();
+	keypad(stdscr, true);
 	start_color();
 	curs_set(0);
 }
@@ -62,26 +77,12 @@ bool Game::help()
 }
 */
 
-
 void Game::credits()
 {
 	clear();
 	wrefresh(stdscr);
-	bool flag = false;
-	int posY = 4;
-	int posX = 4;
-	std::ifstream fileCredits;
-	fileCredits.open("Credits.txt");
-	std::string line;
-	if(fileCredits.is_open())
-	{
-		while ( fileCredits.good() ) //read until end of file
-		{
-			std::getline (fileCredits, line);
-			Draw::drawText(posY, posX, line.c_str()); //draw with drawtext every line
-			posY += 2;
-		}
-	} else mvprintw(1, 1, "Error during reading file");
-	fileCredits.close();
-	getch();
+	Draw::drawText(1,1, "Credits Video Game JumpKing (da rivedere il nome) \n \
+	Alma Mater Studiorum Bologna University: project-00819 \n This game has been \
+	developed in the year 2023 by \n Argonni Emanuele \n Musiani Samuele \n Peronese\
+	Lorenzo \n Ayache Omar \n Hope you had fun playing this game");
 }

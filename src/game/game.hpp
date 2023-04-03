@@ -8,11 +8,10 @@ class Game
 {
 	private:
 		void init();
-
 	public:
 		Game();
 		~Game();
-		void doSelected(int x);
+		bool doSelected(int x);
 		void run();
 		void credits();
 

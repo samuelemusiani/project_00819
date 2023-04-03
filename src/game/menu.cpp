@@ -9,6 +9,7 @@ Menu::Menu(int LINES, int COLS) {
 
 int Menu::drawMenu() //return the selected option
 {
+	wclear(stdscr);
 	// Disegna una box attorno allo schermo
 	box(stdscr, 0, 0);
 
@@ -21,7 +22,9 @@ int Menu::drawMenu() //return the selected option
 	Draw::drawText(3, (COLS - 18)/2, "|");
 	Draw::drawText(3, (COLS + 15)/2, "|");
 
-	while (!flag) {
+	int selectedOption = 0;
+	bool isSelected = false;
+	while (!isSelected) {
 		// Display the Menu Options
 		for (int i = 0 ; i < NUMBER_OF_OPTIONS; i++)
 		{
@@ -50,7 +53,11 @@ int Menu::drawMenu() //return the selected option
 				}
 				break;
 			case 10:
-				this->flag = true;
+				isSelected = true;
+				break;
+			case 27:
+				selectedOption = -1;
+				isSelected = true;
 				break;
 			default:
 				break;
