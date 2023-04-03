@@ -25,5 +25,10 @@ bool Game::init()
 {
 	initscr();
 	start_color();
+
+	// Ottiene le dimensioni del terminale
+    resize_term(40, 140);
+
+
 	curs_set(0);
 }
