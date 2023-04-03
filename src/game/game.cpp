@@ -37,9 +37,6 @@ void Game::run()
 bool Game::init()
 {
 	initscr();
-	// crea una window di ncurses
-
 	start_color();
-	
 	curs_set(0);
 }
