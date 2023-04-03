@@ -16,9 +16,8 @@ void Game::run()
 {
 	//Menu::start();
 	keypad(stdscr, true);
-	mvwin(stdscr, 10, 10);
 	resize_term(44, 150);
-	Menu menu = Menu(LINES, COLS);
+	Menu menu = Menu(44, 150);
 	menu.drawMenu();
 
 }
@@ -30,10 +29,5 @@ bool Game::init()
 
 	start_color();
 	
-	// sposta lo schermo al centro del terminale
-	mvwin(stdscr, 10, 10);
-	// Sposta la finestra di ncurses al centro del terminale
-	
-	wrefresh(stdscr);	
 	curs_set(0);
 }
