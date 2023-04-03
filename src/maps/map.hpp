@@ -7,6 +7,6 @@ class Map
         Chunk possible_chunks[NUM_MAPS];
         void initialize_chunks();
 	public:
-		Map();
+        Map();
         Chunk get_chunk();
 };
