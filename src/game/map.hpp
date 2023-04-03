@@ -1,5 +1,0 @@
-class Map
-{
-	public:
-		Map();
-};

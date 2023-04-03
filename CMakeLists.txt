@@ -14,13 +14,14 @@ file(GLOB_RECURSE SRC_GAME_FILES src/game/*.cpp)
 
 # DRAW:
 file(GLOB_RECURSE SRC_DRAW_FILES src/draw/*.cpp)
-
+# MAPS:
+file(GLOB_RECURSE SRC_MAPS_FILES src/maps/*.cpp)
 
 # PHYSICS:
 file(GLOB_RECURSE SRC_PHYSYCS_FILES src/physics/*.cpp)
 list(FILTER SRC_PHYSYCS_FILES EXCLUDE REGEX "test/.*" )
 
-add_executable(game src/main.cpp ${SRC_GAME_FILES} ${SRC_DRAW_FILES} ${SRC_PHYSYCS_FILES})
+add_executable(project_00819_BIN src/main.cpp ${SRC_GAME_FILES} ${SRC_DRAW_FILES} ${SRC_PHYSYCS_FILES} ${SRC_MAPS_FILES})
 
 target_link_libraries(game ${CURSES_LIBRARIES})
 target_compile_features(game PRIVATE cxx_std_11)
