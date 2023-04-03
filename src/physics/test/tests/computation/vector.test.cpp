@@ -56,7 +56,42 @@ void vector_test_2()
 
 void vector_test_3()
 {
+
 	CERR_YELLOW("vector_test_3");
+	phy::Vector v1 = phy::Vector(0, 0);
+	TEST(0, v1.get_xComponent(), VECTOR_TEST);
+	TEST(0, v1.get_yComponent(), VECTOR_TEST);
+
+	v1 = phy::Vector(0, 100);
+	TEST(0, v1.get_xComponent(), VECTOR_TEST);
+	TEST(0, v1.get_yComponent(), VECTOR_TEST);
+
+	v1.set_magnitude(3);
+	v1.set_direction(90);
+	TEST(0, v1.get_xComponent(), VECTOR_TEST);
+	TEST(3, v1.get_yComponent(), VECTOR_TEST);
+
+
+	v1.set_magnitude(7);
+	v1.set_direction(-180);
+	TEST(-7, v1.get_xComponent(), VECTOR_TEST);
+	TEST(0, v1.get_yComponent(), VECTOR_TEST);
+
+
+	v1.set_magnitude(10.44);
+	v1.set_direction(107);
+	TEST(-3, v1.get_xComponent(), VECTOR_TEST);
+	TEST(10, v1.get_yComponent(), VECTOR_TEST);
+
+	v1.set_magnitude(6.403);
+	v1.set_direction(39);
+	TEST(5, v1.get_xComponent(), VECTOR_TEST);
+	TEST(4, v1.get_yComponent(), VECTOR_TEST);
+}
+
+void vector_test_4()
+{
+	CERR_YELLOW("vector_test_4");
 
 	phy::Vector v1 = phy::Vector(0, 0);
 	phy::Vector v2 = phy::Vector(0, 0);
@@ -117,10 +152,12 @@ void vector_test_3()
 
 }
 
+
 bool vector_test()
 {
 	vector_test_1();
 	vector_test_2();
 	vector_test_3();
+	vector_test_4();
 	return VECTOR_TEST;
 }
