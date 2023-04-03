@@ -8,4 +8,5 @@ class Map
         void initialize_chunks();
 	public:
 		Map();
+        Chunk get_chunk();
 };
