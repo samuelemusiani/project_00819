@@ -54,13 +54,19 @@ void phy::Body::update(int time)
 
 	if(time != 0)
 	{
-		phy::Point newPosition = Point(
-			this->position.get_xPosition() + this->velocity.get_xComponent() * time,
-			this->position.get_yPosition() + this->velocity.get_yComponent() * time
-			);
+		this->set_position(phy::Point(
+			this->get_position().get_xPosition() + 
+			this->get_velocity().get_xComponent() * time +
+			0.5 * this->get_acceleration().get_xComponent() * time * time,
+			this->position.get_yPosition() + 
+			this->velocity.get_yComponent() * time +
+			0.5 * this->get_acceleration().get_yComponent() * time * time
+			));
 
-		phy::Vector tmpAcceleration = this->acceleration;
-		tmpAcceleration.set_magnitude(tmpAcceleration.get_magnitude() * time);
-		set_velocity(phy::Vector::sum(this->velocity, tmpAcceleration));
+		this->set_velocity(
+			phy::Vector::sum(this->get_velocity(),
+			Vector(this->get_acceleration().get_magnitude() * time, 
+				this->get_acceleration().get_direction())
+			));
 	}
 }

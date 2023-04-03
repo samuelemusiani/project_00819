@@ -7,7 +7,7 @@ SRS_COMPUTATION_TESTS=${SRC_TESTS}/computation
 DEST_OBJECT=object
 DEST_COMPUTATION_OBJECT=${DEST_OBJECT}/computation
 
-SRC_FILES=point vector
+SRC_FILES=point vector body
 
 all:
 	@echo "Usare compute o jump per selezionare il target"

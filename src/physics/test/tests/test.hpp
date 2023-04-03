@@ -15,3 +15,4 @@
 
 bool point_test();
 bool vector_test();
+bool body_test();

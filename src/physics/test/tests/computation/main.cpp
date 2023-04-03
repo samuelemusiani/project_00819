@@ -6,6 +6,7 @@ int main()
 
 	generale &= point_test();
 	generale &= vector_test();
+	generale &= body_test();
 
 	if (generale)
 		CERR_GREEN("TUTTO OK");
