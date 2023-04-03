@@ -1,5 +1,8 @@
 #include "body.hpp"
 
+#ifndef PHYSICS_WEIGHTEDBODY
+#define PHYSICS_WEIGHTEDBODY
+
 namespace phy
 {
 	//Ha senso come nome?
@@ -22,3 +25,4 @@ namespace phy
 			double get_energy();
 	};
 }
+#endif

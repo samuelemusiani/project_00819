@@ -1,3 +1,6 @@
+#ifndef PHYSICS_VECTOR
+#define PHYSICS_VECTOR
+
 namespace phy
 {
 	class Vector
@@ -30,3 +33,4 @@ namespace phy
 			static phy::Vector sum(phy::Vector v1, phy::Vector v2);
 	};
 }
+#endif

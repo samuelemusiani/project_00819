@@ -1,6 +1,8 @@
 #include "point.hpp"
 #include "vector.hpp"
 
+#ifndef PHYSICS_BODY
+#define PHYSICS_BODY
 namespace phy
 {
 	class Body
@@ -27,3 +29,4 @@ namespace phy
 			void update(int time);
 	};
 };
+#endif 

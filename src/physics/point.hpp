@@ -1,3 +1,6 @@
+#ifndef PHYSICS_POINT
+#define PHYSICS_POINT
+
 namespace phy
 {
 	class Point
@@ -15,3 +18,4 @@ namespace phy
 			int get_yPosition();
 	};
 }
+#endif
