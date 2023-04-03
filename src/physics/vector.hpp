@@ -24,6 +24,9 @@ namespace phy
 			double get_magnitude();
 			int get_direction();
 
+			int get_xComponent();
+			int get_yComponent();
+
 			static phy::Vector sum(phy::Vector v1, phy::Vector v2);
 	};
 }

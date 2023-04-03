@@ -43,7 +43,7 @@ phy::Vector phy::Body::get_acceleration()
 	return this->acceleration;
 }
 
-void update(int time)
+void phy::Body::update(int time)
 {
 	/*
 	* Valori da aggiornare:
@@ -52,7 +52,15 @@ void update(int time)
 	* (No accellerazione che tanto non cambia con il tempo, va settata a mano?)
 	*/ 
 
-	//https://math.stackexchange.com/questions/1365622/adding-two-polar-vectors
+	if(time != 0)
+	{
+		phy::Point newPosition = Point(
+			this->position.get_xPosition() + this->velocity.get_xComponent() * time,
+			this->position.get_yPosition() + this->velocity.get_yComponent() * time
+			);
 
-	//this->set_velocity(this->get_acceleration * )
+		phy::Vector tmpAcceleration = this->acceleration;
+		tmpAcceleration.set_magnitude(tmpAcceleration.get_magnitude() * time);
+		set_velocity(phy::Vector::sum(this->velocity, tmpAcceleration));
+	}
 }
