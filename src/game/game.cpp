@@ -61,6 +61,7 @@ void Game::init()
 {
 	initscr();
 	noecho();
+	set_escdelay(0);
 	keypad(stdscr, true);
 	start_color();
 	curs_set(0);
