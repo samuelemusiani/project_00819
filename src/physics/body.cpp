@@ -9,7 +9,7 @@ phy::Body::Body(phy::Point position, phy::Vector velocity, phy::Vector accelerat
 {
 	this->set_position(position);
 	this->set_velocity(velocity);
-	this->set_velocity(acceleration);
+	this->set_acceleration(acceleration);
 }
 
 void phy::Body::set_position(phy::Point position)
