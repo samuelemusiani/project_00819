@@ -15,6 +15,8 @@ class Menu
 
 		Menu(int LINES, int COLS);
 
-		int drawMenu();
+		void drawMenu();
+
+		int get_selected_option();
 
 };

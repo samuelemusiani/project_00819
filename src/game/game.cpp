@@ -14,48 +14,27 @@ Game::~Game()
 
 void Game::run()
 {
-	//Menu::start();
 	bool exit = false;
 	Menu menu = Menu(LINES, COLS);
-	while(!exit) {
-		if(Game::doSelected(menu.drawMenu())) exit = true;
-	}
-	Game::~Game();
-}
-
-
-bool Game::doSelected(int x) //switch with 4 options
-{
-	switch (x) {
-		/*case x=0:
-			Game::start();
-			return(false);
-			break;
-		case x=1:
-			Game::resume();
-			return(false);
-			break;
-		case x=2:
-			Game::help();
-			return(false);
-			break;*/
-		case 3:
-		{
-			Game::credits(); //provvisorio
-			getch();
-			return(false);
-			break;
+	while (!exit) {
+		menu.drawMenu();
+		int option = menu.get_selected_option();
+		switch (option) {
+			case 3:
+			{
+				credits();
+				getch();
+				break;
+			}
+			case -1: //condizione di exit
+			{
+				exit = true;
+				break;
+			}
 		}
-		case -1:
-		{
-			return(true);
-			break;
-		}
-		default:
-			return(false);
-			break;
 	}
 }
+
 
 void Game::init()
 {
@@ -66,21 +45,11 @@ void Game::init()
 	start_color();
 	curs_set(0);
 }
-/*
-bool Game::resume()
-{
-	//...
-}
 
-bool Game::help()
-{
-	//...
-}
-*/
 
 void Game::credits()
 {
-	clear();
+	Draw::clearWindow(stdscr);
 	wrefresh(stdscr);
 	Draw::drawText(1,1, "Credits Video Game JumpKing (da rivedere il nome) \n \
 	Alma Mater Studiorum Bologna University: project-00819 \n This game has been \

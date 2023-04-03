@@ -1,15 +1,11 @@
 #include "menu.hpp"
-#include "game.hpp"
-
 
 Menu::Menu(int LINES, int COLS) {
-	posY =  LINES/2 - NUMBER_OF_OPTIONS/2;
-	posX = COLS/2;
+	this->posY =  LINES/2 - NUMBER_OF_OPTIONS/2;
+	this->posX = COLS/2;
 	}
 
-int Menu::drawMenu() //return the selected option
-{
-	wclear(stdscr);
+void Menu::drawMenu() {
 	// Disegna una box attorno allo schermo
 	box(stdscr, 0, 0);
 
@@ -22,18 +18,30 @@ int Menu::drawMenu() //return the selected option
 	Draw::drawText(3, (COLS - 18)/2, "|");
 	Draw::drawText(3, (COLS + 15)/2, "|");
 
+	for (int i = 0 ; i < NUMBER_OF_OPTIONS; i++)
+	{
+		Draw::drawText(posY + 2*i , posX - options[i].length()/2, options[i].c_str());
+	}
+}
+
+
+int Menu::get_selected_option() //return the selected option
+{
 	int selectedOption = 0;
 	bool isSelected = false;
 	while (!isSelected) {
+
+		//clear the WINDOW
+		Draw::clearWindow(stdscr);
+
 		// Display the Menu Options
-		for (int i = 0 ; i < NUMBER_OF_OPTIONS; i++)
-		{
-			Draw::drawText(posY + 2*i , posX - options[i].length()/2, options[i].c_str());
-		}
+		Menu::drawMenu();
+
 		// Highlight the selected option with a different color
-		attron(A_REVERSE);
-		mvprintw(posY + 2*selectedOption, posX - options[selectedOption].length()/2, options[selectedOption].c_str());
-		attroff(A_REVERSE);
+		Draw::attribute_on(stdscr, A_REVERSE);
+		Draw::drawText(posY + 2*selectedOption, posX - options[selectedOption].length()/2, options[selectedOption].c_str());
+		Draw::attribute_off(stdscr, A_REVERSE);
+
 		// Takes Users input
 		switch (getch()) {
 			case KEY_UP:

@@ -1,18 +1,14 @@
 #include <ncurses.h>
-#include <fstream>
-#include <iostream>
-
 
 
 class Game
 {
 	private:
 		void init();
+		void credits();
+
 	public:
 		Game();
 		~Game();
-		bool doSelected(int x);
 		void run();
-		void credits();
-
 };
