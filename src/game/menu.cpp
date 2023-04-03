@@ -3,7 +3,7 @@
 Menu::Menu(int LINES, int COLS) {
 	this->posY =  LINES/2 - NUMBER_OF_OPTIONS/2;
 	this->posX = COLS/2;
-	}
+}
 
 void Menu::drawMenu() {
 	// Disegna una box attorno allo schermo
