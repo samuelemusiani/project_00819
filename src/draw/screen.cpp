@@ -1,0 +1,51 @@
+#include "screen.hpp"
+#include <unistd.h>
+
+
+
+Screen::Screen()
+{
+}
+
+void Screen::init()
+{
+    initscr();
+    cbreak();
+    noecho();
+    if (LINES < 44 || COLS < 150)
+	{
+		printw("Your terminal is too small. Please resize it at least to 44x150");
+		while (LINES < 44 || COLS < 150)
+		{
+			refresh();
+			sleep(1); // attendo 1 secondo per non mandare la cpu a 100%
+		}
+	}
+    curs_set(0);
+    start_color();
+    int xMaxSize, yMaxSize;
+    getmaxyx(stdscr, yMaxSize, xMaxSize);
+    wrefresh(stdscr);
+    int posY = (yMaxSize - 44) / 2;
+    int posX = (xMaxSize - 150) / 2;
+    this->win = newwin(44, 150, posY, posX);
+    keypad(win, true);
+    this-> max_x = getmaxx(win); 
+    this-> max_y = getmaxy(win);
+    init_pair(2, COLOR_GREEN, COLOR_BLACK);
+    wattron(win, COLOR_PAIR(2));
+    box(win, 0, 0); 
+    wattroff(win, COLOR_PAIR(2));
+    init_pair(1, COLOR_WHITE, COLOR_BLUE);
+    wrefresh(win);
+}
+
+int Screen::get_maxX()
+{
+    return this->max_x;
+}
+
+int Screen::get_maxY()
+{
+    return this->max_y;
+}

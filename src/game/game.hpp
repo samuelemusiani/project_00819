@@ -1,10 +1,10 @@
 #include <ncurses.h>
+#include "../draw/draw.hpp"
 
 class Game
 {
 	private:
-		bool init();
-
+		Draw screen;
 	public:
 		Game();
 		~Game();

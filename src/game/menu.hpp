@@ -10,14 +10,13 @@ class Menu
 	private:
 		int posY;
 		int posX;
-		bool flag = false;
-		int selectedOption = 0;
 		std::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Help", "Credits"};
+		Draw screen;
 	public:
 
-		Menu(int LINES, int COLS);
+		Menu(int x, int y, Draw screen);
 
-		void drawMenu();
+		void drawMenu(); // Disegna il menu
 
 
 		

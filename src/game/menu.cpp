@@ -1,35 +1,37 @@
 #include "menu.hpp"
 
-Menu::Menu(int LINES, int COLS) {
-	posY =  LINES/2 - NUMBER_OF_OPTIONS/2;
-	posX = COLS/2;
+Menu::Menu(int x, int y, Draw screen) {
+	posX = x;
+	posY = y;
+	this->screen = screen;
 	}
 	
 void Menu::drawMenu() {
-	// Disegna una box attorno allo schermo
-	box(stdscr, 0, 0);
+
+	// Titolo del gioco all'interno di una box
+	screen.drawText(2, (posX/2)-9, "------------------");
+	screen.drawText(4, (posX/2)-9, "------------------");
+	screen.drawText(3, (posX/2)-9, "|");
+	screen.drawText(3, (posX/2)+8, "|");
+	screen.drawText(3, (posX/2)-4, "JumpKing");
 	
-	// Scrive il titolo del gioco
-	Draw::drawText(3, (COLS)/2 - 4 , "JumpKing");
+	bool isSelected = false;
+	int selectedOption = 0;
 
-	// Crea un rettangolo di trattini attorno a JumpKing
-	Draw::drawText(2, (COLS - 18)/2, "------------------");
-	Draw::drawText(4, (COLS - 18)/2, "------------------");
-	Draw::drawText(3, (COLS - 18)/2, "|");
-	Draw::drawText(3, (COLS + 15)/2, "|");
-
-	while (!flag) {
+	while (!isSelected) {
 		// Scrive le opzioni del menu
 		for (int i = 0 ; i < NUMBER_OF_OPTIONS; i++)
 		{
-			Draw::drawText(posY + 2*i , posX - options[i].length()/2, options[i].c_str());
+			screen.drawText((posY/2-2) +2*i, posX/2 - (options[i].length()/2), options[i].c_str());
+			
 		}
-		// Highlight the selected option with a different color
-		attron(A_REVERSE);
-		mvprintw(posY + 2*selectedOption, posX - options[selectedOption].length()/2, options[selectedOption].c_str());
-		attroff(A_REVERSE);
+
+		wattron(this->screen.win, COLOR_PAIR(1));
+		screen.drawText((posY/2-2) +2*selectedOption, posX/2 - (options[selectedOption].length()/2), options[selectedOption].c_str());
+		wattroff(this->screen.win, COLOR_PAIR(1));
+
 		// Prende l'input dell'utente e cambia la selezione
-		switch (getch()) {
+		switch (wgetch(this->screen.win)) {
 			case KEY_UP:
 				if (selectedOption > 0) {
 					selectedOption--;
@@ -47,7 +49,7 @@ void Menu::drawMenu() {
 				}
 				break;
 			case 10: 
-				this->flag = true;
+				isSelected = true;
 				break;
 		}
 	}
