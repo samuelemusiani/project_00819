@@ -9,5 +9,5 @@ class Map
 
     public:
         Map();
-        Chunk get_chunk();
+        Chunk get_chunk(int n);
 };

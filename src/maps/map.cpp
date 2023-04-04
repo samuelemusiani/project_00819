@@ -21,7 +21,7 @@ void Map::initialize_chunks()
     this->possible_chunks[0].add_platform(97, 37, 31);
 }
 
-Chunk Map::get_chunk()
+Chunk Map::get_chunk(int n)
 {
     //da randomizzare
     return this->possible_chunks[0];
