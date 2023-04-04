@@ -60,10 +60,10 @@ int Menu::get_selected_option() //return the selected option
 					selectedOption = 0;
 				}
 				break;
-			case 10:
+			case 10: //enter_key
 				isSelected = true;
 				break;
-			case 27:
+			case 27: //esc_key
 				selectedOption = -1;
 				isSelected = true;
 				break;
