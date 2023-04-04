@@ -6,7 +6,7 @@
 namespace phy
 {
 	//Ha senso come nome?
-	class WeightedBody : Body
+	class WeightedBody : public Body
 	{
 		protected:
 			double mass;
@@ -18,8 +18,6 @@ namespace phy
 			void set_mass(double mass);
 			double get_mass();
 
-
-			//Tutta la parte sull'energia?
 			double get_kineticEnergy();
 			double get_potentialEnergy();
 			double get_energy();
