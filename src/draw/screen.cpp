@@ -31,6 +31,7 @@ void Screen::init()
     win = newwin(44, 150, posY, posX);
     keypad(win, true);
     set_escdelay(1);
+    // DA FIXARE SERVE nodelay(win, true); // 
     this-> max_x = getmaxx(win); 
     this-> max_y = getmaxy(win);
     init_pair(2, COLOR_GREEN, COLOR_BLACK);

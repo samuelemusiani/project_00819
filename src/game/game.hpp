@@ -1,3 +1,6 @@
+#ifndef GAME_HPP
+#define GAME_HPP
+
 #include <ncurses.h>
 #include "../draw/draw.hpp"
 
@@ -11,5 +14,9 @@ class Game
 		Game();
 		~Game();
 		void run();
+		void start();
 
 };
+
+
+#endif

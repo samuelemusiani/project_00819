@@ -7,6 +7,7 @@ class Credits
         
     public:
         //~Credits();
-        void drawCredits();
+        int drawCredits();
+        void openGithub(int developer);
 };
 

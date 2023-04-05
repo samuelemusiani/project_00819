@@ -66,11 +66,15 @@ int Menu::drawMenu() {
 	
 bool Menu::isSelected(int selection){
 	Credits credits;
+	Game game;
 	switch (selection)
 	{
 	
 	case 0: 
 		// New Game
+		// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
+		game.start();
+		return(false);
 		break;
 	case 1: 
 		// Resume game
@@ -78,17 +82,17 @@ bool Menu::isSelected(int selection){
 	case 2: 
 		// Settings and help
 		break; 
-
+	
 	case 3:
 		// chiama la funziona credits che si trova in credits.cpp
 		credits = Credits();
-		credits.drawCredits();
+		int dev = credits.drawCredits();
+		if (dev != -1) credits.openGithub(dev);
+		
 		wgetch(win);
 		return(false);
 		break;
 	
-	default:
-		return(false);
-		break;
+
 	}
 }

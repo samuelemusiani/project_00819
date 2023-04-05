@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include "../draw/draw.hpp"
 #include "credits.hpp"
+#include "game.hpp"
 
 #define NUMBER_OF_OPTIONS 4
 
