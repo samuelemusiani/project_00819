@@ -16,7 +16,7 @@ all:
 
 jump: 
 	rm -rf ${TARGET}
-	g++ ${SRC_JUMP_TESTS}/main.cpp $(shell find ${DEST_JUMP_OBJECT}/*) ../vector.cpp ../point.cpp -lncurses -o ${TARGET}
+	g++ ${SRC_JUMP_TESTS}/main.cpp $(shell find ${DEST_JUMP_OBJECT}/*) ../*.cpp -lncurses -o ${TARGET}
 	./${TARGET}
 
 compute: ${SRC_COMPUTATION_FILES}
