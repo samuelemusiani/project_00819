@@ -5,11 +5,11 @@
 class Chunk
 {
     private:
-        static Platform platforms[MAX_PLATFORMS];
+        Platform* platforms = new Platform[MAX_PLATFORMS];
         int usedPlatforms;
     public:
         Chunk();
-        void add_platform(int x, int y, int len);
-        bool is_there_a_platform(int x, int y);
+        void add_platform(phy::Point pos, int len);
+        bool is_there_a_platform(phy::Point pos);
         Platform* get_platforms();
 };
