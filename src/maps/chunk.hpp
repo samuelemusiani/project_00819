@@ -11,5 +11,5 @@ class Chunk
         Chunk();
         void add_platform(int x, int y, int len);
         bool is_there_a_platform(int x, int y);
-        Platform* get_platforms(int n);
+        Platform* get_platforms();
 };
