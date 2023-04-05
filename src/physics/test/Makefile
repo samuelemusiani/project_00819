@@ -9,7 +9,7 @@ DEST_OBJECT=object
 DEST_COMPUTATION_OBJECT=${DEST_OBJECT}/computation
 DEST_JUMP_OBJECT=${DEST_OBJECT}/jump
 
-SRC_FILES=point vector body
+SRC_COMPUTATION_FILES=point vector body
 
 all:
 	@echo "Usare compute o jump per selezionare il target"
