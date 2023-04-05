@@ -1,4 +1,5 @@
 #include "map.hpp"
+#include "../../etc/logs/logs.hpp"
 // A chunk is 148x42
 void Map::initialize_chunks()
 {
@@ -23,6 +24,15 @@ void Map::initialize_chunks()
 
 Chunk Map::get_chunk(int n)
 {
-    //da randomizzare
-    return this->possible_chunks[0];
+    if(n<num_Chunks())
+        return this->possible_chunks[n];
+    else
+    {
+        deb::debug("Il chunk che stai cercando non esiste");
+    }
+}
+
+int Map::num_Chunks()
+{
+    return 1; //automatizzare??
 }
