@@ -9,6 +9,7 @@ class Chunk
         int usedPlatforms;
     public:
         Chunk();
+        ~Chunk();
         void add_platform(phy::Point pos, int len);
         bool is_there_a_platform(phy::Point pos);
         Platform* get_platforms();

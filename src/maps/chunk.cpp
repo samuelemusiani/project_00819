@@ -5,6 +5,12 @@ Chunk::Chunk()
     this->usedPlatforms = 0;
 }
 
+Chunk::~Chunk()
+{
+    delete[] this->platforms;
+    this->platforms=nullptr;
+}
+
 void Chunk::add_platform(phy::Point pos, int len)
 {
     if(this->usedPlatforms < MAX_PLATFORMS)
@@ -26,8 +32,13 @@ bool Chunk::is_there_a_platform(phy::Point pos){
     return false;
 }
 
-Platform* Chunk::get_platforms()    // use this function like this:
-{                                   //      Map m;
-    return this->platforms;         //      Platform* x;
-}                                   //      x = m.Map::get_chunk({chunk_that_you_want}).Chunk::get_platforms({chunk_that_you_want})
-                                    // { x[i] will return the i platform of the array }
+/* use this function like this:
+ * Map m;
+ * Platform* x;
+ * x = m.Map::get_chunk({chunk_that_you_want}).Chunk::get_platforms({chunk_that_you_want})
+ * { x[i] will return the i platform of the array }
+*/
+Platform* Chunk::get_platforms()
+{
+    return this->platforms;
+}
