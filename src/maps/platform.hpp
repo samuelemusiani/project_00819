@@ -1,18 +1,17 @@
+#include "../physics/point.hpp"
+
 class Platform
 {
     private:
-        int x_pos;
-        int y_pos;
+        phy::Point position;
         int length;
     public:
         Platform();
-        Platform(int x,int y,int len);
+        Platform(phy::Point pos,int len);
 
-        void set_xPosition(int x);
-        void set_yPosition(int y);
+        void set_position(phy::Point x);
         void set_length(int len);
 
-        int get_xPosition();
-        int get_yPosition();
+        phy::Point get_position();
         int get_length();
 };

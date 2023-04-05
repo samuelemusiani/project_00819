@@ -1,25 +1,19 @@
 #include "platform.hpp"
 
-Platform::Platform() : Platform(0, 0, 0)
+Platform::Platform() : Platform(phy::Point(0,0),0)
 {
 
 }
 
-Platform::Platform(int x, int y, int len)
+Platform::Platform(phy::Point pos, int len)
 {
-    this->set_xPosition(x);
-    this->set_yPosition(y);
+    this->set_position(pos);
     this->set_length(len);
 }
 
-void Platform::set_xPosition(int x)
+void Platform::set_position(phy::Point x)
 {
-    this->x_pos = x;
-}
-
-void Platform::set_yPosition(int y)
-{
-    this->y_pos = y;
+    this->position = x;
 }
 
 void Platform::set_length(int len)
@@ -28,14 +22,9 @@ void Platform::set_length(int len)
 }
 
 
-int Platform::get_xPosition()
+phy::Point Platform::get_position()
 {
-    return this->x_pos;
-}
-
-int Platform::get_yPosition()
-{
-    return this->y_pos;
+    return this->position;
 }
 
 int Platform::get_length()
