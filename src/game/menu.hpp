@@ -16,7 +16,7 @@ class Menu
 
 		Menu(int x, int y, Draw screen);
 
-		void drawMenu(); // Disegna il menu
+		int drawMenu(); // Disegna il menu
 
 
 		

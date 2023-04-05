@@ -6,7 +6,7 @@ Menu::Menu(int x, int y, Draw screen) {
 	this->screen = screen;
 	}
 	
-void Menu::drawMenu() {
+int Menu::drawMenu() {
 
 	// Titolo del gioco all'interno di una box
 	screen.drawText(2, (posX/2)-9, "------------------");
@@ -48,11 +48,16 @@ void Menu::drawMenu() {
 					selectedOption = 0;
 				}
 				break;
+			case 27:
+				selectedOption = -1;
+				isSelected = true;
+				break;
 			case 10: 
 				isSelected = true;
 				break;
 		}
 	}
+	return(selectedOption);
 		
 }
 	
