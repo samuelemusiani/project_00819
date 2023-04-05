@@ -10,5 +10,4 @@ class Map
     public:
         Map();
         Chunk get_chunk(int n);
-        int num_Chunks();
 };

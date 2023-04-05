@@ -1,6 +1,12 @@
 #include "map.hpp"
 #include "../../etc/logs/logs.hpp"
 // A chunk is 148x42
+
+Map::Map()
+{
+    initialize_chunks();
+}
+
 void Map::initialize_chunks()
 {
     // 1st chunk

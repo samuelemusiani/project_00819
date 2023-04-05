@@ -27,6 +27,7 @@ bool Chunk::is_there_a_platform(phy::Point pos){
 }
 
 Platform* Chunk::get_platforms()    // use this function like this:
-{                                   //      Platform* x;
-    return this->platforms;               //      x = Chunk::get_platforms({chunk_that_you_want})
-}                                   // { x[i] will return the i element of the platform's array }
+{                                   //      Map m;
+    return this->platforms;         //      Platform* x;
+}                                   //      x = m.Map::get_chunk({chunk_that_you_want}).Chunk::get_platforms({chunk_that_you_want})
+                                    // { x[i] will return the i platform of the array }
