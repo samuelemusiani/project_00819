@@ -1,4 +1,6 @@
 #include "draw.hpp"
+#include <cstring>
+
 
 void Draw::drawText(int posY, int posX, std::string options) {
 	mvwprintw(win, posY, posX, options.c_str());

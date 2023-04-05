@@ -20,7 +20,7 @@ int Credits::drawCredits(){
     // Implementare con l'array
             
     
-    std::string developers[4] = {"@SuperMitic", "@musianisamuele", "@LorenzoPeronese", "@ILKEBABBARO"};
+    std::string developers[4] = {"@SuperMitic", "@musianisamuele", "@lorenzoperonese", "@Jabbar03"};
     int selectedOption = 0;
     bool selected = false; 
     nodelay(win, TRUE);
@@ -59,11 +59,12 @@ int Credits::drawCredits(){
                     break;
                 case 27:
                     selectedOption = -1;
-                    
+                    selected = true; 
                     break;
                 case 10: 
                     selected = true; 
                     break;
+                
             }
 
 
@@ -90,9 +91,10 @@ int Credits::drawCredits(){
             napms(300/10);
         }
     }
-    credits.drawText(22, 75 - 4, "Credits");
+    
     nodelay(win, FALSE);
-    // stampa selectedOption
+
+    // stampa selectedOption per debug 
     credits.drawText(1, 1, std::to_string(selectedOption));
     
     return selectedOption;
@@ -102,16 +104,32 @@ int Credits::drawCredits(){
 void Credits::openGithub(int developer){
     switch(developer){
         case 0:
-            system("open https://github.com/SuperMitic");
+            #ifdef __APPLE__
+                system("open https://github.com/SuperMitic");
+            #elif __linux__
+                system("xdg-open https://github.com/SuperMitic");
+            #endif
             break;
         case 1:
-            system("open https://github.com/musianisamuele");
+            #ifdef __APPLE__
+                system("open https://github.com/musianisamuele");
+            #elif __linux__
+                system("xdg-open https://github.com/musianisamuele");
+            #endif
             break;
         case 2:
-            system("open https://github.com/lorenzoperonese");
+            #ifdef __APPLE__
+                system("open https://github.com/lorenzoperonese");
+            #elif __linux__
+                system("xdg-open https://github.com/lorenzoperonese");
+            #endif
             break;
         case 3:
-            system("open https://github.com/Jabbar03");
+            #ifdef __APPLE__
+                system("open https://github.com/Jabbar03");
+            #elif __linux__
+                system("xdg-open https://github.com/Jabbar03");
+            #endif
             break;
         default:
             break;
