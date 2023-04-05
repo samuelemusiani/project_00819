@@ -1,6 +1,8 @@
 #include <ncurses.h>
 #include "../draw/draw.hpp"
 
+
+
 class Game
 {
 	private:
@@ -9,4 +11,5 @@ class Game
 		Game();
 		~Game();
 		void run();
+
 };

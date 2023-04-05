@@ -1,6 +1,7 @@
 #include <string>
 #include <ncurses.h>
 #include "../draw/draw.hpp"
+#include "credits.hpp"
 
 #define NUMBER_OF_OPTIONS 4
 
@@ -14,10 +15,11 @@ class Menu
 		Draw screen;
 	public:
 
-		Menu(int x, int y, Draw screen);
+		Menu(int x, int y);
 
 		int drawMenu(); // Disegna il menu
 
-
+		bool isSelected(int selection);
+		
 		
 };

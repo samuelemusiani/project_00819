@@ -1,5 +1,9 @@
 #include "draw.hpp"
 
 void Draw::drawText(int posY, int posX, std::string options) {
-	mvwprintw(this->win, posY, posX, options.c_str());
+	mvwprintw(win, posY, posX, options.c_str());
+}
+
+void Draw::drawBox(){
+	box(win, 0, 0);
 }

@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include "../constant.hpp"
 
 #ifndef DRAW_SCREEN 
 #define DRAW_SCREEN
@@ -10,12 +11,12 @@ class Screen
         int max_y;
 
     public:
-        WINDOW *win;
+        
         Screen();
         void init(); // Inzializza lo schermo e la WINDOW al centro del terminale
         int get_maxX();
         int get_maxY();
-
+        void clearScreen();
 };
 
 #endif

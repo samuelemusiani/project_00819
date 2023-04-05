@@ -1,12 +1,15 @@
 #include "menu.hpp"
 
-Menu::Menu(int x, int y, Draw screen) {
+Menu::Menu(int x, int y) {
 	posX = x;
 	posY = y;
 	this->screen = screen;
 	}
 	
 int Menu::drawMenu() {
+
+	// Disegna la box di colore verde
+	screen.clearScreen();
 
 	// Titolo del gioco all'interno di una box
 	screen.drawText(2, (posX/2)-9, "------------------");
@@ -26,12 +29,12 @@ int Menu::drawMenu() {
 			
 		}
 
-		wattron(this->screen.win, COLOR_PAIR(1));
+		wattron(win, COLOR_PAIR(1));
 		screen.drawText((posY/2-2) +2*selectedOption, posX/2 - (options[selectedOption].length()/2), options[selectedOption].c_str());
-		wattroff(this->screen.win, COLOR_PAIR(1));
+		wattroff(win, COLOR_PAIR(1));
 
 		// Prende l'input dell'utente e cambia la selezione
-		switch (wgetch(this->screen.win)) {
+		switch (wgetch(win)) {
 			case KEY_UP:
 				if (selectedOption > 0) {
 					selectedOption--;
@@ -61,3 +64,31 @@ int Menu::drawMenu() {
 		
 }
 	
+bool Menu::isSelected(int selection){
+	Credits credits;
+	switch (selection)
+	{
+	
+	case 0: 
+		// New Game
+		break;
+	case 1: 
+		// Resume game
+		break;
+	case 2: 
+		// Settings and help
+		break; 
+
+	case 3:
+		// chiama la funziona credits che si trova in credits.cpp
+		credits = Credits();
+		credits.drawCredits();
+		wgetch(win);
+		return(false);
+		break;
+	
+	default:
+		return(false);
+		break;
+	}
+}

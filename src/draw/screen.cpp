@@ -28,14 +28,12 @@ void Screen::init()
     wrefresh(stdscr);
     int posY = (yMaxSize - 44) / 2;
     int posX = (xMaxSize - 150) / 2;
-    this->win = newwin(44, 150, posY, posX);
+    win = newwin(44, 150, posY, posX);
     keypad(win, true);
+    set_escdelay(1);
     this-> max_x = getmaxx(win); 
     this-> max_y = getmaxy(win);
     init_pair(2, COLOR_GREEN, COLOR_BLACK);
-    wattron(win, COLOR_PAIR(2));
-    box(win, 0, 0); 
-    wattroff(win, COLOR_PAIR(2));
     init_pair(1, COLOR_WHITE, COLOR_BLUE);
     wrefresh(win);
 }
@@ -48,4 +46,11 @@ int Screen::get_maxX()
 int Screen::get_maxY()
 {
     return this->max_y;
+}
+
+void Screen::clearScreen()
+{
+    wclear(win);
+    box(win, 0, 0);
+    wrefresh(win);
 }
