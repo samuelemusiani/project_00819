@@ -10,6 +10,7 @@ class Draw : public Screen{
 	public:
 		void drawText(int posY, int posX, std::string options);
 		static void drawBox();
+		static int centerX(std::string text);
 };	
 
 #endif

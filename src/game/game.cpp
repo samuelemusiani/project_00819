@@ -33,3 +33,9 @@ void Game::start()
 	screen.clearScreen();
 	wgetch(win);
 }
+
+void Game::resume()
+{
+	screen.clearScreen();
+	screen.drawText(3, 75 - (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
+}

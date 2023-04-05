@@ -78,6 +78,8 @@ bool Menu::isSelected(int selection){
 		break;
 	case 1: 
 		// Resume game
+		game.resume();
+		return(false);
 		break;
 	case 2: 
 		// Settings and help

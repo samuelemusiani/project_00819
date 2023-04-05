@@ -15,6 +15,7 @@ class Game
 		~Game();
 		void run();
 		void start();
+		void resume();
 
 };
 
