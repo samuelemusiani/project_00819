@@ -1,4 +1,6 @@
 #include "platform.hpp"
+#ifndef MAPS_CHUNK
+#define MAPS_CHUNK
 
 #define MAX_PLATFORMS 25
 
@@ -14,3 +16,5 @@ class Chunk
         bool is_there_a_platform(phy::Point pos);
         Platform* get_platforms();
 };
+
+#endif

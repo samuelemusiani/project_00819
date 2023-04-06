@@ -1,5 +1,8 @@
 #include "../physics/point.hpp"
 
+#ifndef MAPS_PLATFORM
+#define MAPS_PLATFORM
+
 class Platform
 {
     private:
@@ -15,3 +18,5 @@ class Platform
         phy::Point get_position();
         int get_length();
 };
+
+#endif
