@@ -57,6 +57,14 @@ void deb::debug(std::string x)
     }
 }
 
+void deb::debug(phy::Point x)
+{
+    if(openDebugFile(&debugLogFile)) {
+        debugLogFile << dateAndTime() << " [" << x.get_xPosition() << "," << x.get_yPosition() << "]\n";
+        debugLogFile.close();
+    }
+}
+
 void deb::debug(void *x)
 {
     if(openDebugFile(&debugLogFile)) {
