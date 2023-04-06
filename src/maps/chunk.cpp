@@ -32,12 +32,9 @@ bool Chunk::is_there_a_platform(phy::Point pos){
     return false;
 }
 
-/* use this function like this:
- * Map m;
- * Platform* x;
- * x = m.Map::get_chunk({chunk_that_you_want}).Chunk::get_platforms({chunk_that_you_want})
- * { x[i] will return the i platform of the array }
-*/
+/* This method return a pointer to an array of Platforms in which are stored all the platforms that are in the current Chunk.
+ * To get this pointer you first need to instantiate a Map object, then you can use the method get_chunk(...) to get
+ * the desired Chunk,and then you can call the get_platforms() method. */
 Platform* Chunk::get_platforms()
 {
     return this->platforms;
