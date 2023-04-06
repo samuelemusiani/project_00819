@@ -19,8 +19,6 @@ void drawChar(phy::Point p)
 
 void drawProtagonist() 
 {
-	int ch;
-
 	bool EXIT = false;
 
 	int x = 0;
@@ -36,69 +34,13 @@ void drawProtagonist()
 	while(!EXIT)
 	{
 		b.update(0.15);
-		//b.set_position(phy::Point(x, y));
 
 		drawChar(b.get_position());
 
 		refresh();
-		//sleep(0.8);
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 
-		// tmp++;
-		//Double jmp :)
-		// if(tmp % 60 == 0)
-		// 	b.set_velocity(phy::Vector(4, 55));
-
 		clear();
-
-		/*
-		ch = getchar();
-		switch (ch)
-		{
-			case 'w':
-				if(y > 0) y--;
-				break;
-
-			case 's':
-				if(y < LINES - 2) y++;
-				break;
-
-			case 'a':
-				if(x > 0) x--;
-				break;
-
-			case 'd':
-				if(x < COLS - 1) x++;
-				break;
-
-			case 'q':
-				if(x > 0 && y > 0) 
-				{
-					x--;
-					y--;
-				}
-				break;
-
-			case 'g':
-				b.set_velocity(phy::Vector(1, 0));
-				break;
-				
-			case 'e':
-				if(x < COLS - 1 && y > 0) 
-				{
-					x++;
-					y--;
-				}
-				break;
-
-			case KEY_F(1):
-				EXIT = true;
-				break;
-
-			default:
-				break;
-		}
-		*/
 	}
 }
 
