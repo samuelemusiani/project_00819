@@ -6,13 +6,13 @@
 #define LOGS_LOGS
 
 namespace deb {
-    void debug(int x);
-    void debug(double x);
-    void debug(float x);
-    void debug(char x);
-    void debug(std::string x);
-    void debug(void *x);
-    void debug(phy::Point x);
+    void debug(int x,std::string id="no_id");
+    void debug(double x,std::string id="no_id");
+    void debug(float x,std::string id="no_id");
+    void debug(char x,std::string id="no_id");
+    void debug(std::string x,std::string id="no_id");
+    void debug(void *x,std::string id="no_id");
+    void debug(phy::Point x,std::string id="no_id");
 }
 
 #endif
