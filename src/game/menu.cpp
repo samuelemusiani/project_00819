@@ -26,6 +26,7 @@ void Menu::drawMenu() {
 int Menu::get_selected_option() {
 	bool isSelected = false;
 	int selectedOption = 0;
+	nodelay(win, false); // make getch() wait for input so that the menu doesn't refresh too fast - CPU FIX 
 	while (!isSelected) {
 		// Scrive le opzioni del menu
 		for (int i = 0 ; i < NUMBER_OF_OPTIONS; i++)
@@ -66,6 +67,7 @@ int Menu::get_selected_option() {
 			default: 
 				break;
 		}
+		
 	}
 	return selectedOption;
 }
@@ -96,9 +98,6 @@ bool Menu::isSelected(int selection){
 		credits = Credits();
 		int dev = credits.drawCredits();
 		if (dev != -1) credits.openGithub(dev);
-		// DEBUG
-		mvwprintw(win, 2, 2, "ancora dentro credits");
-		wrefresh(win);
 		
 		return(false);
 		break;

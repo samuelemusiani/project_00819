@@ -27,10 +27,6 @@ void Game::run()
 		menu.drawMenu();
 		int x = menu.get_selected_option();
 		menu.isSelected(x);
-		// DEBUG
-		wclear(win);
-		mvwprintw(stdscr, 1, 1, "i am here");
-		refresh();
 	}
 }
 

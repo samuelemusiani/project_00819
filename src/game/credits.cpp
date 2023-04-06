@@ -82,7 +82,7 @@ int Credits::drawCredits(){
 		}
 	}
 	
-	nodelay(win, FALSE);
+	//nodelay(win, FALSE);
 
 	// stampa selectedOption per debug 
 	// credits.drawText(1, 1, std::to_string(selectedOption));
