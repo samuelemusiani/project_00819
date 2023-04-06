@@ -24,8 +24,8 @@ void phy::Body::set_position(phy::Point position)
 {
 	//Da fare l'overloadin dell = :)
 
-	//this->position.set_xPosition(position.get_xPosition());
-	//this->position.set_yPosition(position.get_yPosition());
+	this->position.set_xPosition(position.get_xPosition());
+	this->position.set_yPosition(position.get_yPosition());
 }
 
 void phy::Body::set_position(phy::PrecisePoint position)
@@ -76,11 +76,11 @@ void phy::Body::update(double time)
 	if(time != 0)
 	{
 		this->set_position(phy::PrecisePoint(
-			this->get_position().get_xPosition() + 
+			this->get_precisePosition().get_xPosition() + 
 			this->get_velocity().get_xComponent() * time +
 			0.5 * this->get_acceleration().get_xComponent() * time * time,
-			this->position.get_yPosition() + 
-			this->velocity.get_yComponent() * time +
+			this->get_precisePosition().get_yPosition() + 
+			this->get_velocity().get_yComponent() * time +
 			0.5 * this->get_acceleration().get_yComponent() * time * time
 			));
 
