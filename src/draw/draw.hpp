@@ -1,4 +1,8 @@
 #include <ncurses.h>
+#include "../maps/map.hpp"
+#include "../maps/chunk.hpp"
+#include "../maps/platform.hpp"
+#include "../physics/point.hpp"
 #include "screen.hpp"
 #include <string>
 
@@ -6,11 +10,15 @@
 #ifndef DRAW_DRAW
 #define DRAW_DRAW
 class Draw : public Screen{
-	private: 
+	private:
+		void drawChunk(Chuck c);
+		void drawPlatform(Platform plat);
 	public:
 		void drawText(int posY, int posX, std::string options);
-		static void drawBox();
-		static int centerX(std::string text);
-};	
+		void clearWindow();
+		void drawMap(Map map, int nChunck);
+		void drawPlayer(Point p);
+
+};
 
 #endif
