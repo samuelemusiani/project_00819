@@ -31,11 +31,14 @@ void Screen::init()
     win = newwin(44, 150, posY, posX);
     keypad(win, true);
     set_escdelay(1);
-    // DA FIXARE SERVE nodelay(win, true); // 
     this-> max_x = getmaxx(win); 
     this-> max_y = getmaxy(win);
     init_pair(2, COLOR_GREEN, COLOR_BLACK);
     init_pair(1, COLOR_WHITE, COLOR_BLUE);
+    // Ridefinisco il colore nero a 0,0,0 per alcuni terminali che mostrano un colore diverso
+    init_color(COLOR_BLACK, 0, 0, 0);
+    // Setto il background nero
+    wbkgd(win, COLOR_BLACK);
     wrefresh(win);
 }
 
