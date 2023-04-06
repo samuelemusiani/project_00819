@@ -34,7 +34,7 @@ conto delle possibili collisioni che avvengono sul chunk.
 
 // Basandomi sull'euristica che il body del player verrà aggiornato per brevissimi intervalli
 // di tempo inzio ad implementare la prima possibilità
-void updateWithCollisions(phy::Body *body, double time, Chunk *chunk)
+void phy::updateWithCollisions(phy::Body *body, double time, Chunk *chunk)
 {
 
 	if(!hasJumped(body))
