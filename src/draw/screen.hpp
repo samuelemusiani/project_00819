@@ -17,7 +17,7 @@ class Screen
         int get_maxX();
         int get_maxY();
         void clearScreen();
-        
+        void eraseScreen();
 };
 
 #endif

@@ -25,7 +25,6 @@ void Screen::init()
     start_color();
     int xMaxSize, yMaxSize;
     getmaxyx(stdscr, yMaxSize, xMaxSize);
-    wrefresh(stdscr);
     int posY = (yMaxSize - 44) / 2;
     int posX = (xMaxSize - 150) / 2;
     win = newwin(44, 150, posY, posX);
@@ -57,4 +56,10 @@ void Screen::clearScreen()
     wclear(win);
     box(win, 0, 0);
     wrefresh(win);
+}
+
+void Screen::eraseScreen()
+{
+    werase(win); 
+    box(win, 0, 0);
 }

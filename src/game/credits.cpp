@@ -21,6 +21,7 @@ int Credits::drawCredits(){
             
     
     std::string developers[4] = {"@SuperMitic", "@musianisamuele", "@lorenzoperonese", "@Jabbar03"};
+    std::string creditstext[6] = {"JumpKing Game", "Alma Mater Studiorum Bologna University: project-00819", "This game has been developed", "in the year 2023 by", "Argonni Emanuele, Musiani Samuele", "Peronese Lorenzo, Ayache Omar"};
     int selectedOption = 0;
     bool selected = false; 
     nodelay(win, TRUE);
@@ -28,7 +29,7 @@ int Credits::drawCredits(){
     for(int i = 45; i > -2 && !selected; i = i-1) {
         for(int j = 0; j < 10 && !selected; j++) {
         
-            screen.clearScreen();
+            credits.eraseScreen();
             credits.drawText(8, 20 - (strlen("Who we are?")/2), "Who we are?");
 
             // for loop to draw the developers
@@ -64,31 +65,18 @@ int Credits::drawCredits(){
                 case 10: 
                     selected = true; 
                     break;
-                
+                default:
+                    break;
             }
-
-
-
-
-            // IMPLEMENTARE CON L'ARRAY
-
-
-            if(i - 6 > 0)
-                credits.drawText(i - 6, 75 - (strlen("JumpKing Game")/2), "JumpKing Game");
-            if(i - 5 > 0)
-                credits.drawText(i - 5, 75 - (strlen("Alma Mater Studiorum Bologna University: project-00819")/2), "Alma Mater Studiorum Bologna University: project-00819");
-            if(i - 4 > 0)
-                credits.drawText(i - 4, 75 - (strlen("This game has been developed")/2), "This game has been developed");
-            if(i - 3 > 0)
-                credits.drawText(i - 3, 75 - (strlen("in the year 2023 by")/2), "in the year 2023 by");
-            if(i - 2 > 0)
-                credits.drawText(i - 2, 75 - (strlen("Argonni Emanuele, Musiani Samuele")/2),  "Argonni Emanuele, Musiani Samuele");
-            if(i - 1 > 0)
-                credits.drawText(i - 1, 75 - (strlen("Peronese Lorenzo, Ayache Omar")/2), "Peronese Lorenzo, Ayache Omar");
-            if(i > 0)
-                credits.drawText(i, 75 - (strlen("Hope you enjoy it!")/2), "Hope you enjoy it!");
+            
+            for (int j = 0; j < 6; j++){
+                if(i - 6 + j > 0)
+                    credits.drawText(i - 6 + j, 75 - (creditstext[j].length()/2), creditstext[j]);
+            }
+            
             wrefresh(win);
-            napms(300/10);
+            napms(60);
+           
         }
     }
     
@@ -114,7 +102,7 @@ void Credits::openGithub(int developer){
             #ifdef __APPLE__
                 system("open https://github.com/musianisamuele");
             #elif __linux__
-                system("xdg-open https://github.com/musianisamuele");
+                system("xdg-open https://github.com/fardo");
             #endif
             break;
         case 2:

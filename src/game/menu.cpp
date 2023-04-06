@@ -91,7 +91,7 @@ bool Menu::isSelected(int selection){
 		// chiama la funziona credits che si trova in credits.cpp
 		credits = Credits();
 		int dev = credits.drawCredits();
-		if ((dev = 0) || (dev = 1) || (dev = 2) || (dev = 3)) credits.openGithub(dev);
+		if (dev != -1) credits.openGithub(dev);
 		
 		return(false);
 		break;

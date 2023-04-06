@@ -30,8 +30,7 @@ void Game::run()
 void Game::start()
 {
 	// clear the screen and draw the border
-	screen.clearScreen();
-	wgetch(win);
+	screen.clearScreen();	
 }
 
 void Game::resume()
