@@ -1,29 +1,43 @@
 #include "game.hpp"
 #include "menu.hpp"
+#include <unistd.h>
+#include "game.hpp"
 
+WINDOW *win;
 
 Game::Game()
-{
-	this->init();
-}
+{	
+	this->screen = Draw();
+	screen.init();
+
+}	
 
 Game::~Game()
 {
+	wgetch(win);
 	endwin();
 }
 
 void Game::run()
 {
-	//Menu::start();
-	keypad(stdscr, true);
-	Menu menu = Menu(LINES, COLS);
-	menu.drawMenu();
+	Menu menu = Menu(screen.get_maxX(), screen.get_maxY());
+	bool exit = false;
+	while (!exit) {
 
+		menu.drawMenu();
+		int x = menu.get_selected_option();
+		menu.isSelected(x);
+	}
 }
 
-bool Game::init()
+void Game::start()
 {
-	initscr();
-	start_color();
-	curs_set(0);
+	// clear the screen and draw the border
+	screen.clearScreen();	
+}
+
+void Game::resume()
+{
+	screen.clearScreen();
+	screen.drawText(3, 75 - (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
 }

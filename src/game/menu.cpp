@@ -1,35 +1,46 @@
 #include "menu.hpp"
 
-Menu::Menu(int LINES, int COLS) {
-	posY =  LINES/2 - NUMBER_OF_OPTIONS/2;
-	posX = COLS/2;
+Menu::Menu(int x, int y) {
+	posX = x;
+	posY = y;
+	this->screen = screen;
 	}
 	
 void Menu::drawMenu() {
-	// Disegna una box attorno allo schermo
-	box(stdscr, 0, 0);
+
+	// Disegna la box di colore verde
+	screen.clearScreen();
+
+	// Titolo del gioco all'interno di una box
+	screen.drawText(2, (posX/2)-9, "------------------");
+	screen.drawText(4, (posX/2)-9, "------------------");
+	screen.drawText(3, (posX/2)-9, "|");
+	screen.drawText(3, (posX/2)+8, "|");
+	screen.drawText(3, (posX/2)-4, "JumpKing");
 	
-	// Scrive il titolo del gioco
-	Draw::drawText(3, (COLS)/2 - 4 , "JumpKing");
+	bool isSelected = false;
+	int selectedOption = 0;
+	
+}
 
-	// Crea un rettangolo di trattini attorno a JumpKing
-	Draw::drawText(2, (COLS - 18)/2, "------------------");
-	Draw::drawText(4, (COLS - 18)/2, "------------------");
-	Draw::drawText(3, (COLS - 18)/2, "|");
-	Draw::drawText(3, (COLS + 15)/2, "|");
-
-	while (!flag) {
+int Menu::get_selected_option() {
+	bool isSelected = false;
+	int selectedOption = 0;
+	nodelay(win, false); // make getch() wait for input so that the menu doesn't refresh too fast - CPU FIX 
+	while (!isSelected) {
 		// Scrive le opzioni del menu
 		for (int i = 0 ; i < NUMBER_OF_OPTIONS; i++)
 		{
-			Draw::drawText(posY + 2*i , posX - options[i].length()/2, options[i].c_str());
+			screen.drawText((posY/2-2) +2*i, posX/2 - (options[i].length()/2), options[i].c_str());
+			
 		}
-		// Highlight the selected option with a different color
-		attron(A_REVERSE);
-		mvprintw(posY + 2*selectedOption, posX - options[selectedOption].length()/2, options[selectedOption].c_str());
-		attroff(A_REVERSE);
+
+		wattron(win, COLOR_PAIR(1));
+		screen.drawText((posY/2-2) +2*selectedOption, posX/2 - (options[selectedOption].length()/2), options[selectedOption].c_str());
+		wattroff(win, COLOR_PAIR(1));
+
 		// Prende l'input dell'utente e cambia la selezione
-		switch (getch()) {
+		switch (wgetch(win)) {
 			case KEY_UP:
 				if (selectedOption > 0) {
 					selectedOption--;
@@ -46,11 +57,52 @@ void Menu::drawMenu() {
 					selectedOption = 0;
 				}
 				break;
+			case 27:
+				selectedOption = -1;
+				isSelected = true;
+				break;
 			case 10: 
-				this->flag = true;
+				isSelected = true;
+				break;
+			default: 
 				break;
 		}
-	}
 		
+	}
+	return selectedOption;
 }
 	
+bool Menu::isSelected(int selection){
+	Credits credits;
+	Game game;
+	switch (selection)
+	{
+	
+	case 0: 
+		// New Game
+		// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
+		game.start();
+		return(false);
+		break;
+	case 1: 
+		// Resume game
+		game.resume();
+		return(false);
+		break;
+	case 2: 
+		// Settings and help
+		break; 
+	
+	case 3:
+		// chiama la funziona credits che si trova in credits.cpp
+		credits = Credits();
+		int dev = credits.drawCredits();
+		if (dev != -1) credits.openGithub(dev);
+		
+		return(false);
+		break;
+	
+	
+
+	}
+}

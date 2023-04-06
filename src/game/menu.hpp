@@ -1,6 +1,8 @@
 #include <string>
 #include <ncurses.h>
 #include "../draw/draw.hpp"
+#include "credits.hpp"
+#include "game.hpp"
 
 #define NUMBER_OF_OPTIONS 4
 
@@ -10,15 +12,16 @@ class Menu
 	private:
 		int posY;
 		int posX;
-		bool flag = false;
-		int selectedOption = 0;
 		std::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Help", "Credits"};
+		Draw screen;
 	public:
 
-		Menu(int LINES, int COLS);
+		Menu(int x, int y);
 
-		void drawMenu();
+		void drawMenu(); // Disegna il menu
 
-
+		bool isSelected(int selection);
+		
+		int get_selected_option();
 		
 };

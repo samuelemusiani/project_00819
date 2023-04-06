@@ -1,8 +1,16 @@
 #include <ncurses.h>
+#include "screen.hpp"
 #include <string>
 
 
-class Draw {
+#ifndef DRAW_DRAW
+#define DRAW_DRAW
+class Draw : public Screen{
+	private: 
 	public:
-		static void drawText(int posY, int posX, std::string options);
-};
+		void drawText(int posY, int posX, std::string options);
+		static void drawBox();
+		static int centerX(std::string text);
+};	
+
+#endif
