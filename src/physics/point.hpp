@@ -16,6 +16,8 @@ namespace phy
 			void set_yPosition(int posY);
 			int get_xPosition();
 			int get_yPosition();
+
+
 	};
 }
 #endif
