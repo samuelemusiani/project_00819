@@ -21,12 +21,12 @@ all:
 
 jump: 
 	rm -rf ${TARGET}
-	g++ $(shell find ${SRC_JUMP_TESTS}/*) ../*.cpp ../../../etc/logs/logs.cpp -lncurses -o ${TARGET}
+	g++ $(shell find ${SRC_JUMP_TESTS}/*) ../body.cpp ../vector.cpp ../point.cpp ../precisePoint.cpp ../../../etc/logs/logs.cpp -lncurses -o ${TARGET}
 	./${TARGET}
 
 compute: 
 	rm -rf ${TARGET}
-	g++ $(shell find ${SRC_COMPUTATION_TESTS}/*.cpp) ../*.cpp -o ${TARGET}
+	g++ $(shell find ${SRC_COMPUTATION_TESTS}/*.cpp) ../body.cpp ../vector.cpp ../point.cpp ../precisePoint.cpp -o ${TARGET}
 	./${TARGET}
 
 DIR:
