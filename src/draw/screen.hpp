@@ -6,18 +6,18 @@
 
 class Screen
 {
-    private:
-        int max_x;
-        int max_y;
+	private:
+		int max_x;
+		int max_y;
 
-    public:
-        
-        Screen();
-        void init(); // Inzializza lo schermo e la WINDOW al centro del terminale
-        int get_maxX();
-        int get_maxY();
-        void clearScreen();
-        void eraseScreen();
+	public:
+		
+		Screen();
+		void init(); // Inzializza lo schermo e la WINDOW al centro del terminale
+		int get_maxX();
+		int get_maxY();
+		void clearScreen();
+		void eraseScreen();
 };
 
 #endif

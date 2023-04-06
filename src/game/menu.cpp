@@ -6,7 +6,7 @@ Menu::Menu(int x, int y) {
 	this->screen = screen;
 	}
 	
-int Menu::drawMenu() {
+void Menu::drawMenu() {
 
 	// Disegna la box di colore verde
 	screen.clearScreen();
@@ -20,7 +20,12 @@ int Menu::drawMenu() {
 	
 	bool isSelected = false;
 	int selectedOption = 0;
+	
+}
 
+int Menu::get_selected_option() {
+	bool isSelected = false;
+	int selectedOption = 0;
 	while (!isSelected) {
 		// Scrive le opzioni del menu
 		for (int i = 0 ; i < NUMBER_OF_OPTIONS; i++)
@@ -62,8 +67,7 @@ int Menu::drawMenu() {
 				break;
 		}
 	}
-	return(selectedOption);
-		
+	return selectedOption;
 }
 	
 bool Menu::isSelected(int selection){
@@ -92,6 +96,9 @@ bool Menu::isSelected(int selection){
 		credits = Credits();
 		int dev = credits.drawCredits();
 		if (dev != -1) credits.openGithub(dev);
+		// DEBUG
+		mvwprintw(win, 2, 2, "ancora dentro credits");
+		wrefresh(win);
 		
 		return(false);
 		break;

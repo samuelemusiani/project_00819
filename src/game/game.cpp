@@ -23,7 +23,14 @@ void Game::run()
 	Menu menu = Menu(screen.get_maxX(), screen.get_maxY());
 	bool exit = false;
 	while (!exit) {
-		if (menu.isSelected(menu.drawMenu())) exit = true;
+
+		menu.drawMenu();
+		int x = menu.get_selected_option();
+		menu.isSelected(x);
+		// DEBUG
+		wclear(win);
+		mvwprintw(stdscr, 1, 1, "i am here");
+		refresh();
 	}
 }
 

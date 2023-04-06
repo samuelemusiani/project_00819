@@ -3,11 +3,11 @@
 
 class Credits
 {
-    private:
-        
-    public:
-        //~Credits();
-        int drawCredits();
-        void openGithub(int developer);
+	private:
+		
+	public:
+		//~Credits();
+		int drawCredits();
+		void openGithub(int developer);
 };
 

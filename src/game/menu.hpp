@@ -18,9 +18,10 @@ class Menu
 
 		Menu(int x, int y);
 
-		int drawMenu(); // Disegna il menu
+		void drawMenu(); // Disegna il menu
 
 		bool isSelected(int selection);
 		
+		int get_selected_option();
 		
 };
