@@ -14,7 +14,7 @@ void drawChar(phy::Point p)
 	int y_max;
 	getmaxyx(stdscr, y_max, x_max);
 
-	mvprintw(y_max - p.get_yPosition(), p.get_xPosition(), "T");
+	mvprintw(y_max - p.get_yPosition(), p.get_xPosition(), "@");
 }
 
 void drawProtagonist() 
@@ -28,18 +28,28 @@ void drawProtagonist()
 
 	phy::Body b;
 	b.set_position(phy::Point(0, 0));
-	b.set_velocity(phy::Vector(10, 70));
-	b.set_acceleration(phy::Vector(1, -90));
+	b.set_velocity(phy::Vector(4, 60));
+	b.set_acceleration(phy::Vector(0.4, -90));
+
+	int tmp;
 
 	while(!EXIT)
 	{
-		b.update(1);
+		b.update(0.15);
 		//b.set_position(phy::Point(x, y));
 
 		drawChar(b.get_position());
+
 		refresh();
 		//sleep(0.8);
-		std::this_thread::sleep_for(std::chrono::milliseconds(300));
+		std::this_thread::sleep_for(std::chrono::milliseconds(20));
+
+		// tmp++;
+		//Double jmp :)
+		// if(tmp % 60 == 0)
+		// 	b.set_velocity(phy::Vector(4, 55));
+
+		clear();
 
 		/*
 		ch = getchar();
@@ -92,19 +102,15 @@ void drawProtagonist()
 	}
 }
 
-void basicJump()
-{
-}
-
 int main()
 {
 	initscr();
 	cbreak();
 	noecho();
 	keypad(stdscr, TRUE);
+	curs_set(0);
 
 	drawProtagonist();
-	basicJump();
 
 	endwin();
 
