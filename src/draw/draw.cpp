@@ -15,3 +15,12 @@ int Draw::centerX(std::string text){
 	return x;
 }
 
+void Draw::drawSquare(int posY, int posX, int sizeY, int sizeX){
+	// Draw a square using mvaddch ACS Corner, ACS HLine, ACS VLine
+	mvaddch(posY - sizeY, posX - sizeX, ACS_ULCORNER);
+	mvaddch(posY - sizeY, posX + sizeX, ACS_URCORNER);
+	mvaddch(posY + sizeY, posX - sizeX, ACS_LLCORNER);
+	mvaddch(posY + sizeY, posX + sizeX, ACS_LRCORNER);
+
+
+}

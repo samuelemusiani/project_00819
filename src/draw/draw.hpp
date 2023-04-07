@@ -11,6 +11,7 @@ class Draw : public Screen{
 		void drawText(int posY, int posX, std::string options);
 		static void drawBox();
 		static int centerX(std::string text);
+		void drawSquare(int posY, int posX, int sizeY, int sizeX);
 };	
 
 #endif

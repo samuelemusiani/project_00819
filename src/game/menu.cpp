@@ -74,6 +74,7 @@ int Menu::get_selected_option() {
 	
 bool Menu::isSelected(int selection){
 	Credits credits;
+	Settings settings;
 	Game game;
 	switch (selection)
 	{
@@ -90,7 +91,9 @@ bool Menu::isSelected(int selection){
 		return(false);
 		break;
 	case 2: 
-		// Settings and help
+		// Settings
+		settings.drawSettings();
+		return(false);
 		break; 
 	
 	case 3:
