@@ -1,20 +1,16 @@
 #include "platform.hpp"
+#include <vector>
 #ifndef MAPS_CHUNK
 #define MAPS_CHUNK
-
-#define MAX_PLATFORMS 25
 
 class Chunk
 {
     private:
-        Platform* platforms = new Platform[MAX_PLATFORMS];
-        int usedPlatforms;
+        std::vector<Platform> platforms;
     public:
-        Chunk();
-        ~Chunk();
         void add_platform(phy::Point pos, int len);
         bool is_there_a_platform(phy::Point pos);
-        Platform* get_platforms();
+        std::vector<Platform>* get_platforms();
 };
 
 #endif
