@@ -1,0 +1,89 @@
+#include <cstdlib>
+#include <cstring>
+#include "vector.hpp"
+
+using namespace nostd;
+
+void vector::reallocate()
+{
+	if (this->_capacity == 0)
+	{
+		this->_A = (int*) malloc(1 * sizeof(int));
+		this->_capacity = 1;
+	}
+	else if (this->_capacity == 1)
+	{
+		int* tmp = (int*) malloc(2 * sizeof(int));
+		std::memcpy(tmp, this->_A, 1 * sizeof(int));
+		delete this->_A;
+
+		this->_A = tmp;
+		this->_capacity = 2;
+	} else
+	{
+		int new_capacity = (int) (this->_capacity * 2);
+		int* tmp = (int*) malloc(new_capacity * sizeof(int));
+		std::memcpy(tmp, this->_A, this->_capacity * sizeof(int));
+		delete[] this->_A;
+
+		this->_A = tmp;
+		this->_capacity = new_capacity;
+	}
+}
+
+vector::vector()
+{
+	this->_A = nullptr;
+	this->_size = 0;
+	this->_capacity = 0;
+}
+
+vector::vector(int size)
+{
+	this->_A = (int*) malloc(size * sizeof(int));
+	this->_size = size;
+	this->_capacity = size;
+}
+
+vector::~vector()
+{
+	this->clear();
+}
+
+int vector::at(int pos)
+{
+	if(pos >= this->_size)
+		return *(this->_A + this->_size - 1);
+	else
+		return *(this->_A + pos);
+}
+
+int vector::size()
+{
+	return (int) this->_size;
+}
+
+int vector::capacity()
+{
+	return (int) this->_capacity;
+}
+
+void vector::push_back(int data)
+{
+	if(this->_size == this->_capacity)
+		this->reallocate();
+
+	//Devo fare dei check?
+
+	*(this->_A + this->_size) = data;
+	this->_size++;
+}
+
+void vector::clear()
+{
+	delete[] this->_A;
+	this-> _A = nullptr;
+	this->_size = 0;
+	this->_capacity = 0;
+}
+
