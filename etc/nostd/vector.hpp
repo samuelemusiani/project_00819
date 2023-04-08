@@ -1,3 +1,6 @@
+#include <algorithm>
+#include <cstring>
+
 #ifndef NOSTD_VECTOR
 #define NOSTD_VECTOR
 
