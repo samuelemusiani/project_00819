@@ -14,6 +14,7 @@ namespace nostd
 			unsigned int _capacity;
 
 			void reallocate();
+			void reallocate(int dim);
 
 		public:
 			vector();
@@ -29,8 +30,9 @@ namespace nostd
 			int capacity();
 
 			/* Modifiers */
-			void push_back(int data);
 			void clear();
+			void push_back(int data);
+			void resize(int size);
 	};
 }
 #endif
