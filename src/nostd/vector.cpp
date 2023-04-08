@@ -126,3 +126,8 @@ void vector::resize(int size)
 		}
 	}
 }
+
+int& vector::operator [](int pos)
+{
+	return *(this->_A + pos);
+}

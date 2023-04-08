@@ -33,6 +33,11 @@ namespace nostd
 			void clear();
 			void push_back(int data);
 			void resize(int size);
+
+
+			/* Operator overloading */
+
+			int& operator [](int pos);
 	};
 }
 #endif
