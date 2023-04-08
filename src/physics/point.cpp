@@ -30,3 +30,25 @@ int phy::Point::get_yPosition()
 {
 	return this->posY;
 }
+
+bool phy::Point::operator ==(const phy::Point &p)
+{
+	return (posX == p.posX && posY == p.posY);
+}
+
+bool phy::Point::operator !=(const phy::Point &p)
+{
+	return !(posX == p.posX && posY == p.posY);
+}
+
+phy::Point phy::Point::operator +(const phy::Point &p)
+{
+	phy::Point tmp = phy::Point(posX + p.posX, posY + p.posY);
+	return tmp;
+}
+
+phy::Point phy::Point::operator -(const phy::Point &p)
+{
+	phy::Point tmp = phy::Point(posX - p.posX, posY - p.posY);
+	return tmp;
+}
