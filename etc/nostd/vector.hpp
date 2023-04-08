@@ -153,8 +153,10 @@ namespace nostd
 			{
 				this->_size = size;
 
-				if (this->_size < this->_capacity / 3)
+				if (this->_size >= this->_capacity / 4 && this->_size <= this->_capacity / 3)
 					reallocate(this->_capacity / 2);
+				else if (this->_size <= this->_capacity / 4)
+					reallocate(this->_size * 2);
 			}
 			else
 			{
