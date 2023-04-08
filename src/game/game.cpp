@@ -6,11 +6,11 @@
 WINDOW *win;
 
 Game::Game()
-{	
+{
 	this->screen = Draw();
-	screen.init();
+	this->screen.init();
 
-}	
+}
 
 Game::~Game()
 {
@@ -33,11 +33,12 @@ void Game::run()
 void Game::start()
 {
 	// clear the screen and draw the border
-	screen.clearScreen();	
+	screen.clearScreen();
 }
 
 void Game::resume()
 {
 	screen.clearScreen();
-	screen.drawText(3, 75 - (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
+	std::string s = "Load your game from a saved file";
+	screen.centerX(s, 3, 75 - (s.length()/2) );
 }

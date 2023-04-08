@@ -27,10 +27,10 @@ void Screen::init()
 	getmaxyx(stdscr, yMaxSize, xMaxSize);
 	int posY = (yMaxSize - 44) / 2;
 	int posX = (xMaxSize - 150) / 2;
-	win = newwin(44, 150, posY, posX);
+	WINDOW* win = newwin(44, 150, posY, posX);
 	keypad(win, true);
 	set_escdelay(1);
-	this-> max_x = getmaxx(win); 
+	this-> max_x = getmaxx(win);
 	this-> max_y = getmaxy(win);
 	init_pair(2, COLOR_GREEN, COLOR_BLACK);
 	init_pair(1, COLOR_WHITE, COLOR_BLUE);
@@ -60,6 +60,6 @@ void Screen::clearScreen()
 
 void Screen::eraseScreen()
 {
-	werase(win); 
+	werase(win);
 	box(win, 0, 0);
 }

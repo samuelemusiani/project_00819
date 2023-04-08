@@ -4,20 +4,23 @@
 #include "../maps/platform.hpp"
 #include "../physics/point.hpp"
 #include "screen.hpp"
-#include <string>
+#include <cstring>
+#include <vector>
 
 
 #ifndef DRAW_DRAW
 #define DRAW_DRAW
 class Draw : public Screen{
 	private:
-		void drawChunk(Chuck c);
-		void drawPlatform(Platform plat);
+		void drawPlatform(std::vector<Platform> plat);
 	public:
-		void drawText(int posY, int posX, std::string options);
+		void drawText(int posY, int posX, std::string s);
+		void attrOff(int c_pair);
+		void attrOn(int c_pair);
 		void clearWindow();
 		void drawMap(Map map, int nChunck);
-		void drawPlayer(Point p);
+		void drawPlayer(phy::Point p);
+		void centerX(std::string s, int posY, int posX);
 
 };
 
