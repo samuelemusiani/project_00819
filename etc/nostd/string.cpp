@@ -98,7 +98,7 @@ double nostd::string::stod()
     return result;
 }
 
-char* nostd::string::c_str()
+const char* nostd::string::c_str()
 {
     return this->buffer;
 }
@@ -112,10 +112,5 @@ void nostd::string::clear()
 
 bool nostd::string::is_empty()
 {
-    if(this->size > 0)
-        return false;
-    else
-        return true;
+    return (this->size == 0);
 }
-
-
