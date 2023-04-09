@@ -37,9 +37,32 @@ void point_test_2()
 	TEST(123849, p.get_yPosition(), POINT_TEST);
 }
 
+void point_test_3()
+{
+	CERR_YELLOW("point_test_3");
+
+	phy::Point a = phy::Point(50, -10);
+	phy::Point b = phy::Point(50, -10);
+	TEST(true, a == b, POINT_TEST);
+
+	a.set_xPosition(30);
+	TEST(false, a == b, POINT_TEST);
+	TEST(true, a != b, POINT_TEST);
+
+	phy::Point c;
+	c = a + b;
+	TEST(true, c == phy::Point(80, -20), POINT_TEST);
+	TEST(true, a == phy::Point(30, -10), POINT_TEST);
+	TEST(true, b == phy::Point(50, -10), POINT_TEST);
+
+	c = b - a;
+	TEST(true, c == phy::Point(20, 0), POINT_TEST);
+}
+
 bool point_test()
 {
 	point_test_1();
 	point_test_2();
+	point_test_3();
 	return POINT_TEST;
 }

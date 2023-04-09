@@ -31,6 +31,10 @@ namespace phy
 			int get_yComponent();
 
 			static phy::Vector sum(phy::Vector v1, phy::Vector v2);
+
+			bool operator ==(const Vector &p);
+			bool operator !=(const Vector &p);
+			Vector operator +(const Vector &p);
 	};
 }
 #endif

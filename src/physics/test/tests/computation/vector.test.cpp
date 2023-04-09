@@ -144,12 +144,33 @@ void vector_test_4()
 	TEST_APPROX(abs(30 - v3.get_direction()) <= 5, VECTOR_TEST);
 
 
-	v1 = phy::Vector(2.236, 153);
 	v2 = phy::Vector(10, 177);
+	v1 = phy::Vector(2.236, 153);
 	v3 = phy::Vector::sum(v1, v2);
 	TEST_APPROX(abs(12.07 - v3.get_magnitude()) < 0.3, VECTOR_TEST);
 	TEST_APPROX(abs(172 - v3.get_direction()) <= 5, VECTOR_TEST);
 
+}
+
+void vector_test_5()
+{
+	CERR_YELLOW("vector_test_4");
+
+	phy::Vector a = phy::Vector(10, 90);
+	phy::Vector b = phy::Vector(10, 90);
+	TEST(true, a == b, VECTOR_TEST);
+
+	a.set_magnitude(20);
+	TEST(false, a != b, VECTOR_TEST);
+
+	phy::Vector c = a + b;
+	TEST(true, c == phy::Vector(0, 0), VECTOR_TEST);
+
+	a = phy::Vector(10, 177);
+	b = phy::Vector(2.236, 153);
+	c = a + b;
+	TEST_APPROX(abs(12.07 - c.get_magnitude()) < 0.3, VECTOR_TEST);
+	TEST_APPROX(abs(172 - c.get_direction()) <= 5, VECTOR_TEST);
 }
 
 

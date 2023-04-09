@@ -68,3 +68,18 @@ phy::Vector phy::Vector::sum(phy::Vector v1, phy::Vector v2)
 
 	return v;
 }
+
+bool phy::Vector::operator ==(const phy::Vector &p)
+{
+	return (magnitude == p.magnitude && alpha == p.alpha);
+}
+
+bool phy::Vector::operator !=(const phy::Vector &p)
+{
+	return !(magnitude == p.magnitude && alpha == p.alpha);
+}
+
+phy::Vector phy::Vector::operator +(const phy::Vector &p)
+{
+	return sum(phy::Vector(magnitude, alpha), p);
+}
