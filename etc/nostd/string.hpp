@@ -13,10 +13,10 @@ namespace nostd {
             string();
             string(const char *str);
             ~string();
-            string &operator=(const char *s);
+            string& operator=(const char *s);
             friend std::ostream& operator<<(std::ostream& out, const string& s);
             int length();
-            char *c_str();
+            const char* c_str();
             int stoi();
             double stod();
             bool is_empty();
