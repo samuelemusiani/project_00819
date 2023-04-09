@@ -1,5 +1,4 @@
 #include "map.hpp"
-#include "../../etc/logs/logs.hpp"
 // A chunk is 148x42
 
 Map::Map()
