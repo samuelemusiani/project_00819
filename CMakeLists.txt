@@ -24,12 +24,16 @@ list(FILTER SRC_PHYSYCS_FILES EXCLUDE REGEX "test/.*" )
 #LOGS
 file(GLOB_RECURSE ETC_LOGS_FILES etc/logs/*.cpp)
 
+#NOSTD
+file(GLOB_RECURSE ETC_NOSTD_FILES etc/nostd/*.cpp)
+
 add_executable(game src/main.cpp
 		${SRC_GAME_FILES}
 		${SRC_DRAW_FILES}
 		${SRC_PHYSYCS_FILES}
 		${SRC_MAPS_FILES}
-		${ETC_LOGS_FILES})
+		${ETC_LOGS_FILES}
+		${ETC_NOSTD_FILES})
 
 target_link_libraries(game ${CURSES_LIBRARIES})
 target_compile_features(game PRIVATE cxx_std_11)
