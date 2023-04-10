@@ -4,6 +4,10 @@ void Draw::drawText(int posY, int posX, std::string s) {
 	mvwprintw(this->screen, posY, posX, s.c_str());
 }
 
+void Draw::drawBox(){
+	box(this->screen, 0, 0);
+}
+
 void Draw::clearWindow() {
 	wclear(this->screen);
 }
