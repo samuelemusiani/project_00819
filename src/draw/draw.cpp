@@ -1,23 +1,23 @@
 #include "draw.hpp"
 
 void Draw::drawText(int posY, int posX, std::string s) {
-	mvwprintw(this->screen, posY, posX, s.c_str());
+	mvwprintw(win, posY, posX, s.c_str());
 }
 
 void Draw::drawBox(){
-	box(this->screen, 0, 0);
+	box(win, 0, 0);
 }
 
 void Draw::clearWindow() {
-	wclear(this->screen);
+	wclear(win);
 }
 
 void Draw::attrOn(int c_pair) {
-	wattron(this->screen, COLOR_PAIR(c_pair));
+	wattron(win, COLOR_PAIR(c_pair));
 }
 
 void Draw::attrOff(int c_pair) {
-	wattroff(this->screen, COLOR_PAIR(c_pair));
+	wattroff(win, COLOR_PAIR(c_pair));
 }
 
 //draw map
@@ -31,13 +31,13 @@ void Draw::drawMap(Map map, int nChunk) {
 void Draw::drawPlatform(std::vector<Platform> plat) {
 	for(int i = 0; i < plat.size(); i++) {
 		for(int j = 0; j < plat[i].get_length(); j++) {
-			mvwprintw(this->screen, plat[i].get_position().get_yPosition(), plat[i].get_position().get_yPosition()+j, "=");
+			mvwprintw(win, plat[i].get_position().get_yPosition(), plat[i].get_position().get_yPosition()+j, "=");
 		}
 	}
 }
 
 void Draw::drawPlayer(phy::Point p) {
-	mvwprintw(this->screen, p.get_yPosition(), p.get_xPosition(), "@");
+	mvwprintw(win, p.get_yPosition(), p.get_xPosition(), "@");
 }
 
 void Draw::centerX(std::string s, int posY, int posX) { //posizione del primo carattere
@@ -52,18 +52,18 @@ void Draw::centerX(std::string s, int posY, int posX) { //posizione del primo ca
 
 	//questo ciclo disegna i bordi orizzontali
 	for(int i = 0; i < x; i++) {
-		mvwaddch(this->screen, posY, posX+i, 0);
-		mvwaddch(this->screen, posY-2, posX+i, 0);
+		mvwaddch(win, posY, posX+i, 0);
+		mvwaddch(win, posY-2, posX+i, 0);
 	}
 
 	//questi due comandi disegnano i bordi verticali (assumendo che il testo sia alto 1 quadrato)
-	mvwaddch(this->screen, posY+1, posX, 0);
-	mvwaddch(this->screen, posY+1, posX+x+1, 0);
+	mvwaddch(win, posY+1, posX, 0);
+	mvwaddch(win, posY+1, posX+x+1, 0);
 
 	//corners of the rectangle
-	mvwaddch(this->screen, posY, posX, ACS_ULCORNER);
-	mvwaddch(this->screen, posY+2, posX, ACS_LLCORNER);
-	mvwaddch(this->screen, posY, posX+x+1, ACS_LLCORNER);
-	mvwaddch(this->screen, posY+2, posX+x+1, ACS_LRCORNER);
+	mvwaddch(win, posY, posX, ACS_ULCORNER);
+	mvwaddch(win, posY+2, posX, ACS_LLCORNER);
+	mvwaddch(win, posY, posX+x+1, ACS_LLCORNER);
+	mvwaddch(win, posY+2, posX+x+1, ACS_LRCORNER);
 
 }
