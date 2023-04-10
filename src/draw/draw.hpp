@@ -22,7 +22,7 @@ class Draw : public Screen{
 		void clearWindow();
 		void drawMap(Map map, int nChunck);
 		void drawPlayer(phy::Point p);
-		void centerX(std::string s, int posY, int posX);
+		void drawSquare(std::string s, int posY, int posX);
 
 };
 

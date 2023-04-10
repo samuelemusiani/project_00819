@@ -27,7 +27,7 @@ void Screen::init()
 	getmaxyx(stdscr, yMaxSize, xMaxSize);
 	int posY = (yMaxSize - 44) / 2;
 	int posX = (xMaxSize - 150) / 2;
-	WINDOW* win = newwin(44, 150, posY, posX);
+	win = newwin(44, 150, posY, posX);
 	keypad(win, true);
 	set_escdelay(1);
 	this-> max_x = getmaxx(win);

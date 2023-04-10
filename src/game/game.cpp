@@ -1,14 +1,12 @@
 #include "game.hpp"
-#include "menu.hpp"
 #include <unistd.h>
-#include "game.hpp"
 
 WINDOW *win;
 
 Game::Game()
 {
 	this->screen = Draw();
-	this->screen.init();
+	screen.init();
 
 }
 
@@ -34,11 +32,14 @@ void Game::start()
 {
 	// clear the screen and draw the border
 	screen.clearScreen();
+	Draw maps;
+	Map map = Map();
+	maps.drawMap(map, 0);
 }
 
 void Game::resume()
 {
 	screen.clearScreen();
-	std::string s = "Load your game from a saved file";
-	screen.centerX(s, 3, 75 - (s.length()/2) );
+	std::string s = "w";
+	screen.drawSquare(s, 3, 75 - (s.length()/2) );
 }

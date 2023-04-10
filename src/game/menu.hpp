@@ -4,7 +4,11 @@
 #include "credits.hpp"
 #include "game.hpp"
 
+#ifndef MENU_MENU
+#define MENU_MENU
+
 #define NUMBER_OF_OPTIONS 4
+
 
 
 class Menu
@@ -21,7 +25,9 @@ class Menu
 		void drawMenu(); // Disegna il menu
 
 		bool isSelected(int selection);
-		
+
 		int get_selected_option();
-		
+
 };
+
+#endif
