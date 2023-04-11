@@ -35,6 +35,9 @@ namespace nostd
 
 			/* Operator overloading */
 			T& operator [](int pos);
+
+			vector(const vector<T>& other);
+			vector<T>& operator=(const vector<T>& other);
 	};
 
 	/*
@@ -175,6 +178,28 @@ namespace nostd
 	T& vector<T>::operator [](int pos)
 	{
 		return *(this->_A + pos);
+	}
+
+	template <typename T>
+	vector<T>::vector(const vector<T>& other)
+	{
+		this->_size = other._size;
+		this->_capacity = other._capacity;
+		this->_A = new T[this->_capacity];
+		std::copy(other._A, other._A + this->_size, this->_A);
+	}
+
+	template <typename T>
+	vector<T>& vector<T>::operator=(const vector<T>& other)
+	{
+		if (this != &other) {
+			delete[] _A;
+			this->_size = other._size;
+			this->_capacity = other._capacity;
+			this->_A = new T[this->_capacity];
+			std::copy(other._A, other._A + this->_size, this->_A);
+		}
+		return *this;
 	}
 }
 #endif
