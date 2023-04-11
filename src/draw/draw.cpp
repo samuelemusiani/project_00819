@@ -23,12 +23,11 @@ void Draw::attrOff(int c_pair) {
 //draw map
 void Draw::drawMap(Map map, int nChunk) {
 	//per adesso abbiamo solo il chunk 0
-	std::vector<Platform> plat = *map.get_chunk(nChunk).get_platforms();
-	this->drawPlatform(plat);
+	this->drawPlatform(*map.get_chunk(nChunk).get_platforms());
 }
 
 //draw a platform that display
-void Draw::drawPlatform(std::vector<Platform> plat) {
+void Draw::drawPlatform(std::vector<Platform> &plat) {
 	for(int i = 0; i < plat.size(); i++) {
 		for(int j = 0; j < plat[i].get_length(); j++) {
 			mvwprintw(win, plat[i].get_position().get_yPosition(), plat[i].get_position().get_xPosition()+j, "=");
