@@ -71,7 +71,3 @@ int Menu::get_selected_option() {
 	}
 	return selectedOption;
 }
-	
-void Menu::isSelected(int selection){
-
-}

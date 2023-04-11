@@ -20,8 +20,6 @@ class Menu
 		Menu(int x, int y);
 
 		void drawMenu(); // Disegna il menu
-
-		void isSelected(int selection);
 		
 		int get_selected_option();
 		
