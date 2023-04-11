@@ -14,14 +14,14 @@ Settings::~Settings()
 */
 void Settings::drawSettings(){
     // DEBUG
-    settings.drawBox(); // perchè si cancella da sola prima? 
+    settings.clearScreen(); // perchè si cancella da sola prima? 
     settings.drawText(3, 75 - (Draw::centerX("Settings")), "Settings");
     int selectedOption = 0;
     bool selected = false;
     while (!selected){
         int a = 0;
-        for (int j = 0; j < 4; j++){
-            for (int i = 0; i < 2; i++){
+        for (int i = 0; i < 2; i++){
+            for (int j = 0; j < 4; j++){
                 settings.drawText(10 + 3*j, 45 + 45*i, controls[a]);
                 // Una volta implementata la funziona drawSquare userò quella
                 mvwaddch(win, 10 + 3*j - 1, 60 + 45*i - 1, ACS_ULCORNER);
@@ -52,22 +52,27 @@ void Settings::drawSettings(){
                 }
                 break;
             case KEY_LEFT:
-                if (selectedOption > 0){
+                if (selectedOption > 3){
                     selectedOption = selectedOption - 4;
                 }
                 break;
             case KEY_RIGHT:
-                if (selectedOption < 7){
+                if (selectedOption < 4){
                     selectedOption = selectedOption + 4;
                 }
                 break;
+            case 27:
+                selected = true;
+                break;
             case 10:
                 settings.drawText(6, 75 - (Draw::centerX("Press the key you want to use")), "Press the key you want to use: ");
+                // implementare funzione che cambia i tasti
                 selected = true;
+                wgetch(win);
                 break;
         }
 
     }
-    wrefresh(win);
-
+    
+    
 }

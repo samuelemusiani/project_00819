@@ -21,7 +21,7 @@ class Menu
 
 		void drawMenu(); // Disegna il menu
 
-		bool isSelected(int selection);
+		void isSelected(int selection);
 		
 		int get_selected_option();
 		

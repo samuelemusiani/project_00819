@@ -17,9 +17,9 @@ void Menu::drawMenu() {
 	screen.drawText(3, (posX/2)-9, "|");
 	screen.drawText(3, (posX/2)+8, "|");
 	screen.drawText(3, (posX/2)-4, "JumpKing");
+
+	wrefresh(win);
 	
-	bool isSelected = false;
-	int selectedOption = 0;
 	
 }
 
@@ -38,7 +38,7 @@ int Menu::get_selected_option() {
 		wattron(win, COLOR_PAIR(1));
 		screen.drawText((posY/2-2) +2*selectedOption, posX/2 - (options[selectedOption].length()/2), options[selectedOption].c_str());
 		wattroff(win, COLOR_PAIR(1));
-
+		
 		// Prende l'input dell'utente e cambia la selezione
 		switch (wgetch(win)) {
 			case KEY_UP:
@@ -58,7 +58,7 @@ int Menu::get_selected_option() {
 				}
 				break;
 			case 27:
-				selectedOption = -1;
+				selectedOption = 27;
 				isSelected = true;
 				break;
 			case 10: 
@@ -72,40 +72,6 @@ int Menu::get_selected_option() {
 	return selectedOption;
 }
 	
-bool Menu::isSelected(int selection){
-	Credits credits;
-	Settings settings;
-	Game game;
-	switch (selection)
-	{
-	
-	case 0: 
-		// New Game
-		// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
-		game.start();
-		return(false);
-		break;
-	case 1: 
-		// Resume game
-		game.resume();
-		return(false);
-		break;
-	case 2: 
-		// Settings
-		settings.drawSettings();
-		return(false);
-		break; 
-	
-	case 3:
-		// chiama la funziona credits che si trova in credits.cpp
-		credits = Credits();
-		int dev = credits.drawCredits();
-		if (dev != -1) credits.openGithub(dev);
-		
-		return(false);
-		break;
-	
-	
+void Menu::isSelected(int selection){
 
-	}
 }
