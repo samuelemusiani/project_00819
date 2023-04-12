@@ -16,6 +16,7 @@ class Game
 		void run();
 		void start();
 		void resume();
+		bool exitGame();
 
 };
 

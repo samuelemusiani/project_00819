@@ -6,8 +6,7 @@ class Credits
 	private:
 		
 	public:
-		//~Credits();
-		int drawCredits();
+		int drawCredits(Draw screen);
 		void openGithub(int developer);
 };
 
