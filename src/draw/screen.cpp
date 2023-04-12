@@ -27,18 +27,18 @@ void Screen::init()
 	getmaxyx(stdscr, yMaxSize, xMaxSize);
 	int posY = (yMaxSize - 44) / 2;
 	int posX = (xMaxSize - 150) / 2;
-	win = newwin(44, 150, posY, posX);
-	keypad(win, true);
+	this->screen = newwin(44, 150, posY, posX);
+	keypad(this->screen, true);
 	set_escdelay(1);
-	this-> max_x = getmaxx(win);
-	this-> max_y = getmaxy(win);
+	this-> max_x = getmaxx(this->screen);
+	this-> max_y = getmaxy(this->screen);
 	init_pair(2, COLOR_GREEN, COLOR_BLACK);
 	init_pair(1, COLOR_WHITE, COLOR_BLUE);
 	// Ridefinisco il colore nero a 0,0,0 per alcuni terminali che mostrano un colore diverso
 	init_color(COLOR_BLACK, 0, 0, 0);
 	// Setto il background nero
-	wbkgd(win, COLOR_BLACK);
-	wrefresh(win);
+	wbkgd(this->screen, COLOR_BLACK);
+	wrefresh(this->screen);
 }
 
 int Screen::get_maxX()
@@ -53,13 +53,13 @@ int Screen::get_maxY()
 
 void Screen::clearScreen()
 {
-	wclear(win);
-	box(win, 0, 0);
-	wrefresh(win);
+	wclear(this->screen);
+	box(this->screen, 0, 0);
+	wrefresh(this->screen);
 }
 
 void Screen::eraseScreen()
 {
-	werase(win);
-	box(win, 0, 0);
+	werase(this->screen);
+	box(this->screen, 0, 0);
 }
