@@ -9,13 +9,9 @@
 {
 }*/
 
-int Credits::drawCredits(){
+int Credits::drawCredits(Draw settings){
 
-	Screen screen;
-	screen.clearScreen();
-	Draw credits;
-
-			
+	settings.clearScreen();	
 	
 	std::string developers[4] = {"@SuperMitic", "@musianisamuele", "@lorenzoperonese", "@Jabbar03"};
 	std::string creditstext[6] = {"JumpKing Game", "Alma Mater Studiorum Bologna University: project-00819", "This game has been developed", "in the year 2023 by", "Argonni Emanuele, Musiani Samuele", "Peronese Lorenzo, Ayache Omar"};
@@ -30,13 +26,13 @@ int Credits::drawCredits(){
 	for(int i = 42; i > -6 && !selected; i = i-1) {
 		if (i == -5) i = 42;
 
-		credits.eraseScreen();
+		settings.eraseScreen();
 	
-		credits.drawText(8, 20 - (strlen("Who we are?")/2), "Who we are?");
+		settings.drawText(8, 20 - (strlen("Who we are?")/2), "Who we are?");
 
 		// for loop to draw the developers
 		for(int j = 0; j < 4; j++){
-			credits.drawText(10 + 2*j, 20 - (developers[j].length()/2), developers[j]);
+			settings.drawText(10 + 2*j, 20 - (developers[j].length()/2), developers[j]);
 		}
 
 		if(!NEED_TO_REDRAW) i++;
@@ -44,13 +40,13 @@ int Credits::drawCredits(){
 		//for loop to draw the credits
 		for (int j = 0; j < 6; j++){
 			if(i + j > 0 && i + j < 43)
-				credits.drawText(i + j, 75 - (creditstext[j].length()/2), creditstext[j]);
+				settings.drawText(i + j, 75 - (creditstext[j].length()/2), creditstext[j]);
 		}
 
 		bool EXIT = false;
 		
 		wattron(win, A_UNDERLINE);
-		credits.drawText(10 + 2*selectedOption, 20 - (developers[selectedOption].length()/2), developers[selectedOption]);
+		settings.drawText(10 + 2*selectedOption, 20 - (developers[selectedOption].length()/2), developers[selectedOption]);
 		wattroff(win, A_UNDERLINE);
 
 		wrefresh(win);

@@ -12,9 +12,9 @@ Settings::~Settings()
     endwin();
 }
 */
-void Settings::drawSettings(){
-    // DEBUG
-    settings.clearScreen(); // perchè si cancella da sola prima? 
+void Settings::drawSettings(Draw settings){
+    
+    settings.clearScreen(); 
     settings.drawText(3, 75 - (Draw::centerX("Settings")), "Settings");
     int selectedOption = 0;
     bool selected = false;

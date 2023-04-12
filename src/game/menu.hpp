@@ -14,13 +14,13 @@ class Menu
 		int posY;
 		int posX;
 		std::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Settings", "Credits"};
-		Draw screen;
+		
 	public:
 
 		Menu(int x, int y);
 
-		void drawMenu(); // Disegna il menu
+		void drawMenu(Draw screen); // Disegna il menu
 		
-		int get_selected_option();
+		int get_selected_option(Draw screen);
 		
 };

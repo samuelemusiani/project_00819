@@ -3,10 +3,10 @@
 Menu::Menu(int x, int y) {
 	posX = x;
 	posY = y;
-	this->screen = screen;
+	
 	}
 	
-void Menu::drawMenu() {
+void Menu::drawMenu(Draw screen) {
 
 	// Disegna la box di colore verde
 	screen.clearScreen();
@@ -23,7 +23,7 @@ void Menu::drawMenu() {
 	
 }
 
-int Menu::get_selected_option() {
+int Menu::get_selected_option(Draw screen) {
 	bool isSelected = false;
 	int selectedOption = 0;
 	nodelay(win, false); // make getch() wait for input so that the menu doesn't refresh too fast - CPU FIX 

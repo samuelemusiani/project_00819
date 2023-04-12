@@ -24,14 +24,13 @@ void Game::run()
 	bool exit = false;
 	while (!exit) {
 
-		menu.drawMenu();
-		int x = menu.get_selected_option();
-		//menu.isSelected(x);
+		menu.drawMenu(this->screen);
+		int sel = menu.get_selected_option(this->screen);
 
 		Credits credits;
 		Settings settings;
 		
-		switch (x)
+		switch (sel)
 		{
 		
 		
@@ -48,7 +47,7 @@ void Game::run()
 			break;}
 		case 2: 
 			{// Settings
-			settings.drawSettings();
+			settings.drawSettings(this->screen);
 			
 			break; 
 			}
@@ -56,54 +55,14 @@ void Game::run()
 		{
 			// chiama la funziona credits che si trova in credits.cpp
 			credits = Credits();
-			int dev = credits.drawCredits();
+			int dev = credits.drawCredits(this->screen);
 			if (dev != -1) credits.openGithub(dev);
 			
 			break;
 		}
 		case 27:
 			{
-				// Esci dal gioco
-				wclear(win);
-				mvwprintw(win, 22, Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");
-				std::string options[2] = {"Yes", "No"};
-				int selected = 0;
-				bool choose = false;
-				// Create two button (yes or no) to quit the game 	
-				while (!choose){
-
-					for (int i = 0; i < 2; i++)
-					{
-						mvwprintw(win, 24 + 2*i, 30, options[i].c_str());
-
-					}
-					// Set the selected button to blue
-					wattron(win, COLOR_PAIR(1));
-					mvwprintw(win, 24 + 2*selected, 30, options[selected].c_str());
-					wattroff(win, COLOR_PAIR(1));
-
-					// Wait for the user to press a key
-					switch (wgetch(win))
-					{
-						case KEY_UP:
-							if (selected == 1) selected = selected - 1;
-							else if (selected == 0) selected = 1;
-							break;
-						case KEY_DOWN:
-							if (selected == 0) selected = selected + 1;
-							else if (selected == 1) selected = 0;
-							break;
-						case 10:
-							choose = true;
-							break;
-					}
-
-					
-					
-				}
-				if (selected == 0) exit = true;
-				
-
+				if (exitGame() == true) exit = true;
 			}
 		}
 		
@@ -111,6 +70,57 @@ void Game::run()
 	}
 }
 
+
+bool Game::exitGame(){
+	// Esci dal gioco
+	wclear(win);
+	mvwprintw(win, 16, 75 - Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");
+	std::string options[2] = {"Yes", "No"};
+	int selected = 0;
+	bool choose = false;
+	// Create two button (yes or no) to quit the game 	
+	while (!choose){
+
+		    mvwaddch(win, 18  - 5, 75 - 5, ACS_ULCORNER);
+			mvwaddch(win, 18  - 5, 75 + 5, ACS_URCORNER);
+			mvwaddch(win, 18  + 5, 75 - 5, ACS_LLCORNER);
+			mvwaddch(win, 18  + 5, 75 + 5, ACS_LRCORNER);
+			mvwaddch(win, 18, 75 - 20, ACS_VLINE);
+			mvwaddch(win, 18, 75 + 20, ACS_VLINE);
+			mvwaddch(win, 18  - 5, 75, ACS_HLINE);
+			mvwaddch(win, 18  + 5, 75, ACS_HLINE);
+
+		for (int i = 0; i < 2; i++)
+		{
+			mvwprintw(win, 20, 65 + 15*i, options[i].c_str());
+
+		}
+		// Set the selected button to blue
+		wattron(win, COLOR_PAIR(1));
+		mvwprintw(win, 20, 65 + 15*selected, options[selected].c_str());
+		wattroff(win, COLOR_PAIR(1));
+
+		// Wait for the user to press a key
+		switch (wgetch(win))
+		{
+			case KEY_LEFT:
+				if (selected == 1) selected = selected - 1;
+				else if (selected == 0) selected = 1;
+				break;
+			case KEY_RIGHT:
+				if (selected == 0) selected = selected + 1;
+				else if (selected == 1) selected = 0;
+				break;
+			case 10:
+				choose = true;
+				break;
+		}
+
+		
+		
+	}
+	if (selected == 0) return true;
+}
 
 void Game::start()
 {
