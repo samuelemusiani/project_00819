@@ -24,14 +24,8 @@ void Settings::drawSettings(Draw settings){
             for (int j = 0; j < 4; j++){
                 settings.drawText(10 + 3*j, 45 + 45*i, controls[a]);
                 // Una volta implementata la funziona drawSquare userò quella
-                mvwaddch(win, 10 + 3*j - 1, 60 + 45*i - 1, ACS_ULCORNER);
-                mvwaddch(win, 10 + 3*j - 1, 60 + 45*i + 1, ACS_URCORNER);
-                mvwaddch(win, 10 + 3*j + 1, 60 + 45*i - 1, ACS_LLCORNER);
-                mvwaddch(win, 10 + 3*j + 1, 60 + 45*i + 1, ACS_LRCORNER);
-                mvwaddch(win, 10 + 3*j, 60 + 45*i - 1, ACS_VLINE);
-                mvwaddch(win, 10 + 3*j, 60 + 45*i + 1, ACS_VLINE);
-                mvwaddch(win, 10 + 3*j - 1, 60 + 45*i, ACS_HLINE);
-                mvwaddch(win, 10 + 3*j + 1, 60 + 45*i, ACS_HLINE);
+                settings.drawSquare(keys[a], 10 + 3*j, 60 + 45*i);
+                
                 settings.drawText(10 + 3*j, 60 + 45*i, keys[a]);
                 a = a +1; 
             }

@@ -32,4 +32,4 @@ add_executable(game src/main.cpp
 		${ETC_LOGS_FILES})
 
 target_link_libraries(game ${CURSES_LIBRARIES})
-target_compile_features(game PRIVATE cxx_std_11)
+target_compile_features(game PRIVATE cxx_std_23)

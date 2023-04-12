@@ -81,23 +81,16 @@ bool Game::exitGame(){
 	// Create two button (yes or no) to quit the game 	
 	while (!choose){
 
-		    mvwaddch(win, 18  - 5, 75 - 5, ACS_ULCORNER);
-			mvwaddch(win, 18  - 5, 75 + 5, ACS_URCORNER);
-			mvwaddch(win, 18  + 5, 75 - 5, ACS_LLCORNER);
-			mvwaddch(win, 18  + 5, 75 + 5, ACS_LRCORNER);
-			mvwaddch(win, 18, 75 - 20, ACS_VLINE);
-			mvwaddch(win, 18, 75 + 20, ACS_VLINE);
-			mvwaddch(win, 18  - 5, 75, ACS_HLINE);
-			mvwaddch(win, 18  + 5, 75, ACS_HLINE);
 
 		for (int i = 0; i < 2; i++)
 		{
-			mvwprintw(win, 20, 65 + 15*i, options[i].c_str());
+			//mvwprintw(win, 20, 65 + 15*i, options[i].c_str());
+			screen.drawSquare(options[i], 20, 65 + 15*i);
 
 		}
 		// Set the selected button to blue
 		wattron(win, COLOR_PAIR(1));
-		mvwprintw(win, 20, 65 + 15*selected, options[selected].c_str());
+		screen.drawText(20, 65 + 15*selected, options[selected]);
 		wattroff(win, COLOR_PAIR(1));
 
 		// Wait for the user to press a key
