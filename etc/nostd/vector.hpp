@@ -4,6 +4,7 @@
 #ifndef NOSTD_VECTOR
 #define NOSTD_VECTOR
 
+#ifndef USE_STD
 namespace nostd
 {
 	template <typename T> class vector
@@ -202,4 +203,107 @@ namespace nostd
 		return *this;
 	}
 }
+#else //USO STD COME SUPPORTO
+#include <vector>
+
+namespace nostd
+{
+	template <typename T> class vector
+	{
+		private:
+			std::vector<T> v;
+
+		public:
+			vector();
+			vector(int size);
+
+			/* Element access */
+			T at(int pos);
+
+			/* Capacity */
+			int size();
+			int capacity();
+
+			/* Modifiers */
+			void clear();
+			void push_back(T data);
+			void resize(int size);
+
+			/* Operator overloading */
+			T& operator [](int pos);
+
+			vector(const vector<T>& other);
+			vector<T>& operator=(const vector<T>& other);
+	};
+
+	template <typename T>
+	vector<T>::vector() : vector(0)
+	{
+
+	}
+
+	template <typename T>
+	vector<T>::vector(int size)
+	{
+		this->v = std::vector<T>(size);
+	}
+
+	template <typename T>
+	T vector<T>::at(int pos)
+	{
+		return this->v.at(pos);
+	}
+
+	template <typename T>
+	int vector<T>::size()
+	{
+		return this->v.size();
+	}
+
+	template <typename T>
+	int vector<T>::capacity()
+	{
+		return this->v.capacity();
+	}
+
+	template <typename T>
+	void vector<T>::clear()
+	{
+		this->v.clear();
+	}
+
+	template <typename T>
+	void vector<T>::push_back(T data)
+	{
+		this->v.push_back(data);
+	}
+
+	template <typename T>
+	void vector<T>::resize(int size)
+	{
+		this->v.resize(size);
+	}
+
+	template <typename T>
+	T& vector<T>::operator [](int pos)
+	{
+		return this->v[pos];
+	}
+
+	template <typename T>
+	vector<T>::vector(const vector<T>& other)
+	{
+		this->v = other.v;
+	}
+
+	template <typename T>
+	vector<T>& vector<T>::operator=(const vector<T>& other)
+	{
+		if (this != &other) {
+			this->v = other.v;
+		}
+		return *this;
+	}
+}
+#endif
 #endif

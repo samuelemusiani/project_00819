@@ -73,7 +73,7 @@ void Game::run()
 bool Game::exitGame(){
 	// Esci dal gioco
 	screen.clearScreen();
-	screen.drawText(16, 75 - Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");	std::string options[2] = {"Yes", "No"};
+	screen.drawText(16, 75 - Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");	nostd::string options[2] = {"Yes", "No"};
 	int selected = 0;
 	bool choose = false;
 	// Create two button (yes or no) to quit the game 	
