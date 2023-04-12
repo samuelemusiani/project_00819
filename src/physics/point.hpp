@@ -17,7 +17,10 @@ namespace phy
 			int get_xPosition();
 			int get_yPosition();
 
-
+			bool operator ==(const Point &p);
+			bool operator !=(const Point &p);
+			Point operator +(const Point &p);
+			Point operator -(const Point &p);
 	};
 }
 #endif

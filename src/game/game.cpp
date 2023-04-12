@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include "game.hpp"
 
-WINDOW *win;
 
 Game::Game()
 {	
@@ -38,12 +37,12 @@ void Game::run()
 			{// New Game
 			// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
 			this->start();
-			wgetch(win);
+			screen.getinput();
 			break;}
 		case 1: 
 			{// Resume game
 			this->resume();
-			wgetch(win);
+			screen.getinput();
 			break;}
 		case 2: 
 			{// Settings
@@ -73,9 +72,8 @@ void Game::run()
 
 bool Game::exitGame(){
 	// Esci dal gioco
-	wclear(win);
-	mvwprintw(win, 16, 75 - Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");
-	std::string options[2] = {"Yes", "No"};
+	screen.clearScreen();
+	screen.drawText(16, 75 - Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");	std::string options[2] = {"Yes", "No"};
 	int selected = 0;
 	bool choose = false;
 	// Create two button (yes or no) to quit the game 	
@@ -84,17 +82,15 @@ bool Game::exitGame(){
 
 		for (int i = 0; i < 2; i++)
 		{
-			//mvwprintw(win, 20, 65 + 15*i, options[i].c_str());
 			screen.drawSquare(options[i], 20, 65 + 15*i);
-
 		}
 		// Set the selected button to blue
-		wattron(win, COLOR_PAIR(1));
+		screen.attrOn(COLOR_PAIR(1));
 		screen.drawText(20, 65 + 15*selected, options[selected]);
-		wattroff(win, COLOR_PAIR(1));
+		screen.attrOff(COLOR_PAIR(1));
 
 		// Wait for the user to press a key
-		switch (wgetch(win))
+		switch (screen.getinput())
 		{
 			case KEY_LEFT:
 				if (selected == 1) selected = selected - 1;
@@ -119,6 +115,10 @@ void Game::start()
 {
 	// clear the screen and draw the border
 	screen.clearScreen();
+	Map map = Map();
+	screen.drawMap(map, 0);
+	screen.refreshScreen();
+
 }
 
 void Game::resume()

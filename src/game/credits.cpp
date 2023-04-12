@@ -4,11 +4,6 @@
 
 
 
-
-/*Credits::~Credits()
-{
-}*/
-
 int Credits::drawCredits(Draw settings){
 
 	settings.clearScreen();	
@@ -17,7 +12,7 @@ int Credits::drawCredits(Draw settings){
 	std::string creditstext[6] = {"JumpKing Game", "Alma Mater Studiorum Bologna University: project-00819", "This game has been developed", "in the year 2023 by", "Argonni Emanuele, Musiani Samuele", "Peronese Lorenzo, Ayache Omar"};
 	int selectedOption = 0;
 	bool selected = false; 
-	nodelay(win, TRUE);
+	settings.nodel(true);
 
 	const int TIME_UPDATE_CREDITS = 100;
 	int CYCLES = 0;
@@ -45,11 +40,11 @@ int Credits::drawCredits(Draw settings){
 
 		bool EXIT = false;
 		
-		wattron(win, A_UNDERLINE);
+		settings.attrOn(A_UNDERLINE);
 		settings.drawText(10 + 2*selectedOption, 20 - (developers[selectedOption].length()/2), developers[selectedOption]);
-		wattroff(win, A_UNDERLINE);
+		settings.attrOff(A_UNDERLINE);
 
-		wrefresh(win);
+		settings.refreshScreen();
 		NEED_TO_REDRAW = false;
 
 		for(int j = 0; j < 50 && !selected && !EXIT; j++) {
@@ -64,7 +59,7 @@ int Credits::drawCredits(Draw settings){
 				break;
 			}
 			
-			switch (wgetch(win)) {
+			switch (settings.getinput()) {
 				case KEY_UP:
 					if (selectedOption > 0) {
 						selectedOption--;

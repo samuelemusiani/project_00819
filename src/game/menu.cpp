@@ -7,7 +7,7 @@ Menu::Menu(int x, int y) {
 	}
 	
 void Menu::drawMenu(Draw screen) {
-
+	
 	// Disegna la box di colore verde
 	screen.clearScreen();
 
@@ -18,7 +18,7 @@ void Menu::drawMenu(Draw screen) {
 	screen.drawText(3, (posX/2)+8, "|");
 	screen.drawText(3, (posX/2)-4, "JumpKing");
 
-	wrefresh(win);
+	screen.refreshScreen();
 	
 	
 }
@@ -26,7 +26,7 @@ void Menu::drawMenu(Draw screen) {
 int Menu::get_selected_option(Draw screen) {
 	bool isSelected = false;
 	int selectedOption = 0;
-	nodelay(win, false); // make getch() wait for input so that the menu doesn't refresh too fast - CPU FIX 
+	screen.nodel(false); // make getch() wait for input so that the menu doesn't refresh too fast - CPU FIX 
 	while (!isSelected) {
 		// Scrive le opzioni del menu
 		for (int i = 0 ; i < NUMBER_OF_OPTIONS; i++)
@@ -35,12 +35,12 @@ int Menu::get_selected_option(Draw screen) {
 			
 		}
 
-		wattron(win, COLOR_PAIR(1));
+		screen.attrOn(COLOR_PAIR(1));
 		screen.drawText((posY/2-2) +2*selectedOption, posX/2 - (options[selectedOption].length()/2), options[selectedOption].c_str());
-		wattroff(win, COLOR_PAIR(1));
+		screen.attrOff(COLOR_PAIR(1));
 		
 		// Prende l'input dell'utente e cambia la selezione
-		switch (wgetch(win)) {
+		switch (screen.getinput()) {
 			case KEY_UP:
 				if (selectedOption > 0) {
 					selectedOption--;

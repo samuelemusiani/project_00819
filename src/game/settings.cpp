@@ -8,7 +8,6 @@
 /*
 Settings::~Settings()
 {
-    wgetch(win);
     endwin();
 }
 */
@@ -30,11 +29,11 @@ void Settings::drawSettings(Draw settings){
                 a = a +1; 
             }
         }
-        wattron(win,    COLOR_PAIR(1));
+        settings.attrOn(COLOR_PAIR(1));
         if (selectedOption < 4) settings.drawText(10 + 3*selectedOption, 60, keys[selectedOption]);
         else settings.drawText(10 + 3*(selectedOption - 4), 105, keys[selectedOption]);
-        wattroff(win, COLOR_PAIR(1));
-        switch (wgetch(win)){
+        settings.attrOff(COLOR_PAIR(1));
+        switch (settings.getinput()){
             case KEY_UP:
                 if (selectedOption > 0){
                     selectedOption = selectedOption - 1;
@@ -62,7 +61,7 @@ void Settings::drawSettings(Draw settings){
                 settings.drawText(6, 75 - (Draw::centerX("Press the key you want to use")), "Press the key you want to use: ");
                 // implementare funzione che cambia i tasti
                 selected = true;
-                wgetch(win);
+                settings.getinput();
                 break;
         }
 
