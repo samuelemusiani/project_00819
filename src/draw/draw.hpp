@@ -12,7 +12,7 @@
 #define DRAW_DRAW
 class Draw : public Screen{
 	private:
-		void drawPlatform(std::vector<Platform> &plat);
+		void drawPlatform(nostd::vector<Platform> &plat);
 	public:
 		void drawText(int posY, int posX, std::string s);
 		void attrOff(int c_pair);

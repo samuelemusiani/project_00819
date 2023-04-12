@@ -24,7 +24,7 @@ void Draw::drawMap(Map map, int nChunk) {
 }
 
 //draw a platform that display
-void Draw::drawPlatform(std::vector<Platform> &plat) {
+void Draw::drawPlatform(nostd::vector<Platform> &plat) {
 	for(int i = 0; i < plat.size(); i++) {
 		for(int j = 0; j < plat[i].get_length(); j++) {
 			mvwprintw(this->screen, plat[i].get_position().get_yPosition(), plat[i].get_position().get_xPosition()+j+1, "=");
