@@ -13,7 +13,7 @@ class Menu
 	private:
 		int posY;
 		int posX;
-		std::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Settings", "Credits"};
+		nostd::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Settings", "Credits"};
 		
 	public:
 

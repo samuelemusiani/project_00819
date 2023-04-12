@@ -2,7 +2,7 @@
 #include <cstring>
 
 
-void Draw::drawText(int posY, int posX, std::string s) {
+void Draw::drawText(int posY, int posX, nostd::string s) {
 	mvwprintw(this->screen, posY, posX, s.c_str());
 }
 
@@ -37,7 +37,7 @@ void Draw::drawPlayer(phy::Point p) {
 }
 
 
-void Draw::drawSquare(std::string s, int posY, int posX) { //posizione del primo carattere
+void Draw::drawSquare(nostd::string s, int posY, int posX) { //posizione del primo carattere
 	this->drawText(posY, posX, s);
 
 	//calcolo della lunghezza della stringa
@@ -65,7 +65,7 @@ void Draw::drawSquare(std::string s, int posY, int posX) { //posizione del primo
 
 }
 
-int Draw::centerX(std::string text){
+int Draw::centerX(nostd::string text){
 	int x = strlen(text.c_str()) / 2;
 	return x;
 }
