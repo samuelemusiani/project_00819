@@ -21,6 +21,7 @@ void Game::run()
 {
 	Menu menu = Menu(screen.get_maxX(), screen.get_maxY());
 	bool exit = false;
+	menu.drawFirstMenu(this->screen);
 	while (!exit) {
 
 		menu.drawMenu(this->screen);
