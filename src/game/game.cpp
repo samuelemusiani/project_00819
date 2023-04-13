@@ -2,6 +2,10 @@
 #include "menu.hpp"
 #include <unistd.h>
 #include "game.hpp"
+#include "../physics/body.hpp"
+#include "../physics/point.hpp"
+#include "../physics/vector.hpp"
+
 
 
 Game::Game()
@@ -117,8 +121,47 @@ void Game::start()
 	screen.clearScreen();
 	Map map = Map();
 	screen.drawMap(map, 0);
-	screen.refreshScreen();
 
+	// Creare un oggetto body, chiamo getposition su body. Passo il punto che mi ritorna alla drawPlayer e la drawPlayer disegna il player in quella posizione
+	phy::Body player = phy::Body(phy::Point(10, 10), 1, 1);
+	screen.drawPlayer(player.get_position());
+	screen.refreshScreen();
+	
+	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
+	bool exit = false;
+	screen.nodel(true);
+	while (!exit){
+		
+		switch(screen.getinput())
+		{
+			case KEY_LEFT:
+				player.set_position(player.get_position() + phy::Point(-1, 0));
+				break;
+			case KEY_RIGHT:
+				player.set_position(player.get_position() + phy::Point(1, 0));
+				break;
+			case KEY_UP:
+				player.set_position(player.get_position() + phy::Point(0, -1));
+				break;
+			case KEY_DOWN:
+				player.set_position(player.get_position() + phy::Point(0, 1));
+				break;
+			case 27:
+				exit = true;
+				break;
+			default:
+				break;
+		}
+
+		screen.eraseScreen();
+		screen.drawMap(map, 0);
+		screen.drawPlayer(player.get_position());
+		napms(5);
+	
+	}
+	screen.nodel(false);
+	screen.clearScreen();	
+	
 }
 
 void Game::resume()

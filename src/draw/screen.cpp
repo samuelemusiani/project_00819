@@ -61,7 +61,7 @@ void Screen::clearScreen()
 {
 	wclear(this->screen);
 	box(this->screen, 0, 0);
-	wrefresh(this->screen);
+	
 }
 
 void Screen::eraseScreen()
