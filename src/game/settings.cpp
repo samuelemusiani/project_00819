@@ -23,7 +23,7 @@ void Settings::drawSettings(Draw settings){
             for (int j = 0; j < 4; j++){
                 settings.drawText(10 + 3*j, 45 + 45*i, controls[a]);
                 // Una volta implementata la funziona drawSquare userò quella
-                settings.drawSquare(keys[a], 10 + 3*j, 60 + 45*i);
+                settings.drawSquareAround(keys[a], 10 + 3*j, 60 + 45*i);
                 
                 settings.drawText(10 + 3*j, 60 + 45*i, keys[a]);
                 a = a +1; 

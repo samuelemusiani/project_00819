@@ -82,7 +82,7 @@ bool Game::exitGame(){
 
 		for (int i = 0; i < 2; i++)
 		{
-			screen.drawSquare(options[i], 20, 65 + 15*i);
+			screen.drawSquareAround(options[i], 20, 65 + 15*i);
 		}
 		// Set the selected button to blue
 		screen.attrOn(COLOR_PAIR(1));
