@@ -9,95 +9,47 @@ Menu::Menu(int x, int y) {
 
 void Menu::drawFirstMenu(Draw screen) {
 	
-	// Disegna la box di colore verde
 	screen.clearScreen();
-
-	    bool selected = false;
+	bool selected = false;
 	screen.nodel(true);
-	// crea un foor loop che mette in movimento il testo qui sopra da sinistra a destra 
-	/*for (int i = 0; i < 42 && !selected; i++) {
-		screen.drawText(19, i, "     ██╗██╗   ██╗███╗   ███╗██████╗ ");
-		screen.drawText(20, i, "     ██║██║   ██║████╗ ████║██╔══██╗");
-		screen.drawText(21, i, "     ██║██║   ██║██╔████╔██║██████╔ ");
-		screen.drawText(22, i, "██   ██║██║   ██║██║╚██╔╝██║██╔═══╝ ");
-		screen.drawText(23, i, "╚█████╔╝╚██████╔╝██║ ╚═╝ ██║██║     ");
-		screen.drawText(24, i," ╚════╝  ╚═════╝ ╚═╝     ╚═╝╚═╝      "); 
-		screen.drawText(19, 120-i, " ██╗  ██╗██╗███╗   ██╗ ██████╗ ");
-		screen.drawText(20, 120-i, " ██║ ██╔╝██║████╗  ██║██╔════╝ ");
-		screen.drawText(21, 120-i, " █████╔╝ ██║██╔██╗ ██║██║  ███╗");
-		screen.drawText(22, 120-i, " ██╔═██╗ ██║██║╚██╗██║██║   ██║");
-		screen.drawText(23, 120-i, " ██║  ██╗██║██║ ╚████║╚██████╔╝");
-		screen.drawText(24, 120-i," ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ "); 
-		screen.refreshScreen();
-		int x = screen.getinput();
-		if (x == 27 || x == 10)
-			selected = true;
-		napms(50);
-		screen.eraseScreen();	
-	}*/
 
-	for (int i = 0; i < 42 ; i++) {
+	// animazione del titolo all'avvio del gioco dai lati al centro
+	for (int i = 0; i < 42 && !selected ; i++) {
 		for (int j = 0; j < 6 ; j++) {
 			screen.drawText(19 + j, i, this->Jump[j]); 
 			screen.drawText(19 + j, 120 - i, this->King[j]);
 			}
 		screen.refreshScreen();
-		napms(50);
 		screen.eraseScreen();	
+		napms(50);
+		int x = screen.getinput();
+		if (x == 27 || x == 10) selected = true;
 	}
 
-
-	// un for loop che muove il testo dal centro al centro in alto
-	/*for (int i = 0; i < 16 && !selected; i++) {
-		screen.drawText(19-i, 42, "     ██╗██╗   ██╗███╗   ███╗██████╗ ");
-		screen.drawText(20-i, 42, "     ██║██║   ██║████╗ ████║██╔══██╗");
-		screen.drawText(21-i, 42, "     ██║██║   ██║██╔████╔██║██████╔ ");
-		screen.drawText(22-i, 42, "██   ██║██║   ██║██║╚██╔╝██║██╔═══╝ ");
-		screen.drawText(23-i, 42, "╚█████╔╝╚██████╔╝██║ ╚═╝ ██║██║     ");
-		screen.drawText(24-i, 42," ╚════╝  ╚═════╝ ╚═╝     ╚═╝╚═╝      "); 
-		screen.drawText(19-i, 78, " ██╗  ██╗██╗███╗   ██╗ ██████╗ ");
-		screen.drawText(20-i, 78, " ██║ ██╔╝██║████╗  ██║██╔════╝ ");
-		screen.drawText(21-i, 78, " █████╔╝ ██║██╔██╗ ██║██║  ███╗");
-		screen.drawText(22-i, 78, " ██╔═██╗ ██║██║╚██╗██║██║   ██║");
-		screen.drawText(23-i, 78, " ██║  ██╗██║██║ ╚████║╚██████╔╝");
-		screen.drawText(24-i, 78," ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ "); 
-		screen.refreshScreen();
-		int x = screen.getinput();
-		if (x == 27 || x == 10)
-			selected = true;
-		napms(300);
-		screen.eraseScreen();	
-	}*/
-	
-	for (int i = 0; i < 16 ; i++) {
+	// animazione del titolo all'avvio del gioco dal centro al centro in alto
+	for (int i = 0; i < 16 && !selected ; i++) {
 		for (int j = 0; j < 6 ; j++) {
 			screen.drawText(19 + j - i, 42, this->Jump[j]); 
 			screen.drawText(19 + j - i, 78, this->King[j]);
 			}
+		int x = screen.getinput();
+		if (x == 27 || x == 10) selected = true;
 		screen.refreshScreen();
-		napms(300);
-		screen.eraseScreen();	
+		screen.eraseScreen();
+		napms(250);
 	}
 
-	
-
+	screen.nodel(false);
 
 }
 
 void Menu::drawMenu(Draw screen){
 		screen.clearScreen();
-		screen.drawText(4, 42, "     ██╗██╗   ██╗███╗   ███╗██████╗ ");
-		screen.drawText(5, 42, "     ██║██║   ██║████╗ ████║██╔══██╗");
-		screen.drawText(6, 42, "     ██║██║   ██║██╔████╔██║██████╔ ");
-		screen.drawText(7, 42, "██   ██║██║   ██║██║╚██╔╝██║██╔═══╝ ");
-		screen.drawText(8, 42, "╚█████╔╝╚██████╔╝██║ ╚═╝ ██║██║     ");
-		screen.drawText(9, 42," ╚════╝  ╚═════╝ ╚═╝     ╚═╝╚═╝      "); 
-		screen.drawText(4, 78, " ██╗  ██╗██╗███╗   ██╗ ██████╗ ");
-		screen.drawText(5, 78, " ██║ ██╔╝██║████╗  ██║██╔════╝ ");
-		screen.drawText(6, 78, " █████╔╝ ██║██╔██╗ ██║██║  ███╗");
-		screen.drawText(7, 78, " ██╔═██╗ ██║██║╚██╗██║██║   ██║");
-		screen.drawText(8, 78, " ██║  ██╗██║██║ ╚████║╚██████╔╝");
-		screen.drawText(9, 78," ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ "); 
+		// Scrive il titolo del gioco fermo in alto
+		for (int j = 0; j < 6 ; j++) {
+			screen.drawText(4 + j, 42, this->Jump[j]); 
+			screen.drawText(4 + j, 78, this->King[j]);
+		}
 }
 
 int Menu::get_selected_option(Draw screen) {
