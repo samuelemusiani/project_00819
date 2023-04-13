@@ -122,13 +122,12 @@ void Game::start()
 	Map map = Map();
 	screen.drawMap(map, 0);
 
-	// Creare un oggetto body, il body ha una posizione, chiamo getposition su body. Passo il punto che mi ritorna alla drawPlayer e la drawPlayer disegna il player in quella posizione
+	// Creare un oggetto body, chiamo getposition su body. Passo il punto che mi ritorna alla drawPlayer e la drawPlayer disegna il player in quella posizione
 	phy::Body player = phy::Body(phy::Point(10, 10), 1, 1);
 	screen.drawPlayer(player.get_position());
 	screen.refreshScreen();
 	
 	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
-	// Se il giocatore si muove devo cancellare il giocatore dal vecchio punto facendo un clearScreen e poi disegnando il giocatore in quella posizione
 	bool exit = false;
 	screen.nodel(true);
 	while (!exit){
@@ -157,7 +156,7 @@ void Game::start()
 		screen.eraseScreen();
 		screen.drawMap(map, 0);
 		screen.drawPlayer(player.get_position());
-		napms(1);
+		napms(5);
 	
 	}
 	screen.nodel(false);
