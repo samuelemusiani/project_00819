@@ -15,7 +15,7 @@ void Menu::drawFirstMenu(Draw screen) {
 	    bool selected = false;
 	screen.nodel(true);
 	// crea un foor loop che mette in movimento il testo qui sopra da sinistra a destra 
-	for (int i = 0; i < 42 && !selected; i++) {
+	/*for (int i = 0; i < 42 && !selected; i++) {
 		screen.drawText(19, i, "     ██╗██╗   ██╗███╗   ███╗██████╗ ");
 		screen.drawText(20, i, "     ██║██║   ██║████╗ ████║██╔══██╗");
 		screen.drawText(21, i, "     ██║██║   ██║██╔████╔██║██████╔ ");
@@ -34,9 +34,21 @@ void Menu::drawFirstMenu(Draw screen) {
 			selected = true;
 		napms(50);
 		screen.eraseScreen();	
+	}*/
+
+	for (int i = 0; i < 42 ; i++) {
+		for (int j = 0; j < 6 ; j++) {
+			screen.drawText(19 + j, i, this->Jump[j]); 
+			screen.drawText(19 + j, 120 - i, this->King[j]);
+			}
+		screen.refreshScreen();
+		napms(50);
+		screen.eraseScreen();	
 	}
+
+
 	// un for loop che muove il testo dal centro al centro in alto
-	for (int i = 0; i < 16 && !selected; i++) {
+	/*for (int i = 0; i < 16 && !selected; i++) {
 		screen.drawText(19-i, 42, "     ██╗██╗   ██╗███╗   ███╗██████╗ ");
 		screen.drawText(20-i, 42, "     ██║██║   ██║████╗ ████║██╔══██╗");
 		screen.drawText(21-i, 42, "     ██║██║   ██║██╔████╔██║██████╔ ");
@@ -55,7 +67,19 @@ void Menu::drawFirstMenu(Draw screen) {
 			selected = true;
 		napms(300);
 		screen.eraseScreen();	
+	}*/
+	
+	for (int i = 0; i < 16 ; i++) {
+		for (int j = 0; j < 6 ; j++) {
+			screen.drawText(19 + j - i, 42, this->Jump[j]); 
+			screen.drawText(19 + j - i, 78, this->King[j]);
+			}
+		screen.refreshScreen();
+		napms(300);
+		screen.eraseScreen();	
 	}
+
+	
 
 
 }
