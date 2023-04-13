@@ -21,7 +21,8 @@ class Draw : public Screen{
 		void clearWindow();
 		void drawMap(Map map, int nChunck);
 		void drawPlayer(phy::Point p);
-		void drawSquare(nostd::string s, int posY, int posX);
+		void drawSquareAround(nostd::string s, int posY, int posX);
 		static int centerX(nostd::string text);
+		void drawRectagle(int posY, int posX, int length, int width);
 };
 #endif
