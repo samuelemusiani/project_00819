@@ -37,7 +37,7 @@ void Draw::drawPlayer(phy::Point p) {
 }
 
 
-void Draw::drawSquare(std::string s, int posY, int posX) { //posizione del primo carattere
+void Draw::drawSquareAround(std::string s, int posY, int posX) { //posizione del primo carattere
 	this->drawText(posY, posX, s);
 
 	//calcolo della lunghezza della stringa
@@ -65,8 +65,23 @@ void Draw::drawSquare(std::string s, int posY, int posX) { //posizione del primo
 
 }
 
-int Draw::centerX(std::string text){
+int Draw::centerX(std::string text) {
 	int x = strlen(text.c_str()) / 2;
 	return x;
 }
 
+void Draw::drawRectagle(int posY, int posX, int length, int width) {
+	for(int i = 0; i < length; i++) {
+		mvwaddch(this->screen, posY+i, posX, ACS_VLINE);
+		mvwaddch(this->screen, posY+i, posX+width, ACS_VLINE);
+	}
+	for(int i = 0; i < width; i++) {
+		mvwaddch(this->screen, posY, posX+i, ACS_HLINE);
+		mvwaddch(this->screen, posY+length, posX+i, ACS_HLINE);
+	}
+	//corners of the rectangle
+	mvwaddch(this->screen, posY, posX, ACS_ULCORNER);
+	mvwaddch(this->screen, posY+length, posX, ACS_LLCORNER);
+	mvwaddch(this->screen, posY, posX+width, ACS_URCORNER);
+	mvwaddch(this->screen, posY+length, posX+width, ACS_LRCORNER);
+}
