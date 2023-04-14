@@ -7,6 +7,8 @@
 class Save {
     public: 
         void saveGame(Draw screen);
+
+        void quitGame(Draw screen);
 };
 
 

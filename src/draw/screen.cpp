@@ -81,7 +81,7 @@ void Screen::refreshScreen()
 	wrefresh(this->screen);
 }
 
-void Screen::eraseScreenNoBox()
+void Screen::clearwithoutbox()
 {
 	werase(this->screen);
 }

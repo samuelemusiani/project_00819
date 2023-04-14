@@ -24,7 +24,7 @@ class Screen
 		void nodel(bool value);
 		void refreshScreen();
 		int getinput();
-		void eraseScreenNoBox();
+		void clearwithoutbox();
 		// Funzione che cancella la riga y a partire dalla colonnna x 
 		void clearLine(int y, int x);
 

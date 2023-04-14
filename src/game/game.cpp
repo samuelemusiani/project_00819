@@ -59,7 +59,6 @@ void Game::run()
 			// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
 			this->start();
 			
-			screen.getinput();
 			break;}
 		case 1: 
 			{// Resume game
@@ -223,10 +222,12 @@ void Game::start()
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
 			case 27:
-				
-				pauseGame();
-				
+
+			{	
+				bool quitGamepley = pauseGame();
+				if (quitGamepley == false) exit = true;
 				break;
+			}
 			default:
 				break;
 		}
@@ -328,29 +329,43 @@ void Game::pauseGame()
 {
 	screen.nodel(false);
 	// for che utilizzando move sposta il cursore a (y = i, x = 120) e cancella la riga con clrtoeol
-	for (int i = 0; i < screen.get_maxY(); i++)
+	/*for (int i = 0; i < screen.get_maxY(); i++)
 	{
 		screen.clearLine(i, 90);
-	}
-	screen.drawBox();
-	screen.drawVerticalLine(90, 1, 43);
-	screen.drawText(3, 120 - screen.center("Game Paused"),  "Game Paused");
-	nostd::string options[3] = {"Resume", "Save", "Exit"};
-	for (int i = 0; i < 3; i++)
+	}*/
+	//screen.drawBox();
+	bool resumed = false;
+	while(!resumed)
 	{
-		screen.drawSquareAround(options[i], 20 + 4*i, 120 - (options[i].length() / 2));
-	}
+
+	int xMaxSize, yMaxSize;
+	getmaxyx(stdscr, yMaxSize, xMaxSize);
+	int posY = (yMaxSize - 44) / 2;
+	int posX = (xMaxSize - 150) / 2;
+	
+	Draw pause = screen.newWindow(44, 60, posY, 90 + posX);
+	
+	pause.clearwithoutbox();
+	pause.drawBox();
+	screen.drawBox();
+	pause.drawText(3, 30 - pause.center("Game Paused"),  "Game Paused");
+	nostd::string options[3] = {"Resume", "Save", "Exit"};
 	int selected = 0;
 	bool choose = false;
-	while (!choose){
+	wnoutrefresh(screen.getScreen()); // copying of information from a window data structure to the virtual screen
+	wnoutrefresh(pause.getScreen()); // utilizzando wnoutrefresh, il refresh del terminale avviene solo al doupdate()
+	doupdate(); // aggiorna il terminale. Quindi si evita il flicker dato dal tempo che intercorre tra l'aggiornamento di due window usando il classico refresh
+	
+
+	while (!choose){	
 		for (int i = 0; i < 3; i++)
 		{
-			screen.drawSquareAround(options[i], 20 + 4*i, 120 - (options[i].length() / 2));
+			pause.drawSquareAround(options[i], 20 + 4*i, 30 - (options[i].length() / 2));
 		}
-		screen.attrOn(COLOR_PAIR(1));
-		screen.drawText(20 + 4*selected, 120 - (options[selected].length() / 2), options[selected]);
-		screen.attrOff(COLOR_PAIR(1));
-		switch (screen.getinput())
+		pause.attrOn(COLOR_PAIR(1));
+		pause.drawText(20 + 4*selected, 30 - (options[selected].length() / 2), options[selected]);
+		pause.attrOff(COLOR_PAIR(1));
+		switch (pause.getinput())
 		{
 			case KEY_UP:
 				if (selected == 0) selected = 2;
@@ -367,21 +382,52 @@ void Game::pauseGame()
 				break;
 		}
 	}
+	pause.refreshScreen();
+	Save save = Save();
 	switch (selected)
 	{
 		case 0:
 			screen.nodel(true);
+			pause.deleteWin();
+			resumed = true;
 			break;
 		case 1:
-			Save save = Save();
-			save.saveGame(this->screen);
+		{
+			pause.deleteWin();
+			int xMaxSize, yMaxSize;
+			getmaxyx(stdscr, yMaxSize, xMaxSize);
+			int posY = (yMaxSize - 44) / 2;
+			int posX = (xMaxSize - 150) / 2;
+			
+			Draw save_scr = screen.newWindow(44, 150, posY, posX);
+
+			save.saveGame(save_scr);
+			save_scr.eraseScreen();
+			save_scr.deleteWin();
 			break;
-		/*case 2: 
+		}
+			
+		case 2: 
+			{
+			pause.clearScreen();
+			pause.deleteWin();
+			redrawwin(screen.getScreen());	
+			screen.refreshScreen();
+			int xMaxSize, yMaxSize;
+			getmaxyx(stdscr, yMaxSize, xMaxSize);
+			int posY = (yMaxSize - 15) / 2;
+			int posX = (xMaxSize - 55) / 2;
+			
+			Draw quit_scr = screen.newWindow(15, 55, posY, posX);
+			save.quitGame(quit_scr);
+			quit_scr.eraseScreen();
+			quit_scr.deleteWin();
+			return false;
 			break;
+			}	
 		default:
 			break;
-		*/
+		
 	}
-
-	
+	}
 }
