@@ -1,6 +1,6 @@
 #include <math.h>
-#include "collisions.hpp"
 
+#include "collisions.hpp"
 #include "constants.hpp"
 #include "point.hpp"
 #include "precisePoint.hpp"
@@ -8,45 +8,57 @@
 #include "body.hpp"
 #include "../maps/chunk.hpp"
 
+#include "../../etc/logs/logs.hpp"
+
 
 static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPos, Chunk *chunk);
-static void resetVelocityAcceleration(phy::Body *body);
-static bool hasJumped(phy::Body *body);
-static bool is_on_a_platform(phy::Body *body, Chunk *chunk);
+static void resetVelocityAcceleration(phy::Body &body);
+static bool hasJumped(phy::Body &body);
+static bool is_on_a_platform(phy::Body &body, Chunk *chunk);
 /*
    Le possibilità per implementare la funzione sono molte.
-   L'idea è che prende un putatore a body e che lo aggiorna dopo 'time' tempo tenendo
-conto delle possibili collisioni che avvengono sul chunk.
+   L'idea è che prende un putatore a body e che lo aggiorna dopo 'time' tempo 
+   tenendo conto delle possibili collisioni che avvengono sul chunk.
 
-   1) Posso vedere la velocità di body, la su accelerazione e il tempo in modo che abbia 
-   due possibili sottoscelte: se il corpo dopo lo spotamente dato da 'time' si è spostato 
-   di un solo blocco mi basta controllare che quel blocco non sia una piattaforma e ho finito. 
-   Se invece si sposta di più di un blocco faccio aggiornamenti più piccoli suddividendo 
-   il tempo in maniera tale che si sposti sempre di un blocco e faccio sempre il check se  
-   ha toccato una piattaforma.
+   1) Posso vedere la velocità di body, la su accelerazione e il tempo in modo 
+   che abbia due possibili sottoscelte: se il corpo dopo lo spotamente dato da 
+   'time' si è spostato di un solo blocco mi basta controllare che quel blocco 
+   non sia una piattaforma e ho finito. Se invece si sposta di più di un blocco 
+   faccio aggiornamenti più piccoli suddividendo il tempo in maniera tale che 
+   si sposti sempre di un blocco e faccio sempre il check se ha toccato una 
+   piattaforma.
  
-   2) Posso calcolare tutta la traiettoria del punto e poi a posteriore fare un check se ho 
-   fatto una collisione. Solo che non saprei quando finire di calcolare la traiettoria (visto 
-   che potrebbe anche andare in caduta libera) e sopratutto avrei fatto calcoli inutili se 
-   la collissione fosse all'inzio.
+   2) Posso calcolare tutta la traiettoria del punto e poi a posteriore fare un 
+   check se ho fatto una collisione. Solo che non saprei quando finire di 
+   calcolare la traiettoria (visto che potrebbe anche andare in caduta libera) 
+   e sopratutto avrei fatto calcoli inutili se la collissione fosse all'inzio.
 */
 
 
-// Basandomi sull'euristica che il body del player verrà aggiornato per brevissimi intervalli
-// di tempo inzio ad implementare la prima possibilità
-void phy::updateWithCollisions(phy::Body *body, double time, Chunk *chunk)
+// Basandomi sull'euristica che il body del player verrà aggiornato per 
+// brevissimi intervalli di tempo inzio ad implementare la prima possibilità
+void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 {
 
 	if(!hasJumped(body))
 	{
-		if (is_on_a_platform(body, chunk))
+		if (is_on_a_platform(body, &chunk))
+		{
 			resetVelocityAcceleration(body);
+			// deb::debug(body.get_position(), "PIATTAFORMA");
+		}
 		else
 		{
-			body->set_acceleration(phy::Vector(phy::GRAVITY_ACCELERATION, 270));
+			//Caso in cui ho appena iniziato a cadere per eliminare il delay
+			if (body.get_velocity().get_magnitude() < 1)
+				body.set_velocity(phy::Vector(1, -90));
+
+			body.set_acceleration(phy::Vector(phy::GRAVITY_ACCELERATION, -90));
 			//STA CADENDO :)
 		}
-	}
+	} else 
+		body.set_acceleration(phy::Vector(phy::GRAVITY_ACCELERATION, -90));
+	/*
 	else
 	{
 		phy::Body old_body = *body;
@@ -76,7 +88,10 @@ void phy::updateWithCollisions(phy::Body *body, double time, Chunk *chunk)
 				break;
 		}
 	}
+	*/
+	body.update(time);
 }
+
 
 
 // 0 -> no collision
@@ -95,7 +110,7 @@ static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPo
 	else if (diff_x == 0)
 	{
 		for (int i = old_yPos; i <= new_yPos; i++)
-			if (chunk->is_there_a_platform(old_xPos, i))
+			if (chunk->is_there_a_platform(phy::Point(old_xPos, i)))
 				return 2;
 
 		return 0;
@@ -103,7 +118,7 @@ static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPo
 	else if (diff_y == 0)
 	{
 		for (int i = old_xPos; i <= new_xPos; i++)
-			if (chunk->is_there_a_platform(i, old_yPos))
+			if (chunk->is_there_a_platform(phy::Point(i, old_yPos)))
 				return 1;
 
 		return 0;
@@ -118,15 +133,15 @@ static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPo
 
 }
 
-static void resetVelocityAcceleration(phy::Body *body)
+static void resetVelocityAcceleration(phy::Body &body)
 {
-	body->set_velocity(phy::Vector(0, 0));
-	body->set_acceleration(phy::Vector(0, 0));
+	body.set_velocity(phy::Vector(0, 0));
+	body.set_acceleration(phy::Vector(0, 0));
 }
 
-static bool hasJumped(phy::Body *body)
+static bool hasJumped(phy::Body &body)
 {
-	phy::Vector v = body->get_velocity();
+	phy::Vector v = body.get_velocity();
 	
 	if (v.get_magnitude() < 0.1)
 		return false;
@@ -138,11 +153,7 @@ static bool hasJumped(phy::Body *body)
 	return false;
 }
 
-static bool is_on_a_platform(phy::Body *body, Chunk *chunk)
+static bool is_on_a_platform(phy::Body &body, Chunk *chunk)
 {
-	//DA SISTEMARE APPENA LORENZO FA IL PUSH CON LE FUNZIONI MODIFICATE
-
-	phy::Point p = phy::Point(body->get_position());
-	//p.set_yPosition(p.get_yPosition() - 1);
-	return (chunk->is_there_a_platform(p.get_xPosition(), p.get_yPosition() - 1));
+	return (chunk->is_there_a_platform(body.get_position() - phy::Point(0, 1)));
 }
