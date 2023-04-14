@@ -35,7 +35,7 @@ int Credits::drawCredits(Draw settings){
 		//for loop to draw the credits
 		for (int j = 0; j < 6; j++){
 			if(i + j > 0 && i + j < 43)
-				settings.drawText(i + j, 75 - (creditstext[j].length()/2), creditstext[j]);
+				settings.drawText(i + j, settings.centerX(creditstext[j]), creditstext[j]);
 		}
 
 		bool EXIT = false;
