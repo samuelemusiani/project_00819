@@ -41,7 +41,7 @@ void Game::run()
 			{// New Game
 			// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
 			this->start();
-			screen.getinput();
+			// TODO: Implementing pause menu 
 			break;}
 		case 1: 
 			{// Resume game
@@ -77,7 +77,7 @@ void Game::run()
 bool Game::exitGame(){
 	// Esci dal gioco
 	screen.clearScreen();
-	screen.drawText(16, 75 - Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");	nostd::string options[2] = {"Yes", "No"};
+	screen.drawText(16, Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");	nostd::string options[2] = {"Yes", "No"};
 	int selected = 0;
 	bool choose = false;
 	// Create two button (yes or no) to quit the game 	
@@ -118,7 +118,7 @@ bool Game::exitGame(){
 void Game::start()
 {
 	// clear the screen and draw the border
-	screen.clearScreen();
+	setDifficulty();
 	Map map = Map();
 	screen.drawMap(map, 0);
 
@@ -167,5 +167,39 @@ void Game::start()
 void Game::resume()
 {
 	screen.clearScreen();
-	screen.drawText(3, 75 - (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
+	screen.drawText(3, (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
+}
+
+int Game::setDifficulty()
+{
+	screen.clearScreen();
+	screen.drawText(3, (Draw::centerX("Select the difficulty")), "Select the difficulty");
+	nostd::string options[3] = {"Easy", "Medium", "Hard"};
+	int selected = 0;
+	bool choose = false;
+	while (!choose){
+		for (int i = 0; i < 3; i++)
+		{
+			screen.drawSquareAround(options[i], 20, 58 + 15*i);
+		}
+		screen.attrOn(COLOR_PAIR(1));
+		screen.drawText(20, 58 + 15*selected, options[selected]);
+		screen.attrOff(COLOR_PAIR(1));
+
+		switch (screen.getinput())
+		{
+			case KEY_LEFT:
+				if (selected == 0) selected = 2;
+				else selected = selected - 1;
+				break;
+			case KEY_RIGHT:
+				if (selected == 2) selected = 0;
+				else selected = selected + 1;
+				break;
+			case 10:
+				choose = true;
+				break;
+		}
+	}
+	return selected;
 }

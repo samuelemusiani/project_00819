@@ -66,7 +66,7 @@ void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione d
 }
 
 int Draw::centerX(nostd::string text){
-	int x = strlen(text.c_str()) / 2;
+	int x = 75 - (strlen(text.c_str()) / 2);
 	return x;
 }
 

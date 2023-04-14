@@ -14,7 +14,7 @@ Settings::~Settings()
 void Settings::drawSettings(Draw settings){
     
     settings.clearScreen(); 
-    settings.drawText(3, 75 - (Draw::centerX("Settings")), "Settings");
+    settings.drawText(3, (Draw::centerX("Settings")), "Settings");
     int selectedOption = 0;
     bool selected = false;
     while (!selected){
@@ -58,7 +58,7 @@ void Settings::drawSettings(Draw settings){
                 selected = true;
                 break;
             case 10:
-                settings.drawText(6, 75 - (Draw::centerX("Press the key you want to use")), "Press the key you want to use: ");
+                settings.drawText(6, (Draw::centerX("Press the key you want to use")), "Press the key you want to use: ");
                 // implementare funzione che cambia i tasti
                 selected = true;
                 settings.getinput();
