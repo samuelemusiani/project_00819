@@ -16,39 +16,41 @@ Map::Map(int seed)
 
 void Map::initialize_chunks() {
 	// 1st chunk
-	this->possible_chunks[0].add_platform(phy::Point(46, 3), 11);
-	this->possible_chunks[0].add_platform(phy::Point(112, 3), 15);
-	this->possible_chunks[0].add_platform(phy::Point(21, 8), 23);
-	this->possible_chunks[0].add_platform(phy::Point(86, 8), 21);
-	this->possible_chunks[0].add_platform(phy::Point(130, 8), 9);
-	this->possible_chunks[0].add_platform(phy::Point(2, 12), 11);
-	this->possible_chunks[0].add_platform(phy::Point(110, 14), 24);
-	this->possible_chunks[0].add_platform(phy::Point(23, 16), 10);
-	this->possible_chunks[0].add_platform(phy::Point(39, 19), 10);
-	this->possible_chunks[0].add_platform(phy::Point(85, 19), 26);
-	this->possible_chunks[0].add_platform(phy::Point(56, 23), 13);
-	this->possible_chunks[0].add_platform(phy::Point(80, 27), 19);
-	this->possible_chunks[0].add_platform(phy::Point(20, 29), 33);
-	this->possible_chunks[0].add_platform(phy::Point(95, 32), 22);
-	this->possible_chunks[0].add_platform(phy::Point(0, 36), 28);
-	this->possible_chunks[0].add_platform(phy::Point(97, 37), 31);
+	this->possible_chunks[0].add_platform(phy::Point(46, 39), 11);
+	this->possible_chunks[0].add_platform(phy::Point(112, 39), 15);
+	this->possible_chunks[0].add_platform(phy::Point(21, 34), 23);
+	this->possible_chunks[0].add_platform(phy::Point(86, 34), 21);
+	this->possible_chunks[0].add_platform(phy::Point(130, 34), 9);
+	this->possible_chunks[0].add_platform(phy::Point(2, 30), 11);
+	this->possible_chunks[0].add_platform(phy::Point(110, 28), 24);
+	this->possible_chunks[0].add_platform(phy::Point(23, 26), 10);
+	this->possible_chunks[0].add_platform(phy::Point(39, 23), 10);
+	this->possible_chunks[0].add_platform(phy::Point(85, 23), 26);
+	this->possible_chunks[0].add_platform(phy::Point(56, 19), 13);
+	this->possible_chunks[0].add_platform(phy::Point(80, 15), 19);
+	this->possible_chunks[0].add_platform(phy::Point(20, 13), 33);
+	this->possible_chunks[0].add_platform(phy::Point(95, 10), 22);
+	this->possible_chunks[0].add_platform(phy::Point(0, 6), 28);
+	this->possible_chunks[0].add_platform(phy::Point(97, 5), 31);
 
 	// 2nd chunk
-	this->possible_chunks[1].add_platform(phy::Point(60, 2), 12);
-	this->possible_chunks[1].add_platform(phy::Point(24, 6), 28);
-	this->possible_chunks[1].add_platform(phy::Point(80, 8), 22);
-	this->possible_chunks[1].add_platform(phy::Point(0, 15), 11);
-	this->possible_chunks[1].add_platform(phy::Point(114, 17), 6);
+	this->possible_chunks[1].add_platform(phy::Point(60, 40), 12);
+	this->possible_chunks[1].add_platform(phy::Point(24, 36), 28);
+	this->possible_chunks[1].add_platform(phy::Point(80, 34), 22);
+	this->possible_chunks[1].add_platform(phy::Point(0, 27), 11);
+	this->possible_chunks[1].add_platform(phy::Point(114, 25), 6);
 	this->possible_chunks[1].add_platform(phy::Point(29, 21), 24);
-	this->possible_chunks[1].add_platform(phy::Point(77, 24), 33);
-	this->possible_chunks[1].add_platform(phy::Point(38, 30), 23);
-	this->possible_chunks[1].add_platform(phy::Point(77, 36), 15);
+	this->possible_chunks[1].add_platform(phy::Point(77, 18), 33);
+	this->possible_chunks[1].add_platform(phy::Point(38, 12), 23);
+	this->possible_chunks[1].add_platform(phy::Point(77, 6), 15);
 }
 
 Chunk Map::get_chunk(int n)
 {
     if(n>=0)
         return this->possible_chunks[Random::generateChunk(this->seed,n)];
+	else
+		exit(1);
 }
 
 int Map::getCoins(int n)
