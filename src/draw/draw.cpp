@@ -27,13 +27,13 @@ void Draw::drawMap(Map map, int nChunk) {
 void Draw::drawPlatform(std::vector<Platform> &plat) {
 	for(int i = 0; i < plat.size(); i++) {
 		for(int j = 0; j < plat[i].get_length(); j++) {
-			mvwprintw(this->screen, plat[i].get_position().get_yPosition(), plat[i].get_position().get_xPosition()+j+1, "=");
+			mvwprintw(this->screen, OFFSET-plat[i].get_position().get_yPosition(), plat[i].get_position().get_xPosition()+j+1, "=");
 		}
 	}
 }
 
 void Draw::drawPlayer(phy::Point p) {
-	mvwprintw(this->screen, p.get_yPosition(), p.get_xPosition(), "@");
+	mvwprintw(this->screen, OFFSET-p.get_yPosition(), p.get_xPosition(), "@");
 }
 
 
