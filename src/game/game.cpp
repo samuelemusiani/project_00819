@@ -5,6 +5,7 @@
 #include "../physics/body.hpp"
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
+#include "save.hpp"
 
 
 
@@ -257,14 +258,14 @@ void Game::pauseGame()
 			screen.nodel(true);
 			break;
 		case 1:
-			// saveGame();
+			Save save = Save();
+			save.saveGame(this->screen);
 			break;
-		/*case 2:
-			// exitGamePlay();
+		/*case 2: 
 			break;
 		default:
 			break;
-			*/
+		*/
 	}
 
 	
