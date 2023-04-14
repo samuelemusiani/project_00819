@@ -22,7 +22,7 @@ void Save::saveGame(Draw screen){
         } 
         else if (nome.length() == 27) {
             screen.clearLine(23, 0);
-            screen.drawText(23, 75 - Draw::centerX("Max length reached"),  "Max length reached");
+            screen.drawText(23, Draw::centerX("Max length reached"),  "Max length reached");
             screen.refreshScreen();
         }
         else {
@@ -32,12 +32,12 @@ void Save::saveGame(Draw screen){
                 screen.refreshScreen();
             }
             else 
-                {screen.drawText(23, 75 - Draw::centerX("Only alphanumeric characters"),  "Only alphanumeric characters");}
+                {screen.drawText(23, Draw::centerX("Only alphanumeric characters"),  "Only alphanumeric characters");}
         }
 
         if (nome.length() > 0 && nome.length() < 27) {
             screen.attrOn(COLOR_PAIR(1));
-            screen.drawText(23, 75 - Draw::centerX("Press enter to confirm"), "Press enter to confirm");
+            screen.drawText(23, Draw::centerX("Press enter to confirm"), "Press enter to confirm");
             screen.attrOff(COLOR_PAIR(1));
             screen.refreshScreen();
         }
