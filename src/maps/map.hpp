@@ -17,6 +17,8 @@ class Map
         Map();
 		Map(int seed);
         Chunk get_chunk(int n);
+		int getCoins(int n);
+		int getEnemies(int n);
 };
 
 #endif

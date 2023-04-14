@@ -1,5 +1,6 @@
 #include "platform.hpp"
 #include "../../etc/nostd/vector.hpp"
+#include "../engine/random.hpp"
 #include <vector>
 #ifndef MAPS_CHUNK
 #define MAPS_CHUNK
