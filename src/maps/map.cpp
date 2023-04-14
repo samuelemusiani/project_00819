@@ -1,15 +1,13 @@
 #include "map.hpp"
 // A chunk is 148x42
 
-Map::Map()
-{
+Map::Map() {
 	srand(time(nullptr));
 	this->seed.setSeed(rand());
-    initialize_chunks();
+	initialize_chunks();
 }
 
-Map::Map(int seed)
-{
+Map::Map(int seed) {
 	this->seed.setSeed(seed);
 	initialize_chunks();
 }
@@ -45,20 +43,17 @@ void Map::initialize_chunks() {
 	this->possible_chunks[1].add_platform(phy::Point(77, 6), 15);
 }
 
-Chunk Map::get_chunk(int n)
-{
-    if(n>=0)
-        return this->possible_chunks[Random::generateChunk(this->seed,n)];
+Chunk Map::get_chunk(int n) {
+	if (n >= 0)
+		return this->possible_chunks[Random::generateChunk(this->seed, n)];
 	else
-		exit(1);
+		return this->possible_chunks[Random::generateChunk(this->seed, -n)];
 }
 
-int Map::getCoins(int n)
-{
-	return Random::generateCoins(this->seed,n);
+int Map::getCoins(int n) {
+	return Random::generateCoins(this->seed, n);
 }
 
-int Map::getEnemies(int n)
-{
-	return Random::generateEnemies(this->seed,n);
+int Map::getEnemies(int n) {
+	return Random::generateEnemies(this->seed, n);
 }
