@@ -7,9 +7,11 @@
 #include "../../etc/nostd/vector.hpp"
 #include "../../etc/nostd/string.hpp"
 
+#define OFFSET 42
 
 #ifndef DRAW_DRAW
 #define DRAW_DRAW
+
 class Draw : public Screen{
 	private:
 		void drawPlatform(nostd::vector<Platform> &plat);

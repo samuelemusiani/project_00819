@@ -27,14 +27,15 @@ void Draw::drawMap(Map map, int nChunk) {
 void Draw::drawPlatform(nostd::vector<Platform> &plat) {
 	for(int i = 0; i < plat.size(); i++) {
 		for(int j = 0; j < plat[i].get_length(); j++) {
-			mvwprintw(this->screen, plat[i].get_position().get_yPosition(), plat[i].get_position().get_xPosition()+j+1, "=");
+			mvwprintw(this->screen, OFFSET-plat[i].get_position().get_yPosition(), plat[i].get_position().get_xPosition()+j+1, "=");
 		}
 	}
 }
 
 void Draw::drawPlayer(phy::Point p) {
-	mvwprintw(this->screen, p.get_yPosition(), p.get_xPosition(), "@");
+	mvwprintw(this->screen, OFFSET-p.get_yPosition(), p.get_xPosition(), "@");
 }
+
 
 
 void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione del primo carattere
@@ -64,6 +65,7 @@ void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione d
 	mvwaddch(this->screen, posY+2, posX+x+1, ACS_LRCORNER);
 
 }
+
 
 int Draw::centerX(nostd::string text){
 	int x = 75 - (strlen(text.c_str()) / 2);
