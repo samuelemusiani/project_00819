@@ -15,18 +15,24 @@ SRC_PHYSISCS=..
 SRC_TESTS=tests
 SRC_COMPUTATION_TESTS=${SRC_TESTS}/computation
 SRC_JUMP_TESTS=${SRC_TESTS}/jump
+SRC_COLLISIONS_TESTS=${SRC_TESTS}/collisions
 
 all:
 	@echo "Usare compute o jump per selezionare il target"
 
 jump: 
 	rm -rf ${TARGET}
-	g++ $(shell find ${SRC_JUMP_TESTS}/*) ../body.cpp ../vector.cpp ../point.cpp ../precisePoint.cpp ../../../etc/logs/logs.cpp -lncurses -o ${TARGET}
+	g++ tests/jump/main.cpp ../body.cpp ../vector.cpp ../point.cpp ../precisePoint.cpp -lncurses -o ${TARGET}
 	./${TARGET}
 
 compute: 
 	rm -rf ${TARGET}
 	g++ $(shell find ${SRC_COMPUTATION_TESTS}/*.cpp) ../body.cpp ../vector.cpp ../point.cpp ../precisePoint.cpp -o ${TARGET}
+	./${TARGET}
+
+collisions: 
+	rm -rf ${TARGET}
+	g++ $(shell find ${SRC_COLLISIONS_TESTS}/*.cpp) ../*.cpp ../../maps/*.cpp -lncurses -o ${TARGET}
 	./${TARGET}
 
 DIR:
