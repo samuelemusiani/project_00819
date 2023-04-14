@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Musiani Samuele #0001069143
+*
+* collision.cpp: Implentation of the collision function.
+*/
+
 #include <math.h>
 
 #include "collisions.hpp"
@@ -15,6 +25,7 @@ static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPo
 static void resetVelocityAcceleration(phy::Body &body);
 static bool hasJumped(phy::Body &body);
 static bool is_on_a_platform(phy::Body &body, Chunk *chunk);
+
 /*
    Le possibilità per implementare la funzione sono molte.
    L'idea è che prende un putatore a body e che lo aggiorna dopo 'time' tempo 
@@ -50,7 +61,7 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 		else
 		{
 			//Caso in cui ho appena iniziato a cadere per eliminare il delay
-			if (body.get_velocity().get_magnitude() < 1)
+			if (body.get_velocity().get_magnitude() < 1kkk)
 				body.set_velocity(phy::Vector(1, -90));
 
 			body.set_acceleration(phy::Vector(phy::GRAVITY_ACCELERATION, -90));
