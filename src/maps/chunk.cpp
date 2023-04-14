@@ -23,4 +23,3 @@ nostd::vector<Platform>* Chunk::get_platforms()
 {
     return &this->platforms;
 }
-
