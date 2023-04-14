@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Musiani Samuele #0001069143
+*
+* body.test.cpp: All the tests for the phy::Body class
+*/
+
 #include "../../../point.hpp"
 #include "../../../vector.hpp"
 #include "../../../body.hpp"

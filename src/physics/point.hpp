@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Musiani Samuele #0001069143
+*
+* point.hpp: Class for a point in a plane.
+*/
+
 #ifndef PHYSICS_POINT
 #define PHYSICS_POINT
 

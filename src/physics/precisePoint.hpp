@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Musiani Samuele #0001069143
+*
+* precisePoint.hpp: Class for a more precise point in a plane.
+*/
+
 #include "point.hpp"
 
 #ifndef PHYSICS_PRECISEPOINT

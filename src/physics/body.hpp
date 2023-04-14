@@ -1,3 +1,14 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Musiani Samuele #0001069143
+*
+* body.hpp: Class to simulate a physics body with
+* position, velocity and acelleration.
+*/
+
 #include "precisePoint.hpp"
 #include "vector.hpp"
 
