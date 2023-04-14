@@ -19,7 +19,7 @@ bool Chunk::is_there_a_platform(phy::Point pos){
 /* This method return a pointer to an array of Platforms in which are stored all the platforms that are in the current Chunk.
  * To get this pointer you first need to instantiate a Map object, then you can use the method get_chunk(...) to get
  * the desired Chunk,and then you can call the get_platforms() method. */
-std::vector<Platform>* Chunk::get_platforms()
+nostd::vector<Platform>* Chunk::get_platforms()
 {
     return &this->platforms;
 }

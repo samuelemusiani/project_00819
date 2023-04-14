@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Musiani Samuele #0001069143
+*
+* test.hpp: All the defines used to print tests results.
+*/
+
 #include <iostream>
 
 #ifndef TEST_FUNCTIONS

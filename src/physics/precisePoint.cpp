@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Musiani Samuele #0001069143
+*
+* precisePoint.cpp: Implementation of the phy::PrecisePoint class.
+*/
+
 #include "precisePoint.hpp"
 #include <math.h>
 

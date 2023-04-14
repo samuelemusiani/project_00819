@@ -8,8 +8,8 @@ int Credits::drawCredits(Draw settings){
 
 	settings.clearScreen();	
 	
-	std::string developers[4] = {"@SuperMitic", "@musianisamuele", "@lorenzoperonese", "@Jabbar03"};
-	std::string creditstext[6] = {"JumpKing Game", "Alma Mater Studiorum Bologna University: project-00819", "This game has been developed", "in the year 2023 by", "Argonni Emanuele, Musiani Samuele", "Peronese Lorenzo, Ayache Omar"};
+	nostd::string developers[4] = {"@SuperMitic", "@musianisamuele", "@lorenzoperonese", "@Jabbar03"};
+	nostd::string creditstext[6] = {"JumpKing Game", "Alma Mater Studiorum Bologna University: project-00819", "This game has been developed", "in the year 2023 by", "Argonni Emanuele, Musiani Samuele", "Peronese Lorenzo, Ayache Omar"};
 	int selectedOption = 0;
 	bool selected = false; 
 	settings.nodel(true);
@@ -35,7 +35,7 @@ int Credits::drawCredits(Draw settings){
 		//for loop to draw the credits
 		for (int j = 0; j < 6; j++){
 			if(i + j > 0 && i + j < 43)
-				settings.drawText(i + j, 75 - (creditstext[j].length()/2), creditstext[j]);
+				settings.drawText(i + j, settings.centerX(creditstext[j]), creditstext[j]);
 		}
 
 		bool EXIT = false;

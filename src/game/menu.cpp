@@ -6,21 +6,50 @@ Menu::Menu(int x, int y) {
 	
 	}
 	
-void Menu::drawMenu(Draw screen) {
+
+void Menu::drawFirstMenu(Draw screen) {
 	
-	// Disegna la box di colore verde
 	screen.clearScreen();
+	bool selected = false;
+	screen.nodel(true);
 
-	// Titolo del gioco all'interno di una box
-	screen.drawText(2, (posX/2)-9, "------------------");
-	screen.drawText(4, (posX/2)-9, "------------------");
-	screen.drawText(3, (posX/2)-9, "|");
-	screen.drawText(3, (posX/2)+8, "|");
-	screen.drawText(3, (posX/2)-4, "JumpKing");
+	// animazione del titolo all'avvio del gioco dai lati al centro
+	for (int i = 0; i < 42 && !selected ; i++) {
+		int x = screen.getinput();
+		if (x == 27 || x == 10) selected = true;
+		screen.refreshScreen();
+		screen.eraseScreen();	
+		napms(50);
+		for (int j = 0; j < 6 ; j++) {
+			screen.drawText(19 + j, i, this->Jump[j]); 
+			screen.drawText(19 + j, 120 - i, this->King[j]);
+		}
+	}
 
-	screen.refreshScreen();
-	
-	
+	// animazione del titolo all'avvio del gioco dal centro al centro in alto
+	for (int i = 0; i < 16 && !selected ; i++) {
+		int x = screen.getinput();
+		if (x == 27 || x == 10) selected = true;
+		screen.refreshScreen();
+		screen.eraseScreen();
+		napms(250);
+		for (int j = 0; j < 6 ; j++) {
+			screen.drawText(19 + j - i, 42, this->Jump[j]); 
+			screen.drawText(19 + j - i, 78, this->King[j]);
+		}
+	}
+
+	screen.nodel(false);
+
+}
+
+void Menu::drawMenu(Draw screen){
+		screen.clearScreen();
+		// Scrive il titolo del gioco fermo in alto
+		for (int j = 0; j < 6 ; j++) {
+			screen.drawText(4 + j, 42, this->Jump[j]); 
+			screen.drawText(4 + j, 78, this->King[j]);
+		}
 }
 
 int Menu::get_selected_option(Draw screen) {

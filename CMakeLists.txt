@@ -14,6 +14,10 @@ file(GLOB_RECURSE SRC_GAME_FILES src/game/*.cpp)
 
 # DRAW:
 file(GLOB_RECURSE SRC_DRAW_FILES src/draw/*.cpp)
+
+#ENGINE
+file(GLOB_RECURSE SRC_ENGINE_FILES src/engine/*.cpp)
+
 # MAPS:
 file(GLOB_RECURSE SRC_MAPS_FILES src/maps/*.cpp)
 
@@ -30,6 +34,7 @@ file(GLOB_RECURSE ETC_NOSTD_FILES etc/nostd/*.cpp)
 add_executable(game src/main.cpp
 		${SRC_GAME_FILES}
 		${SRC_DRAW_FILES}
+		${SRC_ENGINE_FILES}
 		${SRC_PHYSYCS_FILES}
 		${SRC_MAPS_FILES}
 		${ETC_LOGS_FILES}
@@ -37,3 +42,7 @@ add_executable(game src/main.cpp
 
 target_link_libraries(game ${CURSES_LIBRARIES})
 target_compile_features(game PRIVATE cxx_std_14)
+
+if(STD)
+	add_compile_definitions(USE_STD)
+endif(STD)
