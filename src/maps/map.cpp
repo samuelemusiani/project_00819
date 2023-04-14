@@ -3,7 +3,15 @@
 
 Map::Map()
 {
+	srand(time(nullptr));
+	this->seed.setSeed(rand());
     initialize_chunks();
+}
+
+Map::Map(int seed)
+{
+	this->seed.setSeed(seed);
+	initialize_chunks();
 }
 
 void Map::initialize_chunks()
@@ -30,5 +38,5 @@ void Map::initialize_chunks()
 Chunk Map::get_chunk(int n)
 {
     if(n>=0)
-        return this->possible_chunks[0];
+        return this->possible_chunks[Random::generateChunk(this->seed)];
 }
