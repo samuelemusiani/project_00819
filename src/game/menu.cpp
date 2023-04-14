@@ -15,28 +15,28 @@ void Menu::drawFirstMenu(Draw screen) {
 
 	// animazione del titolo all'avvio del gioco dai lati al centro
 	for (int i = 0; i < 42 && !selected ; i++) {
-		for (int j = 0; j < 6 ; j++) {
-			screen.drawText(19 + j, i, this->Jump[j]); 
-			screen.drawText(19 + j, 120 - i, this->King[j]);
-			}
+		int x = screen.getinput();
+		if (x == 27 || x == 10) selected = true;
 		screen.refreshScreen();
 		screen.eraseScreen();	
 		napms(50);
-		int x = screen.getinput();
-		if (x == 27 || x == 10) selected = true;
+		for (int j = 0; j < 6 ; j++) {
+			screen.drawText(19 + j, i, this->Jump[j]); 
+			screen.drawText(19 + j, 120 - i, this->King[j]);
+		}
 	}
 
 	// animazione del titolo all'avvio del gioco dal centro al centro in alto
 	for (int i = 0; i < 16 && !selected ; i++) {
-		for (int j = 0; j < 6 ; j++) {
-			screen.drawText(19 + j - i, 42, this->Jump[j]); 
-			screen.drawText(19 + j - i, 78, this->King[j]);
-			}
 		int x = screen.getinput();
 		if (x == 27 || x == 10) selected = true;
 		screen.refreshScreen();
 		screen.eraseScreen();
 		napms(250);
+		for (int j = 0; j < 6 ; j++) {
+			screen.drawText(19 + j - i, 42, this->Jump[j]); 
+			screen.drawText(19 + j - i, 78, this->King[j]);
+		}
 	}
 
 	screen.nodel(false);
