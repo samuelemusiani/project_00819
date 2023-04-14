@@ -57,7 +57,8 @@ void Game::run()
 			{// New Game
 			// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
 			this->start();
-			// TODO: Implementing pause menu 
+			
+			screen.getinput();
 			break;}
 		case 1: 
 			{// Resume game
@@ -221,7 +222,9 @@ void Game::start()
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
 			case 27:
-				exit = true;
+				
+				pauseGame();
+				
 				break;
 			default:
 				break;
@@ -319,3 +322,65 @@ void Game::stats()
 	this->stats_scr.refreshScreen();
 }
 
+
+void Game::pauseGame()
+{
+	screen.nodel(false);
+	// for che utilizzando move sposta il cursore a (y = i, x = 120) e cancella la riga con clrtoeol
+	for (int i = 0; i < screen.get_maxY(); i++)
+	{
+		screen.clearLine(i, 90);
+	}
+	screen.drawBox();
+	screen.drawVerticalLine(90, 1, 43);
+	screen.drawText(3, 120 - screen.center("Game Paused"),  "Game Paused");
+	nostd::string options[3] = {"Resume", "Save", "Exit"};
+	for (int i = 0; i < 3; i++)
+	{
+		screen.drawSquareAround(options[i], 20 + 4*i, 120 - (options[i].length() / 2));
+	}
+	int selected = 0;
+	bool choose = false;
+	while (!choose){
+		for (int i = 0; i < 3; i++)
+		{
+			screen.drawSquareAround(options[i], 20 + 4*i, 120 - (options[i].length() / 2));
+		}
+		screen.attrOn(COLOR_PAIR(1));
+		screen.drawText(20 + 4*selected, 120 - (options[selected].length() / 2), options[selected]);
+		screen.attrOff(COLOR_PAIR(1));
+		switch (screen.getinput())
+		{
+			case KEY_UP:
+				if (selected == 0) selected = 2;
+				else selected = selected - 1;
+				break;
+			case KEY_DOWN:
+				if (selected == 2) selected = 0;
+				else selected = selected + 1;
+				break;
+			case 10:
+				choose = true;
+				break;
+			default: 
+				break;
+		}
+	}
+	switch (selected)
+	{
+		case 0:
+			screen.nodel(true);
+			break;
+		case 1:
+			// saveGame();
+			break;
+		/*case 2:
+			// exitGamePlay();
+			break;
+		default:
+			break;
+			*/
+	}
+
+	
+}

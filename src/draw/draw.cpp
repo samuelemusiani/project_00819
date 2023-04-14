@@ -107,3 +107,7 @@ Draw Draw::newWindow(int height, int width, int posY, int posX) {
 void Draw::setWin(WINDOW *win) {
 	this->screen = win;
 }
+
+int Draw::center(nostd::string t){
+	return (t.length()/2);
+}

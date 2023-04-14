@@ -27,6 +27,8 @@ class Game
 		int setDifficulty();
 		void stats();
 
+		void pauseGame();
+
 };
 
 
