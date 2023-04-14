@@ -24,5 +24,6 @@ class Draw : public Screen{
 		void drawSquareAround(nostd::string s, int posY, int posX);
 		static int centerX(nostd::string text);
 		void drawRectagle(int posY, int posX, int length, int width);
+		int center(nostd::string t);
 };
 #endif

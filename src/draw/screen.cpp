@@ -79,3 +79,19 @@ int Screen::getinput()
 {
 	return wgetch(this->screen);
 }
+
+void Screen::clearLine(int y, int x)
+{
+	wmove(this->screen, y, x);
+	wrefresh(this->screen);
+	wclrtoeol(this->screen);
+	
+}
+
+void Screen::drawVerticalLine(int x, int y1, int y2)
+{
+	for (int i = y1; i < y2; i++)
+	{
+		mvwaddch(this->screen, i, x, ACS_VLINE);
+	}
+}

@@ -85,3 +85,7 @@ void Draw::drawRectagle(int posY, int posX, int length, int width) {
 	mvwaddch(this->screen, posY, posX+width, ACS_URCORNER);
 	mvwaddch(this->screen, posY+length, posX+width, ACS_LRCORNER);
 }
+
+int Draw::center(nostd::string t){
+	return (t.length()/2);
+}
