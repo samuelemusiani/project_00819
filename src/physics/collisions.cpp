@@ -55,55 +55,74 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 	{
 		if (is_on_a_platform(body, &chunk))
 		{
+			// deb::debug("PLATFORM");
 			resetVelocityAcceleration(body);
 			// deb::debug(body.get_position(), "PIATTAFORMA");
 		}
 		else
 		{
-			//Caso in cui ho appena iniziato a cadere per eliminare il delay
-			if (body.get_velocity().get_magnitude() < 1kkk)
-				body.set_velocity(phy::Vector(1, -90));
-
-			body.set_acceleration(phy::Vector(phy::GRAVITY_ACCELERATION, -90));
+			// deb::debug("FALL");
 			//STA CADENDO :)
+
+			//Caso in cui ho appena iniziato a cadere per eliminare il delay
+			// if (body.get_velocity().get_magnitude() < 1)
+			// 	body.set_velocity(phy::Vector(1, -90));
+
+			//Devo continuare a settare l'accelerazione?
+			body.set_acceleration(phy::Vector(phy::GRAVITY_ACCELERATION, -90));
+			body.update(time);
 		}
-	} else 
-		body.set_acceleration(phy::Vector(phy::GRAVITY_ACCELERATION, -90));
-	/*
+	}
 	else
 	{
-		phy::Body old_body = *body;
-		body->update(time);
+		body.set_acceleration(phy::Vector(phy::GRAVITY_ACCELERATION, -90));
+		// Se ho saltato devo fare dei check nel casso colpisca
+		// qualche piattaforma
+
+		phy::Body old_body = body;
+		body.update(time);
 
 		//Faccio tutto con int o metto i precisePoint?
-		int old_xPos = old_body.get_position().get_xPosition();
-		int old_yPos = old_body.get_position().get_yPosition();
-		int new_xPos = body->get_position().get_xPosition();
-		int new_yPos = body->get_position().get_yPosition();
+		int old_xPos = round(old_body.get_precisePosition().get_xPosition());
+		int old_yPos = round(old_body.get_precisePosition().get_yPosition());
+		int new_xPos = round(body.get_precisePosition().get_xPosition());
+		int new_yPos = round(body.get_precisePosition().get_yPosition());
 
-		switch (detectCollision(old_xPos, old_yPos, new_xPos, new_yPos, chunk))
+		phy::Vector velocity = body.get_velocity();
+
+		switch (detectCollision(old_xPos, old_yPos, new_xPos, new_yPos, &chunk))
 		{
+			// no collision
 			case 0:
 				break;
 
+			// 1 -> basic collision in the x direction 
+			// (the body moved only on one block)
 			case 1:
-				body->set_position(phy::Point(old_xPos, new_yPos));
+				body.set_velocity(phy::Vector(0));
+				body.set_position(phy::Point(old_xPos, new_yPos));
 				break;
 
+			// 2 -> basic collision in the y direction 
+			// (the body moved only on one block)
 			case 2:
-				body->set_position(phy::Point(new_xPos, old_yPos));
+				body.set_velocity(phy::Vector(velocity.get_magnitude() / 6, velocity.get_direction() - 90));
+				body.set_position(phy::Point(new_xPos, old_yPos));
 				break;
 
+			// 3 -> complex collision 
+			// (the body moved on more than one block)
 			case 3:
+				deb::debug("AIUTOOOO");
+				//body.set_velocity(phy::Vector(0));
+				//body.update(-time*2);
 				//NON SO COSA FARE :)
 				break;
 		}
 	}
-	*/
-	body.update(time);
 }
 
-
+// BUG NELLA DESCRIZIONE. NON SI MUOVE DI UN BLOCCO E BASTA
 
 // 0 -> no collision
 // 1 -> basic collision in the x direction (the body moved only on one block)
@@ -116,7 +135,7 @@ static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPo
 	int diff_x = old_xPos - new_xPos;
 	int diff_y = old_yPos - new_yPos;
 
-	if ( diff_x == 0 &&  diff_y == 0)
+	if (diff_x == 0 && diff_y == 0)
 		return 0;
 	else if (diff_x == 0)
 	{
@@ -137,7 +156,7 @@ static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPo
 	else
 	{
 		//Come faccio in questo caso?
-		// Devo trovare il momento della collisione e fare un rever della posizione
+		// Devo trovare il momento della collisione e fare un revers della posizione
 		// in modo da avere i vettori
 		return 3;
 	}
@@ -153,7 +172,7 @@ static void resetVelocityAcceleration(phy::Body &body)
 static bool hasJumped(phy::Body &body)
 {
 	phy::Vector v = body.get_velocity();
-	
+
 	if (v.get_magnitude() < 0.1)
 		return false;
 	else if (30 <= v.get_direction() && v.get_direction() <= 150) //Hanno senso questi valori?
