@@ -51,18 +51,16 @@ static bool is_on_a_platform(phy::Body &body, Chunk *chunk);
 void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 {
 
+	deb::debug(hasJumped(body), "has_jumped");
 	if(!hasJumped(body))
 	{
 		if (is_on_a_platform(body, &chunk))
 		{
-			// deb::debug("PLATFORM");
 			resetVelocityAcceleration(body);
-			// deb::debug(body.get_position(), "PIATTAFORMA");
 		}
 		else
 		{
-			// deb::debug("FALL");
-			//STA CADENDO :)
+			// FREE FALL
 
 			//Caso in cui ho appena iniziato a cadere per eliminare il delay
 			// if (body.get_velocity().get_magnitude() < 1)
@@ -71,6 +69,13 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 			//Devo continuare a settare l'accelerazione?
 			body.set_acceleration(phy::Vector(phy::GRAVITY_ACCELERATION, -90));
 			body.update(time);
+
+			// Max free fall velocity to avoid trapassing platforms?
+			// if (body.get_velocity().get_magnitude() > ??)
+			// {
+			// 	body.set_velocity();
+			// 	body.set_acceleration(phy::Vector(0));
+			// }
 		}
 	}
 	else
@@ -111,55 +116,82 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 				break;
 
 			// 3 -> complex collision 
-			// (the body moved on more than one block)
+			// (the body moved one block in the x and 
+			// one block in the y direction)
 			case 3:
-				deb::debug("AIUTOOOO");
-				//body.set_velocity(phy::Vector(0));
-				//body.update(-time*2);
-				//NON SO COSA FARE :)
+				body.set_position(old_body.get_position());
+				break;
+
+			// 4 -> bad...really bad
+			case 4:
+				deb::debug("ECCOMI!!!");
+				// I don't know what to do :)
+				body.set_position(old_body.get_position());
+				break;
+
+			default:
+				// Something went wrong...
+				resetVelocityAcceleration(body);
 				break;
 		}
 	}
+	deb::debug(body.get_position(), "POS:");
 }
-
-// BUG NELLA DESCRIZIONE. NON SI MUOVE DI UN BLOCCO E BASTA
 
 // 0 -> no collision
 // 1 -> basic collision in the x direction (the body moved only on one block)
 // 2 -> basic collision in the y direction (the body moved only on one block)
-// 3 -> complex collision (the body moved on more than one block)
+// 3 -> complex collision (the body moved one block in the x and one block in the y direction)
+// 4 -> bad...really bad
 
 /* DA RISCRIVERE :) */
 static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPos, Chunk *chunk)
 {
-	int diff_x = old_xPos - new_xPos;
-	int diff_y = old_yPos - new_yPos;
+	deb::debug(old_xPos, "old_xPos");
+	deb::debug(old_yPos, "old_yPos");
+	deb::debug(new_xPos, "new_xPos");
+	deb::debug(new_yPos, "new_yPos");
+
+	int diff_x = abs(old_xPos - new_xPos);
+	int diff_y = abs(old_yPos - new_yPos);
 
 	if (diff_x == 0 && diff_y == 0)
 		return 0;
-	else if (diff_x == 0)
+	else if (diff_x == 0 && diff_y == 1)
 	{
-		for (int i = old_yPos; i <= new_yPos; i++)
-			if (chunk->is_there_a_platform(phy::Point(old_xPos, i)))
-				return 2;
-
-		return 0;
+		if (chunk->is_there_a_platform(phy::Point(old_xPos, new_yPos)))
+			return 2;
+		else
+			return 0;
 	}
-	else if (diff_y == 0)
+	else if (diff_x == 1 && diff_y == 0)
 	{
-		for (int i = old_xPos; i <= new_xPos; i++)
-			if (chunk->is_there_a_platform(phy::Point(i, old_yPos)))
-				return 1;
-
-		return 0;
+		if (chunk->is_there_a_platform(phy::Point(new_xPos, old_yPos)))
+			return 1;
+		else
+			return 0;
 	}
-	else
+	else if (diff_x == 1 & diff_y == 1)
 	{
 		//Come faccio in questo caso?
 		// Devo trovare il momento della collisione e fare un revers della posizione
 		// in modo da avere i vettori
-		return 3;
-	}
+
+		// Can I do a symple average of the new and old position? Nope, it does not work :(
+		//return detectCollision(old_xPos, old_yPos, (old_xPos + new_xPos) / 2, (old_yPos + new_yPos) / 2, chunk);
+		
+		if (chunk->is_there_a_platform(phy::Point(new_xPos, new_yPos)))
+			return 3;
+
+		if (chunk->is_there_a_platform(phy::Point(old_xPos, new_yPos)))
+			return 3;
+
+		if (chunk->is_there_a_platform(phy::Point(new_xPos, old_yPos)))
+			return 3;
+
+		return 0;
+	} else
+		return 4;
 
 }
 
@@ -175,12 +207,12 @@ static bool hasJumped(phy::Body &body)
 
 	if (v.get_magnitude() < 0.1)
 		return false;
-	else if (30 <= v.get_direction() && v.get_direction() <= 150) //Hanno senso questi valori?
+	else if (220 < v.get_direction() && v.get_direction() <= 320) //Hanno senso questi valori?
 	{
-		return true;
+		return false;
 	}
 
-	return false;
+	return true;
 }
 
 static bool is_on_a_platform(phy::Body &body, Chunk *chunk)
