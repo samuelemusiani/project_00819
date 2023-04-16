@@ -25,6 +25,7 @@ static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPo
 static void resetVelocityAcceleration(phy::Body &body);
 static bool hasJumped(phy::Body &body);
 static bool is_on_a_platform(phy::Body &body, Chunk *chunk);
+static void borderCollision(phy::Body &body);
 
 /*
    Le possibilità per implementare la funzione sono molte.
@@ -51,7 +52,9 @@ static bool is_on_a_platform(phy::Body &body, Chunk *chunk);
 void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 {
 
-	deb::debug(hasJumped(body), "has_jumped");
+	borderCollision(body);
+
+	// deb::debug(hasJumped(body), "has_jumped");
 	if(!hasJumped(body))
 	{
 		if (is_on_a_platform(body, &chunk))
@@ -124,7 +127,7 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 
 			// 4 -> bad...really bad
 			case 4:
-				deb::debug("ECCOMI!!!");
+				//deb::debug("ECCOMI!!!");
 				// I don't know what to do :)
 				body.set_position(old_body.get_position());
 				break;
@@ -135,7 +138,7 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 				break;
 		}
 	}
-	deb::debug(body.get_position(), "POS:");
+	// deb::debug(body.get_position(), "POS:");
 }
 
 // 0 -> no collision
@@ -218,4 +221,27 @@ static bool hasJumped(phy::Body &body)
 static bool is_on_a_platform(phy::Body &body, Chunk *chunk)
 {
 	return (chunk->is_there_a_platform(body.get_position() - phy::Point(0, 1)));
+}
+
+static void borderCollision(phy::Body &body)
+{
+	phy::Point p = body.get_position();
+	int x = p.get_xPosition();
+
+	if(x < 0)
+	{
+		p.set_xPosition(0);
+		body.set_position(p);
+
+		// Make the player fall when he touch the wall
+		body.set_velocity(phy::Vector(0));
+	}
+	else if (x > 147)
+	{
+		p.set_xPosition(147);
+		body.set_position(p);
+
+		// Make the player fall when he touch the wall
+		body.set_velocity(phy::Vector(0));
+	}
 }
