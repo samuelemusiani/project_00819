@@ -6,6 +6,14 @@ void Draw::drawText(int posY, int posX, nostd::string s) {
 	mvwprintw(this->screen, posY, posX, s.c_str());
 }
 
+void Draw::drawText(int posY, int posX, std::string s) {
+	mvwprintw(this->screen, posY, posX, s.c_str());
+}
+
+void Draw::drawText(int posY, int posX, const char t[]) {
+	mvwprintw(this->screen, posY, posX, t);
+}
+
 void Draw::drawBox(){
 	box(this->screen, 0, 0);
 }
@@ -33,7 +41,7 @@ void Draw::drawPlatform(nostd::vector<Platform> &plat) {
 }
 
 void Draw::drawPlayer(phy::Point p) {
-	mvwprintw(this->screen, OFFSET-p.get_yPosition(), p.get_xPosition(), "@");
+	mvwprintw(this->screen, OFFSET - p.get_yPosition(), p.get_xPosition() + 1, "@");
 }
 
 
