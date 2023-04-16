@@ -141,10 +141,10 @@ void Game::start()
 			case KEY_RIGHT:
 				player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
-			case KEY_UP:
+			case KEY_DOWN:
 				player.set_position(player.get_position() + phy::Point(0, -1));
 				break;
-			case KEY_DOWN:
+			case KEY_UP:
 				player.set_position(player.get_position() + phy::Point(0, 1));
 				break;
 			case 27:
