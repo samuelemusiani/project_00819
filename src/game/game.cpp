@@ -1,10 +1,13 @@
+#include <unistd.h>
+#include <cmath>
+
 #include "game.hpp"
 #include "menu.hpp"
-#include <unistd.h>
-#include "game.hpp"
+
 #include "../physics/body.hpp"
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
+#include "../physics/collisions.hpp"
 
 
 
@@ -124,45 +127,83 @@ void Game::start()
 	screen.drawMap(map, 0);
 
 	// Creare un oggetto body, chiamo getposition su body. Passo il punto che mi ritorna alla drawPlayer e la drawPlayer disegna il player in quella posizione
-	phy::Body player = phy::Body(phy::Point(10, 10), 1, 1);
+	phy::Body player = phy::Body();
+	player.set_position(phy::Point(40, 20));
+	player.set_acceleration(phy::Vector(1, -90));
+
 	screen.drawPlayer(player.get_position());
 	screen.refreshScreen();
 	
 	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
 	bool exit = false;
 	screen.nodel(true);
+	unsigned int cumulative = 0;
+	unsigned int count_not_key = 0;
 	while (!exit){
+
+		int input = screen.getinput();
 		
-		switch(screen.getinput())
+		if (input == (int) 'f')
 		{
-			case KEY_LEFT:
-				player.set_position(player.get_position() + phy::Point(-1, 0));
+			cumulative++;
+			count_not_key = 0;
+		} 
+		else 
+		{
+			count_not_key++;
+			if(count_not_key > 20)
+			{
+				if (cumulative > 5 && map.get_chunk(0).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+					player.set_velocity(phy::Vector(log(cumulative) / 1.2, 55));
+
+				cumulative = 0;
+			}
+
+		
+		switch(input)
+		{
+			case ((int) 's'):
+				if(player.get_velocity().get_magnitude() < 0.1)
+					player.set_position(player.get_position() - phy::Point(1, 0));
 				break;
-			case KEY_RIGHT:
-				player.set_position(player.get_position() + phy::Point(1, 0));
+
+			case ((int) 'd'):
+				if(player.get_velocity().get_magnitude() < 0.1)
+					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
-			case KEY_DOWN:
-				player.set_position(player.get_position() + phy::Point(0, -1));
+
+			case ((int) 'a'):
+				if (map.get_chunk(0).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+					player.set_velocity(phy::Vector(4, 125));
 				break;
-			case KEY_UP:
-				player.set_position(player.get_position() + phy::Point(0, 1));
-				break;
+
+			// case ((int) 'f'):
+			// 	if (map.get_chunk(0).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+			// 		player.set_velocity(phy::Vector(4, 55));
+			// 	break;
+
 			case 27:
 				exit = true;
 				break;
 			default:
 				break;
 		}
+		}
+		// player.update(0.05);
+		phy::updateWithCollisions(player, 0.10, map.get_chunk(0));
 
 		screen.eraseScreen();
 		screen.drawMap(map, 0);
 		screen.drawPlayer(player.get_position());
+
+		screen.drawText(1, 1, std::to_string(player.get_position().get_xPosition()));
+		screen.drawText(1, 5, std::to_string(player.get_position().get_yPosition()));
+		screen.drawText(1, 140, std::to_string(log(cumulative) / 1.2));
 		napms(5);
 	
 	}
 	screen.nodel(false);
 	screen.clearScreen();	
-	
 }
 
 void Game::resume()
