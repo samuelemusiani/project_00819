@@ -151,7 +151,7 @@ void Game::start()
 		else 
 		{
 			count_not_key++;
-			if(count_not_key > 10)
+			if(count_not_key > 20)
 			{
 				if (cumulative > 5 && map.get_chunk(0).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_velocity(phy::Vector(log(cumulative) / 1.2, 55));
