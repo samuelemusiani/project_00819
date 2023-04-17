@@ -114,13 +114,18 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 			// 2 -> basic collision in the y direction 
 			// (the body moved only on one block)
 			case 2:
-				if (body.get_velocity().get_direction() < 90)
+			{
+				int direction = body.get_velocity().get_direction();
+				if (10 < direction && direction < 90)
 					body.set_velocity(phy::Vector(velocity.get_magnitude() / 3, velocity.get_direction() - 90));
-				else
+				else if (90 < direction && direction < 170)
 					body.set_velocity(phy::Vector(velocity.get_magnitude() / 3, velocity.get_direction() + 90));
+				else
+					body.set_velocity(phy::Vector(0));
 
 				body.set_position(phy::Point(new_xPos, old_yPos));
 				break;
+			}
 
 			// 3 -> complex collision 
 			// (the body moved one block in the x and 
