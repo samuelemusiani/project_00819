@@ -66,7 +66,7 @@ void Game::run()
 			break;}
 		case 2: 
 			{// Settings
-			settings.drawSettings(this->screen);
+			settings.drawFirstSettings(this->screen);
 			
 			break; 
 			}

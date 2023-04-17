@@ -11,5 +11,7 @@ class Settings
     public:
         //Settings();
         //~Settings();
+        void drawFirstSettings(Draw settings);
         void drawSettings(Draw settings);
+        int calibrateKeys(Draw settings);
 };
