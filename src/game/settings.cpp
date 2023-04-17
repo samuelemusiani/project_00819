@@ -14,27 +14,27 @@ Settings::~Settings()
 void Settings::drawFirstSettings(Draw settings){
     // create button with (controls, calibration, audio) using swtich and wattron
     settings.clearScreen();
-    nostd::string options[3] = {"Controls", "Calibration", "Audio"};
+    nostd::string options[4] = {"Controls", "Calibration", "Audio", "Sensibility"};
     settings.refreshScreen();
-        int selectedOption = 0;
+    int selectedOption = 0;
     bool selected = false;
     while (!selected){
         settings.clearScreen();
         settings.drawText(3, (Draw::centerX("Settings")), "Settings");
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 4; i++){
             settings.drawText(10 + 3*i, 45, options[i]);
         }
         settings.attrOn(COLOR_PAIR(1));
         settings.drawText(10 + 3*selectedOption, 45, options[selectedOption]);
         settings.attrOff(COLOR_PAIR(1));
         switch (settings.getinput()){
-            case KEY_LEFT:
+            case KEY_UP:
                 if (selectedOption > 0){
                     selectedOption = selectedOption - 1;
                 }
                 break;
-            case KEY_RIGHT:
-                if (selectedOption < 2){
+            case KEY_DOWN:
+                if (selectedOption < 3){
                     selectedOption = selectedOption + 1;
                 }
                 break;
@@ -55,6 +55,10 @@ void Settings::drawFirstSettings(Draw settings){
                     case 2:
                         //drawAudioSettings(settings);
                         break;
+                    case 3:
+                        //drawSensibilitySettings(settings);
+                        break;
+
                 }
                 selected = true;
                 break;
@@ -124,10 +128,15 @@ void Settings::drawSettings(Draw settings){
     
 }
 
+bool Settings::checkifcalibrated(Draw settings){
+    // fa un check se esiste il file e se è già stata calibrata
+    return true;
+}
+
 int Settings::calibrateKeys(Draw settings){
     settings.eraseScreen();
     settings.drawText(6, 70, "Keep pressing a key until this bar is full");
-    
+    settings.drawText(8, 70, "Don't release the key!");
     settings.refreshScreen();
     bool finished = false;
     double mediakey = 20; 
@@ -153,4 +162,9 @@ int Settings::calibrateKeys(Draw settings){
 
     
     }
+    if (keypressed < 40) settings.drawText(12, 70, "Calibration failed!");
+    else settings.drawText(12, 70, "Calibration completed successfully!");
+    settings.refreshScreen();
+    napms(1800);
+    keypressed = keypressed / 5; 
 }

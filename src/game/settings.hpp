@@ -14,4 +14,7 @@ class Settings
         void drawFirstSettings(Draw settings);
         void drawSettings(Draw settings);
         int calibrateKeys(Draw settings);
+
+        // controlla se esiste il file dei salvataggi per controllare se è stata fatta la calibrazione
+        bool checkifcalibrated(Draw settings);
 };
