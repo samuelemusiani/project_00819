@@ -27,18 +27,13 @@ namespace nostd {
 #else //USO STD COME SUPPORTO
 
 #include <string>
-namespace nostd {
-    class string {
-        private:
-		std::string s;
-        public:
-            string();
-            string(const char *str);
-            string& operator=(const char *s);
-            friend std::ostream& operator<<(std::ostream& out, const string& s);
-            int length();
-            const char* c_str();
-            bool empty();
+
+namespace nostd 
+{
+    class string : public std::string
+    {
+	    public:
+	    	string(const char* pippo); 
     };
 }
 

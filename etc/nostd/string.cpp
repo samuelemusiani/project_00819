@@ -117,40 +117,10 @@ bool nostd::string::empty()
 }
 #else
 
-nostd::string::string() : string(nullptr)
+nostd::string::string(const char* pippo)
+	: std::string(pippo)
 {
 
 }
 
-nostd::string::string(const char *str)
-{
-	this->s = str;
-}
-
-nostd::string& nostd::string::operator=(const char* s) {
-	this->s = s;
-	return *this;
-}
-
-namespace nostd { /* it doesn't work without this line, idk why */
-    std::ostream &operator<<(std::ostream &out, const nostd::string &s) {
-        out << s.s;
-        return out;
-    }
-}
-
-int nostd::string::length()
-{
-    return this->s.length();
-}
-
-const char* nostd::string::c_str()
-{
-    return this->s.c_str();
-}
-
-bool nostd::string::empty()
-{
-    return this->s.empty();
-}
 #endif
