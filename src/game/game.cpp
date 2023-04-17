@@ -154,7 +154,7 @@ void Game::start()
 	int current_chunk = 0;
 	int which_key = 0;
 	while (!exit){
-
+		bool right; 
 		int input = screen.getinput();
 
 		if (input == (int) 'f')
