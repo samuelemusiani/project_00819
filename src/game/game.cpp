@@ -225,7 +225,7 @@ void Game::start()
 
 			{	
 				bool quitGamepley = pauseGame();
-				if (quitGamepley == false) exit = true;
+				if (quitGamepley == true) exit = true;
 				break;
 			}
 			default:
@@ -335,6 +335,7 @@ void Game::pauseGame()
 	}*/
 	//screen.drawBox();
 	bool resumed = false;
+	bool exit = false;
 	while(!resumed)
 	{
 
@@ -389,6 +390,7 @@ void Game::pauseGame()
 		case 0:
 			screen.nodel(true);
 			pause.deleteWin();
+
 			resumed = true;
 			break;
 		case 1:
@@ -422,7 +424,8 @@ void Game::pauseGame()
 			save.quitGame(quit_scr);
 			quit_scr.eraseScreen();
 			quit_scr.deleteWin();
-			return false;
+			resumed = true; 
+			exit = true; 
 			break;
 			}	
 		default:
@@ -430,4 +433,5 @@ void Game::pauseGame()
 		
 	}
 	}
+	return exit;
 }
