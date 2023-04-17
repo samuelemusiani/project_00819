@@ -127,12 +127,14 @@ void Settings::drawSettings(Draw settings){
 int Settings::calibrateKeys(Draw settings){
     settings.eraseScreen();
     settings.drawText(6, 70, "Keep pressing a key until this bar is full");
-    settings.nodel(true);
+    
     settings.refreshScreen();
     bool finished = false;
     double mediakey = 20; 
     unsigned int errorkey = 0;
     int keypressed = 0;
+    settings.getinput();
+    settings.nodel(true);
     for (int i = 0; i < 1000; i++) {
         deb::debug((int)keypressed);
         int key = settings.getinput();
