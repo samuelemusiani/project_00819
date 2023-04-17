@@ -111,7 +111,7 @@ void nostd::string::clear()
     this->size = 0;
 }
 
-bool nostd::string::is_empty()
+bool nostd::string::empty()
 {
     return (this->size == 0);
 }
@@ -149,7 +149,7 @@ const char* nostd::string::c_str()
     return this->s.c_str();
 }
 
-bool nostd::string::is_empty()
+bool nostd::string::empty()
 {
     return this->s.empty();
 }

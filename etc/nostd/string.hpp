@@ -20,7 +20,7 @@ namespace nostd {
             const char* c_str();
             int stoi();
             double stod();
-            bool is_empty();
+            bool empty();
     };
 }
 
@@ -38,7 +38,7 @@ namespace nostd {
             friend std::ostream& operator<<(std::ostream& out, const string& s);
             int length();
             const char* c_str();
-            bool is_empty();
+            bool empty();
     };
 }
 
