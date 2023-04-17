@@ -79,3 +79,12 @@ int Screen::getinput()
 {
 	return wgetch(this->screen);
 }
+
+void Screen::clearLine(int y, int x)
+{
+	wmove(this->screen, y, x);
+	wrefresh(this->screen);
+	wclrtoeol(this->screen);
+	box(this->screen, 0, 0);
+	
+}

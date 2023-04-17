@@ -17,4 +17,7 @@ class Settings
 
         // controlla se esiste il file dei salvataggi per controllare se è stata fatta la calibrazione
         bool checkifcalibrated(Draw settings);
+        
+        // disegna una barra di # per la regolazione del volume e sensibilità
+        int drawBarSettings(Draw settings, int y);
 };

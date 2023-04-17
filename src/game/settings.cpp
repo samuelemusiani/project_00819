@@ -19,7 +19,7 @@ void Settings::drawFirstSettings(Draw settings){
     int selectedOption = 0;
     bool selected = false;
     while (!selected){
-        settings.clearScreen();
+        settings.eraseScreen();
         settings.drawText(3, (Draw::centerX("Settings")), "Settings");
         for (int i = 0; i < 4; i++){
             settings.drawText(10 + 3*i, 45, options[i]);
@@ -27,6 +27,7 @@ void Settings::drawFirstSettings(Draw settings){
         settings.attrOn(COLOR_PAIR(1));
         settings.drawText(10 + 3*selectedOption, 45, options[selectedOption]);
         settings.attrOff(COLOR_PAIR(1));
+        settings.refreshScreen();
         switch (settings.getinput()){
             case KEY_UP:
                 if (selectedOption > 0){
@@ -48,19 +49,20 @@ void Settings::drawFirstSettings(Draw settings){
                         break;
                     case 1:
                         calibrateKeys(settings);
-                        settings.drawText(10, 10, "omar");
-                        settings.refreshScreen();
-    
                         break;
                     case 2:
-                        //drawAudioSettings(settings);
+                        // Disegno la barra per la regolazione del volume
+                        int volume = drawBarSettings(settings, 16);
+
                         break;
                     case 3:
-                        //drawSensibilitySettings(settings);
+                        // Disegno la barra per la regolazione della sensibilità
+                        int sensitivity = drawBarSettings(settings, 19);
+
                         break;
 
                 }
-                selected = true;
+                
                 break;
         }
     }
@@ -135,8 +137,8 @@ bool Settings::checkifcalibrated(Draw settings){
 
 int Settings::calibrateKeys(Draw settings){
     settings.eraseScreen();
-    settings.drawText(6, 70, "Keep pressing a key until this bar is full");
-    settings.drawText(8, 70, "Don't release the key!");
+    settings.drawText(6, settings.centerX("Keep pressing the key!"), "Keep pressing the key!");
+    settings.drawText(8, settings.centerX("Calibration in progress..."), "Calibration in progress...");
     settings.refreshScreen();
     bool finished = false;
     double mediakey = 20; 
@@ -156,15 +158,48 @@ int Settings::calibrateKeys(Draw settings){
         for (int j = 0; j < i /100; j++)
             settings.drawText(10, 70 + j, "#");
 
-
         settings.refreshScreen();        
         napms(5);
 
     
     }
-    if (keypressed < 40) settings.drawText(12, 70, "Calibration failed!");
-    else settings.drawText(12, 70, "Calibration completed successfully!");
+    if (keypressed < 40) settings.drawText(12, settings.centerX("Calibration failed!"), "Calibration failed!");
+    else settings.drawText(12, settings.centerX("Calibration completed!"), "Calibration completed!");
     settings.refreshScreen();
     napms(1800);
-    keypressed = keypressed / 5; 
+    return keypressed; 
+}
+
+int Settings::drawBarSettings(Draw settings, int y){
+    std::string bar = "#########";
+    int ch;
+    bool saved = false; 
+    settings.drawText(y, 66, bar.c_str());
+    settings.drawText(y, 65, "[");
+    settings.drawText(y, 85, "]");
+    while (!saved) {
+        ch = settings.getinput();
+        if (ch == KEY_LEFT) { // backspace key
+            if (!bar.empty()) {
+                bar.pop_back();
+                settings.clearLine(y, 66); 
+                settings.drawText(y, 66, bar.c_str());
+                settings.drawText(y, 85, "]");
+                settings.refreshScreen();
+            }
+        } 
+        else if (ch == KEY_RIGHT && bar.length() < 19){ // 32 = space
+                bar += "#";
+                settings.drawText(y, 66, bar.c_str());
+                settings.refreshScreen();
+            }
+        if (ch == 10)  {
+            // TODO: salvare la lunghezza della stringa in un file
+            // bar.length()
+            saved = true; 
+            settings.refreshScreen();
+            settings.eraseScreen();
+        }
+    }
+    return bar.length();
 }
