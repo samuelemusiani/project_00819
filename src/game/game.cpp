@@ -8,6 +8,18 @@
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
 #include "../physics/collisions.hpp"
+#include "../../etc/logs/logs.hpp"
+
+#define JUMPF (1/(1+m_exp(-0.18 * (cumulative - 8)))*5)
+//#define JUMPF cumulative / (1 + cumulative)
+
+double m_exp(double d)
+{
+	if (d >= 0)
+		return exp(d);
+	else
+		return 1/exp(-d);
+}
 
 
 
@@ -137,50 +149,62 @@ void Game::start()
 	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
 	bool exit = false;
 	screen.nodel(true);
-	unsigned int cumulative = 0;
-	unsigned int count_not_key = 0;
+	 int cumulative = 0;
+	 int count_not_key = 0;
+	int current_chunk = 0;
+	int which_key = 0;
 	while (!exit){
 
 		int input = screen.getinput();
-		
+
 		if (input == (int) 'f')
+
 		{
+			which_key = 1;
 			cumulative++;
 			count_not_key = 0;
 		} 
-		else 
+		else if (input == (int) 'a') 
 		{
+			which_key = 2;
+			cumulative++;
+			count_not_key = 0;
+		}
+		else if (input == 'v'){
+			which_key = 3;
+			cumulative++; 
+			count_not_key = 0;
+
+		}
+		else   
+		{
+			//deb::debug((int)cumulative, "cumulative");
+			//deb::debug((double) (JUMPF), "JUMPF");
 			count_not_key++;
 			if(count_not_key > 20)
 			{
-				if (cumulative > 5 && map.get_chunk(0).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
-					player.set_velocity(phy::Vector(log(cumulative) / 1.2, 55));
+				if (cumulative > 1 && which_key == 1 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+					player.set_velocity(phy::Vector(JUMPF, 55));
 
+				else if (cumulative > 1 && which_key == 2 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+					player.set_velocity(phy::Vector(JUMPF, 125));
+
+				else if (cumulative > 1 && which_key == 3 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+					player.set_velocity(phy::Vector(JUMPF, 90));
 				cumulative = 0;
 			}
 
 		
+		
 		switch(input)
 		{
-			case ((int) 's'):
-				if(player.get_velocity().get_magnitude() < 0.1)
+			case ((int) 's'): // move player left
 					player.set_position(player.get_position() - phy::Point(1, 0));
 				break;
 
-			case ((int) 'd'):
-				if(player.get_velocity().get_magnitude() < 0.1)
+			case ((int) 'd'): // move player right
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
-
-			case ((int) 'a'):
-				if (map.get_chunk(0).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
-					player.set_velocity(phy::Vector(4, 125));
-				break;
-
-			// case ((int) 'f'):
-			// 	if (map.get_chunk(0).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
-			// 		player.set_velocity(phy::Vector(4, 55));
-			// 	break;
 
 			case 27:
 				exit = true;
@@ -190,15 +214,26 @@ void Game::start()
 		}
 		}
 		// player.update(0.05);
-		phy::updateWithCollisions(player, 0.10, map.get_chunk(0));
-
+		phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));
 		screen.eraseScreen();
-		screen.drawMap(map, 0);
+		if (player.get_position().get_yPosition() < 0)
+		{
+			current_chunk--; 
+			player.set_position(player.get_position() + phy::Point(0, 42));
+		}
+		else if (player.get_position().get_yPosition() >= 42)  
+		{
+			current_chunk++;
+			player.set_position(player.get_position() - phy::Point(0, 42)); 
+		}
 		screen.drawPlayer(player.get_position());
-
+		screen.drawMap(map, current_chunk);
+		screen.drawText(2, 1, std::to_string(current_chunk));
 		screen.drawText(1, 1, std::to_string(player.get_position().get_xPosition()));
 		screen.drawText(1, 5, std::to_string(player.get_position().get_yPosition()));
-		screen.drawText(1, 140, std::to_string(log(cumulative) / 1.2));
+		screen.drawText(1, 140, std::to_string(JUMPF));
+		//screen.drawText(2, 140, std::to_string(1+pow(1.1, - cumulative/50)));
+		screen.drawText(3, 140, std::to_string(cumulative));
 		napms(5);
 	
 	}
