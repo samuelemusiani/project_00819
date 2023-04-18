@@ -5,7 +5,6 @@ class Entity {
 protected:
   nostd::string id;
   phy::Point p;
-  bool alive;
 public:
 
   Entity(nostd::string id, phy::Point p);

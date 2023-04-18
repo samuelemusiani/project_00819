@@ -33,5 +33,4 @@ void Enemy::got_hit(int damGot)
 void set_state(bool s) {
 
   this->isAlive = s;
-
 }
