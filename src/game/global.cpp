@@ -1,0 +1,4 @@
+#include "global.hpp"
+
+int SETTINGS_VOLUME_LEVEL = 3;
+int SETTINGS_SENSITIVITY_LEVEL = 15 ;

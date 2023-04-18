@@ -66,7 +66,7 @@ void Game::run()
 			break;}
 		case 2: 
 			{// Settings
-			settings.drawSettings(this->screen);
+			settings.drawFirstSettings(this->screen);
 			
 			break; 
 			}
@@ -154,7 +154,7 @@ void Game::start()
 	int current_chunk = 0;
 	int which_key = 0;
 	while (!exit){
-
+		bool right; 
 		int input = screen.getinput();
 
 		if (input == (int) 'f')
@@ -181,7 +181,7 @@ void Game::start()
 			//deb::debug((int)cumulative, "cumulative");
 			//deb::debug((double) (JUMPF), "JUMPF");
 			count_not_key++;
-			if(count_not_key > 20)
+			if(count_not_key > 30)
 			{
 				if (cumulative > 1 && which_key == 1 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_velocity(phy::Vector(JUMPF, 55));
@@ -205,7 +205,6 @@ void Game::start()
 			case ((int) 'd'): // move player right
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
-
 			case 27:
 				exit = true;
 				break;
