@@ -1,73 +1,85 @@
 #include "settings.hpp"
+#include "global.hpp"
 #include <ncurses.h>
 #include "../../etc/logs/logs.hpp"
-/*Settings::Settings()
-{
 
-}
-/*
-Settings::~Settings()
-{
-    endwin();
-}
-*/
-void Settings::drawFirstSettings(Draw settings){
-    // create button with (controls, calibration, audio) using swtich and wattron
-    settings.clearScreen();
-    nostd::string options[4] = {"Controls", "Calibration", "Audio", "Sensibility"};
-    settings.refreshScreen();
+void Settings::drawFirstSettings(Draw screen){
+    // Variabili interne alla funzione
     int selectedOption = 0;
-    bool selected = false;
-    while (!selected){
-        settings.eraseScreen();
-        settings.drawText(3, (Draw::centerX("Settings")), "Settings");
-        for (int i = 0; i < 4; i++){
-            settings.drawText(10 + 3*i, 45, options[i]);
-        }
-        settings.attrOn(COLOR_PAIR(1));
-        settings.drawText(10 + 3*selectedOption, 45, options[selectedOption]);
-        settings.attrOff(COLOR_PAIR(1));
-        settings.refreshScreen();
-        switch (settings.getinput()){
-            case KEY_UP:
-                if (selectedOption > 0){
-                    selectedOption = selectedOption - 1;
-                }
-                break;
-            case KEY_DOWN:
-                if (selectedOption < 3){
-                    selectedOption = selectedOption + 1;
-                }
-                break;
-            case 27:
-                selected = true;
-                break;
-            case 10:
-                switch (selectedOption){
-                    case 0:
-                        drawSettings(settings);
-                        break;
-                    case 1:
-                        calibrateKeys(settings);
-                        break;
-                    case 2:
-                        {// Disegno la barra per la regolazione del volume
-                        int volume = drawBarSettings(settings, 16);
-                        break;
-                        }
-                    case 3:
-                        {
-                        // Disegno la barra per la regolazione della sensibilità
-                        int sensitivity = drawBarSettings(settings, 19);
-                        break;
-                        }
+    bool saved = false;
 
-                }
-                
-                break;
+    while (!saved){
+        screen.eraseScreen();
+
+        // Disegno le opzioni
+        screen.drawText(3, (Draw::centerX("Settings")), "Settings");
+        for (int i = 0; i < 4; i++){
+            screen.drawText(10 + 3*i, 45, options[i]);
+        }
+
+        // Coloro l'opzione selezionata
+        screen.attrOn(COLOR_PAIR(1));
+        screen.drawText(10 + 3*selectedOption, 45, options[selectedOption]);
+        screen.attrOff(COLOR_PAIR(1));
+
+        // Disegno le barre
+        for (int i = 0; i < 2; i++)
+        {
+            int tmp = i == 0 ? SETTINGS_VOLUME_LEVEL : SETTINGS_SENSITIVITY_LEVEL;
+
+            for (int j = 0; j < tmp; j++)
+                screen.drawText(16 + i*3, 66 + j, "#");
+
+            screen.drawText(16 + i*3, 65, "[");
+            screen.drawText(16 + i*3, 65 + 21, "]");
+        }
+
+        screen.refreshScreen();
+
+        int input = screen.getinput();
+
+        if (input == KEY_UP)
+            selectedOption = std::max(0, selectedOption - 1);
+        else if (input == KEY_DOWN)
+        {
+            // 3 Rapprenta il numero di opzioni (4 - 1). Andrebbe in una variabile a parte
+            selectedOption = std::min(3, selectedOption + 1);
+        }
+        else if (input == KEY_LEFT || input == KEY_RIGHT)
+        {
+            int delta = input == KEY_LEFT ? -1 : 1;
+
+            // DA RIFARE
+
+            if (selectedOption == 2)
+            {
+                SETTINGS_VOLUME_LEVEL += delta;
+                SETTINGS_VOLUME_LEVEL = std::min(MAX_VOLUME_LEVEL, SETTINGS_VOLUME_LEVEL);
+                SETTINGS_VOLUME_LEVEL = std::max(MIN_VOLUME_LEVEL, SETTINGS_VOLUME_LEVEL);
+            }
+            else if (selectedOption == 3)
+            {
+                SETTINGS_SENSITIVITY_LEVEL += delta;
+                SETTINGS_SENSITIVITY_LEVEL = std::min(MAX_SENSITIVITY_LEVEL, SETTINGS_SENSITIVITY_LEVEL);
+                SETTINGS_SENSITIVITY_LEVEL = std::max(MIN_SENSITIVITY_LEVEL, SETTINGS_SENSITIVITY_LEVEL);
+            }
+        } 
+        else if (input == 10)
+        {
+            if (selectedOption == 0)
+                drawSettings(screen);
+            else if (selectedOption == 1)
+                calibrateKeys(screen);
+        }
+        else if (input == 27)
+        {
+            // SOLUZIONE MOMENTANEA
+
+            // In realtà andrebbe fatto un check se le impostazioni
+            // sono state salvate e quindi aggiungere un tastos
+            saved = true;
         }
     }
-
 }
 
 void Settings::drawSettings(Draw settings){
@@ -170,38 +182,4 @@ int Settings::calibrateKeys(Draw settings){
     napms(1800);
     settings.nodel(false);
     return keypressed; 
-}
-
-int Settings::drawBarSettings(Draw settings, int y){
-    std::string bar = "#########";
-    int ch;
-    bool saved = false; 
-    settings.drawText(y, 66, bar.c_str());
-    settings.drawText(y, 65, "[");
-    settings.drawText(y, 85, "]");
-    while (!saved) {
-        ch = settings.getinput();
-        if (ch == KEY_LEFT) { // backspace key
-            if (!bar.empty()) {
-                bar.pop_back();
-                settings.clearLine(y, 66); 
-                settings.drawText(y, 66, bar.c_str());
-                settings.drawText(y, 85, "]");
-                settings.refreshScreen();
-            }
-        } 
-        else if (ch == KEY_RIGHT && bar.length() < 19){ // 32 = space
-                bar += "#";
-                settings.drawText(y, 66, bar.c_str());
-                settings.refreshScreen();
-            }
-        if (ch == 10)  {
-            // TODO: salvare la lunghezza della stringa in un file
-            // bar.length()
-            saved = true; 
-            settings.refreshScreen();
-            settings.eraseScreen();
-        }
-    }
-    return bar.length();
 }
