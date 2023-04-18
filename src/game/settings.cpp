@@ -51,15 +51,16 @@ void Settings::drawFirstSettings(Draw settings){
                         calibrateKeys(settings);
                         break;
                     case 2:
-                        // Disegno la barra per la regolazione del volume
+                        {// Disegno la barra per la regolazione del volume
                         int volume = drawBarSettings(settings, 16);
-
                         break;
+                        }
                     case 3:
+                        {
                         // Disegno la barra per la regolazione della sensibilità
                         int sensitivity = drawBarSettings(settings, 19);
-
                         break;
+                        }
 
                 }
                 
@@ -167,6 +168,7 @@ int Settings::calibrateKeys(Draw settings){
     else settings.drawText(12, settings.centerX("Calibration completed!"), "Calibration completed!");
     settings.refreshScreen();
     napms(1800);
+    settings.nodel(false);
     return keypressed; 
 }
 
