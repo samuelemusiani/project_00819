@@ -139,6 +139,7 @@ void Game::start()
 	screen.nodel(true);
 	unsigned int cumulative = 0;
 	unsigned int count_not_key = 0;
+	int current_chunk = 0;
 	while (!exit){
 
 		int input = screen.getinput();
@@ -154,7 +155,7 @@ void Game::start()
 			if(count_not_key > 20)
 			{
 				if (cumulative > 5 && map.get_chunk(0).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
-					player.set_velocity(phy::Vector(log(cumulative) / 1.2, 55));
+					player.set_velocity(phy::Vector(log(cumulative) * 1.5, 55));
 
 				cumulative = 0;
 			}
@@ -163,19 +164,16 @@ void Game::start()
 		switch(input)
 		{
 			case ((int) 's'):
-				if(player.get_velocity().get_magnitude() < 0.1)
 					player.set_position(player.get_position() - phy::Point(1, 0));
 				break;
 
 			case ((int) 'd'):
-				if(player.get_velocity().get_magnitude() < 0.1)
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
-
-			case ((int) 'a'):
-				if (map.get_chunk(0).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
-					player.set_velocity(phy::Vector(4, 125));
-				break;
+			//case ((int) 'a'):
+			//	if (map.get_chunk(0).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+			//		player.set_velocity(phy::Vector(4, 125));
+			//	break;
 
 			// case ((int) 'f'):
 			// 	if (map.get_chunk(0).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
@@ -190,15 +188,24 @@ void Game::start()
 		}
 		}
 		// player.update(0.05);
-		phy::updateWithCollisions(player, 0.10, map.get_chunk(0));
-
+		phy::updateWithCollisions(player, 0.10, map.get_chunk(current_chunk));
 		screen.eraseScreen();
-		screen.drawMap(map, 0);
+		if (player.get_position().get_yPosition() < 0)
+		{
+			current_chunk--; 
+			player.set_position(player.get_position() + phy::Point(0, 42));
+		}
+		else if (player.get_position().get_yPosition() >= 42)  
+		{
+			current_chunk++;
+			player.set_position(player.get_position() - phy::Point(0, 42)); 
+		}
 		screen.drawPlayer(player.get_position());
-
+		screen.drawMap(map, current_chunk);
+		screen.drawText(2, 1, std::to_string(current_chunk));
 		screen.drawText(1, 1, std::to_string(player.get_position().get_xPosition()));
 		screen.drawText(1, 5, std::to_string(player.get_position().get_yPosition()));
-		screen.drawText(1, 140, std::to_string(log(cumulative) / 1.2));
+		screen.drawText(1, 140, std::to_string(log(cumulative) * 1.5));
 		napms(5);
 	
 	}
