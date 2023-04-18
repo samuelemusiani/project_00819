@@ -24,7 +24,6 @@ class Screen
 		void nodel(bool value);
 		void refreshScreen();
 		int getinput();
-		void clearLine(int y, int x);
 };
 
 #endif
