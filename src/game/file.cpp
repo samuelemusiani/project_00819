@@ -117,7 +117,7 @@ void File::saveMap(Map m,std::string name)
 		if (name != "")
 			appendSave(m, name);
 		else
-			appendSave(m, "Player"); // this shouldn't be happening
+			appendSave(m, "Player"); // this shouldn't happen
 	}
 	else
 		updateSave(m);

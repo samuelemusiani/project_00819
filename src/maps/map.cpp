@@ -47,7 +47,7 @@ Chunk Map::get_chunk(int n) {
 	if (n >= 0)
 		return this->possible_chunks[Random::generateChunk(this->seed, n)];
 	else
-		return this->possible_chunks[Random::generateChunk(this->seed, -n)]; // this shouldn't be happening
+		return this->possible_chunks[Random::generateChunk(this->seed, -n)]; // this shouldn't happen
 }
 
 int Map::getCoins(int n) {
