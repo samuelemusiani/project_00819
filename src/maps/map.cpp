@@ -47,7 +47,7 @@ Chunk Map::get_chunk(int n) {
 	if (n >= 0)
 		return this->possible_chunks[Random::generateChunk(this->seed, n)];
 	else
-		return this->possible_chunks[Random::generateChunk(this->seed, -n)];
+		return this->possible_chunks[Random::generateChunk(this->seed, -n)]; // this shouldn't be happening
 }
 
 int Map::getCoins(int n) {
@@ -56,4 +56,14 @@ int Map::getCoins(int n) {
 
 int Map::getEnemies(int n) {
 	return Random::generateEnemies(this->seed, n);
+}
+
+Seed Map::getSeed()
+{
+	return this->seed;
+}
+
+std::string Map::getCoinsAndEnemies()
+{
+	return "NotImplementedYet :)";
 }
