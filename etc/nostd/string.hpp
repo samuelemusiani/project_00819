@@ -3,7 +3,8 @@
 #ifndef NOSTD_STRING
 #define NOSTD_STRING
 
-#ifndef USE_STD
+#ifndef USE_STD_STRING
+
 namespace nostd {
     class string {
         private:

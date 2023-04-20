@@ -1,6 +1,6 @@
 #include "string.hpp"
 
-#ifndef USE_STD
+#ifndef USE_STD_STRING
 nostd::string::string() : string(nullptr)
 {
 
