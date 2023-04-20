@@ -10,9 +10,9 @@ namespace nostd
 	template <typename T> class vector
 	{
 		private:
-			T* _A = nullptr;
-			size_t _size = 0;
-			size_t _capacity = 0;
+			T* _A; 
+			size_t _size;
+			size_t _capacity;
 
 			void reallocate(size_t new_capaciy);
 			void reallocate();
@@ -79,25 +79,28 @@ namespace nostd
 	{
 		if (new_capaciy >= 0 && this->_capacity != new_capaciy)
 		{
-			T* tmp = reinterpret_cast<T*> (::operator new (new_capaciy * sizeof(T)));
+			//T* tmp = reinterpret_cast<T*> (::operator new (new_capaciy * sizeof(T)));
+			T* tmp = new T[new_capaciy];
 			
-			/*
-			   In this case a for loop may help if T has no trivial copy constructor 
-			   so we need to call it explicitly to avoid shallow copy.
-
-			   std::memcpy(tmp, this->_A, std::min(this->_capacity, new_capaciy) * sizeof(int));
-			 */
 			
 			this->_size = std::min(this->_size, new_capaciy);
 
-			for(size_t i = 0; i < this->_size; i++)
-				new (&tmp[i]) T(std::move(this->_A[i]));
+			/*
+			   In this case a for loop may help if T has no trivial copy constructor 
+			   so we need to call it explicitly to avoid shallow copy.
+			 */
+
+			//std::copy(tmp, tmp + std::min(this->_capacity, new_capaciy), this->_A);
+			std::memcpy(tmp, this->_A, std::min(this->_capacity, new_capaciy) * sizeof(T));
+
+			// for(size_t i = 0; i < this->_size; i++)
+				// 	new (&tmp[i]) T(std::move(this->_A[i]));
 
 			
 			for(size_t i = 0; i < this->_size; i++)
 				this->_A[i].~T();
 
-			::operator delete(this->_A, this->_capacity * sizeof(T));
+			delete[] this->_A;
 
 			this->_A = tmp;
 			this->_capacity = new_capaciy;
@@ -155,15 +158,11 @@ namespace nostd
 	template <typename T>
 	void vector<T>::clear()
 	{
-		// delete[] this->_A;
-		// this-> _A = nullptr;
-		// this->_size = 0;
-		// this->_capacity = 0;
-
 		for (size_t i = 0; i < this->_size; i++)
 			this->_A[i].~T();
 
 		this->_size = 0;
+		this->reallocate(0);
 	}
 
 	template <typename T>
