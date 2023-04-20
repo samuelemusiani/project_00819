@@ -7,6 +7,7 @@
 #include "../physics/body.hpp"
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
+#include "save.hpp"
 #include "../physics/collisions.hpp"
 #include "../../etc/logs/logs.hpp"
 
@@ -57,7 +58,7 @@ void Game::run()
 			{// New Game
 			// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
 			this->start();
-			// TODO: Implementing pause menu 
+			
 			break;}
 		case 1: 
 			{// Resume game
@@ -206,8 +207,12 @@ void Game::start()
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
 			case 27:
-				exit = true;
+
+			{	
+				bool quitGamepley = pauseGame();
+				if (quitGamepley == true) exit = true;
 				break;
+			}
 			default:
 				break;
 		}
@@ -237,7 +242,7 @@ void Game::start()
 	
 	}
 	screen.nodel(false);
-	screen.clearScreen();	
+
 }
 
 void Game::resume()
@@ -278,4 +283,115 @@ int Game::setDifficulty()
 		}
 	}
 	return selected;
+}
+
+bool Game::pauseGame()
+{
+	screen.nodel(false);
+	// for che utilizzando move sposta il cursore a (y = i, x = 120) e cancella la riga con clrtoeol
+	/*for (int i = 0; i < screen.get_maxY(); i++)
+	{
+		screen.clearLine(i, 90);
+	}*/
+	//screen.drawBox();
+	bool resumed = false;
+	bool exit = false;
+	while(!resumed)
+	{
+
+	int xMaxSize, yMaxSize;
+	getmaxyx(stdscr, yMaxSize, xMaxSize);
+	int posY = (yMaxSize - 44) / 2;
+	int posX = (xMaxSize - 150) / 2;
+	
+	Draw pause = screen.newWindow(44, 60, posY, 90 + posX);
+	
+	pause.clearwithoutbox();
+	pause.drawBox();
+	screen.drawBox();
+	pause.drawText(3, 30 - pause.center("Game Paused"),  "Game Paused");
+	nostd::string options[3] = {"Resume", "Save", "Exit"};
+	int selected = 0;
+	bool choose = false;
+	wnoutrefresh(screen.getScreen()); // copying of information from a window data structure to the virtual screen
+	wnoutrefresh(pause.getScreen()); // utilizzando wnoutrefresh, il refresh del terminale avviene solo al doupdate()
+	doupdate(); // aggiorna il terminale. Quindi si evita il flicker dato dal tempo che intercorre tra l'aggiornamento di due window usando il classico refresh
+	
+
+	while (!choose){	
+		for (int i = 0; i < 3; i++)
+		{
+			pause.drawSquareAround(options[i], 20 + 4*i, 30 - (options[i].length() / 2));
+		}
+		pause.attrOn(COLOR_PAIR(1));
+		pause.drawText(20 + 4*selected, 30 - (options[selected].length() / 2), options[selected]);
+		pause.attrOff(COLOR_PAIR(1));
+		switch (pause.getinput())
+		{
+			case KEY_UP:
+				if (selected == 0) selected = 2;
+				else selected = selected - 1;
+				break;
+			case KEY_DOWN:
+				if (selected == 2) selected = 0;
+				else selected = selected + 1;
+				break;
+			case 10:
+				choose = true;
+				break;
+			default: 
+				break;
+		}
+	}
+	pause.refreshScreen();
+	Save save = Save();
+	switch (selected)
+	{
+		case 0:
+			screen.nodel(true);
+			pause.deleteWin();
+
+			resumed = true;
+			break;
+		case 1:
+		{
+			pause.deleteWin();
+			int xMaxSize, yMaxSize;
+			getmaxyx(stdscr, yMaxSize, xMaxSize);
+			int posY = (yMaxSize - 44) / 2;
+			int posX = (xMaxSize - 150) / 2;
+			
+			Draw save_scr = screen.newWindow(44, 150, posY, posX);
+
+			save.saveGame(save_scr);
+			save_scr.eraseScreen();
+			save_scr.deleteWin();
+			break;
+		}
+			
+		case 2: 
+			{
+			pause.clearScreen();
+			pause.deleteWin();
+			redrawwin(screen.getScreen());	
+			screen.refreshScreen();
+			int xMaxSize, yMaxSize;
+			getmaxyx(stdscr, yMaxSize, xMaxSize);
+			int posY = (yMaxSize - 15) / 2;
+			int posX = (xMaxSize - 55) / 2;
+			
+			Draw quit_scr = screen.newWindow(15, 55, posY, posX);
+			save.quitGame(quit_scr);
+			quit_scr.eraseScreen();
+			quit_scr.deleteWin();
+			resumed = true; 
+			exit = true; 
+			break;
+			}	
+		default:
+			break;
+		
+	}
+	}
+	return exit;
 }

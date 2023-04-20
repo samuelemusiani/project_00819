@@ -95,3 +95,25 @@ void Draw::drawRectagle(int posY, int posX, int length, int width) {
 	mvwaddch(this->screen, posY, posX+width, ACS_URCORNER);
 	mvwaddch(this->screen, posY+length, posX+width, ACS_LRCORNER);
 }
+
+int Draw::center(nostd::string t){
+	return (t.length()/2);
+}
+
+Draw Draw::newSubWindow(int height, int width, int posY, int posX) {
+	Draw d;
+	d.setWin(derwin(this->screen, height, width, posY, posX));
+	keypad(d.getScreen(), true);
+	return d;
+}
+
+Draw Draw::newWindow(int height, int width, int posY, int posX) {
+	Draw d;
+	d.setWin(newwin(height, width, posY, posX));
+	keypad(d.getScreen(), true);
+	return d;
+}
+
+void Draw::setWin(WINDOW *win) {
+	this->screen = win;
+}

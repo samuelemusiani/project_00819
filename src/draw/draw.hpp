@@ -15,6 +15,7 @@
 class Draw : public Screen{
 	private:
 		void drawPlatform(nostd::vector<Platform> &plat);
+		
 	public:
 		void drawText(int posY, int posX, nostd::string s);
 		void drawText(int posY, int posX, std::string s);
@@ -28,5 +29,10 @@ class Draw : public Screen{
 		void drawSquareAround(nostd::string s, int posY, int posX);
 		static int centerX(nostd::string text);
 		void drawRectagle(int posY, int posX, int length, int width);
+		int center(nostd::string t);
+		Draw newSubWindow(int height, int width, int posY, int posX);
+		Draw newWindow(int height, int width, int posY, int posX);
+		void setWin(WINDOW *win);
+		
 };
 #endif
