@@ -29,6 +29,10 @@ namespace nostd {
 			size_t length() const;
 			bool empty() const;
 
+			/* Modifiers */
+			void push_back(const char data);
+			void pop_back();
+
 			/* String operations */
 			const char* c_str() const;
 

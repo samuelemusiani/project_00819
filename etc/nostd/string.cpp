@@ -57,6 +57,25 @@ bool nostd::string::empty() const
 	return (this->_size == 0);
 }
 
+
+void nostd::string::push_back(const char data)
+{
+	this->_size++;
+	char* tmp = new char[this->_size + 1];
+	std::memcpy(tmp, this->_buffer, this->_size * sizeof(char));
+	tmp[this->_size] = data;
+	tmp[this->_size + 1] = '\0';
+
+	delete[] this->_buffer;
+	this->_buffer = tmp;
+}
+
+void nostd::string::pop_back()
+{
+	if(this->_size > 0)
+		this->_size--;
+}
+
 const char* nostd::string::c_str() const
 {
 	return this->_buffer;
