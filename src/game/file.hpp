@@ -5,6 +5,7 @@
 #include "../../etc/nostd/string.hpp"
 #include "../../etc/logs/logs.hpp"
 #include "settings.hpp"
+#include "global.hpp"
 
 #ifndef GAME_FILE
 #define GAME_FILE
@@ -16,16 +17,18 @@ class File
 		static bool exist(std::fstream* file,std::string path);
 		static void appendSave(Map m,std::string name);
 		static void updateSave(Map m);
-public:
+	public:
 		File();
 		static void initSettings();
-		static void saveSettings(Settings s);
+		static void saveSettings();
 		static bool isAlreadySaved(Map m);
 		static void saveMap(Map m,std::string name="");
 		static void changeName(std::string oldName,std::string newName);
-		static nostd::vector<std::string>* getNames();
-		static nostd::vector<std::string>* getLastModify();
+		static nostd::vector<std::string> getNames();
+		static nostd::vector<std::string> getLastSave();
 		static bool nameAlreadyInUse(std::string name);
+		static Map getMap(std::string name);
+		static void getSettings();
 };
 
 #endif
