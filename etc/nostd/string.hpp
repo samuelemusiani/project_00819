@@ -11,6 +11,7 @@ namespace nostd
 }
 
 std::ostream& operator << (std::ostream& out, const nostd::string& s);
+nostd::string operator+ (nostd::string lhs, const nostd::string& rhs);
 
 namespace nostd {
 	class string {
@@ -39,12 +40,19 @@ namespace nostd {
 			/* Operator overloading */
 			string& operator= (const char *s);
 			string& operator= (const nostd::string& other);
-			string& operator+ (const nostd::string& s1);
-			const char& operator [](size_t pos) const;
-			char& operator [](size_t pos);
+			const char& operator[](size_t pos) const;
+			char& operator[](size_t pos);
+			string& operator+=(const nostd::string& rhs);
+
+			// friend string (::operator+) (const nostd::string& s);
+			friend string (::operator+) (string lhs, const string& rhs);
 			friend std::ostream& (::operator <<) (std::ostream& out, const nostd::string& s);
 
 	};
+
+	string to_string(int data);
+	string to_string(double data);
+	string to_string(char data);
 }
 
 #else //USO STD COME SUPPORTO
