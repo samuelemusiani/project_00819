@@ -1,11 +1,26 @@
+#include <unistd.h>
+#include <cmath>
+
 #include "game.hpp"
 #include "menu.hpp"
-#include <unistd.h>
-#include "game.hpp"
+
 #include "../physics/body.hpp"
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
 #include "save.hpp"
+#include "../physics/collisions.hpp"
+#include "../../etc/logs/logs.hpp"
+
+#define JUMPF (1/(1+m_exp(-0.18 * (cumulative - 8)))*5)
+//#define JUMPF cumulative / (1 + cumulative)
+
+double m_exp(double d)
+{
+	if (d >= 0)
+		return exp(d);
+	else
+		return 1/exp(-d);
+}
 
 
 
@@ -52,7 +67,7 @@ void Game::run()
 			break;}
 		case 2: 
 			{// Settings
-			settings.drawSettings(this->screen);
+			settings.drawFirstSettings(this->screen);
 			
 			break; 
 			}
@@ -125,28 +140,71 @@ void Game::start()
 	screen.drawMap(map, 0);
 
 	// Creare un oggetto body, chiamo getposition su body. Passo il punto che mi ritorna alla drawPlayer e la drawPlayer disegna il player in quella posizione
-	phy::Body player = phy::Body(phy::Point(10, 10), 1, 1);
+	phy::Body player = phy::Body();
+	player.set_position(phy::Point(40, 20));
+	player.set_acceleration(phy::Vector(1, -90));
+
 	screen.drawPlayer(player.get_position());
 	screen.refreshScreen();
 	
 	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
 	bool exit = false;
 	screen.nodel(true);
+	 int cumulative = 0;
+	 int count_not_key = 0;
+	int current_chunk = 0;
+	int which_key = 0;
 	while (!exit){
-		
-		switch(screen.getinput())
+		bool right; 
+		int input = screen.getinput();
+
+		if (input == (int) 'f')
+
 		{
-			case KEY_LEFT:
-				player.set_position(player.get_position() + phy::Point(-1, 0));
+			which_key = 1;
+			cumulative++;
+			count_not_key = 0;
+		} 
+		else if (input == (int) 'a') 
+		{
+			which_key = 2;
+			cumulative++;
+			count_not_key = 0;
+		}
+		else if (input == 'v'){
+			which_key = 3;
+			cumulative++; 
+			count_not_key = 0;
+
+		}
+		else   
+		{
+			//deb::debug((int)cumulative, "cumulative");
+			//deb::debug((double) (JUMPF), "JUMPF");
+			count_not_key++;
+			if(count_not_key > 30)
+			{
+				if (cumulative > 1 && which_key == 1 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+					player.set_velocity(phy::Vector(JUMPF, 55));
+
+				else if (cumulative > 1 && which_key == 2 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+					player.set_velocity(phy::Vector(JUMPF, 125));
+
+				else if (cumulative > 1 && which_key == 3 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+					player.set_velocity(phy::Vector(JUMPF, 90));
+				cumulative = 0;
+			}
+
+		
+		
+		switch(input)
+		{
+			case ((int) 's'): // move player left
+					player.set_position(player.get_position() - phy::Point(1, 0));
 				break;
-			case KEY_RIGHT:
-				player.set_position(player.get_position() + phy::Point(1, 0));
-				break;
-			case KEY_UP:
-				player.set_position(player.get_position() + phy::Point(0, -1));
-				break;
-			case KEY_DOWN:
-				player.set_position(player.get_position() + phy::Point(0, 1));
+
+			case ((int) 'd'): // move player right
+					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
 			case 27:
 
@@ -158,16 +216,33 @@ void Game::start()
 			default:
 				break;
 		}
-
+		}
+		// player.update(0.05);
+		phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));
 		screen.eraseScreen();
-		screen.drawMap(map, 0);
+		if (player.get_position().get_yPosition() < 0)
+		{
+			current_chunk--; 
+			player.set_position(player.get_position() + phy::Point(0, 42));
+		}
+		else if (player.get_position().get_yPosition() >= 42)  
+		{
+			current_chunk++;
+			player.set_position(player.get_position() - phy::Point(0, 42)); 
+		}
 		screen.drawPlayer(player.get_position());
+		screen.drawMap(map, current_chunk);
+		screen.drawText(2, 1, std::to_string(current_chunk));
+		screen.drawText(1, 1, std::to_string(player.get_position().get_xPosition()));
+		screen.drawText(1, 5, std::to_string(player.get_position().get_yPosition()));
+		screen.drawText(1, 140, std::to_string(JUMPF));
+		//screen.drawText(2, 140, std::to_string(1+pow(1.1, - cumulative/50)));
+		screen.drawText(3, 140, std::to_string(cumulative));
 		napms(5);
 	
 	}
 	screen.nodel(false);
-	
-	
+
 }
 
 void Game::resume()

@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Musiani Samuele #0001069143
+*
+* body.cpp: Implementation of the phy::Body class.
+*/
+
 #include "body.hpp"
 
 phy::Body::Body() : Body(phy::Point(0, 0), phy::Vector(0, 0), phy::Vector(0, 0))

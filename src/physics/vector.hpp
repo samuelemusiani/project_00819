@@ -1,3 +1,14 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Musiani Samuele #0001069143
+*
+* vector.hpp: Class for a physics vector stored
+* in polar coordinate.
+*/
+
 #ifndef PHYSICS_VECTOR
 #define PHYSICS_VECTOR
 

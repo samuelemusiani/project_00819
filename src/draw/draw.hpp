@@ -7,15 +7,19 @@
 #include "../../etc/nostd/vector.hpp"
 #include "../../etc/nostd/string.hpp"
 
+#define OFFSET 42
 
 #ifndef DRAW_DRAW
 #define DRAW_DRAW
+
 class Draw : public Screen{
 	private:
 		void drawPlatform(nostd::vector<Platform> &plat);
 		
 	public:
 		void drawText(int posY, int posX, nostd::string s);
+		void drawText(int posY, int posX, std::string s);
+		void drawText(int posY, int posX, const char t[]);
 		void attrOff(int c_pair);
 		void drawBox();
 		void attrOn(int c_pair);
