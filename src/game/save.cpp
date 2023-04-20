@@ -1,6 +1,6 @@
 #include "save.hpp"
 
-void Save::saveGame(Draw screen){
+void Save::saveNewGame(Draw screen){
     screen.eraseScreen();
     screen.drawText(16, 65, "Insert the name of the file: ");
     screen.drawRectagle(19, 64, 2, 30);
@@ -71,7 +71,15 @@ void Save::saveGame(Draw screen){
             }
         }
     }
+    alreadySaved = true;
      
+}
+
+void Save::saveGame(Draw saved){
+    saved.eraseScreen();
+    saved.drawBox();
+    saved.drawText(2, 27 - (strlen("GAME SAVED") / 2), "GAME SAVED");
+    napms(1000);
 }
 
 void Save::quitGame(Draw quit_scr){
@@ -115,7 +123,8 @@ void Save::quitGame(Draw quit_scr){
 			
 			Draw save_scr = quit_scr.newWindow(44, 150, posY, posX);
 
-			saveGame(save_scr);
+			if (alreadySaved) saveGame(save_scr);
+            else saveNewGame(save_scr);
 			save_scr.eraseScreen();
 			save_scr.deleteWin();
     }
