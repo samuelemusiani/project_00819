@@ -20,6 +20,7 @@ namespace nostd
 		public:
 			vector();
 			vector(int size);
+			vector(const vector<T>& other);
 			~vector();
 
 			/* Element access */
@@ -39,8 +40,6 @@ namespace nostd
 			/* Operator overloading */
 			const T& operator [](size_t pos) const;
 			T& operator [](size_t pos);
-
-			vector(const vector<T>& other);
 			vector<T>& operator=(const vector<T>& other);
 	};
 
