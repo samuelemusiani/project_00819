@@ -1,4 +1,5 @@
 #include "menu.hpp"
+#include "global.hpp"
 
 Menu::Menu(int x, int y) {
 	posX = x;

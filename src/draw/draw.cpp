@@ -10,6 +10,15 @@ void Draw::drawText(int posY, int posX, std::string s) {
 	mvwprintw(this->screen, posY, posX, s.c_str());
 }
 
+void Draw::drawUpperText(int posY, int posX, std::string s) {
+	for (int i = 0; i < s.length(); i++)
+		mvwaddch(this->screen, posY, posX + i, s[i] + 'A' - 'a');
+}
+
+void Draw::drawText(int posY, int posX, const char s) {
+	mvwaddch(this->screen, posY, posX, s);
+}
+
 void Draw::drawText(int posY, int posX, const char t[]) {
 	mvwprintw(this->screen, posY, posX, t);
 }
@@ -46,7 +55,7 @@ void Draw::drawPlayer(phy::Point p) {
 
 
 
-void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione del primo carattere
+void Draw::drawSquareAround(std::string s, int posY, int posX) { //posizione del primo carattere
 	this->drawText(posY, posX, s);
 
 	//calcolo della lunghezza della stringa

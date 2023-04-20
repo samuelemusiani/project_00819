@@ -5,7 +5,6 @@
 #include "../draw/draw.hpp"
 
 
-
 class Game
 {
 	private:
