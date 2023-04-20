@@ -33,9 +33,9 @@ void File::saveSettings(Settings s)
 {
 	std::fstream file;
 	if(openFile(&file,"./settings.txt","w"))
-		file << "{ JUMP KING }\n\n[ KeyBindings ]\nml="<<s.getKeys[0]<<"\nmr="<<s.getKeys[1]<<"\njl="<<s.getKeys[2]<<"\n"
+		file << /*"{ JUMP KING }\n\n[ KeyBindings ]\nml="<<s.getKeys[0]<<"\nmr="<<s.getKeys[1]<<"\njl="<<s.getKeys[2]<<"\n"
 				"jr="<<s.getKeys[3]<<"\njp="<<s.getKeys[4]<<"\nsh="<<s.getKeys[5]<<"\nbb="<<s.getKeys[6]<<"\not="<<s.getKeys[7]<<"\n\n"
-				"[ Calibration ]\ncalibr="<<s.getCalibration<<"\n\n[ Audio ]\nvol="<<s.getVolume<<"\n\n[ Sensitivity ]\n"<<"sens="<<s.getVolume<<"\n";
+				"[ Calibration ]\ncalibr="<<s.getCalibration<<"\n\n[ Audio ]\nvol="<<s.getVolume<<"\n\n[ Sensitivity ]\n"<<"sens="<<s.getVolume<<*/"\n";
 	file.close();
 }
 
@@ -57,7 +57,7 @@ bool File::isAlreadySaved(Map m)
 {
 	std::fstream file;
 	std::string buff;
-	if(openFile(&file,"./save.txt"))
+	if(openFile(&file,"./save.txt","r"))
 	{
 		while(getline(file,buff))
 		{
@@ -69,15 +69,17 @@ bool File::isAlreadySaved(Map m)
 			}
 		}
 		file.close();
-		return false;
+		return false; // file exists but the searched seed is not saved
 	}
+	else
+		return false; // file does not exist yet
 }
 
 void File::appendSave(Map m,std::string name)
 {
 	std::fstream file;
 	if(openFile(&file,"./save.txt","app")) {
-		file << "[ Nome: " << name << " ]\nSeed: " << m.getSeed().getSeed()
+		file << "[ Name: " << name << " ]\nSeed: " << m.getSeed().getSeed()
 				 << "\nCoins&Enemies: " << m.getCoinsAndEnemies() << "\n" << dateAndTime() << "\n\n";
 		file.close();
 	}
@@ -121,4 +123,87 @@ void File::saveMap(Map m,std::string name)
 	}
 	else
 		updateSave(m);
+}
+
+void File::changeName(std::string oldName,std::string newName)
+{
+	std::fstream file;
+	std::fstream tmp;
+	bool found = false;
+	std::string buff;
+	int count=-1;
+	std::string search = "[ Name: " + oldName + " ]";
+	if(openFile(&tmp,"./tmp.txt","w") && openFile(&file,"./save.txt","r"))
+	{
+		while(getline(file,buff) && !found)
+		{
+			count++;
+			if(buff==search)
+				found=true;
+		}
+		file.clear();
+		file.seekg(0);
+		for(int i=0;i<count;i++)
+		{
+			getline(file, buff);
+			tmp << buff << "\n";
+		}
+		getline(file,buff); // old name
+		tmp << "[ Name: " << newName << " ]\n";
+		while(getline(file,buff))
+			tmp << buff << "\n";
+		file.close();
+		tmp.close();
+		rename("./tmp.txt","./save.txt");
+	}
+}
+
+nostd::vector<std::string>* File::getNames()
+{
+	static nostd::vector<std::string> names;
+	std::fstream file;
+	std::string buff;
+	if(openFile(&file,"./save.txt","r"))
+	{
+		while(getline(file,buff))
+			if(buff[0] == '[')
+				names.push_back(buff.substr(8,buff.length()-10));
+	}
+	file.close();
+	return &names;
+}
+
+nostd::vector<std::string>* File::getLastModify()
+{
+	static nostd::vector<std::string> lastModify;
+	std::fstream file;
+	std::string buff;
+	if(openFile(&file,"./save.txt","r"))
+	{
+		while(getline(file,buff))
+			if(buff.substr(0,2)=="20")
+				lastModify.push_back(buff.substr(0,buff.length()-1));
+	}
+	file.close();
+	return &lastModify;
+}
+
+bool File::nameAlreadyInUse(std::string name)
+{
+	std::fstream file;
+	std::string search = "[ " + name + " ]";
+	std::string buff;
+	if(openFile(&file,"./save.txt","r"))
+	{
+		while(getline(file,buff))
+			if(buff==search)
+			{
+				file.close();
+				return true;
+			}
+		file.close();
+		return false; // file exists but the name isn't in use
+	}
+	else
+		return false; // file does not exist
 }

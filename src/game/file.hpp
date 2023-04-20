@@ -22,6 +22,10 @@ public:
 		static void saveSettings(Settings s);
 		static bool isAlreadySaved(Map m);
 		static void saveMap(Map m,std::string name="");
+		static void changeName(std::string oldName,std::string newName);
+		static nostd::vector<std::string>* getNames();
+		static nostd::vector<std::string>* getLastModify();
+		static bool nameAlreadyInUse(std::string name);
 };
 
 #endif
