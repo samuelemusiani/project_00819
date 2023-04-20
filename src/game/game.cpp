@@ -366,7 +366,7 @@ bool Game::pauseGame()
 			
 			Draw save_scr = screen.newWindow(44, 150, posY, posX);
 
-			save.saveGame(save_scr);
+			save.saveNewGame(save_scr);
 			save_scr.eraseScreen();
 			save_scr.deleteWin();
 			break;
