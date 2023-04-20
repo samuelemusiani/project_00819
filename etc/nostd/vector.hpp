@@ -10,7 +10,7 @@ namespace nostd
 	template <typename T> class vector
 	{
 		private:
-			T* _A; 
+			T* _buffer; 
 			size_t _size;
 			size_t _capacity;
 
@@ -89,19 +89,19 @@ namespace nostd
 			   so we need to call it explicitly to avoid shallow copy.
 			 */
 
-			//std::copy(tmp, tmp + std::min(this->_capacity, new_capaciy), this->_A);
-			std::memcpy(tmp, this->_A, std::min(this->_capacity, new_capaciy) * sizeof(T));
+			//std::copy(tmp, tmp + std::min(this->_capacity, new_capaciy), this->_buffer);
+			std::memcpy(tmp, this->_buffer, std::min(this->_capacity, new_capaciy) * sizeof(T));
 
 			// for(size_t i = 0; i < this->_size; i++)
-				// 	new (&tmp[i]) T(std::move(this->_A[i]));
+				// 	new (&tmp[i]) T(std::move(this->_buffer[i]));
 
 			
 			for(size_t i = 0; i < this->_size; i++)
-				this->_A[i].~T();
+				this->_buffer[i].~T();
 
-			delete[] this->_A;
+			delete[] this->_buffer;
 
-			this->_A = tmp;
+			this->_buffer = tmp;
 			this->_capacity = new_capaciy;
 		}
 	}
@@ -115,7 +115,7 @@ namespace nostd
 
 	template <typename T>
 	vector<T>::vector(int size)
-		: _A(nullptr), _size(0), _capacity(0)
+		: _buffer(nullptr), _size(0), _capacity(0)
 	{
 		this->resize(size);
 	}
@@ -125,22 +125,22 @@ namespace nostd
 	{
 		this->_size = other._size;
 		this->_capacity = other._capacity;
-		this->_A = new T[this->_capacity];
-		std::copy(other._A, other._A + this->_size, this->_A);
+		this->_buffer = new T[this->_capacity];
+		std::copy(other._buffer, other._buffer + this->_size, this->_buffer);
 	}
 
 	template <typename T>
 	vector<T>::~vector()
 	{
 		this->clear();
-		//::operator delete(this->_A, this->_capacity * sizeof(T));
-		delete[] this->_A;
+		//::operator delete(this->_buffer, this->_capacity * sizeof(T));
+		delete[] this->_buffer;
 	}
 
 	template <typename T>
 	const T& vector<T>::at(const int pos) const
 	{
-		return *(this->_A + std::min(pos, (int) this->_size - 1));
+		return *(this->_buffer + std::min(pos, (int) this->_size - 1));
 	}
 
 	template <typename T>
@@ -159,7 +159,7 @@ namespace nostd
 	void vector<T>::clear()
 	{
 		for (size_t i = 0; i < this->_size; i++)
-			this->_A[i].~T();
+			this->_buffer[i].~T();
 
 		this->_size = 0;
 		this->reallocate(0);
@@ -173,7 +173,7 @@ namespace nostd
 
 		//Do I need to check if the reallocation has been done correctly?
 
-		this->_A[this->_size] = data;
+		this->_buffer[this->_size] = data;
 		this->_size++;
 	}
 	
@@ -188,7 +188,7 @@ namespace nostd
 
 		// when entering a function data becomes an 
 		// lvalue so we need to move it.
-		this->_A[this->_size] = std::move(data);
+		this->_buffer[this->_size] = std::move(data);
 		this->_size++;
 	}
 
@@ -200,7 +200,7 @@ namespace nostd
 			this->_size--;
 
 			//Distruggo l'ultimo elemento
-			this->_A[this->_size].~T();
+			this->_buffer[this->_size].~T();
 		}
 	}
 
@@ -234,24 +234,24 @@ namespace nostd
 	template <typename T>
 	const T& vector<T>::operator [](size_t pos) const
 	{
-		return this->_A[pos];
+		return this->_buffer[pos];
 	}
 
 	template <typename T>
 	T& vector<T>::operator [](size_t pos)
 	{
-		return this->_A[pos];
+		return this->_buffer[pos];
 	}
 
 	template <typename T>
 	vector<T>& vector<T>::operator=(const vector<T>& other)
 	{
 		if (this != &other) {
-			delete[] _A;
+			delete[] _buffer;
 			this->_size = other._size;
 			this->_capacity = other._capacity;
-			this->_A = new T[this->_capacity];
-			std::copy(other._A, other._A + this->_size, this->_A);
+			this->_buffer = new T[this->_capacity];
+			std::copy(other._buffer, other._buffer + this->_size, this->_buffer);
 		}
 		return *this;
 	}
