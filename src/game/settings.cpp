@@ -1,7 +1,9 @@
 #include "settings.hpp"
 #include "global.hpp"
 #include <ncurses.h>
+#include "file.hpp"
 #include "../../etc/logs/logs.hpp"
+#include <locale>
 
 void Settings::drawFirstSettings(Draw screen){
     // Variabili interne alla funzione
@@ -67,7 +69,7 @@ void Settings::drawFirstSettings(Draw screen){
         else if (input == 10)
         {
             if (selectedOption == 0)
-                drawSettings(screen);
+                ControlKeys(screen);
             else if (selectedOption == 1)
                 calibrateKeys(screen);
         }
@@ -77,34 +79,35 @@ void Settings::drawFirstSettings(Draw screen){
 
             // In realtà andrebbe fatto un check se le impostazioni
             // sono state salvate e quindi aggiungere un tastos
+
+            //File::saveSettings();
             saved = true;
         }
     }
 }
 
-void Settings::drawSettings(Draw settings){
+void Settings::ControlKeys(Draw settings){
     
     settings.clearScreen(); 
-    settings.drawText(3, (Draw::centerX("Settings")), "Settings");
     int selectedOption = 0;
     bool selected = false;
     while (!selected){
         int a = 0;
+        settings.eraseScreen();
+        settings.drawText(3, (Draw::centerX("Settings")), "Settings");
         for (int i = 0; i < 2; i++){
             for (int j = 0; j < 4; j++){
                 settings.drawText(10 + 3*j, 45 + 45*i, controls[a]);
                 // Una volta implementata la funziona drawSquare userò quella
-                settings.drawSquareAround(keys[a], 10 + 3*j, 60 + 45*i);
+                settings.drawSquareAround(SETTINGS_CONTROL_KEYS[a], 10 + 3*j, 60 + 45*i);
                 
-                settings.drawText(10 + 3*j, 60 + 45*i, keys[a]);
+                settings.drawUpperText(10 + 3*j, 60 + 45*i, SETTINGS_CONTROL_KEYS[a] );
                 a = a +1; 
             }
         }
-        settings.drawText(30, 60, "Calibration pressure: ");
-
         settings.attrOn(COLOR_PAIR(1));
-        if (selectedOption < 4) settings.drawText(10 + 3*selectedOption, 60, keys[selectedOption]);
-        else settings.drawText(10 + 3*(selectedOption - 4), 105, keys[selectedOption]);
+        if (selectedOption < 4) settings.drawUpperText(10 + 3*selectedOption, 60, SETTINGS_CONTROL_KEYS[selectedOption]);
+        else settings.drawUpperText(10 + 3*(selectedOption - 4), 105, SETTINGS_CONTROL_KEYS[selectedOption]);
         settings.attrOff(COLOR_PAIR(1));
         switch (settings.getinput()){
             case KEY_UP:
@@ -132,9 +135,10 @@ void Settings::drawSettings(Draw settings){
                 break;
             case 10:
                 settings.drawText(6, (Draw::centerX("Press the key you want to use")), "Press the key you want to use: ");
-                // implementare funzione che cambia i tasti
-                selected = true;
-                settings.getinput();
+
+                int x = settings.getinput();
+                if (is_alpha(x)) SETTINGS_CONTROL_KEYS[selectedOption] = std::string(1, static_cast<char>(x));
+
                 break;
         }
 
@@ -143,12 +147,12 @@ void Settings::drawSettings(Draw settings){
     
 }
 
-bool Settings::checkifcalibrated(Draw settings){
-    // fa un check se esiste il file e se è già stata calibrata
-    return true;
+bool Settings::is_alpha(int ch){
+    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
 }
 
-int Settings::calibrateKeys(Draw settings){
+
+void Settings::calibrateKeys(Draw settings){
     settings.eraseScreen();
     settings.drawText(6, settings.centerX("Keep pressing the key!"), "Keep pressing the key!");
     settings.drawText(8, settings.centerX("Calibration in progress..."), "Calibration in progress...");
@@ -159,8 +163,9 @@ int Settings::calibrateKeys(Draw settings){
     int keypressed = 0;
     settings.getinput();
     settings.nodel(true);
+    settings.drawText(12, 69, "[");
+    settings.drawText(12, 80, "]");
     for (int i = 0; i < 1000; i++) {
-        deb::debug((int)keypressed);
         int key = settings.getinput();
         if (key == ERR) {
             errorkey++;
@@ -169,17 +174,20 @@ int Settings::calibrateKeys(Draw settings){
             errorkey = 0;
         }
         for (int j = 0; j < i /100; j++)
-            settings.drawText(10, 70 + j, "#");
+            settings.drawText(12, 70 + j, "#");
 
         settings.refreshScreen();        
         napms(5);
 
     
     }
-    if (keypressed < 40) settings.drawText(12, settings.centerX("Calibration failed!"), "Calibration failed!");
+    if (keypressed < 30) {
+        settings.drawText(12, settings.centerX("Calibration failed!"), "Calibration failed!");
+        keypressed = 0;
+    }
     else settings.drawText(12, settings.centerX("Calibration completed!"), "Calibration completed!");
     settings.refreshScreen();
-    napms(1800);
     settings.nodel(false);
-    return keypressed; 
+    napms(1800);
+    SETTINGS_PRESSURE_CALIBRATION = keypressed;
 }

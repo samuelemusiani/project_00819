@@ -1,7 +1,8 @@
 #include "global.hpp"
+#include "../../etc/nostd/string.hpp"
 
-
-nostd::string SETTINGS_CONTROL_KEYS[8];
-int SETTINGS_PRESSURE_CALIBRATION;
-int SETTINGS_VOLUME_LEVEL;
-int SETTINGS_SENSITIVITY_LEVEL;
+int SETTINGS_VOLUME_LEVEL = 3;
+int SETTINGS_SENSITIVITY_LEVEL = 15 ;
+nostd::string SETTINGS_CONTROL_KEYS[8] = {"s", "d", "a", "f", "o", "p", "v", "esc"};
+bool SETTINGS_IS_CALIBRATED = false;
+int SETTINGS_PRESSURE_CALIBRATION = 0;
