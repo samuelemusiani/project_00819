@@ -23,18 +23,18 @@ namespace nostd
 			~vector();
 
 			/* Element access */
-			T at(int pos);
+			const T& at(const int pos) const;
 
 			/* Capacity */
-			size_t size();
-			size_t capacity();
+			size_t size() const;
+			size_t capacity() const;
 
 			/* Modifiers */
 			void clear();
 			void push_back(const T& data);
 			void push_back(T&& data);
 			void pop_back();
-			void resize(int size);
+			void resize(const int size);
 
 			/* Operator overloading */
 			const T& operator [](size_t pos) const;
@@ -134,23 +134,24 @@ namespace nostd
 	vector<T>::~vector()
 	{
 		this->clear();
-		::operator delete(this->_A, this->_capacity * sizeof(T));
+		//::operator delete(this->_A, this->_capacity * sizeof(T));
+		delete[] this->_A;
 	}
 
 	template <typename T>
-	T vector<T>::at(int pos)
+	const T& vector<T>::at(const int pos) const
 	{
 		return *(this->_A + std::min(pos, (int) this->_size - 1));
 	}
 
 	template <typename T>
-	size_t vector<T>::size()
+	size_t vector<T>::size() const
 	{
 		return this->_size;
 	}
 
 	template <typename T>
-	size_t vector<T>::capacity()
+	size_t vector<T>::capacity() const
 	{
 		return this->_capacity;
 	}
@@ -205,7 +206,7 @@ namespace nostd
 	}
 
 	template <typename T>
-	void vector<T>::resize(int size)
+	void vector<T>::resize(const int size)
 	{
 		if (size >= 0 && size != this->_size)
 		{
