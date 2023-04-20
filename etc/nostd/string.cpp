@@ -1,120 +1,125 @@
 #include "string.hpp"
+#include <cstring>
 
 #ifndef USE_STD_STRING
-nostd::string::string() : string(nullptr)
+
+	/* PRIVATE */
+
+void nostd::string::clear()
+{
+	delete[] this->_buffer;
+	this->_buffer = nullptr;
+	this->_size = 0;
+}
+
+	/* PUBLIC */
+
+nostd::string::string() 
+	: string(nullptr)
 {
 
 }
 
 nostd::string::string(const char *str)
+	: _buffer(nullptr), _size(0)
 {
-    this->buffer = nullptr;
-    this->size = 0;
-    if(str != nullptr)
-        while (str[this->size] != '\0')
-            this->size++;
-    if(this->size >= 0)
-        this->buffer = new char[this->size + 1];
-    for (int i = 0; i < this->size; i++)
-        this->buffer[i] = str[i];
-    this->buffer[this->size] = '\0';
+	if(str != nullptr)
+		this->_size = strlen(str);
+
+	if(this->_size > 0)
+		this->_buffer = new char[this->_size + 1];
+
+	for (int i = 0; i < this->_size; i++)
+		this->_buffer[i] = str[i];
+
+	this->_buffer[this->_size] = '\0';
+}
+
+nostd::string::string(const string& other)
+{
+	this->_size = other._size;
+	this->_buffer = new char[this->_size + 1];
+	std::memcpy(this->_buffer, other._buffer, (this->_size + 1) * sizeof(char));
 }
 
 nostd::string::~string()
 {
-    this->clear();
+	this->clear();
 }
 
-nostd::string& nostd::string::operator=(const char* s) {
-    if (this->buffer != nullptr)
-        this->clear();
-    while (s[this->size] != '\0')
-        this->size++;
-    this->buffer = new char[this->size + 1];
-    for (int i = 0; i < this->size; i++)
-        this->buffer[i] = s[i];
-    this->buffer[this->size] = '\0';
-    return *this;
-}
-
-namespace nostd { /* it doesn't work without this line, idk why */
-    std::ostream &operator<<(std::ostream &out, const nostd::string &s) {
-        out << s.buffer;
-        return out;
-    }
-}
-
-int nostd::string::length()
+size_t nostd::string::length() const
 {
-    return this->size;
+	return this->_size;
 }
 
-int nostd::string::stoi()
+bool nostd::string::empty() const
 {
-    int result = 0;
-    bool negative = false;
-    int i = 0;
-    if (this->buffer[0] == '-')
-    {
-        negative = true;
-        i = 1;
-    }
-    for (; i < this->size; i++)
-    {
-        result *= 10;
-        result += (int)this->buffer[i] - 48; /* 48 is the ASCII code for number 0 */
-    }
-    if(negative)
-        result *= -1;
-    return result;
+	return (this->_size == 0);
 }
 
-double nostd::string::stod()
+const char* nostd::string::c_str() const
 {
-    double result = 0.0;
-    double decimal = 1.0;
-    bool negative = false;
-    int i = 0;
-    if (this->buffer[0] == '-')
-    {
-        negative = true;
-        i++;
-    }
-    while(i<this->size && this->buffer[i] != '.')
-    {
-        result *= 10.0;
-        result += (double)this->buffer[i] - 48;
-        i++;
-    }
-    if(this->buffer[i] == '.')
-        i++;
-    while(i < this->size)
-    {
-        decimal *= 10.0;
-        result += (double)((this->buffer[i] - 48) / decimal);
-        i++;
-    }
-    if(negative)
-        result *= -1.0;
-    return result;
+	return this->_buffer;
 }
 
-const char* nostd::string::c_str()
+nostd::string& nostd::string::operator= (const char* s)
 {
-    return this->buffer;
+
+	if (this->_buffer != nullptr)
+		this->clear();
+
+	this->_size = strlen(s);
+	this->_buffer = new char[this->_size + 1];
+
+	for (int i = 0; i < this->_size; i++)
+		this->_buffer[i] = s[i];
+
+	this->_buffer[this->_size] = '\0';
+
+	return *this;
 }
 
-void nostd::string::clear()
+nostd::string& nostd::string::operator= (const nostd::string& other)
 {
-    delete[] this->buffer;
-    this->buffer = nullptr;
-    this->size = 0;
+
+	if(this != &other)
+	{
+		this->_size = other._size;
+		this->_buffer = new char[this->_size + 1];
+
+		for(int i = 0; i < this->_size; i++)
+			this->_buffer[i] = other._buffer[i];
+
+		delete[] other._buffer;
+	}
+
+	return *this;
 }
 
-bool nostd::string::empty()
+nostd::string& nostd::string::operator+ (const nostd::string& s1)
 {
-    return (this->size == 0);
+	this->_size = s1._size;
+	this->_buffer = new char[this->_size + 1];
+	std::memcpy(this->_buffer, s1._buffer, s1._size * sizeof(char));
+
+	return *this;
 }
+
+const char& nostd::string::operator [](size_t pos) const
+{
+	return this->_buffer[pos];
+}
+
+char& nostd::string::operator [](size_t pos)
+{
+	return this->_buffer[pos];
+}
+
+std::ostream& operator<<(std::ostream &out, const nostd::string &s) {
+	out << s._buffer;
+	return out;
+}
+
 #else
 
 nostd::string::string(const char* pippo)
