@@ -80,7 +80,7 @@ void Settings::drawFirstSettings(Draw screen){
             // In realtà andrebbe fatto un check se le impostazioni
             // sono state salvate e quindi aggiungere un tastos
 
-            //File::saveSettings();
+            File::saveSettings();
             saved = true;
         }
     }
