@@ -29,6 +29,7 @@ public:
 		static nostd::vector<std::string> getLastSave();
 		static bool nameAlreadyInUse(std::string name);
 		static Map getMap(std::string name);
+		static void deleteSave(std::string name);
 };
 
 #endif
