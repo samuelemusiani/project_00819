@@ -21,13 +21,17 @@ bool File::openFile(std::fstream* file,std::string path,std::string mode)
 void File::initSettings() {
 	std::fstream file;
 	if (!exist(&file, "./settings.txt"))
-		if(openFile(&file,"./settings.txt","w"))
+	{
+		if (openFile(&file, "./settings.txt", "w"))
 		{
 			file << "{ JUMP KING }\n\n[ KeyBindings ]\nml=s\nmr=d\njl=a\njr=f\njp=v\nsh=o\nbb=p\not=esc\n\n"
 					"[ Calibration ]\ncalibr=-1\n\n[ Audio ]\nvol=10\n\n[ Sensitivity ]\nsens=10\n\n";
 			file.close();
 			getSettings();
 		}
+	}
+	else
+		getSettings();
 }
 
 void File::saveSettings()
