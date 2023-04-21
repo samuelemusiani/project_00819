@@ -17,7 +17,8 @@ class File
 		static bool exist(std::fstream* file,std::string path);
 		static void appendSave(Map m,std::string name);
 		static void updateSave(Map m);
-	public:
+		static void getSettings();
+public:
 		File();
 		static void initSettings();
 		static void saveSettings();
@@ -28,7 +29,6 @@ class File
 		static nostd::vector<std::string> getLastSave();
 		static bool nameAlreadyInUse(std::string name);
 		static Map getMap(std::string name);
-		static void getSettings();
 };
 
 #endif
