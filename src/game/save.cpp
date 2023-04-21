@@ -71,7 +71,7 @@ void Save::saveNewGame(Draw screen){
             }
         }
     }
-    alreadySaved = true;
+    this->alreadySaved = true;
      
 }
 
