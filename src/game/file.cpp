@@ -271,3 +271,37 @@ void File::getSettings()
 		SETTINGS_SENSITIVITY_LEVEL = stoi(buff.substr(5,buff.length()-5));
 	}
 }
+
+void File::deleteSave(std::string name)
+{
+	std::fstream file;
+	std::fstream tmp;
+	bool found = false;
+	std::string buff;
+	int count=-1;
+	std::string search = "[ Name: " + name + " ]";
+	if(openFile(&tmp,"./tmp.txt","w") && openFile(&file,"./save.txt","r"))
+	{
+		while(!found && getline(file,buff))
+		{
+			count++;
+			if(buff==search)
+				found=true;
+		}
+		if(!found)	return;
+		file.clear();
+		file.seekg(0);
+		for(int i=0;i<count;i++)
+		{
+			getline(file, buff);
+			tmp << buff << "\n";
+		}
+		for(int i=0;i<5;i++)
+			getline(file,buff);
+		while(getline(file,buff))
+			tmp << buff << "\n";
+		file.close();
+		tmp.close();
+		rename("./tmp.txt","./save.txt");
+	}
+}
