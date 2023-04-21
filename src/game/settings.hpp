@@ -2,6 +2,10 @@
 #include "../draw/draw.hpp"
 #include <string>
 
+#ifndef GAME_SETTINGS
+#define GAME_SETTINGS
+
+
 class Settings
 {
     private:
@@ -23,3 +27,5 @@ class Settings
 
         bool is_alpha(int ch);
 };
+
+#endif

@@ -29,8 +29,8 @@ Game::Game()
 {	
 	this->screen = Draw();
 	screen.init();
-	//File::initSettings();
-
+	File::initSettings();
+	File::getSettings();
 }	
 
 Game::~Game()
