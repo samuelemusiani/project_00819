@@ -246,11 +246,12 @@ void File::getSettings()
 	std::fstream file;
 	std::string buff;
 	bool found = false;
-	if(openFile(&file,"./setting.txt"))
+	if(openFile(&file,"./settings.txt","r"))
 	{
 		while(!found && getline(file,buff))
 			if(buff == "[ KeyBindings ]")
 				found = true;
+		deb::debug("ok");
 		for(int i=0;i<8;i++)
 		{
 			getline(file,buff);
