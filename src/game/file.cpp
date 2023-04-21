@@ -40,7 +40,7 @@ void File::saveSettings()
 	if(openFile(&file,"./settings.txt","w"))
 		file << "{ JUMP KING }\n\n[ KeyBindings ]\nml="<<SETTINGS_CONTROL_KEYS[0]<<"\nmr="<<SETTINGS_CONTROL_KEYS[1]<<"\njl="<<SETTINGS_CONTROL_KEYS[2]<<"\n"
 				"jr="<<SETTINGS_CONTROL_KEYS[3]<<"\njp="<<SETTINGS_CONTROL_KEYS[4]<<"\nsh="<<SETTINGS_CONTROL_KEYS[5]<<"\nbb="<<SETTINGS_CONTROL_KEYS[6]<<"\not="<<SETTINGS_CONTROL_KEYS[7]<<"\n\n"
-				"[ Calibration ]\ncalibr="<<SETTINGS_CALIBRATION<<"\n\n[ Audio ]\nvol="<<SETTINGS_VOLUME_LEVEL<<"\n\n[ Sensitivity ]\n"<<"sens="<<SETTINGS_SENSITIVITY_LEVEL<<"\n";
+				"[ Calibration ]\ncalibr="<<SETTINGS_PRESSURE_CALIBRATION<<"\n\n[ Audio ]\nvol="<<SETTINGS_VOLUME_LEVEL<<"\n\n[ Sensitivity ]\n"<<"sens="<<SETTINGS_SENSITIVITY_LEVEL<<"\n";
 	file.close();
 }
 
@@ -260,7 +260,7 @@ void File::getSettings()
 		getline(file,buff); // empty line
 		getline(file,buff); // [ Calibration ]
 		getline(file,buff);
-		SETTINGS_CALIBRATION = stoi(buff.substr(7,buff.length()-7));
+		SETTINGS_PRESSURE_CALIBRATION = stoi(buff.substr(7,buff.length()-7));
 		getline(file,buff); // empty line
 		getline(file,buff); // [ Audio ]
 		getline(file,buff);
