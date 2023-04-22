@@ -64,7 +64,7 @@ void Save::saveNewGame(Draw screen, Map map){
                 // se ci sono errori ritornati dalla funzione per salvare printare Error saving file
                 
                 // controllare se non esiste già un file con lo stesso nome
-                if (File::nameAlreadyInUse) screen.drawText(23, Draw::centerX("Name already in use"), "Name already in use");
+                if (File::nameAlreadyInUse(nome)) screen.drawText(23, Draw::centerX("Name already in use"), "Name already in use");
                 else {
                     saved = true;
                 screen.drawText(23, Draw::centerX("File saved"), "File saved");
