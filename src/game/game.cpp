@@ -138,6 +138,8 @@ void Game::start()
 	Map map = Map();
 	screen.drawMap(map, 0);
 
+	
+
 	// Creare un oggetto body, chiamo getposition su body. Passo il punto che mi ritorna alla drawPlayer e la drawPlayer disegna il player in quella posizione
 	phy::Body player = phy::Body();
 	player.set_position(phy::Point(40, 20));
@@ -149,11 +151,12 @@ void Game::start()
 	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
 	bool exit = false;
 	screen.nodel(true);
-	 int cumulative = 0;
-	 int count_not_key = 0;
-	int current_chunk = 0;
+	int cumulative = 0;
+	int count_not_key = 0;
+	current_chunk = 0;
 	int which_key = 0;
 	while (!exit){
+		stats();
 		bool right; 
 		int input = screen.getinput();
 
@@ -184,13 +187,22 @@ void Game::start()
 			if(count_not_key > 30)
 			{
 				if (cumulative > 1 && which_key == 1 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
-					player.set_velocity(phy::Vector(JUMPF, 55));
+					{
+						player.set_velocity(phy::Vector(JUMPF, 55));
+						jump++;
+					}
 
 				else if (cumulative > 1 && which_key == 2 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
-					player.set_velocity(phy::Vector(JUMPF, 125));
+					{
+						player.set_velocity(phy::Vector(JUMPF, 125));
+						jump++;
+					}
 
 				else if (cumulative > 1 && which_key == 3 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
-					player.set_velocity(phy::Vector(JUMPF, 90));
+					{
+						player.set_velocity(phy::Vector(JUMPF, 90));
+						jump++;
+					}
 				cumulative = 0;
 			}
 
@@ -237,7 +249,10 @@ void Game::start()
 	
 	}
 	screen.nodel(false);
-	screen.clearScreen();	
+	stats_scr.eraseScreenNoBox();
+	stats_scr.refreshScreen();
+	stats_scr.deleteWin();	
+	screen.eraseScreen();
 }
 
 void Game::resume()
@@ -278,4 +293,41 @@ int Game::setDifficulty()
 		}
 	}
 	return selected;
+}
+
+void Game::stats()
+{
+	int xMaxSize, yMaxSize;
+    getmaxyx(stdscr, yMaxSize, xMaxSize);
+    int posY = (yMaxSize - 44) / 2;
+    int posX = (xMaxSize - 150) / 2;
+
+	this->stats_scr = screen.newWindow(3, 150, posY-3, posX);
+	this->stats_scr.eraseScreenNoBox();
+
+	this->stats_scr.drawRectagle(1, 0 , 3, 149);
+
+	this->stats_scr.drawText(2, 2, "Lives: " );
+	for (int i = 0; i < this->heart; i++)
+	{
+		this->stats_scr.drawText(2, 10 + i*2, "♥");
+	}
+	this->stats_scr.drawText(2, 50, "Level: " + std::to_string(this->current_chunk));
+	this->stats_scr.drawText(2, 70, "Jump: " + std::to_string(this->jump));
+	this->stats_scr.drawText(2, 90, "Coins: " + std::to_string(this->coins));
+	/*stats.drawText(2, 2, "Level: " + std::to_string(this->current_chunk));
+	stats.drawText(2, 20, "Jump: " + std::to_string(this->jump));
+	stats.drawText(2, 40, "Coins: " + std::to_string(this->coins));
+	for (int i = 0; i < this->heart; i++)
+	{
+		stats.drawText(2, 60 + i*2, "♥");
+	}
+	*/
+	this->stats_scr.refreshScreen();
+}
+
+void Game::clearStats()
+{
+	this->stats_scr.eraseScreenNoBox();
+	this->stats_scr.deleteWin();
 }

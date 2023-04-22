@@ -75,7 +75,41 @@ void Screen::refreshScreen()
 	wrefresh(this->screen);
 }
 
+void Screen::eraseScreenNoBox()
+{
+	werase(this->screen);
+}
+
 int Screen::getinput()
 {
 	return wgetch(this->screen);
+}
+
+void Screen::clearLine(int y, int x)
+{
+	wmove(this->screen, y, x);
+	wrefresh(this->screen);
+	wclrtoeol(this->screen);
+	box(this->screen, 0, 0);
+	
+}
+
+void Screen::drawVerticalLine(int x, int y1, int y2)
+{
+	for (int i = y1; i < y2; i++)
+	{
+		mvwaddch(this->screen, i, x, ACS_VLINE);
+	}
+}
+
+WINDOW* Screen::getScreen(){
+	return this->screen;
+}
+
+void Screen::deleteWin(){
+	delwin(this->screen);
+}
+
+void Screen::setScreen(WINDOW* w) {
+	this->screen = w;
 }
