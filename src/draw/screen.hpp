@@ -24,6 +24,16 @@ class Screen
 		void nodel(bool value);
 		void refreshScreen();
 		int getinput();
+		void eraseScreenNoBox();
+		// Funzione che cancella la riga y a partire dalla colonnna x 
+		void clearLine(int y, int x);
+
+		// Funzione che disegna una linea verticale a x, da y1 a y2
+		void drawVerticalLine(int x, int y1, int y2);
+
+		WINDOW* getScreen();
+		void deleteWin();
+		void setScreen(WINDOW* w);
 };
 
 #endif
