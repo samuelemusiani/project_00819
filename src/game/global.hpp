@@ -11,8 +11,6 @@
 
 #include "../../etc/nostd/string.hpp"
 
-
-
 extern int SETTINGS_VOLUME_LEVEL;
 extern int SETTINGS_SENSITIVITY_LEVEL;
 extern std::string SETTINGS_CONTROL_KEYS[8];
