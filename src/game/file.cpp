@@ -166,7 +166,7 @@ void File::changeName(std::string oldName,std::string newName)
 
 nostd::vector<std::string> File::getNames()
 {
-	static nostd::vector<std::string> names;
+	nostd::vector<std::string> names;
 	std::fstream file;
 	std::string buff;
 	if(openFile(&file,"./save.txt","r"))

@@ -63,9 +63,10 @@ void Game::run()
 			break;}
 		case 1: 
 			{// Resume game
+			
 			this->resume();
-			screen.getinput();
-			break;}
+			break;
+			}
 		case 2: 
 			{// Settings
 			settings.drawFirstSettings(this->screen);
@@ -144,7 +145,7 @@ void Game::start()
 }
 
 void Game::play(){
-		screen.drawMap(map, 0);
+	screen.drawMap(this->map, 0);
 
 	// Creare un oggetto body, chiamo getposition su body. Passo il punto che mi ritorna alla drawPlayer e la drawPlayer disegna il player in quella posizione
 	phy::Body player = phy::Body();
@@ -214,8 +215,7 @@ void Game::play(){
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
 			case 27:
-
-			{	
+			{
 				bool quitGamepley = pauseGame();
 				if (quitGamepley == true) exit = true;
 				break;
@@ -255,6 +255,7 @@ void Game::play(){
 void Game::resume()
 {
 	screen.clearScreen();
+	
 	nostd::vector<std::string> savedMaps = File::getNames();
 	if (savedMaps.size() == 0) {
 		screen.drawText(5, (Draw::centerX("No saved maps")), "No saved maps");
@@ -291,6 +292,11 @@ void Game::resume()
 			}
 			screen.refreshScreen();
 		}
+		// DEBUG
+		/*std::string mapName = savedMaps[selected];
+		screen.drawText(1, 1, mapName);
+		screen.getinput();
+		screen.refreshScreen();*/
 		this->map = File::getMap(savedMaps[selected]);
 		play();
 	}
