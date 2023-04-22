@@ -3,10 +3,12 @@
 
 #include "game.hpp"
 #include "menu.hpp"
+#include "file.hpp"
 
 #include "../physics/body.hpp"
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
+#include "save.hpp"
 #include "../physics/collisions.hpp"
 #include "../../etc/logs/logs.hpp"
 
@@ -27,7 +29,7 @@ Game::Game()
 {	
 	this->screen = Draw();
 	screen.init();
-
+	File::initSettings();
 }	
 
 Game::~Game()
@@ -57,7 +59,7 @@ void Game::run()
 			{// New Game
 			// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
 			this->start();
-			// TODO: Implementing pause menu 
+			
 			break;}
 		case 1: 
 			{// Resume game
@@ -93,7 +95,8 @@ void Game::run()
 bool Game::exitGame(){
 	// Esci dal gioco
 	screen.clearScreen();
-	screen.drawText(16, Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");	nostd::string options[2] = {"Yes", "No"};
+	screen.drawText(16, Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");	
+	std::string options[2] = {"Yes", "No"};
 	int selected = 0;
 	bool choose = false;
 	// Create two button (yes or no) to quit the game 	
@@ -135,8 +138,13 @@ void Game::start()
 {
 	// clear the screen and draw the border
 	setDifficulty();
-	Map map = Map();
-	screen.drawMap(map, 0);
+	map = Map();
+	play();
+
+}
+
+void Game::play(){
+		screen.drawMap(map, 0);
 
 	// Creare un oggetto body, chiamo getposition su body. Passo il punto che mi ritorna alla drawPlayer e la drawPlayer disegna il player in quella posizione
 	phy::Body player = phy::Body();
@@ -206,8 +214,12 @@ void Game::start()
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
 			case 27:
-				exit = true;
+
+			{	
+				bool quitGamepley = pauseGame();
+				if (quitGamepley == true) exit = true;
 				break;
+			}
 			default:
 				break;
 		}
@@ -237,20 +249,58 @@ void Game::start()
 	
 	}
 	screen.nodel(false);
-	screen.clearScreen();	
+
 }
 
 void Game::resume()
 {
 	screen.clearScreen();
-	screen.drawText(3, (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
+	nostd::vector<std::string> savedMaps = File::getNames();
+	if (savedMaps.size() == 0) {
+		screen.drawText(5, (Draw::centerX("No saved maps")), "No saved maps");
+		screen.refreshScreen();
+	}
+	else {
+		screen.drawText(3, (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
+		int selected = 0;
+		bool choose = false;
+		while (!choose){
+			for (int i = 0; i < savedMaps.size(); i++)
+			{
+				screen.drawSquareAround(savedMaps[i], 20 + 4*i, 75);
+			}
+			screen.attrOn(COLOR_PAIR(1));
+			screen.drawText(20 + 4*selected, 75, savedMaps[selected]);
+			screen.attrOff(COLOR_PAIR(1));
+
+			switch (screen.getinput())
+			{
+				case KEY_UP:
+					if (selected == 0) selected = savedMaps.size() - 1;
+					else selected = selected - 1;
+					break;
+				case KEY_DOWN:
+					if (selected == savedMaps.size() - 1) selected = 0;
+					else selected = selected + 1;
+					break;
+				case 10:
+					choose = true;
+					break;
+				default:
+					break;
+			}
+			screen.refreshScreen();
+		}
+		this->map = File::getMap(savedMaps[selected]);
+		play();
+	}
 }
 
 int Game::setDifficulty()
 {
 	screen.clearScreen();
 	screen.drawText(3, (Draw::centerX("Select the difficulty")), "Select the difficulty");
-	nostd::string options[3] = {"Easy", "Medium", "Hard"};
+	std::string options[3] = {"Easy", "Medium", "Hard"};
 	int selected = 0;
 	bool choose = false;
 	while (!choose){
@@ -278,4 +328,110 @@ int Game::setDifficulty()
 		}
 	}
 	return selected;
+}
+
+bool Game::pauseGame()
+{
+	screen.nodel(false);
+	// for che utilizzando move sposta il cursore a (y = i, x = 120) e cancella la riga con clrtoeol
+	/*for (int i = 0; i < screen.get_maxY(); i++)
+	{
+		screen.clearLine(i, 90);
+	}*/
+	//screen.drawBox();
+	bool resumed = false;
+	bool exit = false;
+	while(!resumed)
+	{
+
+	int xMaxSize, yMaxSize;
+	getmaxyx(stdscr, yMaxSize, xMaxSize);
+	int posY = (yMaxSize - 44) / 2;
+	int posX = (xMaxSize - 150) / 2;
+	
+	Draw pause = screen.newWindow(44, 60, posY, 90 + posX);
+	
+	pause.clearwithoutbox();
+	pause.drawBox();
+	screen.drawBox();
+	pause.drawText(3, 30 - pause.center("Game Paused"),  "Game Paused");
+	std::string options[3] = {"Resume", "Save", "Exit"};
+	int selected = 0;
+	bool choose = false;
+	wnoutrefresh(screen.getScreen()); // copying of information from a window data structure to the virtual screen
+	wnoutrefresh(pause.getScreen()); // utilizzando wnoutrefresh, il refresh del terminale avviene solo al doupdate()
+	doupdate(); // aggiorna il terminale. Quindi si evita il flicker dato dal tempo che intercorre tra l'aggiornamento di due window usando il classico refresh
+	
+
+	while (!choose){	
+		for (int i = 0; i < 3; i++)
+		{
+			pause.drawSquareAround(options[i], 20 + 4*i, 30 - (options[i].length() / 2));
+		}
+		pause.attrOn(COLOR_PAIR(1));
+		pause.drawText(20 + 4*selected, 30 - (options[selected].length() / 2), options[selected]);
+		pause.attrOff(COLOR_PAIR(1));
+		switch (pause.getinput())
+		{
+			case KEY_UP:
+				if (selected == 0) selected = 2;
+				else selected = selected - 1;
+				break;
+			case KEY_DOWN:
+				if (selected == 2) selected = 0;
+				else selected = selected + 1;
+				break;
+			case 10:
+				choose = true;
+				break;
+			default: 
+				break;
+		}
+	}
+	pause.refreshScreen();
+	Save save = Save();
+	switch (selected)
+	{
+		case 0:
+			screen.nodel(true);
+			pause.deleteWin();
+
+			resumed = true;
+			break;
+		case 1:
+		{
+			pause.deleteWin();
+			int xMaxSize, yMaxSize;
+			getmaxyx(stdscr, yMaxSize, xMaxSize);
+			int posY = (yMaxSize - 44) / 2;
+			int posX = (xMaxSize - 150) / 2;
+			
+			Draw save_scr = screen.newWindow(44, 150, posY, posX);
+
+			save.saveNewGame(save_scr, map);
+			save_scr.eraseScreen();
+			save_scr.deleteWin();
+			break;
+		}
+			
+		case 2: 
+			{
+			pause.clearScreen();
+			pause.deleteWin();
+			redrawwin(screen.getScreen());	
+			screen.refreshScreen();
+
+			
+			save.quitGame(screen, map);
+
+			resumed = true; 
+			exit = true; 
+			break;
+			}	
+		default:
+			break;
+		
+	}
+	}
+	return exit;
 }
