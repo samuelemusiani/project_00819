@@ -1,11 +1,14 @@
 #include "save.hpp"
 
-void Save::saveNewGame(Draw screen){
+void Save::saveNewGame(Draw screen, Map map){
+    if (File::isAlreadySaved(map)) {
+        saveGame(screen);
+    }
+    else {
     screen.eraseScreen();
     screen.drawText(16, 65, "Insert the name of the file: ");
     screen.drawRectagle(19, 64, 2, 30);
     screen.refreshScreen();
-    std::string nome;
     int ch;
     bool saved = false; 
     while (!saved) {
@@ -54,11 +57,16 @@ void Save::saveNewGame(Draw screen){
                 screen.refreshScreen();
             }
             if (ch == 10)  {
-                saved = true; 
+                
                 screen.clearLine(23, 0);
                 screen.refreshScreen();
                 // Qui chiamare la funziona per salvare e se salvato con successo printare File saved
                 // se ci sono errori ritornati dalla funzione per salvare printare Error saving file
+                
+                // controllare se non esiste già un file con lo stesso nome
+                if (File::nameAlreadyInUse) screen.drawText(23, Draw::centerX("Name already in use"), "Name already in use");
+                else {
+                    saved = true;
                 screen.drawText(23, Draw::centerX("File saved"), "File saved");
 
                 screen.attrOn(COLOR_PAIR(1));
@@ -67,23 +75,38 @@ void Save::saveNewGame(Draw screen){
                 screen.refreshScreen();
                 screen.getinput();
                 screen.eraseScreen();
-
+                }
             }
         }
     }
-    this->alreadySaved = true;
-     
+    }
+    File::saveMap(map, nome);
+    this->alreadySaved = true; // Forse ora è inutile perchè c'è già la funzione in file
 }
 
-void Save::saveGame(Draw saved){
+void Save::saveGame(Draw screen){
+    int xMaxSize, yMaxSize;
+    getmaxyx(stdscr, yMaxSize, xMaxSize);
+    int posY = (yMaxSize - 5) / 2;
+    int posX = (xMaxSize - 20) / 2;
+    
+    Draw saved = screen.newWindow(5, 20, posY, posX);
     saved.eraseScreen();
     saved.drawBox();
-    saved.drawText(2, 27 - (strlen("GAME SAVED") / 2), "GAME SAVED");
-    napms(1000);
+    saved.drawText(2, 10 - (strlen("Game Saved") / 2), "Game Saved");
+    saved.refreshScreen();
+    saved.eraseScreen();
+    saved.deleteWin();
+    napms(700);
 }
 
-void Save::quitGame(Draw quit_scr){
-
+void Save::quitGame(Draw screen, Map map){
+    int xMaxSize, yMaxSize;
+    getmaxyx(stdscr, yMaxSize, xMaxSize);
+    int posY = (yMaxSize - 15) / 2;
+    int posX = (xMaxSize - 55) / 2;
+    
+    Draw quit_scr = screen.newWindow(15, 55, posY, posX);
     quit_scr.eraseScreen();
     quit_scr.drawBox();
     keypad(quit_scr.getScreen(), true);
@@ -123,11 +146,13 @@ void Save::quitGame(Draw quit_scr){
 			
 			Draw save_scr = quit_scr.newWindow(44, 150, posY, posX);
 
-			if (alreadySaved) saveGame(save_scr);
-            else saveNewGame(save_scr);
+			
+            saveNewGame(save_scr, map);
 			save_scr.eraseScreen();
 			save_scr.deleteWin();
     }
+    quit_scr.eraseScreen();
+    quit_scr.deleteWin();
 
 
 }

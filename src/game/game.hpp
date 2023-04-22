@@ -9,11 +9,13 @@ class Game
 {
 	private:
 		Draw screen;
+		Map map;
 	public:
 		Game();
 		~Game();
 		void run();
 		void start();
+		void play();
 		void resume();
 		bool exitGame();
 
