@@ -30,7 +30,6 @@ Game::Game()
 	this->screen = Draw();
 	screen.init();
 	File::initSettings();
-	File::getSettings();
 }	
 
 Game::~Game()
@@ -140,8 +139,13 @@ void Game::start()
 {
 	// clear the screen and draw the border
 	setDifficulty();
-	Map map = Map();
-	screen.drawMap(map, 0);
+	map = Map();
+	play();
+
+}
+
+void Game::play(){
+		screen.drawMap(map, 0);
 
 	
 
@@ -269,7 +273,45 @@ void Game::start()
 void Game::resume()
 {
 	screen.clearScreen();
-	screen.drawText(3, (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
+	nostd::vector<std::string> savedMaps = File::getNames();
+	if (savedMaps.size() == 0) {
+		screen.drawText(5, (Draw::centerX("No saved maps")), "No saved maps");
+		screen.refreshScreen();
+	}
+	else {
+		screen.drawText(3, (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
+		int selected = 0;
+		bool choose = false;
+		while (!choose){
+			for (int i = 0; i < savedMaps.size(); i++)
+			{
+				screen.drawSquareAround(savedMaps[i], 20 + 4*i, 75);
+			}
+			screen.attrOn(COLOR_PAIR(1));
+			screen.drawText(20 + 4*selected, 75, savedMaps[selected]);
+			screen.attrOff(COLOR_PAIR(1));
+
+			switch (screen.getinput())
+			{
+				case KEY_UP:
+					if (selected == 0) selected = savedMaps.size() - 1;
+					else selected = selected - 1;
+					break;
+				case KEY_DOWN:
+					if (selected == savedMaps.size() - 1) selected = 0;
+					else selected = selected + 1;
+					break;
+				case 10:
+					choose = true;
+					break;
+				default:
+					break;
+			}
+			screen.refreshScreen();
+		}
+		this->map = File::getMap(savedMaps[selected]);
+		play();
+	}
 }
 
 int Game::setDifficulty()
@@ -406,7 +448,7 @@ void Game::pauseGame()
 			
 			Draw save_scr = screen.newWindow(44, 150, posY, posX);
 
-			save.saveNewGame(save_scr);
+			save.saveNewGame(save_scr, map);
 			save_scr.eraseScreen();
 			save_scr.deleteWin();
 			break;
@@ -418,15 +460,10 @@ void Game::pauseGame()
 			pause.deleteWin();
 			redrawwin(screen.getScreen());	
 			screen.refreshScreen();
-			int xMaxSize, yMaxSize;
-			getmaxyx(stdscr, yMaxSize, xMaxSize);
-			int posY = (yMaxSize - 15) / 2;
-			int posX = (xMaxSize - 55) / 2;
+
 			
-			Draw quit_scr = screen.newWindow(15, 55, posY, posX);
-			save.quitGame(quit_scr);
-			quit_scr.eraseScreen();
-			quit_scr.deleteWin();
+			save.quitGame(screen, map);
+
 			resumed = true; 
 			exit = true; 
 			break;

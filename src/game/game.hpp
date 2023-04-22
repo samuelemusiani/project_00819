@@ -14,11 +14,13 @@ class Game
 		int jump = 0;
 		int coins = 0;
 		int heart = 10;
+		Map map;
 	public:
 		Game();
 		~Game();
 		void run();
 		void start();
+		void play();
 		void resume();
 		bool exitGame();
 
