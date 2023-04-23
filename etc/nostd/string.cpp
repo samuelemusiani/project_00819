@@ -105,10 +105,10 @@ void nostd::string::pop_back()
 	if(this->_size > 0)
 	{
 		this->_size--;
-		if (this->_size * 2 < this->_capacity)
+		if (this->_size + 20 < this->_capacity)
 		{
-			reallocate(this->_size + 1);
-			this->_size = this->_capacity - 1;
+			reallocate(this->_size + 5);
+			this->_size;
 		}
 	}
 }
