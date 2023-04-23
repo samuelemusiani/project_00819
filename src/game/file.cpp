@@ -24,8 +24,8 @@ void File::initSettings() {
 	{
 		if (openFile(file, "./settings.txt", "w"))
 		{
-			file << "{ JUMP KING }\n\n[ KeyBindings ]\nml=s\nmr=d\njl=a\njr=f\njp=v\nsh=o\nbb=p\not=esc\n\n"
-					"[ Calibration ]\ncalibr=-1\n\n[ Audio ]\nvol=10\n\n[ Sensitivity ]\nsens=10\n\n";
+			file << "[ KeyBindings ]\nml=s\nmr=d\njl=a\njr=f\njp=v\nsh=o\nbb=p\not=esc\n\n"
+					"[ Preferences ]\nCalibration=-1\nVolume=10\nSensitivity=10\n\n";
 			file.close();
 		}
 	}
@@ -36,9 +36,10 @@ void File::saveSettings()
 {
 	std::fstream file;
 	if(openFile(file,"./settings.txt","w"))
-		file << "{ JUMP KING }\n\n[ KeyBindings ]\nml="<<SETTINGS_CONTROL_KEYS[0]<<"\nmr="<<SETTINGS_CONTROL_KEYS[1]<<"\njl="<<SETTINGS_CONTROL_KEYS[2]<<"\n"
-				"jr="<<SETTINGS_CONTROL_KEYS[3]<<"\njp="<<SETTINGS_CONTROL_KEYS[4]<<"\nsh="<<SETTINGS_CONTROL_KEYS[5]<<"\nbb="<<SETTINGS_CONTROL_KEYS[6]<<"\not="<<SETTINGS_CONTROL_KEYS[7]<<"\n\n"
-				"[ Calibration ]\ncalibr="<<SETTINGS_PRESSURE_CALIBRATION<<"\n\n[ Audio ]\nvol="<<SETTINGS_VOLUME_LEVEL<<"\n\n[ Sensitivity ]\n"<<"sens="<<SETTINGS_SENSITIVITY_LEVEL<<"\n";
+		file << "[ KeyBindings ]\nml="<<SETTINGS_CONTROL_KEYS[0]<<"\nmr="<<SETTINGS_CONTROL_KEYS[1]<<"\n"
+				"jl="<<SETTINGS_CONTROL_KEYS[2]<<"\njr="<<SETTINGS_CONTROL_KEYS[3]<<"\njp="<<SETTINGS_CONTROL_KEYS[4]<<"\n"
+				"sh="<<SETTINGS_CONTROL_KEYS[5]<<"\nbb="<<SETTINGS_CONTROL_KEYS[6]<<"\not="<<SETTINGS_CONTROL_KEYS[7]<<"\n\n"
+				"[ Preferencies ]\nCalibration="<<SETTINGS_PRESSURE_CALIBRATION<<"\nVolume="<<SETTINGS_VOLUME_LEVEL<<"\nSensitivity="<<SETTINGS_SENSITIVITY_LEVEL<<"\n";
 	file.close();
 }
 
@@ -294,27 +295,24 @@ void File::getSettings()
 	if(openFile(file,"./settings.txt","r"))
 	{
 		std::string buff;
-		bool found = false;
-		while(!found && getline(file,buff))
-			if(buff == "[ KeyBindings ]")
-				found = true;
+		getline(file,buff); // [ KeyBindings ]
 		for(int i=0;i<8;i++)
 		{
 			getline(file,buff);
 			SETTINGS_CONTROL_KEYS[i] = buff.substr(3);
 		}
 		getline(file,buff); // empty line
-		getline(file,buff); // [ Calibration ]
+		getline(file,buff); // [ Preferences ]
 		getline(file,buff);
-		SETTINGS_PRESSURE_CALIBRATION = stoi(buff.substr(7));
+		SETTINGS_PRESSURE_CALIBRATION = stoi(buff.substr(12));
 		getline(file,buff); // empty line
 		getline(file,buff); // [ Audio ]
 		getline(file,buff);
-		SETTINGS_VOLUME_LEVEL = stoi(buff.substr(4));
+		SETTINGS_VOLUME_LEVEL = stoi(buff.substr(7));
 		getline(file,buff); // empty line
 		getline(file,buff); // [ Sensitivity ]
 		getline(file,buff);
-		SETTINGS_SENSITIVITY_LEVEL = stoi(buff.substr(5));
+		SETTINGS_SENSITIVITY_LEVEL = stoi(buff.substr(12));
 		file.close();
 	}
 }
