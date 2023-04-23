@@ -14,8 +14,8 @@
 class File
 {
 	private:
-		static bool openFile(std::fstream* file,std::string path,std::string mode="rw"); // mode can be r,w,rw,app; default is rw
-		static bool exist(std::fstream* file,std::string path);
+		static bool openFile(std::fstream &file,std::string path,std::string mode="rw"); // mode can be r,w,rw,app; default is rw
+		static bool exist(std::fstream &file,std::string path);
 		static void appendSave(Map m,int chunk,phy::Point pos,std::string name);
 		static void updateSave(Map m,int chunk,phy::Point pos);
 		static void getSettings();

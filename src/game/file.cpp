@@ -5,24 +5,24 @@ File::File()
 
 }
 
-bool File::openFile(std::fstream* file,std::string path,std::string mode)
+bool File::openFile(std::fstream &file,std::string path,std::string mode)
 {
 	if(mode=="r")
-		file->open(path,std::ios::in);
+		file.open(path,std::ios::in);
 	else if(mode=="w")
-		file->open(path,std::ios::out);
+		file.open(path,std::ios::out);
 	else if(mode=="app")
-		file->open(path,std::ios::app);
+		file.open(path,std::ios::app);
 	else
-		file->open(path,std::ios::in | std::ios::out);
-	return file->is_open();
+		file.open(path,std::ios::in | std::ios::out);
+	return file.is_open();
 }
 
 void File::initSettings() {
 	std::fstream file;
-	if (!exist(&file, "./settings.txt"))
+	if (!exist(file, "./settings.txt"))
 	{
-		if (openFile(&file, "./settings.txt", "w"))
+		if (openFile(file, "./settings.txt", "w"))
 		{
 			file << "{ JUMP KING }\n\n[ KeyBindings ]\nml=s\nmr=d\njl=a\njr=f\njp=v\nsh=o\nbb=p\not=esc\n\n"
 					"[ Calibration ]\ncalibr=-1\n\n[ Audio ]\nvol=10\n\n[ Sensitivity ]\nsens=10\n\n";
@@ -37,7 +37,7 @@ void File::initSettings() {
 void File::saveSettings()
 {
 	std::fstream file;
-	if(openFile(&file,"./settings.txt","w"))
+	if(openFile(file,"./settings.txt","w"))
 		file << "{ JUMP KING }\n\n[ KeyBindings ]\nml="<<SETTINGS_CONTROL_KEYS[0]<<"\nmr="<<SETTINGS_CONTROL_KEYS[1]<<"\njl="<<SETTINGS_CONTROL_KEYS[2]<<"\n"
 				"jr="<<SETTINGS_CONTROL_KEYS[3]<<"\njp="<<SETTINGS_CONTROL_KEYS[4]<<"\nsh="<<SETTINGS_CONTROL_KEYS[5]<<"\nbb="<<SETTINGS_CONTROL_KEYS[6]<<"\not="<<SETTINGS_CONTROL_KEYS[7]<<"\n\n"
 				"[ Calibration ]\ncalibr="<<SETTINGS_PRESSURE_CALIBRATION<<"\n\n[ Audio ]\nvol="<<SETTINGS_VOLUME_LEVEL<<"\n\n[ Sensitivity ]\n"<<"sens="<<SETTINGS_SENSITIVITY_LEVEL<<"\n";
@@ -49,10 +49,10 @@ bool File::isCalibrated()
 	return (SETTINGS_PRESSURE_CALIBRATION!=-1);
 }
 
-bool File::exist(std::fstream *file, std::string path)
+bool File::exist(std::fstream &file, std::string path)
 {
 	bool x = openFile(file,path,"r");
-	file->close();
+	file.close();
 	return x;
 }
 
@@ -67,7 +67,7 @@ bool File::isAlreadySaved(Map m)
 	std::fstream file;
 	std::string buff;
 	std::string tmp = "Seed: "+std::to_string(m.getSeed().getSeed());
-	if(openFile(&file,"./save.txt","r"))
+	if(openFile(file,"./save.txt","r"))
 	{
 		while(getline(file,buff))
 			if(buff == tmp)
@@ -85,7 +85,7 @@ bool File::isAlreadySaved(Map m)
 void File::appendSave(Map m,int chunk,phy::Point pos,std::string name)
 {
 	std::fstream file;
-	if(openFile(&file,"./save.txt","app")) {
+	if(openFile(file,"./save.txt","app")) {
 		file << "[ Name: " << name << " ]\nSeed: " << m.getSeed().getSeed() << "\nCoins&Enemies: " << m.getCoinsAndEnemies()
 		<< "\nChunk: " << chunk << "\nPlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition()<< "\nLastSave: " << dateAndTime() << "\n\n";
 		file.close();
@@ -100,7 +100,7 @@ void File::updateSave(Map m,int chunk,phy::Point pos)
 	std::string buff;
 	bool found=false;
 	std::string search = "Seed: "+std::to_string(m.getSeed().getSeed());
-	if(openFile(&tmp,"./tmp.txt","w") && openFile(&file,"./save.txt","r"))
+	if(openFile(tmp,"./tmp.txt","w") && openFile(file,"./save.txt","r"))
 	{
 		while(!found && getline(file,buff))
 		{
@@ -144,7 +144,7 @@ void File::changeName(std::string oldName,std::string newName)
 	std::string buff;
 	int count=-1;
 	std::string search = "[ Name: " + oldName + " ]";
-	if(openFile(&tmp,"./tmp.txt","w") && openFile(&file,"./save.txt","r"))
+	if(openFile(tmp,"./tmp.txt","w") && openFile(file,"./save.txt","r"))
 	{
 		while(!found && getline(file,buff))
 		{
@@ -175,7 +175,7 @@ nostd::vector<std::string> File::getNames()
 	static nostd::vector<std::string> names;
 	std::fstream file;
 	std::string buff;
-	if(openFile(&file,"./save.txt","r"))
+	if(openFile(file,"./save.txt","r"))
 	{
 		while(getline(file,buff))
 			if(buff.substr(0,7)=="[ Name:")
@@ -190,7 +190,7 @@ nostd::vector<std::string> File::getLastSaves()
 	static nostd::vector<std::string> lastSave;
 	std::fstream file;
 	std::string buff;
-	if(openFile(&file,"./save.txt","r"))
+	if(openFile(file,"./save.txt","r"))
 	{
 		while(getline(file,buff))
 			if(buff.substr(0,9)=="LastSave:")
@@ -205,7 +205,7 @@ bool File::nameAlreadyInUse(std::string name)
 	std::fstream file;
 	std::string search = "[ Name: " + name + " ]";
 	std::string buff;
-	if(openFile(&file,"./save.txt","r"))
+	if(openFile(file,"./save.txt","r"))
 	{
 		while(getline(file,buff))
 			if(buff==search)
@@ -227,7 +227,7 @@ Map File::getMap(std::string name)
 	std::string buff;
 	std::string anotherBuff;
 	bool found = false;
-	if(openFile(&file,"./save.txt","r"))
+	if(openFile(file,"./save.txt","r"))
 	{
 		while (!found && getline(file, buff))
 			if (buff == search)
@@ -253,7 +253,7 @@ int File::getChunk(std::string name)
 	std::string search = "[ Name: " + name + " ]";
 	std::string buff;
 	bool found = false;
-	if(openFile(&file,"./save.txt","r")) {
+	if(openFile(file,"./save.txt","r")) {
 		while (!found && getline(file, buff))
 			if (buff == search)
 				found = true;
@@ -277,7 +277,7 @@ phy::Point File::getPoint(std::string name)
 	newPos.set_xPosition(0);
 	newPos.set_yPosition(0);
 	bool found = false;
-	if(openFile(&file,"./save.txt","r")) {
+	if(openFile(file,"./save.txt","r")) {
 		while (!found && getline(file, buff))
 			if (buff == search)
 				found = true;
@@ -298,7 +298,7 @@ void File::getSettings()
 	std::fstream file;
 	std::string buff;
 	bool found = false;
-	if(openFile(&file,"./settings.txt","r"))
+	if(openFile(file,"./settings.txt","r"))
 	{
 		while(!found && getline(file,buff))
 			if(buff == "[ KeyBindings ]")
@@ -331,7 +331,7 @@ void File::deleteSave(std::string name)
 	std::string buff;
 	int count=-1;
 	std::string search = "[ Name: " + name + " ]";
-	if(openFile(&tmp,"./tmp.txt","w") && openFile(&file,"./save.txt","r"))
+	if(openFile(tmp,"./tmp.txt","w") && openFile(file,"./save.txt","r"))
 	{
 		while(!found && getline(file,buff))
 		{
@@ -362,7 +362,7 @@ int File::countSaves()
 	int count=0;
 	std::fstream file;
 	std::string buff;
-	if(openFile(&file,"./save.txt","r")) {
+	if(openFile(file,"./save.txt","r")) {
 		while (getline(file, buff))
 			if (buff.substr(0, 7) == "[ Name:")
 				count++;
