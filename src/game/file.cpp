@@ -69,14 +69,12 @@ bool File::isAlreadySaved(Map m)
 	std::string tmp = "Seed: "+std::to_string(m.getSeed().getSeed());
 	if(openFile(file,"./save.txt","r"))
 	{
-		while(getline(file,buff))
+		bool found = false;
+		while(!found && getline(file,buff))
 			if(buff == tmp)
-			{
-				file.close();
-				return true;
-			}
+				found = true;
 		file.close();
-		return false; // file exists but the searched seed is not saved
+		return found;
 	}
 	else
 		return false; // file does not exist yet
@@ -152,21 +150,22 @@ void File::changeName(std::string oldName,std::string newName)
 			if(buff==search)
 				found=true;
 		}
-		if(!found)	return;
-		file.clear();
-		file.seekg(0);
-		for(int i=0;i<count;i++)
-		{
-			getline(file, buff);
-			tmp << buff << "\n";
+		if(found) {
+			file.clear();
+			file.seekg(0);
+			for (int i = 0; i < count; i++) {
+				getline(file, buff);
+				tmp << buff << "\n";
+			}
+			getline(file, buff); // old name
+			tmp << "[ Name: " << newName << " ]\n";
+			while (getline(file, buff))
+				tmp << buff << "\n";
 		}
-		getline(file,buff); // old name
-		tmp << "[ Name: " << newName << " ]\n";
-		while(getline(file,buff))
-			tmp << buff << "\n";
 		file.close();
 		tmp.close();
-		rename("./tmp.txt","./save.txt");
+		if(found)
+			rename("./tmp.txt","./save.txt");
 	}
 }
 
@@ -180,8 +179,8 @@ nostd::vector<std::string> File::getNames()
 		while(getline(file,buff))
 			if(buff.substr(0,7)=="[ Name:")
 				names.push_back(buff.substr(8,buff.length()-10));
+		file.close();
 	}
-	file.close();
 	return names;
 }
 
@@ -195,8 +194,8 @@ nostd::vector<std::string> File::getLastSaves()
 		while(getline(file,buff))
 			if(buff.substr(0,9)=="LastSave:")
 				lastSave.push_back(buff.substr(10));
+		file.close();
 	}
-	file.close();
 	return lastSave;
 }
 
@@ -207,17 +206,15 @@ bool File::nameAlreadyInUse(std::string name)
 	std::string buff;
 	if(openFile(file,"./save.txt","r"))
 	{
-		while(getline(file,buff))
+		bool found = false;
+		while(!found && getline(file,buff))
 			if(buff==search)
-			{
-				file.close();
-				return true;
-			}
+				found = true;
 		file.close();
-		return false; // file exists but the name isn't in use
+		return found;
 	}
 	else
-		return false; // file does not exist
+		return false; // file does not exist yet
 }
 
 Map File::getMap(std::string name)
@@ -232,19 +229,24 @@ Map File::getMap(std::string name)
 		while (!found && getline(file, buff))
 			if (buff == search)
 				found = true;
-		if(!found)
+		if(found)
 		{
-			Map casualMap;
-			return casualMap; // this shouldn't happen
+			getline(file, buff);
+			getline(file, anotherBuff);
+			file.close();
+			Map m(std::stoi(buff.substr(6)), anotherBuff.substr(15));
+			return m;
 		}
-		getline(file, buff);
-		getline(file, anotherBuff);
-		Map m(std::stoi(buff.substr(6)), anotherBuff.substr(15));
-		return m;
+		else
+		{
+			file.close();
+			Map casualMap;
+			return casualMap; // map not found, this shouldn't happen
+		}
 
 	}
 	Map casualMap2;
-	return casualMap2; // this shouldn't happen
+	return casualMap2; // file not found, this shouldn't happen
 }
 
 int File::getChunk(std::string name)
@@ -257,14 +259,20 @@ int File::getChunk(std::string name)
 		while (!found && getline(file, buff))
 			if (buff == search)
 				found = true;
-		if (!found)
-			return 0; // this shouldn't happen
-		for(int i=0;i<3;i++)
-			getline(file,buff);
-		return stoi(buff.substr(7));
+		if(found) {
+			for (int i = 0; i < 3; i++)
+				getline(file, buff);
+			file.close();
+			return stoi(buff.substr(7));
+		}
+		else
+		{
+			file.close();
+			return 0; // save not found, this shouldn't happen
+		}
 	}
 	else
-		return 0; // this shouldn't happen
+		return 0; // file not found, this shouldn't happen
 }
 
 phy::Point File::getPoint(std::string name)
@@ -281,13 +289,19 @@ phy::Point File::getPoint(std::string name)
 		while (!found && getline(file, buff))
 			if (buff == search)
 				found = true;
-		if (!found)
-			return newPos; // this shouldn't happen
-		for(int i=0;i<4;i++)
-			getline(file,buff);
-		pos.set_xPosition(stoi(buff.substr(11,buff.find(',')-11)));
-		pos.set_yPosition(stoi(buff.substr(buff.find(',')+1)));
-		return pos;
+		if (found) {
+			for (int i = 0; i < 4; i++)
+				getline(file, buff);
+			pos.set_xPosition(stoi(buff.substr(11, buff.find(',') - 11)));
+			pos.set_yPosition(stoi(buff.substr(buff.find(',') + 1)));
+			file.close();
+			return pos;
+		}
+		else
+		{
+			file.close();
+			return newPos;
+		}
 	}
 	else
 		return newPos; // this shouldn't happen
@@ -320,6 +334,7 @@ void File::getSettings()
 		getline(file,buff); // [ Sensitivity ]
 		getline(file,buff);
 		SETTINGS_SENSITIVITY_LEVEL = stoi(buff.substr(5));
+		file.close();
 	}
 }
 
@@ -339,21 +354,22 @@ void File::deleteSave(std::string name)
 			if(buff==search)
 				found=true;
 		}
-		if(!found)	return;
-		file.clear();
-		file.seekg(0);
-		for(int i=0;i<count;i++)
-		{
-			getline(file, buff);
-			tmp << buff << "\n";
+		if(found) {
+			file.clear();
+			file.seekg(0);
+			for (int i = 0; i < count; i++) {
+				getline(file, buff);
+				tmp << buff << "\n";
+			}
+			for (int i = 0; i < 5; i++)
+				getline(file, buff);
+			while (getline(file, buff))
+				tmp << buff << "\n";
 		}
-		for(int i=0;i<5;i++)
-			getline(file,buff);
-		while(getline(file,buff))
-			tmp << buff << "\n";
 		file.close();
 		tmp.close();
-		rename("./tmp.txt","./save.txt");
+		if(found)
+			rename("./tmp.txt","./save.txt");
 	}
 }
 
@@ -366,6 +382,7 @@ int File::countSaves()
 		while (getline(file, buff))
 			if (buff.substr(0, 7) == "[ Name:")
 				count++;
+		file.close();
 	}
 	return count;
 }
