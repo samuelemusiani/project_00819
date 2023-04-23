@@ -17,8 +17,10 @@ namespace nostd {
 	class string {
 		private:
 			size_t _size;
+			size_t _capacity;
 			char* _buffer;
 			void clear();
+			void reallocate(size_t new_capaciy);
 
 		public:
 			string();
@@ -28,6 +30,7 @@ namespace nostd {
 
 			/* Capacity */
 			size_t length() const;
+			size_t capacity() const;
 			bool empty() const;
 
 			/* Modifiers */

@@ -9,8 +9,26 @@
 void nostd::string::clear()
 {
 	delete[] this->_buffer;
-	this->_buffer = nullptr;
-	this->_size = 0;
+	reallocate(1);
+	this->_size = this->_capacity - 1;
+	this->_buffer[0] = '\0';
+}
+
+void nostd::string::reallocate(size_t new_capaciy)
+{
+	if (new_capaciy >= 1 && this->_capacity != new_capaciy)
+	{
+		char* tmp = new char[new_capaciy];
+
+		this->_size = std::min(this->_size, new_capaciy - 1);
+
+		std::memcpy(tmp, this->_buffer, std::min(this->_capacity, new_capaciy) * sizeof(char));
+
+		delete[] this->_buffer;
+
+		this->_buffer = tmp;
+		this->_capacity = new_capaciy;
+	}
 }
 
 	/* PUBLIC */
@@ -22,16 +40,19 @@ nostd::string::string()
 }
 
 nostd::string::string(const char *str)
-	: _buffer(nullptr), _size(0)
+	: _buffer(nullptr), _size(0), _capacity(0)
 {
 	if(str != nullptr)
-		this->_size = strlen(str);
-
-	if(this->_size >= 0)
-		this->_buffer = new char[this->_size + 1];
-
-	for (int i = 0; i < this->_size; i++)
-		this->_buffer[i] = str[i];
+	{
+		reallocate(strlen(str) + 1);
+		this->_size = this->_capacity - 1;
+		std::memcpy(this->_buffer, str, this->_capacity * sizeof(char));
+	}
+	else
+	{
+		reallocate(1);
+		this->_size = this->_capacity - 1;
+	}
 
 	this->_buffer[this->_size] = '\0';
 }
@@ -39,18 +60,24 @@ nostd::string::string(const char *str)
 nostd::string::string(const string& other)
 {
 	this->_size = other._size;
-	this->_buffer = new char[this->_size + 1];
-	std::memcpy(this->_buffer, other._buffer, (this->_size + 1) * sizeof(char));
+	this->_capacity = other._capacity;
+	this->_buffer = new char[this->_capacity];
+	std::memcpy(this->_buffer, other._buffer, this->_capacity * sizeof(char));
 }
 
 nostd::string::~string()
 {
-	this->clear();
+	delete[] this->_buffer;
 }
 
 size_t nostd::string::length() const
 {
 	return this->_size;
+}
+
+size_t nostd::string::capacity() const
+{
+	return this->_capacity;
 }
 
 bool nostd::string::empty() const
@@ -61,20 +88,23 @@ bool nostd::string::empty() const
 
 void nostd::string::push_back(const char data)
 {
-	this->_size++;
-	char* tmp = new char[this->_size + 1];
-	std::memcpy(tmp, this->_buffer, this->_size * sizeof(char));
-	tmp[this->_size - 1] = data;
-	tmp[this->_size] = '\0';
-
-	delete[] this->_buffer;
-	this->_buffer = tmp;
+	reallocate(++this->_capacity);
+	this->_size = this->_capacity - 1;
+	this->_buffer[this->_size - 1] = data;
+	this->_buffer[this->_size] = '\0';
 }
 
 void nostd::string::pop_back()
 {
 	if(this->_size > 0)
+	{
 		this->_size--;
+		if (this->_size * 2 < this->_capacity)
+		{
+			reallocate(this->_size + 1);
+			this->_size = this->_capacity - 1;
+		}
+	}
 }
 
 const char* nostd::string::c_str() const
@@ -84,16 +114,10 @@ const char* nostd::string::c_str() const
 
 nostd::string& nostd::string::operator= (const char* s)
 {
+	reallocate(strlen(s) + 1);
+	this->_size = this->_capacity - 1;
 
-	if (this->_buffer != nullptr)
-		this->clear();
-
-	this->_size = strlen(s);
-	this->_buffer = new char[this->_size + 1];
-
-	for (int i = 0; i < this->_size; i++)
-		this->_buffer[i] = s[i];
-
+	std::memcpy(this->_buffer, s, this->_size * sizeof(char));
 	this->_buffer[this->_size] = '\0';
 
 	return *this;
@@ -103,11 +127,10 @@ nostd::string& nostd::string::operator= (const nostd::string& other)
 {
 	if(this != &other)
 	{
+		reallocate(other._capacity);
 		this->_size = other._size;
-		this->_buffer = new char[this->_size + 1];
 
-		for(int i = 0; i < this->_size; i++)
-			this->_buffer[i] = other._buffer[i];
+		std::memcpy(this->_buffer, other._buffer, this->_capacity * sizeof(char));
 	}
 
 	return *this;
@@ -123,8 +146,6 @@ char& nostd::string::operator [](size_t pos)
 	return this->_buffer[pos];
 }
 
-#include <iostream>
-
 nostd::string& nostd::string::operator+= (const nostd::string& rhs)
 {
 	size_t tmp_size = this->_size + rhs._size;
@@ -138,6 +159,7 @@ nostd::string& nostd::string::operator+= (const nostd::string& rhs)
 	delete[] this->_buffer;
 	this->_buffer = tmp_buffer;
 	this->_size += tmp_size;
+	this->_capacity = this->_size + 1;
 	return *this;
 }
 
@@ -153,8 +175,6 @@ std::ostream& operator<<(std::ostream &out, const nostd::string &s) {
 	out << s._buffer;
 	return out;
 }
-
-#include <iostream>
 
 nostd::string nostd::to_string(int data)
 {
