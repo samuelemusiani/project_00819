@@ -27,11 +27,9 @@ void File::initSettings() {
 			file << "{ JUMP KING }\n\n[ KeyBindings ]\nml=s\nmr=d\njl=a\njr=f\njp=v\nsh=o\nbb=p\not=esc\n\n"
 					"[ Calibration ]\ncalibr=-1\n\n[ Audio ]\nvol=10\n\n[ Sensitivity ]\nsens=10\n\n";
 			file.close();
-			getSettings();
 		}
 	}
-	else
-		getSettings();
+	getSettings();
 }
 
 void File::saveSettings()
@@ -65,10 +63,10 @@ static auto dateAndTime()
 bool File::isAlreadySaved(Map m)
 {
 	std::fstream file;
-	std::string buff;
-	std::string tmp = "Seed: "+std::to_string(m.getSeed().getSeed());
 	if(openFile(file,"./save.txt","r"))
 	{
+		std::string buff;
+		std::string tmp = "Seed: "+std::to_string(m.getSeed().getSeed());
 		bool found = false;
 		while(!found && getline(file,buff))
 			if(buff == tmp)
@@ -95,11 +93,11 @@ void File::updateSave(Map m,int chunk,phy::Point pos)
 	// the only way to do this is to rewrite the entire file
 	std::fstream file;
 	std::fstream tmp;
-	std::string buff;
-	bool found=false;
-	std::string search = "Seed: "+std::to_string(m.getSeed().getSeed());
 	if(openFile(tmp,"./tmp.txt","w") && openFile(file,"./save.txt","r"))
 	{
+		std::string buff;
+		bool found=false;
+		std::string search = "Seed: "+std::to_string(m.getSeed().getSeed());
 		while(!found && getline(file,buff))
 		{
 			tmp << buff << "\n";
@@ -138,17 +136,18 @@ void File::changeName(std::string oldName,std::string newName)
 {
 	std::fstream file;
 	std::fstream tmp;
-	bool found = false;
-	std::string buff;
-	int count=-1;
-	std::string search = "[ Name: " + oldName + " ]";
 	if(openFile(tmp,"./tmp.txt","w") && openFile(file,"./save.txt","r"))
 	{
+		bool found = false;
+		std::string buff;
+		int count=0;
+		std::string search = "[ Name: " + oldName + " ]";
 		while(!found && getline(file,buff))
 		{
-			count++;
 			if(buff==search)
 				found=true;
+			else
+				count++;
 		}
 		if(found) {
 			file.clear();
@@ -171,11 +170,11 @@ void File::changeName(std::string oldName,std::string newName)
 
 nostd::vector<std::string> File::getNames()
 {
-	static nostd::vector<std::string> names;
+	nostd::vector<std::string> names;
 	std::fstream file;
-	std::string buff;
 	if(openFile(file,"./save.txt","r"))
 	{
+		std::string buff;
 		while(getline(file,buff))
 			if(buff.substr(0,7)=="[ Name:")
 				names.push_back(buff.substr(8,buff.length()-10));
@@ -186,7 +185,7 @@ nostd::vector<std::string> File::getNames()
 
 nostd::vector<std::string> File::getLastSaves()
 {
-	static nostd::vector<std::string> lastSave;
+	nostd::vector<std::string> lastSave;
 	std::fstream file;
 	std::string buff;
 	if(openFile(file,"./save.txt","r"))
@@ -202,10 +201,10 @@ nostd::vector<std::string> File::getLastSaves()
 bool File::nameAlreadyInUse(std::string name)
 {
 	std::fstream file;
-	std::string search = "[ Name: " + name + " ]";
-	std::string buff;
 	if(openFile(file,"./save.txt","r"))
 	{
+		std::string search = "[ Name: " + name + " ]";
+		std::string buff;
 		bool found = false;
 		while(!found && getline(file,buff))
 			if(buff==search)
@@ -220,42 +219,34 @@ bool File::nameAlreadyInUse(std::string name)
 Map File::getMap(std::string name)
 {
 	std::fstream file;
-	std::string search = "[ Name: " + name + " ]";
-	std::string buff;
-	std::string anotherBuff;
-	bool found = false;
-	if(openFile(file,"./save.txt","r"))
-	{
+	if(openFile(file,"./save.txt","r")) {
+		std::string search = "[ Name: " + name + " ]";
+		std::string buff;
+		bool found = false;
 		while (!found && getline(file, buff))
 			if (buff == search)
 				found = true;
-		if(found)
-		{
+		if (found) {
+			std::string anotherBuff;
 			getline(file, buff);
 			getline(file, anotherBuff);
 			file.close();
 			Map m(std::stoi(buff.substr(6)), anotherBuff.substr(15));
 			return m;
-		}
-		else
-		{
+		} else
 			file.close();
-			Map casualMap;
-			return casualMap; // map not found, this shouldn't happen
-		}
-
 	}
 	Map casualMap2;
-	return casualMap2; // file not found, this shouldn't happen
+	return casualMap2; // this shouldn't happen
 }
 
 int File::getChunk(std::string name)
 {
 	std::fstream file;
-	std::string search = "[ Name: " + name + " ]";
-	std::string buff;
-	bool found = false;
 	if(openFile(file,"./save.txt","r")) {
+		std::string search = "[ Name: " + name + " ]";
+		std::string buff;
+		bool found = false;
 		while (!found && getline(file, buff))
 			if (buff == search)
 				found = true;
@@ -266,26 +257,20 @@ int File::getChunk(std::string name)
 			return stoi(buff.substr(7));
 		}
 		else
-		{
 			file.close();
-			return 0; // save not found, this shouldn't happen
-		}
 	}
-	else
-		return 0; // file not found, this shouldn't happen
+	return 0; // this shouldn't happen
 }
 
 phy::Point File::getPoint(std::string name)
 {
+	phy::Point newPos(0,0);
 	std::fstream file;
-	std::string search = "[ Name: " + name + " ]";
-	std::string buff;
-	phy::Point pos;
-	phy::Point newPos;
-	newPos.set_xPosition(0);
-	newPos.set_yPosition(0);
-	bool found = false;
 	if(openFile(file,"./save.txt","r")) {
+		std::string search = "[ Name: " + name + " ]";
+		std::string buff;
+		phy::Point pos;
+		bool found = false;
 		while (!found && getline(file, buff))
 			if (buff == search)
 				found = true;
@@ -298,22 +283,18 @@ phy::Point File::getPoint(std::string name)
 			return pos;
 		}
 		else
-		{
 			file.close();
-			return newPos;
-		}
 	}
-	else
-		return newPos; // this shouldn't happen
+	return newPos; // this shouldn't happen
 }
 
 void File::getSettings()
 {
 	std::fstream file;
-	std::string buff;
-	bool found = false;
 	if(openFile(file,"./settings.txt","r"))
 	{
+		std::string buff;
+		bool found = false;
 		while(!found && getline(file,buff))
 			if(buff == "[ KeyBindings ]")
 				found = true;
@@ -342,17 +323,18 @@ void File::deleteSave(std::string name)
 {
 	std::fstream file;
 	std::fstream tmp;
-	bool found = false;
-	std::string buff;
-	int count=-1;
-	std::string search = "[ Name: " + name + " ]";
 	if(openFile(tmp,"./tmp.txt","w") && openFile(file,"./save.txt","r"))
 	{
+		bool found = false;
+		std::string buff;
+		int count=0;
+		std::string search = "[ Name: " + name + " ]";
 		while(!found && getline(file,buff))
 		{
-			count++;
 			if(buff==search)
 				found=true;
+			else
+				count++;
 		}
 		if(found) {
 			file.clear();
@@ -377,8 +359,8 @@ int File::countSaves()
 {
 	int count=0;
 	std::fstream file;
-	std::string buff;
 	if(openFile(file,"./save.txt","r")) {
+		std::string buff;
 		while (getline(file, buff))
 			if (buff.substr(0, 7) == "[ Name:")
 				count++;
