@@ -10,6 +10,7 @@ namespace nostd
 	class string;
 }
 
+bool operator== (const nostd::string& lhs, const nostd::string& rhs);
 std::ostream& operator << (std::ostream& out, const nostd::string& s);
 nostd::string operator+ (nostd::string lhs, const nostd::string& rhs);
 
@@ -48,6 +49,7 @@ namespace nostd {
 			string& operator+=(const nostd::string& rhs);
 
 			// friend string (::operator+) (const nostd::string& s);
+			friend bool (::operator==) (const string& lhs, const string& rhs);
 			friend string (::operator+) (string lhs, const string& rhs);
 			friend std::ostream& (::operator <<) (std::ostream& out, const nostd::string& s);
 

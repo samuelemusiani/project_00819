@@ -169,6 +169,26 @@ nostd::string& nostd::string::operator+= (const nostd::string& rhs)
 	return *this;
 }
 
+bool operator== (const nostd::string& lhs, const nostd::string& rhs)
+{
+	if(lhs._size != rhs._size)
+		return false;
+	else
+	{
+		int i = 0;
+		bool notEqual = false;
+
+		while(i < lhs._size && !notEqual)
+		{
+			if(lhs._buffer[i] != rhs._buffer[i])
+				notEqual = true;
+			i++;
+		}
+
+		return !notEqual;
+	}
+}
+
 nostd::string operator+ (nostd::string lhs, const nostd::string& rhs)
 {	
 	lhs += rhs;
