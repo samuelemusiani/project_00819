@@ -44,6 +44,10 @@ void File::saveSettings()
 	file.close();
 }
 
+bool File::isCalibrated()
+{
+	return (SETTINGS_PRESSURE_CALIBRATION!=-1);
+}
 
 bool File::exist(std::fstream *file, std::string path)
 {
@@ -62,17 +66,15 @@ bool File::isAlreadySaved(Map m)
 {
 	std::fstream file;
 	std::string buff;
+	std::string tmp = "Seed: "+std::to_string(m.getSeed().getSeed());
 	if(openFile(&file,"./save.txt","r"))
 	{
 		while(getline(file,buff))
-		{
-			std::string tmp = "Seed: "+std::to_string(m.getSeed().getSeed());
 			if(buff == tmp)
 			{
 				file.close();
 				return true;
 			}
-		}
 		file.close();
 		return false; // file exists but the searched seed is not saved
 	}
@@ -80,17 +82,17 @@ bool File::isAlreadySaved(Map m)
 		return false; // file does not exist yet
 }
 
-void File::appendSave(Map m,std::string name)
+void File::appendSave(Map m,int chunk,phy::Point pos,std::string name)
 {
 	std::fstream file;
 	if(openFile(&file,"./save.txt","app")) {
-		file << "[ Name: " << name << " ]\nSeed: " << m.getSeed().getSeed()
-				 << "\nCoins&Enemies: " << m.getCoinsAndEnemies() << "\nLastSave: " << dateAndTime() << "\n\n";
+		file << "[ Name: " << name << " ]\nSeed: " << m.getSeed().getSeed() << "\nCoins&Enemies: " << m.getCoinsAndEnemies()
+		<< "\nChunk: " << chunk << "\nPlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition()<< "\nLastSave: " << dateAndTime() << "\n\n";
 		file.close();
 	}
 }
 
-void File::updateSave(Map m)
+void File::updateSave(Map m,int chunk,phy::Point pos)
 {
 	// the only way to do this is to rewrite the entire file
 	std::fstream file;
@@ -106,9 +108,13 @@ void File::updateSave(Map m)
 			if(buff==search)
 				found=true;
 		}
-		getline(file,buff); // this is the 1st line that has to be replaced
+		getline(file,buff);
 		tmp << "Coins&Enemies: " << m.getCoinsAndEnemies() << "\n";
-		getline(file,buff); // this is the 2nd line that has to be replaced
+		getline(file,buff);
+		tmp << "Chunk: " << chunk << "\n";
+		getline(file,buff);
+		tmp << "PlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition() << "\n";
+		getline(file,buff);
 		tmp << "LastSave: " << dateAndTime() << "\n\n";
 		while(getline(file,buff))
 			tmp << buff << "\n";
@@ -118,16 +124,16 @@ void File::updateSave(Map m)
 	}
 }
 
-void File::saveMap(Map m,std::string name)
+void File::saveMap(Map m,int chunk,phy::Point pos,std::string name)
 {
 	if(!isAlreadySaved(m)) {
 		if (!name.empty())
-			appendSave(m, name);
+			appendSave(m,chunk,pos,name);
 		else
-			appendSave(m, "Player"); // this shouldn't happen
+			appendSave(m,chunk,pos,"Player"); // this shouldn't happen
 	}
 	else
-		updateSave(m);
+		updateSave(m,chunk,pos);
 }
 
 void File::changeName(std::string oldName,std::string newName)
@@ -179,7 +185,7 @@ nostd::vector<std::string> File::getNames()
 	return names;
 }
 
-nostd::vector<std::string> File::getLastSave()
+nostd::vector<std::string> File::getLastSaves()
 {
 	static nostd::vector<std::string> lastSave;
 	std::fstream file;
@@ -188,7 +194,7 @@ nostd::vector<std::string> File::getLastSave()
 	{
 		while(getline(file,buff))
 			if(buff.substr(0,9)=="LastSave:")
-				lastSave.push_back(buff.substr(10,buff.length()-10));
+				lastSave.push_back(buff.substr(10));
 	}
 	file.close();
 	return lastSave;
@@ -233,12 +239,58 @@ Map File::getMap(std::string name)
 		}
 		getline(file, buff);
 		getline(file, anotherBuff);
-		Map m(std::stoi(buff.substr(6, buff.length() - 6)), anotherBuff.substr(15, anotherBuff.length() - 15));
+		Map m(std::stoi(buff.substr(6)), anotherBuff.substr(15));
 		return m;
 
 	}
 	Map casualMap2;
 	return casualMap2; // this shouldn't happen
+}
+
+int File::getChunk(std::string name)
+{
+	std::fstream file;
+	std::string search = "[ Name: " + name + " ]";
+	std::string buff;
+	bool found = false;
+	if(openFile(&file,"./save.txt","r")) {
+		while (!found && getline(file, buff))
+			if (buff == search)
+				found = true;
+		if (!found)
+			return 0; // this shouldn't happen
+		for(int i=0;i<3;i++)
+			getline(file,buff);
+		return stoi(buff.substr(7));
+	}
+	else
+		return 0; // this shouldn't happen
+}
+
+phy::Point File::getPoint(std::string name)
+{
+	std::fstream file;
+	std::string search = "[ Name: " + name + " ]";
+	std::string buff;
+	phy::Point pos;
+	phy::Point newPos;
+	newPos.set_xPosition(0);
+	newPos.set_yPosition(0);
+	bool found = false;
+	if(openFile(&file,"./save.txt","r")) {
+		while (!found && getline(file, buff))
+			if (buff == search)
+				found = true;
+		if (!found)
+			return newPos; // this shouldn't happen
+		for(int i=0;i<4;i++)
+			getline(file,buff);
+		pos.set_xPosition(stoi(buff.substr(11,buff.find(',')-11)));
+		pos.set_yPosition(stoi(buff.substr(buff.find(',')+1)));
+		return pos;
+	}
+	else
+		return newPos; // this shouldn't happen
 }
 
 void File::getSettings()
@@ -251,24 +303,23 @@ void File::getSettings()
 		while(!found && getline(file,buff))
 			if(buff == "[ KeyBindings ]")
 				found = true;
-		deb::debug("ok");
 		for(int i=0;i<8;i++)
 		{
 			getline(file,buff);
-			SETTINGS_CONTROL_KEYS[i] = buff.substr(3,buff.length()-3);
+			SETTINGS_CONTROL_KEYS[i] = buff.substr(3);
 		}
 		getline(file,buff); // empty line
 		getline(file,buff); // [ Calibration ]
 		getline(file,buff);
-		SETTINGS_PRESSURE_CALIBRATION = stoi(buff.substr(7,buff.length()-7));
+		SETTINGS_PRESSURE_CALIBRATION = stoi(buff.substr(7));
 		getline(file,buff); // empty line
 		getline(file,buff); // [ Audio ]
 		getline(file,buff);
-		SETTINGS_VOLUME_LEVEL = stoi(buff.substr(4,buff.length()-4));
+		SETTINGS_VOLUME_LEVEL = stoi(buff.substr(4));
 		getline(file,buff); // empty line
 		getline(file,buff); // [ Sensitivity ]
 		getline(file,buff);
-		SETTINGS_SENSITIVITY_LEVEL = stoi(buff.substr(5,buff.length()-5));
+		SETTINGS_SENSITIVITY_LEVEL = stoi(buff.substr(5));
 	}
 }
 
@@ -304,4 +355,17 @@ void File::deleteSave(std::string name)
 		tmp.close();
 		rename("./tmp.txt","./save.txt");
 	}
+}
+
+int File::countSaves()
+{
+	int count=0;
+	std::fstream file;
+	std::string buff;
+	if(openFile(&file,"./save.txt","r")) {
+		while (getline(file, buff))
+			if (buff.substr(0, 7) == "[ Name:")
+				count++;
+	}
+	return count;
 }
