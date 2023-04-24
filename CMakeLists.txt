@@ -44,5 +44,14 @@ target_link_libraries(game ${CURSES_LIBRARIES})
 target_compile_features(game PRIVATE cxx_std_14)
 
 if(STD)
-	add_compile_definitions(USE_STD)
+	add_compile_definitions(USE_STD_VECTOR)
+	add_compile_definitions(USE_STD_STRING)
 endif(STD)
+
+if(STD_VECTOR)
+	add_compile_definitions(USE_STD_VECTOR)
+endif(STD_VECTOR)
+
+if(STD_STRING)
+	add_compile_definitions(USE_STD_STRING)
+endif(STD_STRING)
