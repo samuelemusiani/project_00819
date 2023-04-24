@@ -131,4 +131,3 @@ void Credits::openGithub(int developer){
 			break;
 	}   
 }
-
