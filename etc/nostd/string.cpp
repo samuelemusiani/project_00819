@@ -246,6 +246,66 @@ nostd::string nostd::to_string(char data)
 	return s;
 }
 
+int nostd::stoi(nostd::string s)
+{
+    int result = 0;
+    bool negative = false;
+    int i = 0;
+
+    if (s[0] == '-')
+    {
+        negative = true;
+        i = 1;
+    }
+
+    for (; i < s.length(); i++)
+    {
+        result *= 10;
+        result += (int) (s[i] - '0');
+    }
+
+    if(negative)
+        result = -result;
+
+    return result;
+}
+
+double nostd::stod(nostd::string s)
+{
+    double result = 0.0;
+    double decimal = 1.0;
+    bool negative = false;
+    int i = 0;
+
+    if (s[0] == '-')
+    {
+        negative = true;
+        i++;
+    }
+
+    while(i < s.length() && s[i] != '.')
+    {
+        result *= 10.0;
+        result += (double) s[i] - '0';
+        i++;
+    }
+
+    if(s[i] == '.')
+        i++;
+
+    while(i < s.length())
+    {
+        decimal *= 10.0;
+        result += (double) ((s[i] - '0') / decimal);
+        i++;
+    }
+
+    if(negative)
+        result = -result;
+
+    return result;
+}
+
 #else
 
 nostd::string::string(const char* pippo)
