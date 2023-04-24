@@ -58,6 +58,9 @@ namespace nostd {
 	string to_string(int data);
 	string to_string(double data);
 	string to_string(char data);
+
+	int stoi(nostd::string s);
+	double stod(nostd::string s);
 }
 
 #else //USO STD COME SUPPORTO
