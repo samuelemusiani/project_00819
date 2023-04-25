@@ -21,6 +21,20 @@ int Random::generateCoins(Seed seed, int chunk) {
 }
 
 int Random::generateChunk(Seed seed, int chunk) {
-	seedSrand(seed, chunk);
-	return (rand() % 2); // number of possible chunks
+	if(chunk == 0)
+	{
+		seedSrand(seed, chunk);
+		return (rand() % 2);
+	}
+	else
+	{
+		seedSrand(seed,chunk-1);
+		int previous = generateChunk(seed,chunk-1);
+		seedSrand(seed,chunk);
+		int random = rand() % 2;
+		if(random == previous)
+			return (random + 1) % 2;
+		else
+			return random;
+	}
 }
