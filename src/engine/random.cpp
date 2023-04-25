@@ -28,7 +28,6 @@ int Random::generateChunk(Seed seed, int chunk) {
 	}
 	else
 	{
-		seedSrand(seed,chunk-1);
 		int previous = generateChunk(seed,chunk-1);
 		seedSrand(seed,chunk);
 		int random = rand() % 2;
