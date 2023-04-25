@@ -1,4 +1,5 @@
 #include <ostream>
+#include <istream>
 
 #ifndef NOSTD_STRING
 #define NOSTD_STRING
@@ -61,6 +62,9 @@ namespace nostd {
 
 	int stoi(nostd::string s);
 	double stod(nostd::string s);
+
+	/* Should I put this here? */
+	std::istream& getline(std::istream& is, nostd::string& str, char delim = '\n');
 }
 
 #else //USO STD COME SUPPORTO

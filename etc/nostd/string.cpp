@@ -306,6 +306,17 @@ double nostd::stod(nostd::string s)
     return result;
 }
 
+std::istream& nostd::getline(std::istream& is, nostd::string& str, char delim)
+{
+	const int MAX_DIM = 2048;
+	char buff[MAX_DIM];
+
+	is.getline(buff, MAX_DIM, delim);
+	str = buff;
+
+	return is;
+}
+
 #else
 
 nostd::string::string(const char* pippo)
