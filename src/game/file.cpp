@@ -39,7 +39,7 @@ void File::saveSettings()
 		file << "[ KeyBindings ]\nml="<<SETTINGS_CONTROL_KEYS[0]<<"\nmr="<<SETTINGS_CONTROL_KEYS[1]<<"\n"
 				"jl="<<SETTINGS_CONTROL_KEYS[2]<<"\njr="<<SETTINGS_CONTROL_KEYS[3]<<"\njp="<<SETTINGS_CONTROL_KEYS[4]<<"\n"
 				"sh="<<SETTINGS_CONTROL_KEYS[5]<<"\nbb="<<SETTINGS_CONTROL_KEYS[6]<<"\not="<<SETTINGS_CONTROL_KEYS[7]<<"\n\n"
-				"[ Preferencies ]\nCalibration="<<SETTINGS_PRESSURE_CALIBRATION<<"\nVolume="<<SETTINGS_VOLUME_LEVEL<<"\nSensitivity="<<SETTINGS_SENSITIVITY_LEVEL<<"\n";
+				"[ Preferences ]\nCalibration="<<SETTINGS_PRESSURE_CALIBRATION<<"\nVolume="<<SETTINGS_VOLUME_LEVEL<<"\nSensitivity="<<SETTINGS_SENSITIVITY_LEVEL<<"\n";
 	file.close();
 }
 
