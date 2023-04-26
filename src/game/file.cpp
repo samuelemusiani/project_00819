@@ -305,12 +305,8 @@ void File::getSettings()
 		getline(file,buff); // [ Preferences ]
 		getline(file,buff);
 		SETTINGS_PRESSURE_CALIBRATION = stoi(buff.substr(12));
-		getline(file,buff); // empty line
-		getline(file,buff); // [ Audio ]
 		getline(file,buff);
 		SETTINGS_VOLUME_LEVEL = stoi(buff.substr(7));
-		getline(file,buff); // empty line
-		getline(file,buff); // [ Sensitivity ]
 		getline(file,buff);
 		SETTINGS_SENSITIVITY_LEVEL = stoi(buff.substr(12));
 		file.close();
