@@ -207,23 +207,27 @@ nostd::string nostd::to_string(int data)
 
 	nostd::string s;
 
-	if (data < 0)
+	if (data == 0)
+		s.push_back('0');
+	else
 	{
-		s.push_back('-');
-		data = -data;
+		if (data < 0)
+		{
+			s.push_back('-');
+			data = -data;
+		}
+
+		int size = ceil(log(data) / log(10));
+		if(data % (int) pow(10, size) == 0) size++;
+
+		int ipow = pow(10, size - 1);
+		for(int i = 0; i < size; i++)
+		{
+			s.push_back(data / ipow + '0');
+			data %= ipow;
+			ipow /= 10;
+		}
 	}
-
-	int size = ceil(log(data) / log(10));
-	if(data % (int) pow(10, size) == 0) size++;
-
-	int ipow = pow(10, size - 1);
-	for(int i = 0; i < size; i++)
-	{
-		s.push_back(data / ipow + '0');
-		data %= ipow;
-		ipow /= 10;
-	}
-
 	return s;
 }
 
