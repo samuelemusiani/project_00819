@@ -159,10 +159,10 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 /* DA RISCRIVERE :) */
 static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPos, Chunk *chunk)
 {
-	deb::debug(old_xPos, "old_xPos");
-	deb::debug(old_yPos, "old_yPos");
-	deb::debug(new_xPos, "new_xPos");
-	deb::debug(new_yPos, "new_yPos");
+	// deb::debug(old_xPos, "old_xPos");
+	// deb::debug(old_yPos, "old_yPos");
+	// deb::debug(new_xPos, "new_xPos");
+	// deb::debug(new_yPos, "new_yPos");
 
 	int diff_x = abs(old_xPos - new_xPos);
 	int diff_y = abs(old_yPos - new_yPos);
