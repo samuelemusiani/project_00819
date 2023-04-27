@@ -199,10 +199,12 @@ void Game::start()
 		switch(input)
 		{
 			case ((int) 's'): // move player left
+				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() - phy::Point(1, 0));
 				break;
 
 			case ((int) 'd'): // move player right
+				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
 			case 27:
