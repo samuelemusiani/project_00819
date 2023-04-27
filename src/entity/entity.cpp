@@ -8,6 +8,14 @@ Entity::Entity (nostd::string id, phy::Point p)
 
 }
 
+Entity::Entity (nostd::string id, phy::Point p, int hp, int ms, int damg)
+{
+
+  this->init_entity(id, p);
+  Enemy enemy = Enemy(hp, ms, damg);
+
+}
+
 void Entity::init_entity(nostd::string id, phy::Point p)
 {
 

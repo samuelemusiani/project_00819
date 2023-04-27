@@ -1,9 +1,14 @@
+#include "entity.hpp"
+
+
 class Enemy : public Entity {
+
 protected:
   int hp;
   double ms;
   int damg;
-  bool isAlive;
+  //bool isAlive;
+
 public:
 
   Enemy(int hp, int ms, int damg);
@@ -12,4 +17,5 @@ public:
   void set_hp(int hp);
   void got_hit(int damGot);
   void set_state(bool s);
+
 }
