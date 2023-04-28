@@ -1,5 +1,6 @@
 #include "chunk.hpp"
 #include "../engine/random.hpp"
+#include "../../etc/nostd/string.hpp"
 #include <chrono>
 #include <string>
 
@@ -14,14 +15,14 @@ class Map
         Chunk possible_chunks[NUM_MAPS];
         void initialize_chunks();
 		Seed seed;
-		std::string coinsAndEnemies;
+		nostd::string coinsAndEnemies;
     public:
         Map();
-		Map(int seed,std::string coinsAndEnemies);
+		Map(int seed,nostd::string coinsAndEnemies);
         Chunk get_chunk(int n);
 		int getCoins(int n);
 		int getEnemies(int n);
-		std::string getCoinsAndEnemies();
+		nostd::string getCoinsAndEnemies();
 		Seed getSeed();
 };
 

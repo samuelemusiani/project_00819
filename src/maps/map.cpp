@@ -8,7 +8,7 @@ Map::Map() {
 	initialize_chunks();
 }
 
-Map::Map(int seed,std::string coinsAndEnemies) {
+Map::Map(int seed,nostd::string coinsAndEnemies) {
 	this->seed.setSeed(seed);
 	this->coinsAndEnemies = coinsAndEnemies;
 	initialize_chunks();
@@ -65,7 +65,7 @@ Seed Map::getSeed()
 	return this->seed;
 }
 
-std::string Map::getCoinsAndEnemies()
+nostd::string Map::getCoinsAndEnemies()
 {
 	return this->coinsAndEnemies;
 }

@@ -1,6 +1,7 @@
 #ifndef GAME_GLOBAL
 #define GAME_GLOBAL
 
+#include "../../etc/nostd/string.hpp"
 #include <string>
 
 #define MAX_VOLUME_LEVEL 20
@@ -9,7 +10,7 @@
 #define MAX_SENSITIVITY_LEVEL 20
 #define MIN_SENSITIVITY_LEVEL 0
 
-extern std::string SETTINGS_CONTROL_KEYS[8];
+extern nostd::string SETTINGS_CONTROL_KEYS[8];
 extern int SETTINGS_PRESSURE_CALIBRATION;
 extern int SETTINGS_VOLUME_LEVEL;
 extern int SETTINGS_SENSITIVITY_LEVEL;
