@@ -14,9 +14,9 @@
 class File
 {
 	private:
-		static bool openFile(std::fstream &file,std::string path,std::string mode="rw"); // mode can be r,w,rw,app; default is rw
+		static bool openFile(std::fstream &file,std::string path,nostd::string mode="rw"); // mode can be r,w,rw,app; default is rw
 		static bool exist(std::fstream &file,std::string path);
-		static void appendSave(Map m,int chunk,phy::Point pos,std::string name);
+		static void appendSave(Map m,int chunk,phy::Point pos,nostd::string name);
 		static void updateSave(Map m,int chunk,phy::Point pos);
 		static void getSettings();
 public:
@@ -25,15 +25,15 @@ public:
 		static void saveSettings();
 		static bool isCalibrated();
 		static bool isAlreadySaved(Map m);
-		static void saveMap(Map m,int chunk,phy::Point pos,std::string name="");
-		static void changeName(std::string oldName,std::string newName);
-		static nostd::vector<std::string> getNames();
-		static nostd::vector<std::string> getLastSaves();
-		static bool nameAlreadyInUse(std::string name);
-		static Map getMap(std::string name);
-		static int getChunk(std::string name);
-		static phy::Point getPoint(std::string name);
-		static void deleteSave(std::string name);
+		static void saveMap(Map m,int chunk,phy::Point pos,nostd::string name="");
+		static void changeName(nostd::string oldName,nostd::string newName);
+		static nostd::vector<nostd::string> getNames();
+		static nostd::vector<nostd::string> getLastSaves();
+		static bool nameAlreadyInUse(nostd::string name);
+		static Map getMap(nostd::string name);
+		static int getChunk(nostd::string name);
+		static phy::Point getPoint(nostd::string name);
+		static void deleteSave(nostd::string name);
 		static int countSaves();
 };
 
