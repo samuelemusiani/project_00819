@@ -232,7 +232,7 @@ Map File::getMap(nostd::string name)
 			nostd::getline(file, buff);
 			nostd::getline(file, anotherBuff);
 			file.close();
-			Map m(std::stoi(buff.substr(6)), anotherBuff.substr(15));
+			Map m(nostd::stoi(buff.substr(6)), anotherBuff.substr(15));
 			return m;
 		} else
 			file.close();
