@@ -2,16 +2,27 @@
 
 #define TYPE_OF_ENTITIES {'A', 'B', 'C', 'D', 'E', '$'}
 
+//every
+struct lista {
+  Entity val;
+  lista* next;
+};
+typedef lista* plista;
+
 class Manager {
 private:
-  nostd::vector<Entity> Entities;
-  int N_Entities;
+  nostd::vector<plista> Entities; //vettore di liste (puntatori alle teste delle liste)
+  int Global_Entities;
+
+protected:
+  plista head_insert(int Chunk, Entity e); //TODO
+  plista delete_el(plista p, Entity e);
+
 public:
 
   Manager();
-  int get_entities();//pensar a cosa ritorna l'entita come oggetto o cosa?
-  void add_entity(char id, int p, int hp, int ms, int damg);
-  void kill_entity();//forse non serve
+  void add_entity(int Chunk, char id, int p, int hp, int ms, int damg);
+  //void kill_entity();//forse non serve
 
   //boh forse servono
   bool isThereSomethingHere(phy::Point p);

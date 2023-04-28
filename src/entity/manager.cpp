@@ -2,7 +2,14 @@
 
 Manager::Manager ()
 {
-  this->N_Entities = 0;
+  this->Global_Entities = 0;
+
+}
+
+Manager::~Manager()
+{
+  //save everything somewhere
+	this->Global_Entities = 0;
 }
 
 //non so se ha senso usare un puntatore, così se non c'è nulla metto il puntatore a NULL
@@ -22,10 +29,47 @@ nostd::vector<phy::Point> get_entities_by_id(nostd::string id) {
   return(v);
 }
 
-void add_entity(nostd::string id, phy::Point p, int hp, int ms, int damg) {
+void add_entity(int Chunk, nostd::string id, phy::Point p, int hp, int ms, int damg) {
   if(id == '$') {
-    Entity coin = Entity(id, p);
+    Entity entity = Entity(id, p);
   } else {
-    Entity enemy = Entity(id, p, hp, ms, damg);
+    Entity entity = Entity(id, p, hp, ms, damg);
+  }
+
+  this->Entities[Chunk] = head_insert(Chunk, entity);
+
+  this->Global_Entities++;
+}
+
+/*void kill_entity(int Chunk, Entity e) {//TBD
+  plsita tmp = this->Entites[Chunk];
+  delete_el(tmp, e);
+  this->Global_Entities--;
+}*/
+
+plista head_insert(int Chunk, Entity e) {
+  if(this->Entities[Chunk] == NULL) {
+    plista p = new lista;
+    p->next = NULL;
+    p->val = e;
+  } else {
+    plista p = new lista;
+    p->next = this->Entites[Chunk];
+    p->val = e;
+  }
+  return(p);
+}
+
+plista delete_el(plista p, Entity e) {
+  if(p == NULL) {
+    return(p);
+  } else if (this->Entites[Chunk]->val == e) {
+    plista tmp = p->next;
+    delete p;
+    p = NULL;
+    return(tmp);
+  } else {
+    p->next = delete_el(Chunk, p->val);
+    return(p);
   }
 }
