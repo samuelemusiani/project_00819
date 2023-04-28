@@ -137,15 +137,17 @@ void Game::start()
 {
 	// clear the screen and draw the border
 	setDifficulty();
-	map = Map();
+	this->map = Map();
+	this->player = phy::Body();
+	this->player.set_position(phy::Point(40, 20));
+	this->player.set_acceleration(phy::Vector(1, -90));
 	play();
 
 }
 
 void Game::play(){
-	screen.drawMap(this->map, 0);
 
-	
+	screen.drawMap(this->map, 0);
 
 	// Creare un oggetto body, chiamo getposition su body. Passo il punto che mi ritorna alla drawPlayer e la drawPlayer disegna il player in quella posizione
 	player = phy::Body();
@@ -154,8 +156,8 @@ void Game::play(){
 
 	screen.drawPlayer(player.get_position());
 	screen.refreshScreen();
-	
-	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
+	screen.nodel(true);
+
 	bool exit = false;
 	screen.nodel(true);
 	int cumulative = 0;
@@ -280,7 +282,8 @@ void Game::resume()
 		screen.drawText(3, (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
 		int selected = 0;
 		bool choose = false;
-		while (!choose){
+		bool exit = false;
+		while (!choose && !exit){
 			for (int i = 0; i < savedMaps.size(); i++)
 			{
 				screen.drawSquareAround(savedMaps[i], 20 + 4*i, 75);
@@ -302,18 +305,19 @@ void Game::resume()
 				case 10:
 					choose = true;
 					break;
+				case 27:
+					exit = true;
+					break;
 				default:
 					break;
 			}
 			screen.refreshScreen();
 		}
-		// DEBUG
-		/*std::string mapName = savedMaps[selected];
-		screen.drawText(1, 1, mapName);
-		screen.getinput();
-		screen.refreshScreen();*/
-		this->map = File::getMap(savedMaps[selected]);
-		play();
+		if (choose) {
+			this->map = File::getMap(savedMaps[selected]);
+			this->player.set_position(File::getPoint(savedMaps[selected]));
+			play();
+		}
 	}
 }
 
@@ -376,12 +380,7 @@ void Game::stats()
 void Game::pauseGame()
 {
 	screen.nodel(false);
-	// for che utilizzando move sposta il cursore a (y = i, x = 120) e cancella la riga con clrtoeol
-	/*for (int i = 0; i < screen.get_maxY(); i++)
-	{
-		screen.clearLine(i, 90);
-	}*/
-	//screen.drawBox();
+
 	bool resumed = false;
 	bool exit = false;
 	while(!resumed)
@@ -401,7 +400,7 @@ void Game::pauseGame()
 	std::string options[3] = {"Resume", "Save", "Exit"};
 	int selected = 0;
 	bool choose = false;
-	wnoutrefresh(screen.getScreen()); // copying of information from a window data structure to the virtual screen
+	wnoutrefresh(screen.getScreen()); // copy information from a window data structure to the virtual screen
 	wnoutrefresh(pause.getScreen()); // utilizzando wnoutrefresh, il refresh del terminale avviene solo al doupdate()
 	doupdate(); // aggiorna il terminale. Quindi si evita il flicker dato dal tempo che intercorre tra l'aggiornamento di due window usando il classico refresh
 	
