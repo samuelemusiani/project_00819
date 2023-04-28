@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Peronese Lorenzo #0001081726
+*
+* logs.cpp: Implementation of the Logs class
+*/
+
 #include "logs.hpp"
 
 static std::string debugLogPath = "./logs.txt";

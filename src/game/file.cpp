@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Peronese Lorenzo #0001081726
+*
+* file.cpp: Implementation of the File class
+*/
+
 #include "file.hpp"
 
 File::File()

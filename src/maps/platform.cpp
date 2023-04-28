@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Peronese Lorenzo #0001081726
+*
+* platform.cpp: Implementation of the Platform class
+*/
+
 #include "platform.hpp"
 
 Platform::Platform() : Platform(phy::Point(0,0),0)
