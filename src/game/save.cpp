@@ -13,7 +13,7 @@ void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
     bool saved = false; 
     while (!saved) {
         ch = screen.getinput();
-        if (ch == 127) { // backspace key
+        if (ch == 127 || ch == KEY_BACKSPACE) { // 127 on mac, KEY_BACKSPACE on linux
             if (!nome.empty()) {
                 nome.pop_back();
                 screen.eraseScreen();
