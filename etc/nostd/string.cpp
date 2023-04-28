@@ -118,6 +118,84 @@ const char* nostd::string::c_str() const
 	return this->_buffer;
 }
 
+nostd::string nostd::string::substr(size_t pos) const
+{
+	return this->substr(pos, this->_size);
+}
+
+nostd::string nostd::string::substr(size_t pos, size_t len) const
+{
+	nostd::string s;
+
+	int i = 0;
+	while(pos + i < this->_size && i < len)
+	{
+		s.push_back(this->_buffer[pos + i]);
+		i++;
+	}
+	
+	return s;
+}
+
+size_t nostd::string::find (const nostd::string& str, size_t pos) const
+{
+	return this->find(str.c_str(), pos, str.length());
+}
+
+size_t nostd::string::find (const char* s, size_t pos) const
+{
+	return this->find(s, pos, strlen(s));
+}
+
+size_t nostd::string::find (const char* s, size_t pos, size_t n) const
+{
+	bool found = false;
+
+	while(pos < this->_size && !found)
+	{
+		int i = 0;
+		bool tmp_found = true;
+		while(i < n && i + pos < this->_size && tmp_found)
+		{
+			if (s[i] != this->_buffer[pos + i])
+				tmp_found = false;	
+			else
+				i++;
+		}
+
+		if(i + pos == this->_size) 
+			tmp_found = false;
+
+		if (tmp_found)
+			found = true;
+		else
+			pos++;
+	}
+
+	if(found)
+		return pos;
+	else
+		return -1;
+}
+
+size_t nostd::string::find (char c, size_t pos) const
+{
+	bool found = false;
+
+	while(pos < this->_size && !found)
+	{
+		if(this->_buffer[pos] == c)
+			found = true;
+		else
+			pos++;
+	}
+
+	if(found)
+		return pos;
+	else
+		return -1;
+}
+
 nostd::string& nostd::string::operator= (const char* s)
 {
 	reallocate(strlen(s) + 1);

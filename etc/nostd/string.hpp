@@ -41,6 +41,13 @@ namespace nostd {
 
 			/* String operations */
 			const char* c_str() const;
+			string substr(size_t pos = 0) const;
+			string substr(size_t pos, size_t len) const;
+
+			size_t find (const nostd::string& str, size_t pos = 0) const;
+			size_t find (const char* s, size_t pos = 0) const;
+			size_t find (const char* s, size_t pos, size_t n) const;
+			size_t find (char c, size_t pos = 0) const;
 
 			/* Operator overloading */
 			string& operator= (const char *s);
