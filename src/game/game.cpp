@@ -5,9 +5,6 @@
 #include "menu.hpp"
 #include "file.hpp"
 
-#include "../physics/body.hpp"
-#include "../physics/point.hpp"
-#include "../physics/vector.hpp"
 #include "save.hpp"
 #include "../physics/collisions.hpp"
 #include "../../etc/logs/logs.hpp"
@@ -148,7 +145,7 @@ void Game::play(){
 	screen.drawMap(this->map, 0);
 
 	// Creare un oggetto body, chiamo getposition su body. Passo il punto che mi ritorna alla drawPlayer e la drawPlayer disegna il player in quella posizione
-	phy::Body player = phy::Body();
+	player = phy::Body();
 	player.set_position(phy::Point(40, 20));
 	player.set_acceleration(phy::Vector(1, -90));
 
@@ -160,7 +157,7 @@ void Game::play(){
 	screen.nodel(true);
 	 int cumulative = 0;
 	 int count_not_key = 0;
-	int current_chunk = 0;
+
 	int which_key = 0;
 	while (!exit){
 		bool right; 
@@ -414,7 +411,7 @@ bool Game::pauseGame()
 			
 			Draw save_scr = screen.newWindow(44, 150, posY, posX);
 
-			save.saveNewGame(save_scr, map);
+			save.saveNewGame(save_scr, map, current_chunk, player.get_position());
 			save_scr.eraseScreen();
 			save_scr.deleteWin();
 			break;
@@ -428,7 +425,7 @@ bool Game::pauseGame()
 			screen.refreshScreen();
 
 			
-			save.quitGame(screen, map);
+			save.quitGame(screen, map, current_chunk, player.get_position());
 
 			resumed = true; 
 			exit = true; 

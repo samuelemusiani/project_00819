@@ -3,6 +3,9 @@
 
 #include <ncurses.h>
 #include "../draw/draw.hpp"
+#include "../physics/body.hpp"
+#include "../physics/point.hpp"
+#include "../physics/vector.hpp"
 
 
 class Game
@@ -10,6 +13,8 @@ class Game
 	private:
 		Draw screen;
 		Map map;
+		phy::Body player;
+		int current_chunk = 0;
 	public:
 		Game();
 		~Game();
