@@ -1,3 +1,14 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Peronese Lorenzo #0001081726
+*
+* chunk.hpp: Class for each chunk, return the position of the platforms to draw them
+*/
+
+
 #include "platform.hpp"
 #include "../../etc/nostd/vector.hpp"
 #include "../engine/random.hpp"

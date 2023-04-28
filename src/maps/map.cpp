@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Peronese Lorenzo #0001081726
+*
+* map.cpp: Implementation of the Map class
+*/
+
 #include "map.hpp"
 // A chunk is 148x42
 

@@ -1,3 +1,13 @@
+/*
+* Alma Mater Studiorum - University of Bologna
+* First cycle degree in Computer Science
+* Computer Programming - 00819
+*
+* Author: Peronese Lorenzo #0001081726
+*
+* map.hpp: Class that initializes the map and everything related
+*/
+
 #include "chunk.hpp"
 #include "../engine/random.hpp"
 #include "../../etc/nostd/string.hpp"
