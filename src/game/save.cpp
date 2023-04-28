@@ -1,6 +1,6 @@
 #include "save.hpp"
 
-void Save::saveNewGame(Draw screen, Map map){
+void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
     if (File::isAlreadySaved(map)) {
         saveGame(screen);
     }
@@ -80,7 +80,7 @@ void Save::saveNewGame(Draw screen, Map map){
         }
     }
     }
-    File::saveMap(map, nome);
+    File::saveMap(map, chunk, PlayerPos, nome);
     this->alreadySaved = true; // Forse ora è inutile perchè c'è già la funzione in file
 }
 
@@ -100,7 +100,7 @@ void Save::saveGame(Draw screen){
     napms(700);
 }
 
-void Save::quitGame(Draw screen, Map map){
+void Save::quitGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
     int xMaxSize, yMaxSize;
     getmaxyx(stdscr, yMaxSize, xMaxSize);
     int posY = (yMaxSize - 15) / 2;
@@ -147,7 +147,7 @@ void Save::quitGame(Draw screen, Map map){
 			Draw save_scr = quit_scr.newWindow(44, 150, posY, posX);
 
 			
-            saveNewGame(save_scr, map);
+            saveNewGame(save_scr, map, chunk, PlayerPos);
 			save_scr.eraseScreen();
 			save_scr.deleteWin();
     }

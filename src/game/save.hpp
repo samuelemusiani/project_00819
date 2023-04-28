@@ -10,10 +10,10 @@ class Save {
         bool alreadySaved; // per controllare se esiste già il nome del file di salvataggio
         std::string nome;
     public: 
-        void saveNewGame(Draw screen, Map map);
+        void saveNewGame(Draw screen, Map map, int chunk, phy::Point);
         void saveGame(Draw saved);
 
-        void quitGame(Draw screen, Map map);
+        void quitGame(Draw screen, Map map, int chunk, phy::Point);
 };
 
 
