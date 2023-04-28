@@ -4,11 +4,13 @@
 Map::Map() {
 	srand(time(nullptr));
 	this->seed.setSeed(rand());
+	this->coinsAndEnemies = "notImplementedYet:)";
 	initialize_chunks();
 }
 
-Map::Map(int seed) {
+Map::Map(int seed,nostd::string coinsAndEnemies) {
 	this->seed.setSeed(seed);
+	this->coinsAndEnemies = coinsAndEnemies;
 	initialize_chunks();
 }
 
@@ -47,7 +49,7 @@ Chunk Map::get_chunk(int n) {
 	if (n >= 0)
 		return this->possible_chunks[Random::generateChunk(this->seed, n)];
 	else
-		return this->possible_chunks[Random::generateChunk(this->seed, -n)];
+		return this->possible_chunks[Random::generateChunk(this->seed, -n)]; // this shouldn't happen
 }
 
 int Map::getCoins(int n) {
@@ -56,4 +58,14 @@ int Map::getCoins(int n) {
 
 int Map::getEnemies(int n) {
 	return Random::generateEnemies(this->seed, n);
+}
+
+Seed Map::getSeed()
+{
+	return this->seed;
+}
+
+nostd::string Map::getCoinsAndEnemies()
+{
+	return this->coinsAndEnemies;
 }
