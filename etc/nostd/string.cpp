@@ -113,6 +113,11 @@ void nostd::string::pop_back()
 	}
 }
 
+const char* nostd::string::c_str() const
+{
+	return this->_buffer;
+}
+
 nostd::string nostd::string::substr(size_t pos) const
 {
 	return this->substr(pos, this->_size);
@@ -125,7 +130,7 @@ nostd::string nostd::string::substr(size_t pos, size_t len) const
 	int i = 0;
 	while(pos + i < this->_size && i < len)
 	{
-		s.push_back(this->_buffer[i]);
+		s.push_back(this->_buffer[pos + i]);
 		i++;
 	}
 	
