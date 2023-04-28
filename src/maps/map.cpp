@@ -44,7 +44,12 @@ void Map::initialize_chunks() {
 }
 
 Chunk Map::get_chunk(int n) {
-	if (n >= 0)
+	if(n==0) {
+		Chunk c = this->possible_chunks[Random::generateChunk(this->seed, n)];
+		c.add_platform(phy::Point(0,0),148);
+		return c;
+	}
+	if (n > 0)
 		return this->possible_chunks[Random::generateChunk(this->seed, n)];
 	else
 		return this->possible_chunks[Random::generateChunk(this->seed, -n)];
