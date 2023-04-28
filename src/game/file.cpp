@@ -5,16 +5,16 @@ File::File()
 
 }
 
-bool File::openFile(std::fstream &file,std::string path,nostd::string mode)
+bool File::openFile(std::fstream &file,nostd::string path,nostd::string mode)
 {
 	if(mode=="r")
-		file.open(path,std::ios::in);
+		file.open(path.c_str(),std::ios::in);
 	else if(mode=="w")
-		file.open(path,std::ios::out);
+		file.open(path.c_str(),std::ios::out);
 	else if(mode=="app")
-		file.open(path,std::ios::app);
+		file.open(path.c_str(),std::ios::app);
 	else
-		file.open(path,std::ios::in | std::ios::out);
+		file.open(path.c_str(),std::ios::in | std::ios::out);
 	return file.is_open();
 }
 
@@ -48,7 +48,7 @@ bool File::isCalibrated()
 	return (SETTINGS_PRESSURE_CALIBRATION!=-1);
 }
 
-bool File::exist(std::fstream &file, std::string path)
+bool File::exist(std::fstream &file, nostd::string path)
 {
 	bool x = openFile(file,path,"r");
 	file.close();
