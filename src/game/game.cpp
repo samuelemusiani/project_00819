@@ -278,6 +278,7 @@ void Game::resume()
 	if (savedMaps.size() == 0) {
 		screen.drawText(5, (Draw::centerX("No saved maps")), "No saved maps");
 		screen.refreshScreen();
+		screen.getinput();
 	}
 	else {
 		screen.drawText(3, (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
