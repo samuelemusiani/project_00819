@@ -140,6 +140,7 @@ void Game::start()
 	this->player = phy::Body();
 	this->player.set_position(phy::Point(40, 20));
 	this->player.set_acceleration(phy::Vector(1, -90));
+	this->current_chunk = 0;
 	play();
 
 }
