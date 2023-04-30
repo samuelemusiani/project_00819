@@ -29,7 +29,7 @@ class Draw : public Screen{
 		void drawMap(Map map, int nChunck);
 		void drawPlayer(phy::Point p);
 		void drawSquareAround(std::string s, int posY, int posX);
-		static int centerX(nostd::string text);
+		static int centerX(std::string text);
 		void drawRectagle(int posY, int posX, int length, int width);
 		Draw newWindow(int height, int width, int posY, int posX);
 		void setWin(WINDOW *win);

@@ -84,7 +84,7 @@ void Draw::drawSquareAround(std::string s, int posY, int posX) { //posizione del
 }
 
 
-int Draw::centerX(nostd::string text){
+int Draw::centerX(std::string text){
 	int x = 75 - (strlen(text.c_str()) / 2);
 	return x;
 }
