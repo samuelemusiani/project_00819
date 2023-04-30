@@ -317,6 +317,7 @@ void Game::resume()
 		}
 		if (choose) {
 			this->map = File::getMap(savedMaps[selected]);
+			this->current_chunk = File::getChunk(savedMaps[selected]);
 			this->player.set_position(File::getPoint(savedMaps[selected]));
 			play();
 		}
