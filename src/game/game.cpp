@@ -251,6 +251,7 @@ void Game::resume()
 	screen.clearScreen();
 	
 	nostd::vector<std::string> savedMaps = File::getNames();
+	nostd::vector<std::string> savedDate = File::getLastSaves();
 	if (savedMaps.size() == 0) {
 		screen.drawText(5, (Draw::centerX("No saved maps")), "No saved maps");
 		screen.refreshScreen();
@@ -261,13 +262,14 @@ void Game::resume()
 		int selected = 0;
 		bool choose = false;
 		bool exit = false;
+		
 		while (!choose && !exit){
 			for (int i = 0; i < savedMaps.size(); i++)
 			{
-				screen.drawSquareAround(savedMaps[i], 20 + 4*i, 75);
+				screen.drawSquareAround(savedMaps[i] + ' ' + savedDate[i], 13 + 4*i, screen.centerX(savedMaps[i] + ' ' + savedDate[i]));
 			}
 			screen.attrOn(COLOR_PAIR(1));
-			screen.drawText(20 + 4*selected, 75, savedMaps[selected]);
+			screen.drawText(13 + 4*selected, screen.centerX(savedMaps[selected]+ ' ' + savedDate[selected]), savedMaps[selected]);
 			screen.attrOff(COLOR_PAIR(1));
 
 			switch (screen.getinput())
