@@ -24,10 +24,8 @@ void Screen::init()
 	}
 	curs_set(0);
 	start_color();
-	int xMaxSize, yMaxSize;
-	getmaxyx(stdscr, yMaxSize, xMaxSize);
-	int posY = (yMaxSize - 44) / 2;
-	int posX = (xMaxSize - 150) / 2;
+	int posY, posX;
+	size(posY, posX, 44, 150);
 	this->screen = newwin(44, 150, posY, posX);
 	keypad(this->screen, true);
 	set_escdelay(1);
@@ -40,6 +38,13 @@ void Screen::init()
 	// Setto il background nero
 	wbkgd(this->screen, COLOR_BLACK);
 	wrefresh(this->screen);
+}
+
+void Screen::size(int &posY, int &posX, int offsetY, int offsetX){
+	int xMaxSize, yMaxSize;
+    getmaxyx(stdscr, yMaxSize, xMaxSize);
+    posY = (yMaxSize - offsetY) / 2;
+    posX = (xMaxSize - offsetX) / 2;
 }
 
 void Screen::nodel(bool value)

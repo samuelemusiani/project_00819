@@ -345,10 +345,8 @@ bool Game::pauseGame()
 	while(!resumed)
 	{
 
-	int xMaxSize, yMaxSize;
-	getmaxyx(stdscr, yMaxSize, xMaxSize);
-	int posY = (yMaxSize - 44) / 2;
-	int posX = (xMaxSize - 150) / 2;
+	int posY, posX;
+	screen.size(posY, posX, 44, 150);
 	
 	Draw pause = screen.newWindow(44, 60, posY, 90 + posX);
 	
@@ -402,10 +400,8 @@ bool Game::pauseGame()
 		case 1:
 		{
 			pause.deleteWin();
-			int xMaxSize, yMaxSize;
-			getmaxyx(stdscr, yMaxSize, xMaxSize);
-			int posY = (yMaxSize - 44) / 2;
-			int posX = (xMaxSize - 150) / 2;
+			int posY, posX;
+			screen.size(posY, posX, 44, 150);
 			
 			Draw save_scr = screen.newWindow(44, 150, posY, posX);
 

@@ -34,6 +34,7 @@ class Screen
 		WINDOW* getScreen();
 		void deleteWin();
 		void setScreen(WINDOW* w);
+		void size(int &posY, int &posX, int offsetY, int offsetX);
 };
 
 #endif
