@@ -1,9 +1,9 @@
 #include "entity.hpp"
 
-#define TYPE_OF_ENTITIES {'A', 'B', 'C', 'D', 'E', '$'}
+//#define TYPE_OF_ENTITIES {'A', 'B', 'C', 'D', 'E', '$'}
 
-#ifndef MANAGER_MANAGER
-#define MANAGER_MANAGER
+#ifndef ENTITY_MANAGER
+#define ENTITY_MANAGER
 
 struct lista {
   Entity val;
@@ -30,5 +30,5 @@ public:
   bool isThereSomethingHere(phy::Point p);
   nostd::vector<phy::Point> get_entities_by_id(nostd::string id); //non so se devo usare un vettore di punti
 
-}
+};
 #endif

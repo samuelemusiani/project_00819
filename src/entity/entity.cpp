@@ -30,3 +30,21 @@ void Entity::set_point(phy::Point p)
   this->p = p;
 
 }
+
+int Entity::get_y() {
+
+  return(this->p.get_yPosition());
+
+}
+
+int Entity::get_x() {
+
+  return(this->p.get_xPosition());
+
+}
+
+char Entity::get_id() {
+
+  return(this->id);
+
+}

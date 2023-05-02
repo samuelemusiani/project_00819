@@ -45,7 +45,7 @@ void Draw::drawPlayer(phy::Point p) {
 }
 
 void Draw::drawEntity(Entity entity) {
-	mvwprrintw(this->screen, OFFSET-entity.p.get_yPosition(), entity.p.get_yPosition(), "%c", entity.id);
+	mvwprintw(this->screen, 1, 1, "entity.get_id()");
 }
 
 

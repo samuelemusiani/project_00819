@@ -1,7 +1,7 @@
 #include "entity.hpp"
 
-#ifndef ENEMY_ENEMY
-#define ENEMY_ENEMY
+#ifndef ENTITY_ENEMY
+#define ENTITY_ENEMY
 
 class Enemy : public Entity {
 
@@ -20,5 +20,5 @@ public:
   void got_hit(int damGot);
   void set_state(bool s);
 
-}
+};
 #endif
