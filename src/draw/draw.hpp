@@ -6,6 +6,7 @@
 #include "screen.hpp"
 #include "../../etc/nostd/vector.hpp"
 #include "../../etc/nostd/string.hpp"
+#include "../entity/entity.hpp"
 
 #define OFFSET 42
 
@@ -28,5 +29,6 @@ class Draw : public Screen{
 		void drawSquareAround(nostd::string s, int posY, int posX);
 		static int centerX(nostd::string text);
 		void drawRectagle(int posY, int posX, int length, int width);
+		void drawEntity(Entity entity);
 };
 #endif

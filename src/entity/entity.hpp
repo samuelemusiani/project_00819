@@ -3,6 +3,9 @@
 
 //coin are just entity with $ as id
 
+#ifndef ENTITY_ENTITY
+#define ENTITY_ENTITY
+
 class Entity : public Manager {
 protected:
   nostd::string id;
@@ -15,3 +18,4 @@ public:
   void set_point(phy::Point p);
 
 }
+#endif

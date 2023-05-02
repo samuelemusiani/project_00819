@@ -1,5 +1,7 @@
 #include "entity.hpp"
 
+#ifndef ENEMY_ENEMY
+#define ENEMY_ENEMY
 
 class Enemy : public Entity {
 
@@ -19,3 +21,4 @@ public:
   void set_state(bool s);
 
 }
+#endif
