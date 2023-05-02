@@ -317,19 +317,6 @@ void Game::stats()
 	this->stats_scr.drawText(2, 50, "Level: " + std::to_string(this->current_chunk));
 	this->stats_scr.drawText(2, 70, "Jump: " + std::to_string(this->jump));
 	this->stats_scr.drawText(2, 90, "Coins: " + std::to_string(this->coins));
-	/*stats.drawText(2, 2, "Level: " + std::to_string(this->current_chunk));
-	stats.drawText(2, 20, "Jump: " + std::to_string(this->jump));
-	stats.drawText(2, 40, "Coins: " + std::to_string(this->coins));
-	for (int i = 0; i < this->heart; i++)
-	{
-		stats.drawText(2, 60 + i*2, "♥");
-	}
-	*/
 	this->stats_scr.refreshScreen();
 }
 
-void Game::clearStats()
-{
-	this->stats_scr.eraseScreenNoBox();
-	this->stats_scr.deleteWin();
-}
