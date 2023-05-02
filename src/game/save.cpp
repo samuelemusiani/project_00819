@@ -85,10 +85,10 @@ void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
 }
 
 void Save::saveGame(Draw screen){
-    int xMaxSize, yMaxSize;
-    getmaxyx(stdscr, yMaxSize, xMaxSize);
-    int posY = (yMaxSize - 5) / 2;
-    int posX = (xMaxSize - 20) / 2;
+
+    int posY, posX;
+    screen.size(posY, posX, 5, 20);
+   
     
     Draw saved = screen.newWindow(5, 20, posY, posX);
     saved.eraseScreen();
@@ -101,10 +101,8 @@ void Save::saveGame(Draw screen){
 }
 
 void Save::quitGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
-    int xMaxSize, yMaxSize;
-    getmaxyx(stdscr, yMaxSize, xMaxSize);
-    int posY = (yMaxSize - 15) / 2;
-    int posX = (xMaxSize - 55) / 2;
+    int posY, posX;
+    screen.size(posY, posX, 15, 55);
     
     Draw quit_scr = screen.newWindow(15, 55, posY, posX);
     quit_scr.eraseScreen();
@@ -139,10 +137,8 @@ void Save::quitGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
     
     } 
     if (selected == 1) { // Se l'utente vuole salvare prima di uscire
-            int xMaxSize, yMaxSize;
-			getmaxyx(stdscr, yMaxSize, xMaxSize);
-			int posY = (yMaxSize - 44) / 2;
-			int posX = (xMaxSize - 150) / 2;
+			int posY, posX;
+            screen.size(posY, posX, 44, 150);
 			
 			Draw save_scr = quit_scr.newWindow(44, 150, posY, posX);
 
