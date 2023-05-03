@@ -95,7 +95,7 @@ bool Game::exitGame(){
 	// Esci dal gioco
 	screen.clearScreen();
 	screen.drawText(16, Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");	
-	std::string options[2] = {"Yes", "No"};
+	nostd::string options[2] = {"Yes", "No"};
 	int selected = 0;
 	bool choose = false;
 	// Create two button (yes or no) to quit the game 	
@@ -254,12 +254,12 @@ void Game::play(){
 		}
 		screen.drawPlayer(player.get_position());
 		screen.drawMap(map, current_chunk);
-		screen.drawText(2, 1, std::to_string(current_chunk));
-		screen.drawText(1, 1, std::to_string(player.get_position().get_xPosition()));
-		screen.drawText(1, 5, std::to_string(player.get_position().get_yPosition()));
-		screen.drawText(1, 140, std::to_string(JUMPF));
-		//screen.drawText(2, 140, std::to_string(1+pow(1.1, - cumulative/50)));
-		screen.drawText(3, 140, std::to_string(cumulative));
+		screen.drawText(2, 1, nostd::to_string(current_chunk));
+		screen.drawText(1, 1, nostd::to_string(player.get_position().get_xPosition()));
+		screen.drawText(1, 5, nostd::to_string(player.get_position().get_yPosition()));
+		screen.drawText(1, 140, nostd::to_string(JUMPF));
+		//screen.drawText(2, 140, nostd::to_string(1+pow(1.1, - cumulative/50)));
+		screen.drawText(3, 140, nostd::to_string(cumulative));
 		napms(5);
 	
 	}
@@ -274,8 +274,8 @@ void Game::resume()
 {
 	screen.clearScreen();
 	
-	nostd::vector<std::string> savedMaps = File::getNames();
-	nostd::vector<std::string> savedDate = File::getLastSaves();
+	nostd::vector<nostd::string> savedMaps = File::getNames();
+	nostd::vector<nostd::string> savedDate = File::getLastSaves();
 	if (savedMaps.size() == 0) {
 		screen.drawText(5, (Draw::centerX("No saved maps")), "No saved maps");
 		screen.refreshScreen();
@@ -290,10 +290,10 @@ void Game::resume()
 		while (!choose && !exit){
 			for (int i = 0; i < savedMaps.size(); i++)
 			{
-				screen.drawSquareAround(savedMaps[i] + ' ' + savedDate[i], 13 + 4*i, screen.centerX(savedMaps[i] + ' ' + savedDate[i]));
+				screen.drawSquareAround(savedMaps[i] + " " + savedDate[i], 13 + 4*i, screen.centerX(savedMaps[i] + " " + savedDate[i]));
 			}
 			screen.attrOn(COLOR_PAIR(1));
-			screen.drawText(13 + 4*selected, screen.centerX(savedMaps[selected]+ ' ' + savedDate[selected]), savedMaps[selected]);
+			screen.drawText(13 + 4*selected, screen.centerX(savedMaps[selected]+ " " + savedDate[selected]), savedMaps[selected]);
 			screen.attrOff(COLOR_PAIR(1));
 
 			switch (screen.getinput())
@@ -330,7 +330,7 @@ int Game::setDifficulty()
 {
 	screen.clearScreen();
 	screen.drawText(3, (Draw::centerX("Select the difficulty")), "Select the difficulty");
-	std::string options[3] = {"Easy", "Medium", "Hard"};
+	nostd::string options[3] = {"Easy", "Medium", "Hard"};
 	int selected = 0;
 	bool choose = false;
 	while (!choose){
@@ -400,7 +400,7 @@ void Game::pauseGame()
 	pause.drawBox();
 	screen.drawBox();
 	pause.drawText(3, 30 - pause.center("Game Paused"),  "Game Paused");
-	std::string options[3] = {"Resume", "Save", "Exit"};
+	nostd::string options[3] = {"Resume", "Save", "Exit"};
 	int selected = 0;
 	bool choose = false;
 	wnoutrefresh(screen.getScreen()); // copy information from a window data structure to the virtual screen

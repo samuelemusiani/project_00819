@@ -19,7 +19,7 @@ void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
                 screen.eraseScreen();
                 screen.drawText(16, 65, "Insert the name of the file: ");
                 screen.drawRectagle(19, 64, 2, 30);
-                screen.drawText(20, 66, nome.c_str());
+                screen.drawText(20, 66, nome);
                 screen.refreshScreen();
             }
         } 
@@ -35,8 +35,8 @@ void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
         }
         else {
             if (isalnum(ch) && ch != KEY_DOWN && ch != KEY_UP && ch != KEY_LEFT && ch != KEY_RIGHT || ch == 32 ){ // 32 = space
-                nome += ch;
-                screen.drawText(20, 66, nome.c_str());
+                nome.push_back(ch);
+                screen.drawText(20, 66, nome);
                 screen.refreshScreen();
             }
             else 

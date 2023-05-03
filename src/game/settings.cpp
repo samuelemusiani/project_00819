@@ -135,10 +135,10 @@ void Settings::ControlKeys(Draw settings){
                 break;
             case 10:
                 settings.drawText(6, (Draw::centerX("Press the key you want to use")), "Press the key you want to use: ");
-
                 int x = settings.getinput();
-                if (is_alpha(x)) SETTINGS_CONTROL_KEYS[selectedOption] = std::string(1, static_cast<char>(x));
-
+                deb::debug("xstr: " , nostd::to_string(x));
+                deb::debug("char(x): ", nostd::to_string(char(x)));
+                if (is_alpha(x)) SETTINGS_CONTROL_KEYS[selectedOption] = nostd::to_string(char(x));
                 break;
         }
 
@@ -148,7 +148,7 @@ void Settings::ControlKeys(Draw settings){
 }
 
 bool Settings::is_alpha(int ch){
-    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+    return (ch >= 'a' && ch <= 'z');
 }
 
 

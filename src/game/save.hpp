@@ -8,7 +8,7 @@
 class Save {
     private: 
         bool alreadySaved; // per controllare se esiste già il nome del file di salvataggio
-        std::string nome;
+        nostd::string nome;
     public: 
         void saveNewGame(Draw screen, Map map, int chunk, phy::Point);
         void saveGame(Draw saved);

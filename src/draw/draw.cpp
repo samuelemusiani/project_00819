@@ -6,11 +6,7 @@ void Draw::drawText(int posY, int posX, nostd::string s) {
 	mvwprintw(this->screen, posY, posX, s.c_str());
 }
 
-void Draw::drawText(int posY, int posX, std::string s) {
-	mvwprintw(this->screen, posY, posX, s.c_str());
-}
-
-void Draw::drawUpperText(int posY, int posX, std::string s) {
+void Draw::drawUpperText(int posY, int posX, nostd::string s) {
 	for (int i = 0; i < s.length(); i++)
 		mvwaddch(this->screen, posY, posX + i, s[i] + 'A' - 'a');
 }
@@ -55,7 +51,7 @@ void Draw::drawPlayer(phy::Point p) {
 
 
 
-void Draw::drawSquareAround(std::string s, int posY, int posX) { //posizione del primo carattere
+void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione del primo carattere
 	this->drawText(posY, posX, s);
 
 	//calcolo della lunghezza della stringa
@@ -83,9 +79,13 @@ void Draw::drawSquareAround(std::string s, int posY, int posX) { //posizione del
 
 }
 
-
-int Draw::centerX(std::string text){
+int Draw::centerX(nostd::string text){
 	int x = 75 - (strlen(text.c_str()) / 2);
+	return x;
+}
+
+int Draw::centerX(const char* text){
+	int x = 75 - (strlen(text) / 2);
 	return x;
 }
 
