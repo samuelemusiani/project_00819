@@ -89,15 +89,11 @@ namespace nostd
 			   so we need to call it explicitly to avoid shallow copy.
 			 */
 
-			//std::copy(tmp, tmp + std::min(this->_capacity, new_capaciy), this->_buffer);
-			std::memcpy(tmp, this->_buffer, std::min(this->_capacity, new_capaciy) * sizeof(T));
+			// std::memcpy(tmp, this->_buffer, std::min(this->_capacity, new_capaciy) * sizeof(T));
+			std::copy(this->_buffer, this->_buffer + std::min(this->_capacity, new_capaciy), tmp);
 
-			// for(size_t i = 0; i < this->_size; i++)
-				// 	new (&tmp[i]) T(std::move(this->_buffer[i]));
-
-			
-			for(size_t i = 0; i < this->_size; i++)
-				this->_buffer[i].~T();
+			 // for(size_t i = 0; i < std::min(this->_capacity, new_capaciy); i++)
+				//  tmp[i] = this->_buffer[i];
 
 			delete[] this->_buffer;
 
@@ -158,9 +154,6 @@ namespace nostd
 	template <typename T>
 	void vector<T>::clear()
 	{
-		for (size_t i = 0; i < this->_size; i++)
-			this->_buffer[i].~T();
-
 		this->_size = 0;
 		this->reallocate(0);
 	}
