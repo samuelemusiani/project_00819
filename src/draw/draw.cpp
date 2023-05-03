@@ -44,10 +44,31 @@ void Draw::drawPlayer(phy::Point p) {
 	mvwprintw(this->screen, OFFSET - p.get_yPosition(), p.get_xPosition() + 1, "@");
 }
 
-void Draw::drawEntity(Entity entity) {
-	mvwprintw(this->screen, 1, 1, "entity.get_id()");
+void Draw::drawEnemy(Enemy enemy) {
+	mvwprintw(this->screen, OFFSET - enemy.get_y(), enemy.get_x(), enemy.get_id().c_str());
 }
 
+void Draw::drawEnemiesInChunk(int Chunk, pnemici p) {
+	while(p != NULL) {
+		drawEnemy(p->val);
+		p = p->next;
+	}
+	delete p;
+	p = NULL;
+}
+
+void Draw::drawCoin(Coin coin) {
+	mvwprintw(this->screen, OFFSET - coin.get_y(), coin.get_x(), "$");
+}
+
+void Draw::drawCoinsInChunk(int Chunk, pmonete p) {
+	while(p != NULL) {
+		drawCoin(p->val);
+		p = p->next;
+	}
+	delete p;
+	p = NULL;
+}
 
 
 void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione del primo carattere

@@ -9,6 +9,7 @@
 #include "../physics/vector.hpp"
 #include "../physics/collisions.hpp"
 #include "../../etc/logs/logs.hpp"
+#include "../entity/entity.hpp"
 
 #define JUMPF (1/(1+m_exp(-0.18 * (cumulative - 8)))*5)
 //#define JUMPF cumulative / (1 + cumulative)
@@ -24,15 +25,15 @@ double m_exp(double d)
 
 
 Game::Game()
-{	
+{
 	this->screen = Draw();
 	screen.init();
 
-}	
+}
 
 Game::~Game()
 {
-	
+
 	endwin();
 }
 
@@ -48,27 +49,27 @@ void Game::run()
 
 		Credits credits;
 		Settings settings;
-		
+
 		switch (sel)
 		{
-		
-		
-		case 0: 
+
+
+		case 0:
 			{// New Game
 			// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
 			this->start();
-			// TODO: Implementing pause menu 
+			// TODO: Implementing pause menu
 			break;}
-		case 1: 
+		case 1:
 			{// Resume game
 			this->resume();
 			screen.getinput();
 			break;}
-		case 2: 
+		case 2:
 			{// Settings
 			settings.drawFirstSettings(this->screen);
-			
-			break; 
+
+			break;
 			}
 		case 3:
 		{
@@ -76,7 +77,7 @@ void Game::run()
 			credits = Credits();
 			int dev = credits.drawCredits(this->screen);
 			if (dev != -1) credits.openGithub(dev);
-			
+
 			break;
 		}
 		case 27:
@@ -84,7 +85,7 @@ void Game::run()
 				if (exitGame() == true) exit = true;
 			}
 		}
-		
+
 
 	}
 }
@@ -96,7 +97,7 @@ bool Game::exitGame(){
 	screen.drawText(16, Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");	nostd::string options[2] = {"Yes", "No"};
 	int selected = 0;
 	bool choose = false;
-	// Create two button (yes or no) to quit the game 	
+	// Create two button (yes or no) to quit the game
 	while (!choose){
 
 
@@ -125,8 +126,8 @@ bool Game::exitGame(){
 				break;
 		}
 
-		
-		
+
+
 	}
 	if (selected == 0) return true;
 }
@@ -143,9 +144,16 @@ void Game::start()
 	player.set_position(phy::Point(40, 20));
 	player.set_acceleration(phy::Vector(1, -90));
 
+	//test enemy and coin generator
+	Manager manager = Manager();
+	for(int i = 0; i < map.getEnemies(0); i ++)	{manager.add_enemy(0, "A", phy::Point(i, i), 1, 1, 1);}
+	for(int i = 0; i < map.getCoins(0); i ++)	{manager.add_coin(0, "$", phy::Point(2*i+1, 2*i+1), 1);}
+	screen.drawEnemiesInChunk(0, manager.getAllEnemiesInChunk(0));
+	screen.drawCoinsInChunk(0, manager.getAllCoinsInChunk(0));
+
 	screen.drawPlayer(player.get_position());
 	screen.refreshScreen();
-	
+
 	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
 	bool exit = false;
 	screen.nodel(true);
@@ -154,7 +162,7 @@ void Game::start()
 	int current_chunk = 0;
 	int which_key = 0;
 	while (!exit){
-		bool right; 
+		bool right;
 		int input = screen.getinput();
 
 		if (input == (int) 'f')
@@ -163,8 +171,8 @@ void Game::start()
 			which_key = 1;
 			cumulative++;
 			count_not_key = 0;
-		} 
-		else if (input == (int) 'a') 
+		}
+		else if (input == (int) 'a')
 		{
 			which_key = 2;
 			cumulative++;
@@ -172,11 +180,11 @@ void Game::start()
 		}
 		else if (input == 'v'){
 			which_key = 3;
-			cumulative++; 
+			cumulative++;
 			count_not_key = 0;
 
 		}
-		else   
+		else
 		{
 			//deb::debug((int)cumulative, "cumulative");
 			//deb::debug((double) (JUMPF), "JUMPF");
@@ -194,8 +202,8 @@ void Game::start()
 				cumulative = 0;
 			}
 
-		
-		
+
+
 		switch(input)
 		{
 			case ((int) 's'): // move player left
@@ -219,13 +227,13 @@ void Game::start()
 		screen.eraseScreen();
 		if (player.get_position().get_yPosition() < 0)
 		{
-			current_chunk--; 
+			current_chunk--;
 			player.set_position(player.get_position() + phy::Point(0, 42));
 		}
-		else if (player.get_position().get_yPosition() >= 42)  
+		else if (player.get_position().get_yPosition() >= 42)
 		{
 			current_chunk++;
-			player.set_position(player.get_position() - phy::Point(0, 42)); 
+			player.set_position(player.get_position() - phy::Point(0, 42));
 		}
 		screen.drawPlayer(player.get_position());
 		screen.drawMap(map, current_chunk);
@@ -236,10 +244,10 @@ void Game::start()
 		//screen.drawText(2, 140, std::to_string(1+pow(1.1, - cumulative/50)));
 		screen.drawText(3, 140, std::to_string(cumulative));
 		napms(5);
-	
+
 	}
 	screen.nodel(false);
-	screen.clearScreen();	
+	screen.clearScreen();
 }
 
 void Game::resume()
