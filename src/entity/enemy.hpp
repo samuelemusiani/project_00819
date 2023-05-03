@@ -9,11 +9,12 @@ protected:
   int hp;
   double ms;
   int damg;
-  //bool isAlive;
+  bool isAlive;
 
 public:
 
-  Enemy(int hp, int ms, int damg);
+  Enemy(nostd::string id, phy::Point p, int hp, int ms, int damg) ;
+  Enemy();
 
   void init_enemy(int hp, int ms, int damg);
   void set_hp(int hp);

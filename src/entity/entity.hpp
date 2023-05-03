@@ -1,5 +1,6 @@
 #include "../../etc/nostd/string.hpp"
 #include "../physics/point.hpp"
+//#include "enemy.hpp"
 
 //coins are just entity with $ as id
 
@@ -12,13 +13,14 @@ protected:
   phy::Point p;
 public:
 
-  Entity(nostd::string id, phy::Point p);//constructor for coins
-  Entity(nostd::string id, phy::Point p, int hp, int ms, int damg);//constructor for enemies
+  Entity(nostd::string id, phy::Point p);
+  Entity();
   void init_entity(nostd::string id, phy::Point p);
   void set_point(phy::Point p);
   int get_x();
   int get_y();
-  char get_id();
+  phy::Point get_pos();
+  nostd::string get_id();
 
 };
 #endif
