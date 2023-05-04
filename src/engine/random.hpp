@@ -22,5 +22,6 @@ class Random {
 		static int generateEnemies(Seed seed, int chunk);
 		static int generateCoins(Seed seed, int chunk);
 		static int generateChunk(Seed seed, int chunk);
+        static int generateType(int chunk);
 };
 #endif
