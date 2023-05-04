@@ -13,10 +13,11 @@ void Screen::init()
 	initscr();
 	cbreak();
 	noecho();
-	if (LINES < 44 || COLS < 150)
+	if (LINES < 48 || COLS < 150)
 	{
 		printw("Your terminal is too small. Please resize it at least to 44x150");
-		while (LINES < 44 || COLS < 150)
+		mvprintw(1, 0, "Please resize your terminal window or reduce the size with Ctrl- or CMD-");
+		while (LINES < 48 || COLS < 150)
 		{
 			refresh();
 			sleep(1); // attendo 1 secondo per non mandare la cpu a 100%
@@ -25,8 +26,8 @@ void Screen::init()
 	curs_set(0);
 	start_color();
 	int posY, posX;
-	size(posY, posX, 44, 150);
-	this->screen = newwin(44, 150, posY, posX);
+	size(posY, posX, 44	, 150);
+	this->screen = newwin(44, 150, posY + 1 , posX);
 	keypad(this->screen, true);
 	set_escdelay(1);
 	this-> max_x = getmaxx(this->screen); 
@@ -42,8 +43,8 @@ void Screen::init()
 
 void Screen::size(int &posY, int &posX, int offsetY, int offsetX){
 	int xMaxSize, yMaxSize;
-    getmaxyx(stdscr, yMaxSize, xMaxSize);
-    posY = (yMaxSize - offsetY) / 2;
+	getmaxyx(stdscr, yMaxSize, xMaxSize);
+    posY = ((yMaxSize - offsetY) / 2);
     posX = (xMaxSize - offsetX) / 2;
 }
 

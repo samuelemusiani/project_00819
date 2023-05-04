@@ -299,12 +299,10 @@ int Game::setDifficulty()
 
 void Game::stats()
 {
-	int xMaxSize, yMaxSize;
-    getmaxyx(stdscr, yMaxSize, xMaxSize);
-    int posY = (yMaxSize - 44) / 2;
-    int posX = (xMaxSize - 150) / 2;
+	int posY, posX;
+	screen.size(posY, posX, 44, 150);
 
-	this->stats_scr = screen.newWindow(3, 150, posY-3, posX);
+	this->stats_scr = screen.newWindow(3, 150, posY - 3, posX);
 	this->stats_scr.eraseScreenNoBox();
 
 	this->stats_scr.drawRectagle(1, 0 , 3, 149);
