@@ -144,10 +144,8 @@ void Game::start()
 	player.set_position(phy::Point(40, 20));
 	player.set_acceleration(phy::Vector(1, -90));
 
-	//test enemy and coin generator
+	//inizialize manager
 	Manager manager = Manager();
-	for(int i = 0; i < map.getEnemies(0); i ++)	{manager.add_enemy(0, "A", phy::Point(i, i), 1, 1, 1);}
-	for(int i = 0; i < map.getCoins(0); i ++)	{manager.add_coin(0, "$", phy::Point(2*i+1, 2*i+1), 1);}
 
 	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
 	bool exit = false;
@@ -231,9 +229,12 @@ void Game::start()
 			player.set_position(player.get_position() - phy::Point(0, 42));
 		}
 		screen.drawPlayer(player.get_position());
-		screen.drawEnemiesInChunk(0, manager.getAllEnemiesInChunk(0));
-		screen.drawCoinsInChunk(0, manager.getAllCoinsInChunk(0));
 
+		//qui vengono chiamate draw dei nemici e monete
+		//manca drawEnemiesInChunk e drawCoinsInChunk???
+		manager.set_chunk(current_chunk);
+		manager.move_enemies(0);
+		manager.print_entity();
 		screen.drawMap(map, current_chunk);
 		screen.drawText(2, 1, std::to_string(current_chunk));
 		screen.drawText(1, 1, std::to_string(player.get_position().get_xPosition()));

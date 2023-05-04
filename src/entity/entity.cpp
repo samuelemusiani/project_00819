@@ -1,7 +1,7 @@
 #include "entity.hpp"
 
 
-Entity::Entity (nostd::string id, phy::Point p)
+Entity::Entity (char id, phy::Point p)
 {
 
   this->init_entity(id, p);
@@ -10,7 +10,7 @@ Entity::Entity (nostd::string id, phy::Point p)
 
 Entity::Entity(){}
 
-void Entity::init_entity(nostd::string id, phy::Point p)
+void Entity::init_entity(char id, phy::Point p)
 {
 
   this->id = id;
@@ -37,7 +37,7 @@ int Entity::get_x() {
 
 }
 
-nostd::string Entity::get_id() {
+char Entity::get_id() {
 
   return(this->id);
 

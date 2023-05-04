@@ -45,29 +45,11 @@ void Draw::drawPlayer(phy::Point p) {
 }
 
 void Draw::drawEnemy(Enemy enemy) {
-	mvwprintw(this->screen, OFFSET - enemy.get_y(), enemy.get_x(), enemy.get_id().c_str());
-}
-
-void Draw::drawEnemiesInChunk(int Chunk, pnemici p) {
-	while(p != NULL) {
-		drawEnemy(p->val);
-		p = p->next;
-	}
-	delete p;
-	p = NULL;
+	mvwprintw(this->screen, OFFSET - enemy.get_y(), enemy.get_x(), enemy.get_id());
 }
 
 void Draw::drawCoin(Coin coin) {
-	mvwprintw(this->screen, OFFSET - coin.get_y(), coin.get_x(), "$");
-}
-
-void Draw::drawCoinsInChunk(int Chunk, pmonete p) {
-	while(p != NULL) {
-		drawCoin(p->val);
-		p = p->next;
-	}
-	delete p;
-	p = NULL;
+	mvwprintw(this->screen, OFFSET - coin.get_y(), coin.get_x(), coin.get_id());
 }
 
 

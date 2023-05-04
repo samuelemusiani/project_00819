@@ -1,6 +1,6 @@
 #include "enemy.hpp"
 
-Enemy::Enemy (nostd::string id, phy::Point p, int hp, int ms, int damg):Entity(id, p) {
+Enemy::Enemy (char id, phy::Point p, int hp, int ms, int damg):Entity(id, p) {
 
   this->init_enemy(hp, ms, damg);
 
@@ -36,4 +36,12 @@ void Enemy::set_state(bool s) {
 
   this->isAlive = s;
 
+}
+
+bool Enemy::canMove(Chunk chunk) {
+  if(chunk.is_there_a_platform(this->p + phy::Point(-1, -1)) || chunk.is_there_a_platform(this->p + phy::Point(1, -1))) {
+    return(false);
+  } else return(true);
+
+  //check if there is a player or smth else 
 }

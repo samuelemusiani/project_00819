@@ -1,6 +1,6 @@
 #include "coin.hpp"
 
-Coin::Coin(nostd::string id, phy::Point p, int value):Entity(id, p) {
+Coin::Coin(char id, phy::Point p, int value):Entity(id, p) {
 
   this->init_coin(value);
 

@@ -11,8 +11,9 @@ protected:
 
 public:
 
-  Coin(nostd::string id, phy::Point p, int value);
+  Coin(char id, phy::Point p, int value);
   Coin();
+  
   void init_coin(int value);
   int get_value();
   void set_state(bool s);
