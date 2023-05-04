@@ -8,6 +8,7 @@
 * random.cpp: Implementation of the Random class
 */
 
+#include <ctime>
 #include "random.hpp"
 
 Random::Random()
