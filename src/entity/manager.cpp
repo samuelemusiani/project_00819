@@ -48,10 +48,12 @@ void Manager::head_insert(int Chunk, Enemy enemy) {
     pnemici p = new nemici;
     p->next = NULL;
     p->val = enemy;
+    this->Enemies[Chunk] = p;
   } else {
     pnemici p = new nemici;
     p->next = this->Enemies[Chunk];
     p->val = enemy;
+    this->Enemies[Chunk] = p;
   }
 }
 
@@ -61,10 +63,12 @@ void Manager::head_insert(int Chunk, Coin coin) {
     pmonete p = new monete;
     p->next = NULL;
     p->val = coin;
+    this->Coins[Chunk] = p;
   } else {
     pmonete p = new monete;
     p->next = this->Coins[Chunk];
     p->val = coin;
+    this->Coins[Chunk] = p;
   }
 }
 
