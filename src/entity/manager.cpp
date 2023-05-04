@@ -30,6 +30,10 @@ pmonete Manager::getAllCoinsInChunk(int Chunk) {
 
 void Manager::add_enemy(int Chunk, nostd::string id, phy::Point p, int hp, int ms, int damg) {
   Enemy enemy = Enemy(id, p, hp, ms, damg);
+
+  if(Enemies.size() <= Chunk)
+	  Enemies.push_back(nullptr);
+
   head_insert(Chunk, enemy);
   this->Global_Entities++;
   this->Global_Enemies++;
@@ -37,6 +41,10 @@ void Manager::add_enemy(int Chunk, nostd::string id, phy::Point p, int hp, int m
 
 void Manager::add_coin(int Chunk, nostd::string id, phy::Point p, int value) {
   Coin coin = Coin(id, p, value);
+
+  if(Coins.size() <= Chunk)
+	  Coins.push_back(nullptr);
+
   head_insert(Chunk, coin);
   this->Global_Entities++;
   this->Global_Coins++;
