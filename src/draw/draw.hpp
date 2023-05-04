@@ -14,7 +14,7 @@
 
 class Draw : public Screen{
 	private:
-		void drawPlatform(nostd::vector<Platform> &plat);
+		void drawPlatform(nostd::vector<Platform> plat);
 	public:
 		void drawText(int posY, int posX, nostd::string s);
 		void drawText(int posY, int posX, std::string s);
