@@ -47,3 +47,15 @@ int Random::generateChunk(Seed seed, int chunk) {
 			return random;
 	}
 }
+
+int Random::generateType(int chunk)
+{
+    srand(time(nullptr));
+    int random = rand() % 10;
+    if(random < (5 - chunk/10))
+        return 1;
+    else if(random < 8 - chunk/10)
+        return 2;
+    else
+        return 3;
+}
