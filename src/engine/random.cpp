@@ -10,6 +10,8 @@
 
 #include <ctime>
 #include "random.hpp"
+#define SCREEN_WIDTH 148
+#define SCREEN_HEIGHT 42
 
 Random::Random()
 {
@@ -22,12 +24,12 @@ void Random::seedSrand(Seed seed, int chunk, int offset)
 }
 
 int Random::generateEnemies(Seed seed, int chunk) {
-	seedSrand(seed, chunk, 13);
+	seedSrand(seed, chunk, 11);
 	return (2 + rand() % 3); // enemies range: 2-4
 }
 
 int Random::generateCoins(Seed seed, int chunk) {
-	seedSrand(seed, chunk, 17);
+	seedSrand(seed, chunk, 13);
 	return (3 + rand() % 4); // coins range: 3-6
 }
 
@@ -49,14 +51,39 @@ int Random::generateChunk(Seed seed, int chunk) {
 	}
 }
 
-int Random::generateType(int chunk)
+int Random::generateEntityType(int chunk)
 {
     srand(time(nullptr));
-    int random = rand() % 10;
-    if(random < (5 - chunk/10))
+    int random = rand() % 100;
+    if(random < (60 - chunk*2))
         return 1;
-    else if(random < 8 - chunk/10)
+    else if(random < 85 - chunk)
         return 2;
     else
         return 3;
+}
+
+phy::Point Random::generateEnemyPosition(Map map, int chunk)
+{
+	phy::Point point;
+	seedSrand(map.getSeed(),chunk,17);
+	nostd::vector<Platform> p = map.get_chunk(chunk).get_platforms();
+	int random;
+	do {
+		random = rand() % p.size();
+	} while(false); // is_there_an_entity(map.getSeed(),chunk,random { platform number })
+	point.set_xPosition(p.at(random).get_position().get_xPosition() + rand() % p.at(random).get_length());
+	point.set_yPosition(p.at(random).get_position().get_yPosition() + 1);
+	return point;
+}
+
+phy::Point Random::generateCoinPosition(Map map, int chunk)
+{
+	phy::Point point;
+	seedSrand(map.getSeed(),chunk,21);
+	do {
+		point.set_xPosition(rand() % SCREEN_WIDTH);
+		point.set_yPosition(rand() % SCREEN_HEIGHT);
+	}while(map.get_chunk(chunk).is_there_a_platform(point));
+	return point;
 }

@@ -28,11 +28,11 @@ void Draw::attrOff(int c_pair) {
 //draw map
 void Draw::drawMap(Map map, int nChunk) {
 	//per adesso abbiamo solo il chunk 0
-	this->drawPlatform(*map.get_chunk(nChunk).get_platforms());
+	this->drawPlatform(map.get_chunk(nChunk).get_platforms());
 }
 
 //draw a platform that display
-void Draw::drawPlatform(nostd::vector<Platform> &plat) {
+void Draw::drawPlatform(nostd::vector<Platform> plat) {
 	for(int i = 0; i < plat.size(); i++) {
 		for(int j = 0; j < plat[i].get_length(); j++) {
 			mvwprintw(this->screen, OFFSET-plat[i].get_position().get_yPosition(), plat[i].get_position().get_xPosition()+j+1, "=");
@@ -95,3 +95,4 @@ void Draw::drawRectagle(int posY, int posX, int length, int width) {
 	mvwaddch(this->screen, posY, posX+width, ACS_URCORNER);
 	mvwaddch(this->screen, posY+length, posX+width, ACS_LRCORNER);
 }
+

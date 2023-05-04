@@ -9,6 +9,8 @@
 */
 
 #include "map.hpp"
+#include "../engine/random.hpp"
+
 // A chunk is 148x42
 
 Map::Map() {

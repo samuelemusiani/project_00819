@@ -9,9 +9,10 @@
 */
 
 #include "chunk.hpp"
-#include "../engine/random.hpp"
 #include "../../etc/nostd/string.hpp"
+#include "../engine/seed.hpp"
 #include <chrono>
+#include <ctime>
 #include <string>
 
 #ifndef MAPS_MAP
