@@ -106,10 +106,7 @@ void nostd::string::pop_back()
 		this->_size--;
 		this->_buffer[this->_size] = '\0';
 		if (this->_size + 20 < this->_capacity)
-		{
 			reallocate(this->_size + 5);
-			this->_size;
-		}
 	}
 }
 
