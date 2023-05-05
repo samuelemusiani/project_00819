@@ -231,10 +231,10 @@ void Game::start()
 		screen.drawPlayer(player.get_position());
 
 		//qui vengono chiamate draw dei nemici e monete
-		//manca drawEnemiesInChunk e drawCoinsInChunk???
 		manager.set_chunk(current_chunk);
 		manager.move_enemies(0);
 		manager.print_entity();
+
 		screen.drawMap(map, current_chunk);
 		screen.drawText(2, 1, std::to_string(current_chunk));
 		screen.drawText(1, 1, std::to_string(player.get_position().get_xPosition()));

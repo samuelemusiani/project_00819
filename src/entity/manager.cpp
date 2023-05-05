@@ -104,16 +104,16 @@ void Manager::set_chunk(int Chunk, Map map) {
   if(this->current_chunk < Chunk) {
     this->current_chunk = Chunk;
   } else if (this->current_chunk > Chunk) {
-    for(int i = 0; i < map.getEnemies(Chunk); i ++)
-      manager.add_enemy(this->current_chunk, Random::generateEnemyType(), Random::generateEnemyPosition(map), i%2 == 0 ? dx : sx);
-  	for(int i = 0; i < map.getCoins(Chunk); i ++)
-      manager.add_coin(this->current_chunk, Random::generateCoinType(), Random::generateCoinPosition(map));
+    for(int i = 0; i < map.getEnemies(Chunk); i ++) {}
+      //manager.add_enemy(this->current_chunk, Random::generateEnemyType(), Random::generateEnemyPosition(map), i%2 == 0 ? dx : sx);
+  	for(int i = 0; i < map.getCoins(Chunk); i ++) {}
+      //manager.add_coin(this->current_chunk, Random::generateCoinType(), Random::generateCoinPosition(map));
     //bullets
   }
 }
 
 //time is in ms
-void move_enemies(int time) {
+void Manager::move_enemies(int time) {
   pnemici tmp = this->Enemies[this->current_chunk];
   Chunk chunk = map.get_chunk(this->current_chunk))
   while(tmp != NULL) {
@@ -127,19 +127,48 @@ void move_enemies(int time) {
   }
 }
 
-void print_entity() {
+void Manager::print_entity() {
   pnemici p = this->Enemies[this->current_chunk];
 	while(p != NULL) {
 		drawEnemy(p->val);
 		p = p->next;
 	}
 
-  pmonete q = this->Coins[this->current_chunk];
+pmonete q = this->Coins[this->current_chunk];
 	while(q != NULL) {
 		drawCoin(p->val);
 		q = q->next;
 	}
+}
 
+
+bool Manager::is_there_an_entity(Map map, int Chunk, int plat) { //check se c'è un nemico sulla piattaforma
+  bool check = false;
+  Platform platform = map.get_chunk(Chunk).get_platforms(plat);
+  int start = platform.get_position().get_xPosition();
+  int end = paltform.get_position().get_xPosition() + platform.get_length();
+  pnemici p = getAllEnemiesInChunk(Chunk);
+  pmonete q = getAllCoinsInChunk(Chunk);
+
+  while(p != NULL && !check) {
+    if(p->val.p.get_y() == platform.get_position().get_yPosition()) {
+      if(p->val.p.get_x() >= start.get_xPosition() && p->val.p.get_x() <= end.get_xPosition()) {
+        check = true;
+      }
+    }
+    p = p->next;
+  }
+
+  while(q != NULL && !check) {
+    if(q->val.p.get_y() == platform.get_yPosition()) {
+      if(q->val.p.get_x() >= start.get_xPosition() && q->val.p.get_x() <= end.get_xPosition()) {
+        check = true;
+      }
+    }
+    q = q->next;
+  }
+
+  return(check);
 }
 
 

@@ -13,6 +13,7 @@
 #define SCREEN_WIDTH 148
 #define SCREEN_HEIGHT 42
 
+
 Random::Random()
 {
 

@@ -43,5 +43,5 @@ bool Enemy::canMove(Chunk chunk) {
     return(false);
   } else return(true);
 
-  //check if there is a player or smth else 
+  //check if there is a player or smth else
 }

@@ -1,4 +1,5 @@
 #include "entity.hpp"
+#include "../maps/chunk.hpp"
 
 #ifndef ENTITY_ENEMY
 #define ENTITY_ENEMY
@@ -10,7 +11,7 @@ protected:
 
   int hp;
   double ms;
-  int damg
+  int damg;
   DIRECTION_POSSIBILITY dir;
   bool isAlive;
 
@@ -24,6 +25,7 @@ public:
   void got_hit(int damGot);
   void set_state(bool s);
   void set_direction(DIRECTION_POSSIBILITY dir);
+  bool canMove(Chunk chunk);
 
 };
 #endif

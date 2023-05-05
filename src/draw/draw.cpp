@@ -45,11 +45,11 @@ void Draw::drawPlayer(phy::Point p) {
 }
 
 void Draw::drawEnemy(Enemy enemy) {
-	mvwprintw(this->screen, OFFSET - enemy.get_y(), enemy.get_x(), enemy.get_id());
+	this->drawText(OFFSET - enemy.get_y(), enemy.get_x(), enemy.get_id());
 }
 
 void Draw::drawCoin(Coin coin) {
-	mvwprintw(this->screen, OFFSET - coin.get_y(), coin.get_x(), coin.get_id());
+	this->drawText(OFFSET - coin.get_y(), coin.get_x(), coin.get_id());
 }
 
 

@@ -9,11 +9,13 @@
 */
 
 
+
+#ifndef MAPS_CHUNK
+#define MAPS_CHUNK
+
 #include "platform.hpp"
 #include "../../etc/nostd/vector.hpp"
 #include <vector>
-#ifndef MAPS_CHUNK
-#define MAPS_CHUNK
 
 class Chunk
 {

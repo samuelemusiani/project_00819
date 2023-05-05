@@ -38,7 +38,7 @@ public:
   ~Manager();
 
   void set_chunk(int Chunk);
-  void add_enemy(int Chunk, Enemy enemy, phy::Point p)
+  void add_enemy(int Chunk, Enemy enemy, phy::Point p);
   void add_coin(int Chunk, Coin coin, phy::Point p);
 
   void head_insert(int Chunk, Enemy enemy);
@@ -47,9 +47,8 @@ public:
   void collect_coin(int Chunk, Coin coin);
   void kill_entity(int Chunk, Enemy enemy);
   void move_enemies(int time);
-  void print_enemy(); //la print enemy va chiamata dopo la chiamata del chunk
-
-  }
+  void print_entity(); //la print enemy va chiamata dopo la chiamata del chunk
+  bool is_there_an_entity(Map map, int Chunk, int plat); //check se c'è un nemico sulla piattaforma
 
 };
 #endif
