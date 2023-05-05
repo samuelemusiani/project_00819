@@ -51,7 +51,19 @@ int Random::generateChunk(Seed seed, int chunk) {
 	}
 }
 
-int Random::generateEntityType(int chunk)
+int Random::generateEnemyType(int chunk)
+{
+    srand(time(nullptr));
+    int random = rand() % 100;
+    if(random < (60 - chunk*2))
+        return 1;
+    else if(random < 85 - chunk)
+        return 2;
+    else
+        return 3;
+}
+
+int Random::generateCoinType(int chunk)
 {
     srand(time(nullptr));
     int random = rand() % 100;
