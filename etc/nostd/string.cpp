@@ -92,8 +92,7 @@ void nostd::string::push_back(const char data)
 
 	if(this->_size >= this->_capacity)
 	{
-		this->_capacity = this->_size + 5;
-		reallocate(this->_capacity);
+		reallocate(this->_size + 5);
 	}
 
 	this->_buffer[this->_size - 1] = data;
