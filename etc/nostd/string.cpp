@@ -239,7 +239,7 @@ nostd::string& nostd::string::operator+= (const nostd::string& rhs)
 
 	delete[] this->_buffer;
 	this->_buffer = tmp_buffer;
-	this->_size += tmp_size;
+	this->_size = tmp_size;
 	this->_capacity = this->_size + 1;
 	return *this;
 }
