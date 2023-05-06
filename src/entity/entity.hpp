@@ -1,7 +1,5 @@
 #include "../physics/point.hpp"
 
-//coins are just entity with $ as id
-
 #ifndef ENTITY_ENTITY
 #define ENTITY_ENTITY
 

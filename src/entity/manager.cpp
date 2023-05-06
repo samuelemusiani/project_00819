@@ -3,6 +3,7 @@
 Manager::Manager (Map map)
 {
   this->map = map;
+  this->seed = map.getSeed();
   this->current_chunk = -1;
   //this->set_chunk(-1, this->map);
   this->Global_Entities = 0;
@@ -104,9 +105,12 @@ void Manager::collect_coin(int Chunk, Coin coin) {
 void Manager::set_chunk(int Chunk, Map map) {
   if (this->current_chunk < Chunk) {
     for(int i = 0; i < 10; i ++)
-      this->add_enemy(Chunk, ENEMY_TYPE2, phy::Point(10+i,10+i), true);//EnemyType[1/*Random::generateEnemyType()*/], phy::Point(i,i)/*Random::generateEnemyPosition(map)*/, i%2 == 0 ? true : false);
-  	for(int i = 0; i < map.getCoins(Chunk); i ++)
-      this->add_coin(Chunk, COIN_TYPE1, phy::Point(5+i,5+i));//CoinType[1/*Random::generateCoinType()*/], phy::Point(2*i,2*i)/*Random::generateCoinPosition(map)*/);
+      //this->add_enemy(Chunk, ENEMY_TYPE2, phy::Point(10+i,10+i), true);//EnemyType[1/*Random::generateEnemyType()*/], phy::Point(i,i)/*Random::generateEnemyPosition(map)*/, i%2 == 0 ? true : false);
+      this->add_enemy(Chunk, EnemyType[Random::generateEnemyType(this->seed, Chunk)], Random::generateEnemyPosition(map, Chunk), i%2 == 0 ? true : false);
+    for(int i = 0; i < map.getCoins(Chunk); i ++)
+      //this->add_coin(Chunk, COIN_TYPE1, phy::Point(5+i,5+i));//CoinType[1/*Random::generateCoinType()*/], phy::Point(2*i,2*i)/*Random::generateCoinPosition(map)*/);
+      this->add_coin(Chunk, CoinType[Random::generateCoinType(this->seed, Chunk)], Random::generateCoinPosition(map, Chunk));
+
     //bullets
   }
   this->current_chunk = Chunk;

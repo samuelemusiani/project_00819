@@ -4,6 +4,7 @@
 #include "../../etc/nostd/vector.hpp"
 #include "../draw/draw.hpp"
 #include "../maps/map.hpp"
+#include "../engine/random.hpp"
 
 #include "../../etc/logs/logs.hpp"
 
@@ -25,6 +26,7 @@ typedef monete* pmonete;
 class Manager {
 private:
   Map map;
+  Seed seed;
   int current_chunk;
   nostd::vector<pnemici> Enemies;
   nostd::vector<pmonete> Coins;
