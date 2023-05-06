@@ -142,7 +142,7 @@ void Manager::print_entity(Draw screen) {
 }
 
 
-bool Manager::is_there_an_entity(Map map, int Chunk, int plat) { //check se c'è un nemico sulla piattaforma
+bool Manager::is_there_an_entity_in_platform(Map map, int Chunk, int plat) { //check se c'è un nemico sulla piattaforma
   bool check = false;
   Platform platform = map.get_chunk(Chunk).get_platforms()[plat];
 
@@ -165,6 +165,29 @@ bool Manager::is_there_an_entity(Map map, int Chunk, int plat) { //check se c'è
       if(q->val.get_x() >= start && q->val.get_x() <= end) {
         check = true;
       }
+    }
+    q = q->next;
+  }
+
+  return(check);
+}
+
+bool Manager::is_there_an_entity_in_point(int Chunk, phy::Point point) {
+  bool check = false;
+
+  pnemici p = getAllEnemiesInChunk(Chunk);
+  pmonete q = getAllCoinsInChunk(Chunk);
+
+  while(p != NULL && !check) {
+    if(p->val.get_y() == point.get_yPosition() && p->val.get_x() == point.get_xPosition()) {
+      check = true;
+    }
+    p = p->next;
+  }
+
+  while(q != NULL && !check) {
+    if(q->val.get_y() == point.get_yPosition() && q->val.get_x() == point.get_xPosition()) {
+      check = true;
     }
     q = q->next;
   }

@@ -50,7 +50,8 @@ public:
   void kill_entity(int Chunk, Enemy enemy);
   void move_enemies(int time);
   void print_entity(Draw screen); //la print enemy va chiamata dopo la chiamata del chunk
-  bool is_there_an_entity(Map map, int Chunk, int plat); //check se c'è un nemico sulla piattaforma
+  bool is_there_an_entity_in_platform(Map map, int Chunk, int plat); //check se c'è un nemico sulla piattaforma
+  bool is_there_an_entity_in_point(int Chunk, phy::Point point);
   pnemici getAllEnemiesInChunk(int Chunk);
   pmonete getAllCoinsInChunk(int Chunk);
 
