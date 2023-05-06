@@ -51,9 +51,9 @@ int Random::generateChunk(Seed seed, int chunk) {
 	}
 }
 
-int Random::generateEnemyType(int chunk)
+int Random::generateEnemyType(Seed seed,int chunk)
 {
-    srand(time(nullptr));
+	seedSrand(seed,chunk,23);
     int random = rand() % 100;
     if(random < (60 - chunk*2))
         return 1;
@@ -63,9 +63,9 @@ int Random::generateEnemyType(int chunk)
         return 3;
 }
 
-int Random::generateCoinType(int chunk)
+int Random::generateCoinType(Seed seed,int chunk)
 {
-    srand(time(nullptr));
+	seedSrand(seed,chunk,29);
     int random = rand() % 100;
     if(random < (60 - chunk*2))
         return 1;
@@ -83,7 +83,7 @@ phy::Point Random::generateEnemyPosition(Map map, int chunk)
 	int random;
 	do {
 		random = rand() % p.size();
-	} while(false); // is_there_an_entity(map.getSeed(),chunk,random { platform number })
+	} while(false); // is_there_an_entity_in_platform(map.getSeed(),chunk,random { platform number })
 	point.set_xPosition(p.at(random).get_position().get_xPosition() + rand() % p.at(random).get_length());
 	point.set_yPosition(p.at(random).get_position().get_yPosition() + 1);
 	return point;
@@ -96,6 +96,6 @@ phy::Point Random::generateCoinPosition(Map map, int chunk)
 	do {
 		point.set_xPosition(rand() % SCREEN_WIDTH);
 		point.set_yPosition(rand() % SCREEN_HEIGHT);
-	}while(map.get_chunk(chunk).is_there_a_platform(point));
+	}while(map.get_chunk(chunk).is_there_a_platform(point) /* || !is_there_an_entity_in_point(map.getSeed(),chunk,point)*/);
 	return point;
 }

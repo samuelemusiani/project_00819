@@ -23,8 +23,8 @@ class Random {
 		static int generateEnemies(Seed seed, int chunk);
 		static int generateCoins(Seed seed, int chunk);
 		static int generateChunk(Seed seed, int chunk);
-        static int generateEnemyType(int chunk);
-		static int generateCoinType(int chunk);
+        static int generateEnemyType(Seed seed,int chunk);
+		static int generateCoinType(Seed seed,int chunk);
 		static phy::Point generateEnemyPosition(Map map,int chunk);
 		static phy::Point generateCoinPosition(Map map,int chunk);
 };
