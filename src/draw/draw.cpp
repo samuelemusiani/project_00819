@@ -14,11 +14,6 @@ void Draw::drawText(int posY, int posX, const char t[]) {
 	mvwprintw(this->screen, posY, posX, t);
 }
 
-//DA TOGLIERE SE NON SERVE PERCHE' CHAR* DOVREBBE ESSERE QUELLA SOPRA
-/*void Draw::drawText(int posY, int posX, const char* t) {
-	mvwprintw(this->screen, posY, posX, t);
-}*/
-
 void Draw::drawBox(){
 	box(this->screen, 0, 0);
 }
@@ -50,9 +45,8 @@ void Draw::drawPlayer(phy::Point p) {
 }
 
 void Draw::drawEntity(Entity entity) {
-	this->drawText(OFFSET - entity.get_y(), entity.get_x(), std::to_string(entity.get_id()).c_str());
+	mvwprintw(this->screen, OFFSET - entity.get_y(), entity.get_x(), entity.get_id().c_str());
 }
-
 
 void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione del primo carattere
 	this->drawText(posY, posX, s);
@@ -103,4 +97,3 @@ void Draw::drawRectagle(int posY, int posX, int length, int width) {
 	mvwaddch(this->screen, posY, posX+width, ACS_URCORNER);
 	mvwaddch(this->screen, posY+length, posX+width, ACS_LRCORNER);
 }
-

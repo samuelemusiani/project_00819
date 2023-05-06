@@ -33,7 +33,6 @@ class Draw : public Screen{
 		static int centerX(nostd::string text);
 		void drawRectagle(int posY, int posX, int length, int width);
 
-		//public o no?
 		void drawEntity(Entity entity);
 
 
