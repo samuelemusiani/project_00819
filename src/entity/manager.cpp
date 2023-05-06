@@ -105,9 +105,9 @@ void Manager::set_chunk(int Chunk, Map map) {
     this->current_chunk = Chunk;
   } else if (this->current_chunk > Chunk) {
     for(int i = 0; i < map.getEnemies(Chunk); i ++)
-      this->add_enemy(this->current_chunk, EnemyType[1/*Random::generateEnemyType()*/], phy::Point(i,i)/*Random::generateEnemyPosition(map)*/, i%2 == 0 ? true : false);
+      this->add_enemy(this->current_chunk, ENEMY_TYPE1, phy::Point(10+i,10+i), true);//EnemyType[1/*Random::generateEnemyType()*/], phy::Point(i,i)/*Random::generateEnemyPosition(map)*/, i%2 == 0 ? true : false);
   	for(int i = 0; i < map.getCoins(Chunk); i ++)
-      this->add_coin(this->current_chunk, CoinType[1/*Random::generateCoinType()*/], phy::Point(2*i,2*i)/*Random::generateCoinPosition(map)*/);
+      this->add_coin(this->current_chunk, COIN_TYPE1, phy::Point(5+i,5+i));//CoinType[1/*Random::generateCoinType()*/], phy::Point(2*i,2*i)/*Random::generateCoinPosition(map)*/);
     //bullets
   }
 }

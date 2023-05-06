@@ -232,8 +232,8 @@ void Game::start()
 
 		//qui vengono chiamate draw dei nemici e monete
 		manager.set_chunk(current_chunk, map);
-		manager.move_enemies(0);
 		manager.print_entity(screen);
+		//manager.move_enemies(0);
 
 		screen.drawMap(map, current_chunk);
 		screen.drawText(2, 1, std::to_string(current_chunk));
