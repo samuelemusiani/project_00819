@@ -5,6 +5,8 @@
 #include "../draw/draw.hpp"
 #include "../maps/map.hpp"
 
+#include "../../etc/logs/logs.hpp"
+
 #ifndef ENTITY_MANAGER
 #define ENTITY_MANAGER
 
@@ -54,6 +56,8 @@ public:
   bool is_there_an_entity_in_point(int Chunk, phy::Point point);
   pnemici getAllEnemiesInChunk(int Chunk);
   pmonete getAllCoinsInChunk(int Chunk);
+
+  void print_enemy_list();
 
 };
 #endif

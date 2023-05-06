@@ -3,7 +3,8 @@
 Manager::Manager (Map map)
 {
   this->map = map;
-  this->set_chunk(-1, this->map);
+  this->current_chunk = -1;
+  //this->set_chunk(-1, this->map);
   this->Global_Entities = 0;
   this->Global_Coins = 0;
   this->Global_Enemies = 0;
@@ -101,15 +102,14 @@ void Manager::collect_coin(int Chunk, Coin coin) {
 }
 
 void Manager::set_chunk(int Chunk, Map map) {
-  if(this->current_chunk < Chunk) {
-    this->current_chunk = Chunk;
-  } else if (this->current_chunk > Chunk) {
-    for(int i = 0; i < map.getEnemies(Chunk); i ++)
-      this->add_enemy(this->current_chunk, ENEMY_TYPE1, phy::Point(10+i,10+i), true);//EnemyType[1/*Random::generateEnemyType()*/], phy::Point(i,i)/*Random::generateEnemyPosition(map)*/, i%2 == 0 ? true : false);
+  if (this->current_chunk < Chunk) {
+    for(int i = 0; i < 10; i ++)
+      this->add_enemy(Chunk, ENEMY_TYPE2, phy::Point(10+i,10+i), true);//EnemyType[1/*Random::generateEnemyType()*/], phy::Point(i,i)/*Random::generateEnemyPosition(map)*/, i%2 == 0 ? true : false);
   	for(int i = 0; i < map.getCoins(Chunk); i ++)
-      this->add_coin(this->current_chunk, COIN_TYPE1, phy::Point(5+i,5+i));//CoinType[1/*Random::generateCoinType()*/], phy::Point(2*i,2*i)/*Random::generateCoinPosition(map)*/);
+      this->add_coin(Chunk, COIN_TYPE1, phy::Point(5+i,5+i));//CoinType[1/*Random::generateCoinType()*/], phy::Point(2*i,2*i)/*Random::generateCoinPosition(map)*/);
     //bullets
   }
+  this->current_chunk = Chunk;
 }
 
 //time is in dec sec (sec*10^-1)
@@ -213,3 +213,17 @@ pnemici Manager::delete_el(pproiettile p, Bullet bullet) {
   }
 }
 */
+
+//ONLY FOR DEBUGING
+
+void Manager::print_enemy_list() {
+  pnemici p = this->Enemies[this->current_chunk];
+  int c = 0;
+  while (p != nullptr) {
+    deb::debug(p->val.get_id(), "type");
+    deb::debug(p->val.get_point(), "spawning point");
+    p = p->next;
+    c++;
+  }
+  deb::debug(c, "number of enemies");
+}
