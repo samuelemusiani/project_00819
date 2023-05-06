@@ -6,7 +6,8 @@
 #include "screen.hpp"
 #include "../../etc/nostd/vector.hpp"
 #include "../../etc/nostd/string.hpp"
-#include "../entity/manager.hpp"
+#include "../entity/entity.hpp"
+
 
 
 #define OFFSET 42
@@ -17,8 +18,6 @@
 class Draw : public Screen{
 	private:
 		void drawPlatform(nostd::vector<Platform> plat);
-		void drawEnemy(Enemy enemy);
-		void drawCoin(Coin coin);
 
 	public:
 		void drawText(int posY, int posX, nostd::string s);
@@ -33,6 +32,9 @@ class Draw : public Screen{
 		void drawSquareAround(nostd::string s, int posY, int posX);
 		static int centerX(nostd::string text);
 		void drawRectagle(int posY, int posX, int length, int width);
+
+		//public o no?
+		void drawEntity(Entity entity);
 
 
 };

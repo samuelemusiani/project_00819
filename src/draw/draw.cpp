@@ -14,6 +14,11 @@ void Draw::drawText(int posY, int posX, const char t[]) {
 	mvwprintw(this->screen, posY, posX, t);
 }
 
+//DA TOGLIERE SE NON SERVE PERCHE' CHAR* DOVREBBE ESSERE QUELLA SOPRA
+/*void Draw::drawText(int posY, int posX, const char* t) {
+	mvwprintw(this->screen, posY, posX, t);
+}*/
+
 void Draw::drawBox(){
 	box(this->screen, 0, 0);
 }
@@ -44,12 +49,8 @@ void Draw::drawPlayer(phy::Point p) {
 	mvwprintw(this->screen, OFFSET - p.get_yPosition(), p.get_xPosition() + 1, "@");
 }
 
-void Draw::drawEnemy(Enemy enemy) {
-	this->drawText(OFFSET - enemy.get_y(), enemy.get_x(), enemy.get_id());
-}
-
-void Draw::drawCoin(Coin coin) {
-	this->drawText(OFFSET - coin.get_y(), coin.get_x(), coin.get_id());
+void Draw::drawEntity(Entity entity) {
+	this->drawText(OFFSET - entity.get_y(), entity.get_x(), std::to_string(entity.get_id()).c_str());
 }
 
 

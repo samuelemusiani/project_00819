@@ -43,7 +43,7 @@ char Entity::get_id() {
 
 }
 
-phy::Point Entity::get_pos() {
+phy::Point Entity::get_point() {
 
   return(this->p);
 

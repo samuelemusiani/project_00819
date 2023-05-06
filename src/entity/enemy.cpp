@@ -45,3 +45,27 @@ bool Enemy::canMove(Chunk chunk) {
 
   //check if there is a player or smth else
 }
+
+bool Enemy::isItAlive() {
+
+  return(this->isAlive);
+
+}
+
+/*DIRECTION_POSSIBILITY Enemy::get_direction() {
+
+  return(this->dir);
+
+}*/
+
+void Enemy::set_direction(bool dir) {
+
+  this->dir = dir;
+
+}
+
+bool Enemy::get_direction() {
+
+  return(this->dir);
+
+}

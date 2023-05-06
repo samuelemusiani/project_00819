@@ -3,6 +3,7 @@
 
 #include <ncurses.h>
 #include "../draw/draw.hpp"
+#include "../entity/manager.hpp"
 
 
 

@@ -1,8 +1,9 @@
 #include "manager.hpp"
 
-Manager::Manager ()
+Manager::Manager (Map map)
 {
-  this->set_chunk(-1);
+  this->map = map;
+  this->set_chunk(-1, this->map);
   this->Global_Entities = 0;
   this->Global_Coins = 0;
   this->Global_Enemies = 0;
@@ -28,8 +29,8 @@ pmonete Manager::getAllCoinsInChunk(int Chunk) {
   return(p);
 }
 
-void Manger::add_enemy(int Chunk, Enemy enemy, phy::Point p, DIRECTION_POSSIBILITY dir) {
-  enemy.set_position(p);
+void Manager::add_enemy(int Chunk, Enemy enemy, phy::Point p, bool dir) {
+  enemy.set_point(p);
   enemy.set_direction(dir);
 
   if(Enemies.size() <= Chunk)
@@ -41,7 +42,7 @@ void Manger::add_enemy(int Chunk, Enemy enemy, phy::Point p, DIRECTION_POSSIBILI
 }
 
 void Manager::add_coin(int Chunk, Coin coin, phy::Point p) {
-  coin.set_position(p);
+  coin.set_point(p);
 
   if(Coins.size() <= Chunk)
 	  Coins.push_back(nullptr);
@@ -82,9 +83,9 @@ void Manager::head_insert(int Chunk, Coin coin) {
 }
 
 void Manager::kill_entity(int Chunk, Enemy enemy) {
-  pnemici tmp = this->Entites[Chunk];
-  while (tmp != NULL || enemy.get_pos() == tmp->val.get_pos()) {
-    tmp.set_state(false);
+  pnemici tmp = this->Enemies[Chunk];
+  while (tmp != NULL || enemy.get_point() == tmp->val.get_point()) {
+    tmp->val.set_state(false);
   }
   this->Global_Enemies--;
   this->Global_Entities--;
@@ -92,51 +93,50 @@ void Manager::kill_entity(int Chunk, Enemy enemy) {
 
 void Manager::collect_coin(int Chunk, Coin coin) {
   pmonete tmp = this->Coins[Chunk];
-  while (tmp != NULL || coin.get_pos() == tmp->val.get_pos()) {
-    this->set_state(true);
+  while (tmp != NULL || coin.get_point() == tmp->val.get_point()) {
+    tmp->val.set_state(true);
   }
   this->Global_Coins--;
   this->Global_Entities--;
 }
 
 void Manager::set_chunk(int Chunk, Map map) {
-  this->map = map;
   if(this->current_chunk < Chunk) {
     this->current_chunk = Chunk;
   } else if (this->current_chunk > Chunk) {
-    for(int i = 0; i < map.getEnemies(Chunk); i ++) {}
-      //manager.add_enemy(this->current_chunk, Random::generateEnemyType(), Random::generateEnemyPosition(map), i%2 == 0 ? dx : sx);
-  	for(int i = 0; i < map.getCoins(Chunk); i ++) {}
-      //manager.add_coin(this->current_chunk, Random::generateCoinType(), Random::generateCoinPosition(map));
+    for(int i = 0; i < map.getEnemies(Chunk); i ++)
+      this->add_enemy(this->current_chunk, EnemyType[1/*Random::generateEnemyType()*/], phy::Point(i,i)/*Random::generateEnemyPosition(map)*/, i%2 == 0 ? true : false);
+  	for(int i = 0; i < map.getCoins(Chunk); i ++)
+      this->add_coin(this->current_chunk, CoinType[1/*Random::generateCoinType()*/], phy::Point(2*i,2*i)/*Random::generateCoinPosition(map)*/);
     //bullets
   }
 }
 
-//time is in ms
+//time is in dec sec (sec*10^-1)
 void Manager::move_enemies(int time) {
   pnemici tmp = this->Enemies[this->current_chunk];
-  Chunk chunk = map.get_chunk(this->current_chunk))
+  Chunk chunk = map.get_chunk(this->current_chunk);
   while(tmp != NULL) {
-    if(tmp->val.isAlive) {
-      if(tmp->val.canMove(chunk) {
-        if(tmp->val.direction == dx) tmp->val.p += phy::Point(1,0); //se non compila cambiare il +=
-        else tmp->val.p += phy::Point(-1,0);
-      } else tmp->val.dir = tmp->val.dir ==  dx ? sx : dx;
+    if(tmp->val.isItAlive()) {
+      if(tmp->val.canMove(chunk)) {
+        if(tmp->val.get_direction() == true) tmp->val.set_point(tmp->val.get_point() + phy::Point(1,0)); //se non compila cambiare il +=
+        else tmp->val.set_point(tmp->val.get_point() + phy::Point(-1,0));
+      } else tmp->val.set_direction(tmp->val.get_direction() ==  true ? false : true);
     }
     tmp = tmp->next;
   }
 }
 
-void Manager::print_entity() {
+void Manager::print_entity(Draw screen) {
   pnemici p = this->Enemies[this->current_chunk];
 	while(p != NULL) {
-		drawEnemy(p->val);
+		screen.drawEntity(p->val);
 		p = p->next;
 	}
 
-pmonete q = this->Coins[this->current_chunk];
+  pmonete q = this->Coins[this->current_chunk];
 	while(q != NULL) {
-		drawCoin(p->val);
+		screen.drawEntity(q->val);
 		q = q->next;
 	}
 }
@@ -144,15 +144,16 @@ pmonete q = this->Coins[this->current_chunk];
 
 bool Manager::is_there_an_entity(Map map, int Chunk, int plat) { //check se c'è un nemico sulla piattaforma
   bool check = false;
-  Platform platform = map.get_chunk(Chunk).get_platforms(plat);
+  Platform platform = map.get_chunk(Chunk).get_platforms()[plat];
+
   int start = platform.get_position().get_xPosition();
-  int end = paltform.get_position().get_xPosition() + platform.get_length();
+  int end = platform.get_position().get_xPosition() + platform.get_length();
   pnemici p = getAllEnemiesInChunk(Chunk);
   pmonete q = getAllCoinsInChunk(Chunk);
 
   while(p != NULL && !check) {
-    if(p->val.p.get_y() == platform.get_position().get_yPosition()) {
-      if(p->val.p.get_x() >= start.get_xPosition() && p->val.p.get_x() <= end.get_xPosition()) {
+    if(p->val.get_y() == platform.get_position().get_yPosition()) {
+      if(p->val.get_x() >= start && p->val.get_x() <= end) {
         check = true;
       }
     }
@@ -160,8 +161,8 @@ bool Manager::is_there_an_entity(Map map, int Chunk, int plat) { //check se c'è
   }
 
   while(q != NULL && !check) {
-    if(q->val.p.get_y() == platform.get_yPosition()) {
-      if(q->val.p.get_x() >= start.get_xPosition() && q->val.p.get_x() <= end.get_xPosition()) {
+    if(q->val.get_y() == platform.get_position().get_yPosition()) {
+      if(q->val.get_x() >= start && q->val.get_x() <= end) {
         check = true;
       }
     }
@@ -178,7 +179,7 @@ NON SERVE PER I NEMICI O MONETE MA FORSE SERVIRA' PER I BULLETS
 pnemici Manager::delete_el(pproiettile p, Bullet bullet) {
   if(p == NULL) {
     return(p);
-  } else if (p->val.get_id() == bullet.get_id() && p->val.get_pos() == bullet.get_pos()) { //controllo l'id e la pos dell'oggetto da eliminare
+  } else if (p->val.get_id() == bullet.get_id() && p->val.get_point() == bullet.get_point()) { //controllo l'id e la pos dell'oggetto da eliminare
     pproiettile tmp = p->next;
     delete p;
     p = NULL;

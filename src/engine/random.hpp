@@ -10,7 +10,6 @@
 
 #include "seed.hpp"
 #include "../maps/map.hpp"
-
 #include <cstdlib>
 
 
@@ -28,5 +27,6 @@ class Random {
 		static int generateCoinType(Seed seed,int chunk);
 		static phy::Point generateEnemyPosition(Map map,int chunk);
 		static phy::Point generateCoinPosition(Map map,int chunk);
+
 };
 #endif

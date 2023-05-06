@@ -11,4 +11,8 @@ extern Coin COIN_TYPE1;
 extern Coin COIN_TYPE2;
 extern Coin COIN_TYPE3;
 
+extern Enemy EnemyType[3];
+extern Coin CoinType[3];
+
+
 #endif
