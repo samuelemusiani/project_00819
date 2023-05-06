@@ -233,13 +233,13 @@ nostd::string& nostd::string::operator+= (const nostd::string& rhs)
 	char* tmp_buffer = new char[tmp_size + 1];
 
 	std::memcpy(tmp_buffer, this->_buffer, this->_size * sizeof(char));
-	std::memcpy(tmp_buffer + this->_size * sizeof(char), rhs._buffer, rhs._size * sizeof(char));
+	std::memcpy(tmp_buffer + this->_size, rhs._buffer, rhs._size * sizeof(char));
 
 	tmp_buffer[tmp_size] = '\0';
 
 	delete[] this->_buffer;
 	this->_buffer = tmp_buffer;
-	this->_size += tmp_size;
+	this->_size = tmp_size;
 	this->_capacity = this->_size + 1;
 	return *this;
 }
