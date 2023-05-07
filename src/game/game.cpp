@@ -146,6 +146,8 @@ void Game::start()
 
 	//inizialize manager
 	Manager manager = Manager(map);
+	//time for moving
+	int time = 0;
 
 	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
 	bool exit = false;
@@ -237,7 +239,8 @@ void Game::start()
 		//manager.print_enemy_list();
 
 		manager.print_entity(screen);
-		//manager.move_enemies(0);
+		if(time == 1001) time = 0;
+		manager.move_enemies(time);
 
 		screen.drawMap(map, current_chunk);
 		screen.drawText(2, 1, std::to_string(current_chunk));

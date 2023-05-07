@@ -39,10 +39,15 @@ void Enemy::set_state(bool s) {
 }
 
 bool Enemy::canMove(Chunk chunk) {
-  if(chunk.is_there_a_platform(this->p + phy::Point(-1, -1)) || chunk.is_there_a_platform(this->p + phy::Point(1, -1))) {
-    return(false);
-  } else return(true);
-
+  if(this->dir == true) {
+    if(chunk.is_there_a_platform(this->p + phy::Point(1, -1))) {
+      return(true);
+    } else return(false);
+  } else {
+    if (chunk.is_there_a_platform(this->p + phy::Point(-1, -1))) {
+      return(true);
+    } else return(false);
+  }
   //check if there is a player or smth else
 }
 

@@ -104,7 +104,7 @@ void Manager::collect_coin(int Chunk, Coin coin) {
 
 void Manager::set_chunk(int Chunk, Map map) {
   if (this->current_chunk < Chunk) {
-    for(int i = 0; i < 10; i ++)
+    for(int i = 0; i < map.getEnemies(Chunk); i ++)
       //this->add_enemy(Chunk, ENEMY_TYPE2, phy::Point(10+i,10+i), true);//EnemyType[1/*Random::generateEnemyType()*/], phy::Point(i,i)/*Random::generateEnemyPosition(map)*/, i%2 == 0 ? true : false);
       this->add_enemy(Chunk, EnemyType[Random::generateEnemyType(this->seed, Chunk)], Random::generateEnemyPosition(map, Chunk), i%2 == 0 ? true : false);
     for(int i = 0; i < map.getCoins(Chunk); i ++)
@@ -117,18 +117,22 @@ void Manager::set_chunk(int Chunk, Map map) {
 }
 
 //time is in dec sec (sec*10^-1)
-void Manager::move_enemies(int time) {
-  pnemici tmp = this->Enemies[this->current_chunk];
-  Chunk chunk = map.get_chunk(this->current_chunk);
-  while(tmp != NULL) {
-    if(tmp->val.isItAlive()) {
-      if(tmp->val.canMove(chunk)) {
-        if(tmp->val.get_direction() == true) tmp->val.set_point(tmp->val.get_point() + phy::Point(1,0)); //se non compila cambiare il +=
-        else tmp->val.set_point(tmp->val.get_point() + phy::Point(-1,0));
-      } else tmp->val.set_direction(tmp->val.get_direction() ==  true ? false : true);
+void Manager::move_enemies(int& time) {
+  if(time == 1000) {
+    //this->print_enemy_list();
+    pnemici tmp = this->Enemies[this->current_chunk];
+    Chunk chunk = map.get_chunk(this->current_chunk);
+    while(tmp != NULL) {
+      if(tmp->val.isItAlive()) {
+        if(tmp->val.canMove(chunk)) {
+          deb::debug(tmp->val.get_direction(), "direzione");
+          if(tmp->val.get_direction() == true) tmp->val.set_point(tmp->val.get_point() + phy::Point(1,0));
+          else tmp->val.set_point(tmp->val.get_point() + phy::Point(-1,0));
+        } else {deb::debug(tmp->val.get_direction(), "sono dentro all'else del cambio direzione"); tmp->val.set_direction(!tmp->val.get_direction());}
+      }
+      tmp = tmp->next;
     }
-    tmp = tmp->next;
-  }
+  } else time += 1;
 }
 
 void Manager::print_entity(Draw screen) {
@@ -225,7 +229,7 @@ void Manager::print_enemy_list() {
   int c = 0;
   while (p != nullptr) {
     deb::debug(p->val.get_id(), "type");
-    deb::debug(p->val.get_point(), "spawning point");
+    deb::debug(p->val.get_point(), "current point");
     p = p->next;
     c++;
   }
