@@ -158,6 +158,7 @@ void Game::play(){
 	screen.drawPlayer(player.get_position());
 	screen.refreshScreen();
 	screen.nodel(true);
+	deb::debug(player.get_position(), "player position");
 
 	bool exit = false;
 	screen.nodel(true);
@@ -286,14 +287,17 @@ void Game::resume()
 		int selected = 0;
 		bool choose = false;
 		bool exit = false;
+		nostd::vector<nostd::string> Maps_Date = File::getNames();
 		
 		while (!choose && !exit){
 			for (int i = 0; i < savedMaps.size(); i++)
 			{
-				screen.drawSquareAround(savedMaps[i] + " " + savedDate[i], 13 + 4*i, screen.centerX(savedMaps[i] + " " + savedDate[i]));
+				savedDate[i] = " " + savedDate[i];
+				Maps_Date[i] += savedDate[i];
+				screen.drawSquareAround(Maps_Date[i], 13 + 4*i, screen.centerX(Maps_Date[i]));
 			}
 			screen.attrOn(COLOR_PAIR(1));
-			screen.drawText(13 + 4*selected, screen.centerX(savedMaps[selected]+ " " + savedDate[selected]), savedMaps[selected]);
+			screen.drawText(13 + 4*selected, screen.centerX(Maps_Date[selected]), Maps_Date[selected]);
 			screen.attrOff(COLOR_PAIR(1));
 
 			switch (screen.getinput())
@@ -320,7 +324,10 @@ void Game::resume()
 		if (choose) {
 			this->map = File::getMap(savedMaps[selected]);
 			this->current_chunk = File::getChunk(savedMaps[selected]);
+			deb::debug(File::getChunk(savedMaps[selected]));
+			deb::debug(savedMaps[selected]);
 			this->player.set_position(File::getPoint(savedMaps[selected]));
+			deb::debug(File::getPoint("lele"));
 			play();
 		}
 	}
