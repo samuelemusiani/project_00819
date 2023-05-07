@@ -234,12 +234,13 @@ void Game::start()
 
 		//qui vengono chiamate draw dei nemici e monete
 		manager.set_chunk(current_chunk, map);
+		manager.print_entity(screen);
 
 		//debugging
-		//manager.print_enemy_list();
-
-		manager.print_entity(screen);
 		if(time == 1001) time = 0;
+		//if(time%100==0) deb::debug(time, "time");
+		//if(time%1000==0) manager.print_enemy_list();
+
 		manager.move_enemies(time);
 
 		screen.drawMap(map, current_chunk);
