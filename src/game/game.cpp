@@ -82,6 +82,7 @@ void Game::run()
 		case 27:
 			{
 				if (exitGame() == true) exit = true;
+				break;
 			}
 		}
 		
@@ -129,6 +130,7 @@ bool Game::exitGame(){
 		
 	}
 	if (selected == 0) return true;
+	else return false;
 }
 
 void Game::start()
