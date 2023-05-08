@@ -1,87 +1,135 @@
 #include "save.hpp"
 
 void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
+    bool nosaved = false;
     if (File::isAlreadySaved(map)) {
         saveGame(screen);
     }
     else {
-    screen.eraseScreen();
-    screen.drawText(16, 65, "Insert the name of the file: ");
-    screen.drawRectagle(19, 64, 2, 30);
-    screen.refreshScreen();
-    int ch;
-    bool saved = false; 
-    while (!saved) {
-        ch = screen.getinput();
-        if (ch == 127 || ch == KEY_BACKSPACE) { // 127 on mac, KEY_BACKSPACE on linux
-            if (!nome.empty()) {
-                nome.pop_back();
-                screen.eraseScreen();
-                screen.drawText(16, 65, "Insert the name of the file: ");
-                screen.drawRectagle(19, 64, 2, 30);
-                screen.drawText(20, 66, nome);
-                screen.refreshScreen();
+        bool exit = false;
+        // Check if there are already 5 saves
+        if (File::countSaves() > 4) {
+            bool deleted = false;
+            int selected = 0;
+            while (!deleted && !exit){
+            screen.eraseScreen();
+            screen.drawText(3, Draw::centerX("You can't create more than 5 saves"), "You can't create more than 5 saves");
+            screen.drawText(5, Draw::centerX("Delete one your old saved map"), "Delete one your old saved map");
+            nostd::vector<nostd::string> savedMaps = File::getNames();
+            nostd::vector<nostd::string> savedDate = File::getLastSaves();
+            for (int i = 0; i < savedMaps.size(); i++)
+                {
+                    screen.drawSquareAround(savedMaps[i] + " " + savedDate[i], 13 + 4*i, screen.centerX(savedMaps[i] + " " + savedDate[i]));
+                }
+
+            screen.attrOn(COLOR_PAIR(1));
+            screen.drawText(13 + 4*selected, screen.centerX(savedMaps[selected] + " " + savedDate[selected]), savedMaps[selected] + " " + savedDate[selected]);
+            screen.attrOff(COLOR_PAIR(1));
+
+            switch (screen.getinput())
+            {
+                case KEY_UP:
+                    if (selected == 0) selected = savedMaps.size() - 1;
+                    else selected = selected - 1;
+                    break;
+                case KEY_DOWN:
+                    if (selected == savedMaps.size() - 1) selected = 0;
+                    else selected = selected + 1;
+                    break;
+                case 10:
+                    File::deleteSave(savedMaps[selected]);
+                    deleted = true;
+                    break;
+                case 27:
+                    exit = true;
+                    nosaved = true;
+                    break;
+                default:
+                    break;
             }
-        } 
-        else if (nome.length() == 27) {
-            screen.clearLine(23, 0);
-            screen.drawText(23, Draw::centerX("Max length reached"),  "Max length reached");
-            screen.refreshScreen();
-        }
-        else if (nome.empty() == true && ch == 10) {
-            screen.clearLine(23, 0);
-            screen.drawText(23, Draw::centerX("Insert a name"),  "Insert a name");
-            screen.refreshScreen();
-        }
-        else {
-            if (isalnum(ch) && ch != KEY_DOWN && ch != KEY_UP && ch != KEY_LEFT && ch != KEY_RIGHT || ch == 32 ){ // 32 = space
-                nome.push_back(ch);
-                screen.drawText(20, 66, nome);
-                screen.refreshScreen();
             }
-            else 
-                {   
-                    screen.clearLine(23, 0);
-                    screen.drawText(23, Draw::centerX("Only alphanumeric characters"),  "Only alphanumeric characters");
-                    screen.refreshScreen();
+        }
+        // SAVING PROMPT
+        if (!exit){
+            screen.eraseScreen();
+            screen.drawText(16, 65, "Insert the name of the file: ");
+            screen.drawRectagle(19, 64, 2, 30);
+            screen.refreshScreen();
+            int ch;
+            bool saved = false; 
+            while (!saved) {
+                ch = screen.getinput();
+                if (ch == 127 || ch == KEY_BACKSPACE) { // 127 on mac, KEY_BACKSPACE on linux
+                    if (!nome.empty()) {
+                        nome.pop_back();
+                        screen.eraseScreen();
+                        screen.drawText(16, 65, "Insert the name of the file: ");
+                        screen.drawRectagle(19, 64, 2, 30);
+                        screen.drawText(20, 66, nome);
+                        screen.refreshScreen();
                     }
-        }
-
-        if (nome.length() > 0 && nome.length() < 27) {
-            
-            if (isalnum(ch)){
-                screen.clearLine(23, 0);
-                screen.attrOn(COLOR_PAIR(1));
-                screen.drawText(23, Draw::centerX("Press enter to confirm"), "Press enter to confirm");
-                screen.attrOff(COLOR_PAIR(1));
-                screen.refreshScreen();
-            }
-            if (ch == 10)  {
-                
-                screen.clearLine(23, 0);
-                screen.refreshScreen();
-                // Qui chiamare la funziona per salvare e se salvato con successo printare File saved
-                // se ci sono errori ritornati dalla funzione per salvare printare Error saving file
-                
-                // controllare se non esiste già un file con lo stesso nome
-                if (File::nameAlreadyInUse(nome)) screen.drawText(23, Draw::centerX("Name already in use"), "Name already in use");
+                } 
+                else if (nome.length() == 27) {
+                    screen.clearLine(23, 0);
+                    screen.drawText(23, Draw::centerX("Max length reached"),  "Max length reached");
+                    screen.refreshScreen();
+                }
+                else if (nome.empty() == true && ch == 10) {
+                    screen.clearLine(23, 0);
+                    screen.drawText(23, Draw::centerX("Insert a name"),  "Insert a name");
+                    screen.refreshScreen();
+                }
                 else {
-                    saved = true;
-                screen.drawText(23, Draw::centerX("File saved"), "File saved");
+                    if (isalnum(ch) && ch != KEY_DOWN && ch != KEY_UP && ch != KEY_LEFT && ch != KEY_RIGHT || ch == 32 ){ // 32 = space
+                        nome.push_back(ch);
+                        screen.drawText(20, 66, nome);
+                        screen.refreshScreen();
+                    }
+                    else 
+                        {   
+                            screen.clearLine(23, 0);
+                            screen.drawText(23, Draw::centerX("Only alphanumeric characters"),  "Only alphanumeric characters");
+                            screen.refreshScreen();
+                            }
+                }
 
-                screen.attrOn(COLOR_PAIR(1));
-                screen.drawText(25, Draw::centerX("Press enter to exit"), "Press enter to exit");
-                screen.attrOff(COLOR_PAIR(1));
-                screen.refreshScreen();
-                screen.getinput();
-                screen.eraseScreen();
+                if (nome.length() > 0 && nome.length() < 27) {
+                    
+                    if (isalnum(ch)){
+                        screen.clearLine(23, 0);
+                        screen.attrOn(COLOR_PAIR(1));
+                        screen.drawText(23, Draw::centerX("Press enter to confirm"), "Press enter to confirm");
+                        screen.attrOff(COLOR_PAIR(1));
+                        screen.refreshScreen();
+                    }
+                    if (ch == 10)  {
+                        
+                        screen.clearLine(23, 0);
+                        screen.refreshScreen();
+                        // Qui chiamare la funziona per salvare e se salvato con successo printare File saved
+                        // se ci sono errori ritornati dalla funzione per salvare printare Error saving file
+                        
+                        // controllare se non esiste già un file con lo stesso nome
+                        if (File::nameAlreadyInUse(nome)) screen.drawText(23, Draw::centerX("Name already in use"), "Name already in use");
+                        else {
+                            saved = true;
+                        screen.drawText(23, Draw::centerX("File saved"), "File saved");
+
+                        screen.attrOn(COLOR_PAIR(1));
+                        screen.drawText(25, Draw::centerX("Press enter to exit"), "Press enter to exit");
+                        screen.attrOff(COLOR_PAIR(1));
+                        screen.refreshScreen();
+                        screen.getinput();
+                        screen.eraseScreen();
+                        }
+                    }
                 }
             }
         }
+    
     }
-    }
-    File::saveMap(map, chunk, PlayerPos, nome);
-    this->alreadySaved = true; // Forse ora è inutile perchè c'è già la funzione in file
+    if (!nosaved) File::saveMap(map, chunk, PlayerPos, nome);
+    
 }
 
 void Save::saveGame(Draw screen){
