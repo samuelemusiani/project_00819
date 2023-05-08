@@ -347,7 +347,7 @@ void File::deleteSave(nostd::string name)
 				nostd::getline(file, buff);
 				tmp << buff << "\n";
 			}
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 7; i++)
 				nostd::getline(file, buff);
 			while (nostd::getline(file, buff))
 				tmp << buff << "\n";
