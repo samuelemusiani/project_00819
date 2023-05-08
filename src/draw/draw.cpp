@@ -6,8 +6,13 @@ void Draw::drawText(int posY, int posX, nostd::string s) {
 	mvwprintw(this->screen, posY, posX, s.c_str());
 }
 
-void Draw::drawText(int posY, int posX, std::string s) {
-	mvwprintw(this->screen, posY, posX, s.c_str());
+void Draw::drawUpperText(int posY, int posX, nostd::string s) {
+	for (int i = 0; i < s.length(); i++)
+		mvwaddch(this->screen, posY, posX + i, s[i] + 'A' - 'a');
+}
+
+void Draw::drawText(int posY, int posX, const char s) {
+	mvwaddch(this->screen, posY, posX, s);
 }
 
 void Draw::drawText(int posY, int posX, const char t[]) {
@@ -74,9 +79,13 @@ void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione d
 
 }
 
-
 int Draw::centerX(nostd::string text){
 	int x = 75 - (strlen(text.c_str()) / 2);
+	return x;
+}
+
+int Draw::centerX(const char* text){
+	int x = 75 - (strlen(text) / 2);
 	return x;
 }
 
@@ -97,9 +106,20 @@ void Draw::drawRectagle(int posY, int posX, int length, int width) {
 }
 
 
+int Draw::center(nostd::string t){
+	return (t.length()/2);
+}
+
+Draw Draw::newSubWindow(int height, int width, int posY, int posX) {
+	Draw d;
+	d.setWin(derwin(this->screen, height, width, posY, posX));
+	keypad(d.getScreen(), true);
+	return d;
+}
+
 Draw Draw::newWindow(int height, int width, int posY, int posX) {
 	Draw d;
-	d.setWin(newwin(height, width, posY + 1, posX));
+	d.setWin(newwin(height, width, posY, posX));
 	keypad(d.getScreen(), true);
 	return d;
 }

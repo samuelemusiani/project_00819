@@ -3,7 +3,9 @@
 
 #include <ncurses.h>
 #include "../draw/draw.hpp"
-
+#include "../physics/body.hpp"
+#include "../physics/point.hpp"
+#include "../physics/vector.hpp"
 
 
 class Game
@@ -11,15 +13,18 @@ class Game
 	private:
 		Draw screen;
 		Draw stats_scr;
-		int current_chunk;
+		int current_chunk = 0;
 		int jump = 0;
 		int coins = 0;
 		int heart = 10;
+		Map map;
+		phy::Body player;
 	public:
 		Game();
 		~Game();
 		void run();
 		void start();
+		void play();
 		void resume();
 		bool exitGame();
 
@@ -27,7 +32,8 @@ class Game
 		int setDifficulty();
 		void stats();
 
-};
+		bool pauseGame();
 
+};
 
 #endif

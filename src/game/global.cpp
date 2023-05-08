@@ -1,5 +1,5 @@
 #include "global.hpp"
-
+#include "../../etc/nostd/string.hpp"
 
 nostd::string SETTINGS_CONTROL_KEYS[8];
 int SETTINGS_PRESSURE_CALIBRATION;
