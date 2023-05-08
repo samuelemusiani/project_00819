@@ -160,7 +160,6 @@ void Game::play(){
 	screen.nodel(true);
 	int cumulative = 0;
 	int count_not_key = 0;
-	current_chunk = 0;
 	int which_key = 0;
 	while (!exit){
 		stats();
