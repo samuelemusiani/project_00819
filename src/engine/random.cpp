@@ -52,9 +52,9 @@ int Random::generateChunk(Seed seed, int chunk) {
 	}
 }
 
-int Random::generateEnemyType(Seed seed,int chunk)
+int Random::generateEnemyType(Seed seed,int chunk,int num)
 {
-	seedSrand(seed,chunk,23);
+	seedSrand(seed,chunk,27 + num);
     int random = rand() % 100;
     if(random < (60 - chunk*2))
         return 1;
@@ -64,9 +64,9 @@ int Random::generateEnemyType(Seed seed,int chunk)
         return 3;
 }
 
-int Random::generateCoinType(Seed seed,int chunk)
+int Random::generateCoinType(Seed seed,int chunk,int num)
 {
-	seedSrand(seed,chunk,29);
+	seedSrand(seed,chunk,23 + num);
     int random = rand() % 100;
     if(random < (60 - chunk*2))
         return 1;
