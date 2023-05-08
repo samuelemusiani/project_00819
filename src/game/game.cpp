@@ -272,9 +272,11 @@ void Game::play(){
 }
 
 void Game::resume()
-{
+{	
+	bool deleted = false; 
+	do {
 	screen.clearScreen();
-	
+	deleted = false;
 	nostd::vector<nostd::string> savedMaps = File::getNames();
 	nostd::vector<nostd::string> savedDate = File::getLastSaves();
 	if (savedMaps.size() == 0) {
@@ -283,12 +285,14 @@ void Game::resume()
 		screen.getinput();
 	}
 	else {
-		screen.drawText(3, (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
 		int selected = 0;
 		bool choose = false;
 		bool exit = false;
 		
 		while (!choose && !exit){
+			screen.drawText(3, (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
+			screen.drawText(7, (Draw::centerX("Press enter to play")), "Press enter to play");
+			screen.drawText(9, (Draw::centerX("Press 'r' to remove a saved game")), "Press 'r' to remove a saved game");
 			for (int i = 0; i < savedMaps.size(); i++)
 			{
 				screen.drawSquareAround(savedMaps[i] + " " + savedDate[i], 13 + 4*i, screen.centerX(savedMaps[i] + " " + savedDate[i]));
@@ -311,13 +315,18 @@ void Game::resume()
 				case 10:
 					choose = true;
 					break;
+				case 'r':
+					File::deleteSave(savedMaps[selected]);
+					deleted = true;
+					exit = true;
+					break;
 				case 27:
 					exit = true;
 					break;
 				default:
 					break;
 			}
-			screen.refreshScreen();
+			screen.eraseScreen();
 		}
 		if (choose) {
 			this->map = File::getMap(savedMaps[selected]);
@@ -327,6 +336,7 @@ void Game::resume()
 			play();
 		}
 	}
+	} while (deleted);
 }
 
 int Game::setDifficulty()
