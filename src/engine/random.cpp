@@ -110,7 +110,7 @@ phy::Point Random::generateCoinPosition(Map map, int chunk,nostd::vector<phy::Po
 	do {
 		point.set_xPosition(rand() % SCREEN_WIDTH);
 		point.set_yPosition(rand() % SCREEN_HEIGHT);
-	}while(map.get_chunk(chunk).is_there_a_platform(point) || !is_there_an_entity(entityPos,point));
+	}while(map.get_chunk(chunk).is_there_a_platform(point) || is_there_an_entity(entityPos,point));
 	return point;
 }
 
