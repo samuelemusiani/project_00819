@@ -31,8 +31,6 @@ class Draw : public Screen{
 		static int centerX(nostd::string text);
 		static int centerX(const char* text);
 		void drawRectagle(int posY, int posX, int length, int width);
-		Draw newWindow(int height, int width, int posY, int posX);
-		void setWin(WINDOW *win);
 		int center(nostd::string t);
 		Draw newSubWindow(int height, int width, int posY, int posX);
 		Draw newWindow(int height, int width, int posY, int posX);

@@ -13,13 +13,12 @@ class Game
 	private:
 		Draw screen;
 		Draw stats_scr;
-		int current_chunk;
+		int current_chunk = 0;
 		int jump = 0;
 		int coins = 0;
 		int heart = 10;
 		Map map;
 		phy::Body player;
-		int current_chunk = 0;
 	public:
 		Game();
 		~Game();

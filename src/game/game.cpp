@@ -265,7 +265,7 @@ void Game::play(){
 	
 	}
 	screen.nodel(false);
-	stats_scr.eraseScreenNoBox();
+	stats_scr.clearwithoutbox();
 	stats_scr.refreshScreen();
 	stats_scr.deleteWin();	
 	screen.eraseScreen();
@@ -378,8 +378,8 @@ void Game::stats()
 	int posY, posX;
 	screen.size(posY, posX, 44, 150);
 
-	this->stats_scr = screen.newWindow(3, 150, posY - 3, posX);
-	this->stats_scr.eraseScreenNoBox();
+	this->stats_scr = screen.newWindow(3, 150, posY - 2, posX);
+	this->stats_scr.clearwithoutbox();
 
 	this->stats_scr.drawRectagle(1, 0 , 3, 149);
 
@@ -388,14 +388,14 @@ void Game::stats()
 	{
 		this->stats_scr.drawText(2, 10 + i*2, "♥");
 	}
-	this->stats_scr.drawText(2, 50, "Level: " + std::to_string(this->current_chunk));
-	this->stats_scr.drawText(2, 70, "Jump: " + std::to_string(this->jump));
-	this->stats_scr.drawText(2, 90, "Coins: " + std::to_string(this->coins));
+	this->stats_scr.drawText(2, 50, "Level: " + nostd::to_string(this->current_chunk));
+	this->stats_scr.drawText(2, 70, "Jump: " + nostd::to_string(this->jump));
+	this->stats_scr.drawText(2, 90, "Coins: " + nostd::to_string(this->coins));
 	this->stats_scr.refreshScreen();
 }
 
 
-void Game::pauseGame()
+bool Game::pauseGame()
 {
 	screen.nodel(false);
 
@@ -405,9 +405,9 @@ void Game::pauseGame()
 	{
 
 	int posY, posX;
-	screen.size(posY, posX, 44, 150);
+	screen.size(posY, posX, 46, 150);
 	
-	Draw pause = screen.newWindow(44, 60, posY, 90 + posX);
+	Draw pause = screen.newWindow(46, 60, posY, 90 + posX);
 	
 	pause.clearwithoutbox();
 	pause.drawBox();
@@ -460,9 +460,9 @@ void Game::pauseGame()
 		{
 			pause.deleteWin();
 			int posY, posX;
-			screen.size(posY, posX, 44, 150);
+			screen.size(posY, posX, 46, 150);
 			
-			Draw save_scr = screen.newWindow(44, 150, posY, posX);
+			Draw save_scr = screen.newWindow(46, 150, posY, posX);
 
 			save.saveNewGame(save_scr, map, current_chunk, player.get_position());
 			save_scr.eraseScreen();

@@ -106,17 +106,6 @@ void Draw::drawRectagle(int posY, int posX, int length, int width) {
 }
 
 
-Draw Draw::newWindow(int height, int width, int posY, int posX) {
-	Draw d;
-	d.setWin(newwin(height, width, posY + 1, posX));
-	keypad(d.getScreen(), true);
-	return d;
-}
-
-void Draw::setWin(WINDOW *win) {
-	this->screen = win;
-}
-
 int Draw::center(nostd::string t){
 	return (t.length()/2);
 }
