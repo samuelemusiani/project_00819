@@ -13,7 +13,6 @@
 extern int SETTINGS_VOLUME_LEVEL;
 extern int SETTINGS_SENSITIVITY_LEVEL;
 extern nostd::string SETTINGS_CONTROL_KEYS[8];
-extern bool SETTINGS_CALIBRATED;
 extern int SETTINGS_PRESSURE_CALIBRATION;
 
 #endif
