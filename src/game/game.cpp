@@ -150,10 +150,6 @@ void Game::play(){
 
 	screen.drawMap(this->map, 0);
 
-	// Creare un oggetto body, chiamo getposition su body. Passo il punto che mi ritorna alla drawPlayer e la drawPlayer disegna il player in quella posizione
-	player = phy::Body();
-	player.set_position(phy::Point(40, 20));
-	player.set_acceleration(phy::Vector(1, -90));
 
 	screen.drawPlayer(player.get_position());
 	screen.refreshScreen();
@@ -333,6 +329,7 @@ void Game::resume()
 			this->current_chunk = File::getChunk(savedMaps[selected]);
 			deb::debug(savedMaps[selected]);
 			this->player.set_position(File::getPoint(savedMaps[selected]));
+			deb::debug(File::getPoint(savedMaps[selected]));
 			play();
 		}
 	}
