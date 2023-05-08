@@ -129,8 +129,7 @@ bool Game::exitGame(){
 		
 		
 	}
-	if (selected == 0) return true;
-	else return false;
+	return selected == 0;
 }
 
 void Game::start()
