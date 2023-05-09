@@ -105,14 +105,16 @@ void Manager::collect_coin(int Chunk, Coin coin) {
 void Manager::set_chunk(int Chunk, Map map) {
   if (this->current_chunk < Chunk) {
     //deb::debug(map.getEnemies(Chunk), "numero di nemici");
-    for(int i = 0; i < map.getEnemies(Chunk); i ++)
-      //this->add_enemy(Chunk, ENEMY_TYPE2, phy::Point(10+i,10+i), true);//EnemyType[1/*Random::generateEnemyType()*/], phy::Point(i,i)/*Random::generateEnemyPosition(map)*/, i%2 == 0 ? true : false);
-      {
-        this->add_enemy(Chunk, EnemyType[Random::generateEnemyType(this->seed, Chunk)], Random::generateEnemyPosition(map, Chunk), i%2 == 0 ? true : false);
-      }
+
+
+    for(int i = 0; i < map.getEnemies(Chunk); i ++) {
+      deb::debug(i, "sono dentro al for di add_enemy all'indice");
+      this->add_enemy(Chunk, EnemyType[Random::generateEnemyType(this->seed, Chunk, i)], Random::generateEnemyPosition(map, Chunk, this->getAllEntitiesPositions(Chunk)), i%2 == 0 ? true : false);
+      deb::debug("nemico addato con successo");
+    }
+
     for(int i = 0; i < map.getCoins(Chunk); i ++)
-      //this->add_coin(Chunk, COIN_TYPE1, phy::Point(5+i,5+i));//CoinType[1/*Random::generateCoinType()*/], phy::Point(2*i,2*i)/*Random::generateCoinPosition(map)*/);
-      this->add_coin(Chunk, CoinType[Random::generateCoinType(this->seed, Chunk)], Random::generateCoinPosition(map, Chunk));
+      this->add_coin(Chunk, CoinType[Random::generateCoinType(this->seed, Chunk, i)], Random::generateCoinPosition(map, Chunk, this->getAllEntitiesPositions(Chunk)));
     //bullets
   }
   this->current_chunk = Chunk;
@@ -204,6 +206,28 @@ bool Manager::is_there_an_entity_in_point(int Chunk, phy::Point point) {
 
   return(check);
 }
+
+nostd::vector<phy::Point> Manager::getAllEntitiesPositions(int Chunk) {
+  nostd::vector<phy::Point> v;
+  pnemici p = this->Enemies[Chunk];
+  pmonete q = this->Coins[Chunk];
+
+  while (p != nullptr) {
+    v.push_back(p->val.get_point());
+    p = p->next;
+  }
+
+  while (q != nullptr) {
+    v.push_back(q->val.get_point());
+    q = q->next;
+  }
+
+  for(int i = 0; i < v.size(); i ++) {
+    deb::debug(v[i], "posizione entità");
+  }
+  return(v);
+}
+
 
 
 

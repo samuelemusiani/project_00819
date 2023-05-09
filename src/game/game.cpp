@@ -239,7 +239,7 @@ void Game::start()
 		//debugging
 		if(time == 1001) time = 0;
 		//if(time%100==0) deb::debug(time, "time");
-		//if(time%1000==0) manager.print_enemy_list();
+		if(time%1000==0) manager.print_enemy_list();
 
 		manager.move_enemies(time);
 

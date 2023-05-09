@@ -58,6 +58,7 @@ public:
   bool is_there_an_entity_in_point(int Chunk, phy::Point point);
   pnemici getAllEnemiesInChunk(int Chunk);
   pmonete getAllCoinsInChunk(int Chunk);
+  nostd::vector<phy::Point> getAllEntitiesPositions(int Chunk);
 
   void print_enemy_list();
 
