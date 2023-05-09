@@ -168,20 +168,20 @@ void Game::play(){
 		bool right; 
 		int input = screen.getinput();
 
-		if (input == (int) 'f')
+		if (input == SETTINGS_CONTROL_KEYS[3]) // jump right
 
 		{
 			which_key = 1;
 			cumulative++;
 			count_not_key = 0;
 		} 
-		else if (input == (int) 'a') 
+		else if (input == SETTINGS_CONTROL_KEYS[2]) // jump left
 		{
 			which_key = 2;
 			cumulative++;
 			count_not_key = 0;
 		}
-		else if (input == 'v'){
+		else if (input == SETTINGS_CONTROL_KEYS[4]){ // jump vertical
 			which_key = 3;
 			cumulative++; 
 			count_not_key = 0;
@@ -216,17 +216,16 @@ void Game::play(){
 
 		
 		
-		switch(input)
-		{
-			case ((int) 's'): // move player left
+			if (input == SETTINGS_CONTROL_KEYS[0]) // move player left
+			{
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() - phy::Point(1, 0));
-				break;
-
-			case ((int) 'd'): // move player right
+			}
+			else if (input == SETTINGS_CONTROL_KEYS[1]) // move player right
+			{
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() + phy::Point(1, 0));
-				break;
+			}
 
 #ifdef USE_HACK
 			case (KEY_UP):
@@ -248,16 +247,16 @@ void Game::play(){
 				screen.nodel(true);
 				break;
 #endif
-			case 27: // Pause menu con tasto esc
+			else if (input == 27)
 			{
 				bool quitGamepley = pauseGame(); // se true esci dal gioco
 				if (quitGamepley == true) exit = true;
-				break;
 			}
-			default:
-				break;
-		}
-		}
+			else
+			{
+				// default case
+			}
+					}
 		// player.update(0.05);
 #ifdef USE_HACK
 		if (!fly) phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));

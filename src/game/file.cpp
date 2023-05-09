@@ -34,7 +34,7 @@ void File::initSettings() {
 	{
 		if (openFile(file, "./settings.txt", "w"))
 		{
-			file << "[ KeyBindings ]\nml=s\nmr=d\njl=a\njr=f\njp=v\nsh=o\nbb=p\not=esc\n\n"
+			file << "[ KeyBindings ]\nml=s\nmr=d\njl=a\njr=f\njp=v\nsh=o\nbb=p\not=m\n\n"
 					"[ Preferences ]\nCalibration=-1\nVolume=10\nSensitivity=10\n\n";
 			file.close();
 		}
@@ -309,7 +309,7 @@ void File::getSettings()
 		for(int i=0;i<8;i++)
 		{
 			nostd::getline(file,buff);
-			SETTINGS_CONTROL_KEYS[i] = buff.substr(3);
+			SETTINGS_CONTROL_KEYS[i] = buff.substr(3)[0];
 		}
 		nostd::getline(file,buff); // empty line
 		nostd::getline(file,buff); // [ Preferences ]

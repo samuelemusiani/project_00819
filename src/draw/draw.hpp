@@ -21,6 +21,7 @@ class Draw : public Screen{
 		void drawText(int posY, int posX, const char t[]);
 		void drawText(int posY, int posX, const char s);
 		void drawUpperText(int posY, int posX, nostd::string s);
+		void drawUpperText(int posY, int posX, char s);
 		void attrOff(int c_pair);
 		void drawBox();
 		void attrOn(int c_pair);
@@ -28,6 +29,7 @@ class Draw : public Screen{
 		void drawMap(Map map, int nChunck);
 		void drawPlayer(phy::Point p);
 		void drawSquareAround(nostd::string s, int posY, int posX);
+		void drawSquareAround(char s, int posY, int posX);
 		static int centerX(nostd::string text);
 		static int centerX(const char* text);
 		void drawRectagle(int posY, int posX, int length, int width);
