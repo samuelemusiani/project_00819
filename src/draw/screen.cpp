@@ -119,3 +119,16 @@ void Screen::deleteWin(){
 void Screen::setScreen(WINDOW* w) {
 	this->screen = w;
 }
+
+void Screen::noOutRefresh(){  // copy information from a window data structure to the virtual screen
+ 							  // utilizzando wnoutrefresh, il refresh del terminale avviene solo al doupdate()
+	wnoutrefresh(this->screen);
+}
+
+void Screen::update(){  // aggiorna il terminale. Quindi si evita il flicker dato dal tempo che intercorre tra l'aggiornamento di due window usando il classico refresh
+	doupdate();
+}
+
+void Screen::redraw(){
+	redrawwin(this->screen);
+}

@@ -150,11 +150,13 @@ void Game::play(){
 
 	screen.drawMap(this->map, 0);
 
-
+	
 	screen.drawPlayer(player.get_position());
 	screen.refreshScreen();
 	screen.nodel(true);
 	deb::debug(player.get_position(), "player position");
+	stats();
+	
 
 	bool exit = false;
 	screen.nodel(true);
@@ -162,7 +164,7 @@ void Game::play(){
 	int count_not_key = 0;
 	int which_key = 0;
 	while (!exit){
-		stats();
+		updateStats();
 		bool right; 
 		int input = screen.getinput();
 
@@ -225,9 +227,9 @@ void Game::play(){
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
-			case 27:
+			case 27: // Pause menu con tasto esc
 			{
-				bool quitGamepley = pauseGame();
+				bool quitGamepley = pauseGame(); // se true esci dal gioco
 				if (quitGamepley == true) exit = true;
 				break;
 			}
@@ -375,6 +377,10 @@ void Game::stats()
 	screen.size(posY, posX, 44, 150);
 
 	this->stats_scr = screen.newWindow(3, 150, posY - 2, posX);
+	updateStats();
+}
+
+void Game::updateStats(){
 	this->stats_scr.clearwithoutbox();
 
 	this->stats_scr.drawRectagle(1, 0 , 3, 149);
@@ -397,93 +403,109 @@ bool Game::pauseGame()
 
 	bool resumed = false;
 	bool exit = false;
-	while(!resumed)
-	{
-
 	int posY, posX;
 	screen.size(posY, posX, 46, 150);
 	
 	Draw pause = screen.newWindow(46, 60, posY, 90 + posX);
-	
-	pause.clearwithoutbox();
-	pause.drawBox();
-	screen.drawBox();
-	pause.drawText(3, 30 - pause.center("Game Paused"),  "Game Paused");
-	nostd::string options[3] = {"Resume", "Save", "Exit"};
-	int selected = 0;
-	bool choose = false;
-	wnoutrefresh(screen.getScreen()); // copy information from a window data structure to the virtual screen
-	wnoutrefresh(pause.getScreen()); // utilizzando wnoutrefresh, il refresh del terminale avviene solo al doupdate()
-	doupdate(); // aggiorna il terminale. Quindi si evita il flicker dato dal tempo che intercorre tra l'aggiornamento di due window usando il classico refresh
-	
+	while(!resumed) {
 
-	while (!choose){	
-		for (int i = 0; i < 3; i++)
-		{
-			pause.drawSquareAround(options[i], 20 + 4*i, 30 - (options[i].length() / 2));
-		}
-		pause.attrOn(COLOR_PAIR(1));
-		pause.drawText(20 + 4*selected, 30 - (options[selected].length() / 2), options[selected]);
-		pause.attrOff(COLOR_PAIR(1));
-		switch (pause.getinput())
-		{
-			case KEY_UP:
-				if (selected == 0) selected = 2;
-				else selected = selected - 1;
-				break;
-			case KEY_DOWN:
-				if (selected == 2) selected = 0;
-				else selected = selected + 1;
-				break;
-			case 10:
-				choose = true;
-				break;
-			default: 
-				break;
-		}
-	}
-	pause.refreshScreen();
-	Save save = Save();
-	switch (selected)
-	{
-		case 0:
-			screen.nodel(true);
-			pause.deleteWin();
-
-			resumed = true;
-			break;
-		case 1:
-		{
-			pause.deleteWin();
-			int posY, posX;
-			screen.size(posY, posX, 46, 150);
-			
-			Draw save_scr = screen.newWindow(46, 150, posY, posX);
-
-			save.saveNewGame(save_scr, map, current_chunk, player.get_position());
-			save_scr.eraseScreen();
-			save_scr.deleteWin();
-			break;
-		}
-			
-		case 2: 
-			{
-			pause.clearScreen();
-			pause.deleteWin();
-			redrawwin(screen.getScreen());	
-			screen.refreshScreen();
-
-			
-			save.quitGame(screen, map, current_chunk, player.get_position());
-
-			resumed = true; 
-			exit = true; 
-			break;
-			}	
-		default:
-			break;
+		pause.clearwithoutbox();
+		pause.drawBox();
+		pause.drawText(3, 30 - pause.center("Game Paused"),  "Game Paused");
+		nostd::string options[4] = {"Resume", "Settings", "Save", "Exit"};
+		int selected = 0;
+		bool choose = false;
 		
-	}
-	}
+		stats_scr.redraw();
+		screen.redraw();
+		screen.noOutRefresh();
+		stats_scr.noOutRefresh();
+		pause.noOutRefresh();
+		Screen::update();
+
+
+
+		while (!choose){	
+			for (int i = 0; i < 4; i++)
+			{
+				pause.drawSquareAround(options[i], 20 + 4*i, 30 - (options[i].length() / 2));
+			}
+			pause.attrOn(COLOR_PAIR(1));
+			pause.drawText(20 + 4*selected, 30 - (options[selected].length() / 2), options[selected]);
+			pause.attrOff(COLOR_PAIR(1));
+			switch (pause.getinput())
+			{
+				case KEY_UP:
+					if (selected == 0) selected = 3;
+					else selected = selected - 1;
+					break;
+				case KEY_DOWN:
+					if (selected == 3) selected = 0;
+					else selected = selected + 1;
+					break;
+				case 10:
+					choose = true;
+					break;
+				default: 
+					break;
+			}
+		}
+		pause.refreshScreen();
+		Save save = Save();
+		switch (selected)
+		{
+			case 0:
+				screen.nodel(true);
+				pause.deleteWin();
+
+				resumed = true;
+				break;
+
+			case 1:{
+				Settings settings = Settings();
+				int posX, posY;
+				screen.size(posY, posX, 46, 150);
+				Draw settings_scr = screen.newWindow(46, 150, posY, posX);
+				settings.drawFirstSettings(settings_scr);
+				settings_scr.eraseScreen();
+				settings_scr.deleteWin();
+				
+
+
+				break;
+			}
+			case 2:
+			{
+				int posY, posX;
+				screen.size(posY, posX, 46, 150);
+				
+				Draw save_scr = screen.newWindow(46, 150, posY, posX);
+
+				save.saveNewGame(save_scr, map, current_chunk, player.get_position());
+				save_scr.eraseScreen();
+				save_scr.deleteWin();
+				break;
+			}
+				
+			case 3: 
+				{
+				pause.clearScreen();
+				pause.deleteWin();
+				redrawwin(screen.getScreen());	
+				screen.refreshScreen();
+
+				
+				save.quitGame(screen, map, current_chunk, player.get_position());
+
+				resumed = true; 
+				exit = true; 
+				break;
+				}	
+			default:
+				break;
+			
+		}
+		}
+	pause.deleteWin();
 	return exit;
 }
