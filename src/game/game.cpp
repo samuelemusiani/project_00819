@@ -515,8 +515,11 @@ bool Game::pauseGame()
 				{
 				pause.clearScreen();
 				pause.deleteWin();
-				redrawwin(screen.getScreen());	
-				screen.refreshScreen();
+				screen.redraw();
+				stats_scr.redraw();	
+				screen.noOutRefresh();
+				stats_scr.noOutRefresh();
+				Screen::update();
 
 				
 				save.quitGame(screen, map, current_chunk, player.get_position());
