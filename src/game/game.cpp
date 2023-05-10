@@ -197,19 +197,19 @@ void Game::play(){
 				if (cumulative > 1 && which_key == 1 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 55));
-						jump++;
+						map.incrementJumps();
 					}
 
 				else if (cumulative > 1 && which_key == 2 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 125));
-						jump++;
+						map.incrementJumps();
 					}
 
 				else if (cumulative > 1 && which_key == 3 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 90));
-						jump++;
+						map.incrementJumps();
 					}
 				cumulative = 0;
 			}
@@ -331,6 +331,7 @@ void Game::resume()
 			deb::debug(savedMaps[selected]);
 			this->player.set_position(File::getPoint(savedMaps[selected]));
 			deb::debug(File::getPoint(savedMaps[selected]));
+			map.setJumps(File::getJumpsNumber(savedMaps[selected]));
 			play();
 		}
 	}
@@ -391,7 +392,7 @@ void Game::updateStats(){
 		this->stats_scr.drawText(2, 10 + i*2, "♥");
 	}
 	this->stats_scr.drawText(2, 50, "Level: " + nostd::to_string(this->current_chunk));
-	this->stats_scr.drawText(2, 70, "Jump: " + nostd::to_string(this->jump));
+	this->stats_scr.drawText(2, 70, "Jumps: " + nostd::to_string(map.getJumps()));
 	this->stats_scr.drawText(2, 90, "Coins: " + nostd::to_string(this->coins));
 	this->stats_scr.refreshScreen();
 }

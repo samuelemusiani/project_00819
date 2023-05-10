@@ -43,6 +43,7 @@ public:
 		static Map getMap(nostd::string name);
 		static int getChunk(nostd::string name);
 		static phy::Point getPoint(nostd::string name);
+		static int getJumpsNumber(nostd::string name);
 		static void deleteSave(nostd::string name);
 		static int countSaves();
 };

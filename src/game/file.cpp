@@ -94,7 +94,7 @@ void File::appendSave(Map m,int chunk,phy::Point pos,nostd::string name)
 	std::fstream file;
 	if(openFile(file,"./save.txt","app")) {
 		file << "[ Name: " << name << " ]\nSeed: " << m.getSeed().getSeed() << "\nCoins&Enemies: " << m.getCoinsAndEnemies()
-		<< "\nChunk: " << chunk << "\nPlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition()<< "\nLastSave: " << dateAndTime() << "\n\n";
+		<< "\nChunk: " << chunk << "\nPlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition()<< "\nJumpsNumber: " << m.getJumps() << "\nLastSave: " << dateAndTime() << "\n\n";
 		file.close();
 	}
 }
@@ -121,6 +121,8 @@ void File::updateSave(Map m,int chunk,phy::Point pos)
 		tmp << "Chunk: " << chunk << "\n";
 		nostd::getline(file,buff);
 		tmp << "PlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition() << "\n";
+		nostd::getline(file,buff);
+		tmp << "JumpsNumber: " << m.getJumps() << "\n";
 		nostd::getline(file,buff);
 		tmp << "LastSave: " << dateAndTime() << "\n\n";
 		while(nostd::getline(file,buff))
@@ -297,6 +299,29 @@ phy::Point File::getPoint(nostd::string name)
 			file.close();
 	}
 	return newPos; // this shouldn't happen
+}
+
+int File::getJumpsNumber(nostd::string name)
+{
+	std::fstream file;
+	if(openFile(file,"./save.txt","r")) {
+		nostd::string search = "[ Name: " + name + " ]";
+		nostd::string buff;
+		bool found = false;
+		while (!found && nostd::getline(file, buff))
+			if (buff == search)
+				found = true;
+		if (found) {
+			for (int i = 0; i < 5; i++)
+				nostd::getline(file, buff);
+			int n = nostd::stoi(buff.substr(buff.find(':') + 2));
+			file.close();
+			return n;
+		}
+		else
+			file.close();
+	}
+	return 0; // this shouldn't happen
 }
 
 void File::getSettings()

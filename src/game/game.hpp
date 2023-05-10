@@ -14,7 +14,6 @@ class Game
 		Draw screen;
 		Draw stats_scr;
 		int current_chunk = 0;
-		int jump = 0;
 		int coins = 0;
 		int heart = 10;
 		Map map;

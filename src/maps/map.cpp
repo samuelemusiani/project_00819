@@ -15,6 +15,7 @@ Map::Map() {
 	srand(time(nullptr));
 	this->seed.setSeed(rand());
 	this->coinsAndEnemies = "notImplementedYet:)";
+	this->jumps = 0;
 	initialize_chunks();
 }
 
@@ -83,4 +84,19 @@ Seed Map::getSeed()
 nostd::string Map::getCoinsAndEnemies()
 {
 	return this->coinsAndEnemies;
+}
+
+int Map::getJumps()
+{
+	return this->jumps;
+}
+
+void Map::incrementJumps()
+{
+	this->jumps++;
+}
+
+void Map::setJumps(int n)
+{
+	this->jumps = n;
 }

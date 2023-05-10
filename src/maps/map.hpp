@@ -26,6 +26,7 @@ class Map
         void initialize_chunks();
 		Seed seed;
 		nostd::string coinsAndEnemies;
+		int jumps;
     public:
         Map();
 		Map(int seed,nostd::string coinsAndEnemies);
@@ -34,6 +35,9 @@ class Map
 		int getEnemies(int n);
 		nostd::string getCoinsAndEnemies();
 		Seed getSeed();
+		int getJumps();
+		void incrementJumps();
+		void setJumps(int n);
 };
 
 #endif
