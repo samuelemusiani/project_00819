@@ -105,7 +105,8 @@ void Manager::collect_coin(int Chunk, Coin coin) {
 void Manager::set_chunk(int Chunk, Map map) {
   if (this->current_chunk < Chunk) {
     //deb::debug(map.getEnemies(Chunk), "numero di nemici");
-
+	  this->Enemies.push_back(nullptr);
+	  this->Coins.push_back(nullptr);
 
     for(int i = 0; i < map.getEnemies(Chunk); i ++) {
       deb::debug(i, "sono dentro al for di add_enemy all'indice");

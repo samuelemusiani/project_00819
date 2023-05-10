@@ -106,11 +106,12 @@ phy::Point Random::generateEnemyPosition(Map map, int chunk,nostd::vector<phy::P
 phy::Point Random::generateCoinPosition(Map map, int chunk,nostd::vector<phy::Point> entityPos)
 {
 	phy::Point point;
+	Chunk c = map.get_chunk(chunk);
 	seedSrand(map.getSeed(),chunk,21);
 	do {
 		point.set_xPosition(rand() % SCREEN_WIDTH);
 		point.set_yPosition(rand() % SCREEN_HEIGHT);
-	}while(map.get_chunk(chunk).is_there_a_platform(point) || is_there_an_entity(entityPos,point));
+	}while(c.is_there_a_platform(point) || is_there_an_entity(entityPos,point));
 	return point;
 }
 
