@@ -310,7 +310,14 @@ nostd::string nostd::to_string(double data)
 {
 	const int precision = 5;
 
-	nostd::string s = nostd::to_string((int) data);
+	nostd::string s;
+	if(data < 0) 
+	{
+		s.push_back('-');
+		data = -data;
+	}
+
+	s += nostd::to_string((int) data);
 	data = data - (int) data;
 	data = round(data * pow(10, precision));
 	s.push_back('.');
