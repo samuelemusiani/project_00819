@@ -17,6 +17,6 @@
 #define PHYSICS_COLLISIONS
 namespace phy
 {
-void updateWithCollisions(phy::Body &body, double time, Chunk chunk);
+	void updateWithCollisions(phy::Body &body, double time, Chunk chunk);
 }
 #endif

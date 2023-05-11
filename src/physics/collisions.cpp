@@ -46,15 +46,12 @@ static void borderCollision(phy::Body &body);
    e sopratutto avrei fatto calcoli inutili se la collissione fosse all'inzio.
 */
 
-
-// Basandomi sull'euristica che il body del player verrà aggiornato per 
-// brevissimi intervalli di tempo inzio ad implementare la prima possibilità
 void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 {
 
+	// Check collision with the map boders
 	borderCollision(body);
 
-	// deb::debug(hasJumped(body), "has_jumped");
 	if(!hasJumped(body))
 	{
 		if (is_on_a_platform(body, &chunk))
@@ -65,27 +62,36 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 		{
 			// FREE FALL
 
-			//Caso in cui ho appena iniziato a cadere per eliminare il delay
-			// if (body.get_velocity().get_magnitude() < 1)
-			// 	body.set_velocity(phy::Vector(1, -90));
-
 			//Devo continuare a settare l'accelerazione?
 			body.set_acceleration(phy::Vector(phy::GRAVITY_ACCELERATION, -90));
+
+			phy::Body old_body = body;
 			body.update(time);
 
-			// Max free fall velocity to avoid trapassing platforms?
-			// if (body.get_velocity().get_magnitude() > ??)
-			// {
-			// 	body.set_velocity();
-			// 	body.set_acceleration(phy::Vector(0));
-			// }
+			int old_yPos = round(old_body.get_precisePosition().get_yPosition());
+			int new_yPos = round(body.get_precisePosition().get_yPosition());
+			int new_xPos = round(body.get_precisePosition().get_xPosition());
+
+			if (old_yPos - new_yPos > 1)
+			{
+				bool found_a_platform = false;
+				int tmp_pos = old_yPos;
+
+				while (tmp_pos >= new_yPos && !found_a_platform)
+				{
+					found_a_platform = chunk.is_there_a_platform(phy::Point(new_xPos, tmp_pos));
+					tmp_pos--;
+				}
+				if (found_a_platform) tmp_pos += 2;
+
+				body.set_position(phy::Point(new_xPos, tmp_pos));
+			}
+
 		}
 	}
 	else
 	{
 		body.set_acceleration(phy::Vector(phy::GRAVITY_ACCELERATION, -90));
-		// Se ho saltato devo fare dei check nel casso colpisca
-		// qualche piattaforma
 
 		phy::Body old_body = body;
 		body.update(time);
@@ -136,7 +142,6 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 
 			// 4 -> bad...really bad
 			case 4:
-				//deb::debug("ECCOMI!!!");
 				// I don't know what to do :)
 				body.set_position(old_body.get_position());
 				break;
@@ -147,7 +152,6 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 				break;
 		}
 	}
-	// deb::debug(body.get_position(), "POS:");
 }
 
 // 0 -> no collision
@@ -156,14 +160,11 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 // 3 -> complex collision (the body moved one block in the x and one block in the y direction)
 // 4 -> bad...really bad
 
-/* DA RISCRIVERE :) */
+/* This function detect the type of collision that append base on the old and
+ * the new position of the player.
+ */
 static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPos, Chunk *chunk)
 {
-	// deb::debug(old_xPos, "old_xPos");
-	// deb::debug(old_yPos, "old_yPos");
-	// deb::debug(new_xPos, "new_xPos");
-	// deb::debug(new_yPos, "new_yPos");
-
 	int diff_x = abs(old_xPos - new_xPos);
 	int diff_y = abs(old_yPos - new_yPos);
 
@@ -185,23 +186,18 @@ static int detectCollision(int old_xPos, int old_yPos, int new_xPos, int new_yPo
 	}
 	else if (diff_x == 1 & diff_y == 1)
 	{
-		//Come faccio in questo caso?
-		// Devo trovare il momento della collisione e fare un revers della posizione
-		// in modo da avere i vettori
+	
+		// I need to check all possible path that the player could have taken
+		// during the jump. If only one of these paths have a platform a 
+		// collision is detected
 
-		// Can I do a symple average of the new and old position? Nope, it does not work :(
-		//return detectCollision(old_xPos, old_yPos, (old_xPos + new_xPos) / 2, (old_yPos + new_yPos) / 2, chunk);
-		
-		if (chunk->is_there_a_platform(phy::Point(new_xPos, new_yPos)))
+		if (chunk->is_there_a_platform(phy::Point(new_xPos, new_yPos))
+		|| chunk->is_there_a_platform(phy::Point(old_xPos, new_yPos)) 
+		|| chunk->is_there_a_platform(phy::Point(new_xPos, old_yPos))
+		)
 			return 3;
-
-		if (chunk->is_there_a_platform(phy::Point(old_xPos, new_yPos)))
-			return 3;
-
-		if (chunk->is_there_a_platform(phy::Point(new_xPos, old_yPos)))
-			return 3;
-
-		return 0;
+		else
+			return 0;
 	} else
 		return 4;
 
@@ -219,10 +215,9 @@ static bool hasJumped(phy::Body &body)
 
 	if (v.get_magnitude() < 0.1)
 		return false;
-	else if (220 < v.get_direction() && v.get_direction() <= 320) //Hanno senso questi valori?
-	{
+	//Does this values make sense?
+	else if (180 <= v.get_direction() && v.get_direction() <= 360) 
 		return false;
-	}
 
 	return true;
 }
@@ -232,6 +227,9 @@ static bool is_on_a_platform(phy::Body &body, Chunk *chunk)
 	return (chunk->is_there_a_platform(body.get_position() - phy::Point(0, 1)));
 }
 
+/* Check if the player had a collision with the map left and right borders.
+ * If a collision happen the player fall immediately
+ */
 static void borderCollision(phy::Body &body)
 {
 	phy::Point p = body.get_position();
