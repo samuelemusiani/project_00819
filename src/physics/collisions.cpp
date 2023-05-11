@@ -77,16 +77,22 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 				bool found_a_platform = false;
 				int tmp_pos = old_yPos;
 
-				while (tmp_pos >= new_yPos && !found_a_platform)
+				while (tmp_pos >= new_yPos && tmp_pos >= 0 && !found_a_platform)
 				{
-					found_a_platform = chunk.is_there_a_platform(phy::Point(new_xPos, tmp_pos));
-					tmp_pos--;
+					
+					if (chunk.is_there_a_platform(phy::Point(new_xPos, tmp_pos)))
+						found_a_platform = true;
+					else
+						tmp_pos--;
 				}
-				if (found_a_platform) tmp_pos += 2;
+				if (found_a_platform) 
+				{
+					tmp_pos += 1;
+					resetVelocityAcceleration(body);
+				}
 
 				body.set_position(phy::Point(new_xPos, tmp_pos));
 			}
-
 		}
 	}
 	else
