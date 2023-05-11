@@ -578,22 +578,44 @@ void Game::hack(){
 			break;
 		case '0':
 			fly = false;
-		case 's':  // set custom chunk
+		case 's':  // set all custom 
 		{
+
 			hack.eraseScreen();
-			hack.drawText(2, 25 - hack.center("Set custom chunk"), "Set custom chunk");
-			int x = hack.getinput();
-			nostd::string set_chunk;
-			while (x != 10){
-				// controlla se l'input è un numero
-				if (x >= 48 && x <= 57) set_chunk = set_chunk + nostd::to_string(char(x));
-				// se è backspace cancella l'ultimo carattere
-				else if (x == 127) set_chunk = set_chunk.substr(0, set_chunk.length() - 1);
-				hack.clearLine(4, 0);
-				hack.drawText(4, 25 - hack.center(set_chunk), set_chunk);
-				x = hack.getinput();
+			hack.drawText(2, 25 - hack.center("Super secret menu"), "Super secret menu");
+			hack.drawText(4, 25 - hack.center("WARNING: this menu is for skilled developers!"), "WARNING: this menu is for skilled developers!");
+			nostd::string options[4] = {"1. Set life", "2. Set coins", "3. Set jump", "4. Set level"};
+			for (int i = 0; i < 4; i++)
+			{
+				hack.drawText(7 + 2*i, 7, options[i]);
 			}
-			current_chunk = stoi(set_chunk);
+			hack.refreshScreen();
+			
+			int secret = hack.getinput();
+			switch (secret){
+				case '1':
+					hack.eraseScreen();
+					hack.drawText(2, 25 - hack.center("Set life"), "Set life");
+					this->heart = setCustom(hack);
+					break;
+				case '2':
+					hack.eraseScreen();
+					hack.drawText(2, 25 - hack.center("Set coins"), "Set coins");
+					this->coins = setCustom(hack);
+					break;
+				case '3':
+					hack.eraseScreen();
+					hack.drawText(2, 25 - hack.center("Set jump"), "Set jump");
+					this->jump = setCustom(hack);
+					break;
+				case '4':
+					hack.eraseScreen();
+					hack.drawText(2, 25 - hack.center("Set level"), "Set level");
+					this->current_chunk = setCustom(hack);
+					break;
+				default:
+					break;
+			}
 			break;
 		}
 		default:
@@ -601,4 +623,19 @@ void Game::hack(){
 	}
 	hack.eraseScreen();
 	hack.deleteWin();
+}
+
+int Game::setCustom(Draw hack){
+	int a = hack.getinput();
+	nostd::string set_chunk;
+	while (a != 10){
+		// controlla se l'input è un numero
+		if (a >= 48 && a <= 57) set_chunk = set_chunk + nostd::to_string(char(a));
+		// se è backspace cancella l'ultimo carattere
+		else if (a == 127) set_chunk = set_chunk.substr(0, set_chunk.length() - 1);
+		hack.clearLine(4, 0);
+		hack.drawText(4, 25 - hack.center(set_chunk), set_chunk);
+		a = hack.getinput();
+	}
+	return stoi(set_chunk);
 }

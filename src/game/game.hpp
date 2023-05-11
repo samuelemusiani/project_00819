@@ -20,6 +20,8 @@ class Game
 		bool fly = false;
 		Map map;
 		phy::Body player;
+		void hack();
+		int setCustom(Draw hack);
 	public:
 		Game();
 		~Game();
@@ -35,7 +37,7 @@ class Game
 		void updateStats();
 		
 		bool pauseGame();
-		void hack();
+		
 
 };
 
