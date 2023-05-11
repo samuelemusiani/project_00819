@@ -17,6 +17,7 @@ class Game
 		int jump = 0;
 		int coins = 0;
 		int heart = 10;
+		bool fly = false;
 		Map map;
 		phy::Body player;
 	public:
@@ -32,8 +33,9 @@ class Game
 		int setDifficulty();
 		void stats();
 		void updateStats();
-
+		
 		bool pauseGame();
+		void hack();
 
 };
 

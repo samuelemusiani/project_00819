@@ -227,6 +227,22 @@ void Game::play(){
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
+
+			case (KEY_UP):
+				if (fly) player.set_position(player.get_position() + phy::Point(0, 1));
+				break;
+			case (KEY_LEFT):
+				if (fly) player.set_position(player.get_position() + phy::Point(-1, 0));
+				break;
+			case (KEY_DOWN):
+				if (fly) player.set_position(player.get_position() + phy::Point(0, -1));
+				break;
+			case (KEY_RIGHT):
+				if (fly) player.set_position(player.get_position() + phy::Point(1, 0));
+				break;
+			case ((int) 'h'):
+				hack();
+				break;
 			case 27: // Pause menu con tasto esc
 			{
 				bool quitGamepley = pauseGame(); // se true esci dal gioco
@@ -238,7 +254,7 @@ void Game::play(){
 		}
 		}
 		// player.update(0.05);
-		phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));
+		if (!fly) phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));
 		screen.eraseScreen();
 		if (player.get_position().get_yPosition() < 0)
 		{
@@ -508,4 +524,74 @@ bool Game::pauseGame()
 		}
 	pause.deleteWin();
 	return exit;
+}
+
+
+void Game::hack(){
+	int posX, posY;
+	screen.size(posY, posX, 20, 50);
+	Draw hack = screen.newWindow(20, 50, posY, posX);
+	hack.drawBox();
+	hack.drawText(2, 25 - hack.center("Hack Menu"), "Hack Menu");
+	hack.drawText(4, 25 - hack.center("Only use for development purposes!") , "Only use for development purposes!");
+	hack.drawText(7, 7, "1. Add life");
+	hack.drawText(7, 25, "6. Remove life");
+	hack.drawText(9, 7, "2. Add coin");
+	hack.drawText(9, 25, "7. Remove coin");
+	hack.drawText(11, 7, "3. Add jump");
+	hack.drawText(11, 25, "8. Remove jump");
+	hack.drawText(13, 7, "4. Add level");
+	hack.drawText(13, 25, "9. Remove level");
+	hack.drawText(15, 7, "5. Enable fly");
+	hack.drawText(15, 25, "0. Disable fly");
+	hack.refreshScreen();
+	int x = hack.getinput();
+	switch (x){
+		case '1':
+			this->heart++;
+			break;
+		case '2':
+			this->coins++;
+			break;
+		case '3':
+			this->jump++;
+			break;
+		case '4':
+			this->current_chunk++;
+			break;
+		case '5':
+			fly = true;
+			break;
+		case '6':
+			this->heart--;
+			break;
+		case '7':
+			this->coins--;
+			break;
+		case '8':
+			this->jump--;
+			break;
+		case '9':
+			this->current_chunk--;
+			break;
+		case '0':
+			fly = false;
+		case 's':
+		{
+			/*// set custom chunk
+			int x = hack.getinput();
+			nostd::string set_chunk;
+			while (x != KEY_ENTER){
+				set_chunk = set_chunk + nostd::to_string(char(x));
+			}
+			// convert string to int
+			int chunk = stoi(set_chunk);
+			current_chunk = chunk;*/
+			break;
+		}
+		default:
+			break;
+	}
+	hack.eraseScreen();
+	hack.deleteWin();
 }
