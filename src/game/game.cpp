@@ -241,7 +241,9 @@ void Game::play(){
 				if (fly) player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
 			case ((int) 'h'):
+				screen.nodel(false);
 				hack();
+				screen.nodel(true);
 				break;
 			case 27: // Pause menu con tasto esc
 			{
@@ -576,17 +578,22 @@ void Game::hack(){
 			break;
 		case '0':
 			fly = false;
-		case 's':
+		case 's':  // set custom chunk
 		{
-			/*// set custom chunk
+			hack.eraseScreen();
+			hack.drawText(2, 25 - hack.center("Set custom chunk"), "Set custom chunk");
 			int x = hack.getinput();
 			nostd::string set_chunk;
-			while (x != KEY_ENTER){
-				set_chunk = set_chunk + nostd::to_string(char(x));
+			while (x != 10){
+				// controlla se l'input è un numero
+				if (x >= 48 && x <= 57) set_chunk = set_chunk + nostd::to_string(char(x));
+				// se è backspace cancella l'ultimo carattere
+				else if (x == 127) set_chunk = set_chunk.substr(0, set_chunk.length() - 1);
+				hack.clearLine(4, 0);
+				hack.drawText(4, 25 - hack.center(set_chunk), set_chunk);
+				x = hack.getinput();
 			}
-			// convert string to int
-			int chunk = stoi(set_chunk);
-			current_chunk = chunk;*/
+			current_chunk = stoi(set_chunk);
 			break;
 		}
 		default:
