@@ -228,6 +228,7 @@ void Game::play(){
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
 
+#ifdef USE_HACK
 			case (KEY_UP):
 				if (fly) player.set_position(player.get_position() + phy::Point(0, 1));
 				break;
@@ -240,13 +241,13 @@ void Game::play(){
 			case (KEY_RIGHT):
 				if (fly) player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
-				#ifdef HACK
+				
 			case ((int) 'h'):
 				screen.nodel(false);
 				hack();
 				screen.nodel(true);
 				break;
-				#endif
+#endif
 			case 27: // Pause menu con tasto esc
 			{
 				bool quitGamepley = pauseGame(); // se true esci dal gioco
@@ -258,7 +259,11 @@ void Game::play(){
 		}
 		}
 		// player.update(0.05);
+#ifdef USE_HACK
 		if (!fly) phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));
+#else
+		phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));
+#endif
 		screen.eraseScreen();
 		if (player.get_position().get_yPosition() < 0)
 		{
@@ -525,12 +530,10 @@ bool Game::pauseGame()
 				break;
 			
 		}
-		}
-	pause.deleteWin();
-	return exit;
+		} pause.deleteWin(); return exit;
 }
 
-#ifdef HACK
+#ifdef USE_HACK
 
 void Game::hack(){
 	int posX, posY;

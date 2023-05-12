@@ -44,7 +44,7 @@ target_link_libraries(game ${CURSES_LIBRARIES})
 target_compile_features(game PRIVATE cxx_std_14)
 
 if(HACK)
-  add_compile_definitions(-DHACK=1)
+	add_compile_definitions(USE_HACK)
 endif(HACK)
 
 if(STD)
