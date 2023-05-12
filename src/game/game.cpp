@@ -252,10 +252,6 @@ void Game::play(){
 				bool quitGamepley = pauseGame(); // se true esci dal gioco
 				if (quitGamepley == true) exit = true;
 			}
-			else
-			{
-				// default case
-			}
 					}
 		// player.update(0.05);
 #ifdef USE_HACK

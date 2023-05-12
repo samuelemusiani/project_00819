@@ -87,28 +87,25 @@ void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione d
 void Draw::drawSquareAround(char s, int posY, int posX) { //posizione del primo carattere
 	this->drawText(posY, posX, s);
 
-	//calcolo della lunghezza della stringa
-	int x = 1;
-
 	//le coordinate posX e posY indicano la posizione dell'angolo in alto a sx
 	posX--;
 	posY--;
 
 	//questo ciclo disegna i bordi orizzontali
-	for(int i = 0; i < x+1; i++) {
+	for(int i = 0; i < 2; i++) {
 		mvwaddch(this->screen, posY, posX+i, ACS_HLINE);
 		mvwaddch(this->screen, posY+2, posX+i, ACS_HLINE);
 	}
 
 	//questi due comandi disegnano i bordi verticali (assumendo che il testo sia alto 1 quadrato)
 	mvwaddch(this->screen, posY+1, posX, ACS_VLINE);
-	mvwaddch(this->screen, posY+1, posX+x+1, ACS_VLINE);
+	mvwaddch(this->screen, posY+1, posX+2, ACS_VLINE);
 
 	//corners of the rectangle
 	mvwaddch(this->screen, posY, posX, ACS_ULCORNER);
 	mvwaddch(this->screen, posY+2, posX, ACS_LLCORNER);
-	mvwaddch(this->screen, posY, posX+x+1, ACS_URCORNER);
-	mvwaddch(this->screen, posY+2, posX+x+1, ACS_LRCORNER);
+	mvwaddch(this->screen, posY, posX+2, ACS_URCORNER);
+	mvwaddch(this->screen, posY+2, posX+2, ACS_LRCORNER);
 
 }
 
