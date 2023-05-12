@@ -43,6 +43,10 @@ add_executable(game src/main.cpp
 target_link_libraries(game ${CURSES_LIBRARIES})
 target_compile_features(game PRIVATE cxx_std_14)
 
+if(HACK)
+	add_compile_definitions(USE_HACK)
+endif(HACK)
+
 if(STD)
 	add_compile_definitions(USE_STD_VECTOR)
 	add_compile_definitions(USE_STD_STRING)

@@ -17,8 +17,15 @@ class Game
 		int jump = 0;
 		int coins = 0;
 		int heart = 10;
+#ifdef USE_HACK
+		bool fly = false;
+#endif
 		Map map;
 		phy::Body player;
+#ifdef USE_HACK
+		void hack();
+		int setCustom(Draw hack);
+#endif
 	public:
 		Game();
 		~Game();
@@ -32,7 +39,6 @@ class Game
 		int setDifficulty();
 		void stats();
 		void updateStats();
-
 		bool pauseGame();
 
 };

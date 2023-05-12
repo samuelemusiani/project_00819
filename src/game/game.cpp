@@ -227,6 +227,27 @@ void Game::play(){
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
+
+#ifdef USE_HACK
+			case (KEY_UP):
+				if (fly) player.set_position(player.get_position() + phy::Point(0, 1));
+				break;
+			case (KEY_LEFT):
+				if (fly) player.set_position(player.get_position() + phy::Point(-1, 0));
+				break;
+			case (KEY_DOWN):
+				if (fly) player.set_position(player.get_position() + phy::Point(0, -1));
+				break;
+			case (KEY_RIGHT):
+				if (fly) player.set_position(player.get_position() + phy::Point(1, 0));
+				break;
+				
+			case ((int) 'h'):
+				screen.nodel(false);
+				hack();
+				screen.nodel(true);
+				break;
+#endif
 			case 27: // Pause menu con tasto esc
 			{
 				bool quitGamepley = pauseGame(); // se true esci dal gioco
@@ -238,7 +259,11 @@ void Game::play(){
 		}
 		}
 		// player.update(0.05);
+#ifdef USE_HACK
+		if (!fly) phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));
+#else
 		phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));
+#endif
 		screen.eraseScreen();
 		if (player.get_position().get_yPosition() < 0)
 		{
@@ -505,7 +530,135 @@ bool Game::pauseGame()
 				break;
 			
 		}
-		}
-	pause.deleteWin();
-	return exit;
+		} pause.deleteWin(); return exit;
 }
+
+#ifdef USE_HACK
+
+void Game::hack(){
+	int posX, posY;
+	screen.size(posY, posX, 20, 50);
+	Draw hack = screen.newWindow(20, 50, posY, posX);
+	hack.attrOn(COLOR_PAIR(2));
+	hack.drawBox();
+	hack.drawText(2, 25 - hack.center("Hack Menu"), "Hack Menu");
+	hack.drawText(4, 25 - hack.center("Only use for development purposes!") , "Only use for development purposes!");
+	hack.drawText(7, 7, "1. Add life");
+	hack.drawText(7, 25, "6. Remove life");
+	hack.drawText(9, 7, "2. Add coin");
+	hack.drawText(9, 25, "7. Remove coin");
+	hack.drawText(11, 7, "3. Add jump");
+	hack.drawText(11, 25, "8. Remove jump");
+	hack.drawText(13, 7, "4. Add level");
+	hack.drawText(13, 25, "9. Remove level");
+	hack.drawText(15, 7, "5. Enable fly");
+	hack.drawText(15, 25, "0. Disable fly");
+	hack.refreshScreen();
+	int x = hack.getinput();
+	switch (x){
+		case '1':
+			this->heart++;
+			break;
+		case '2':
+			this->coins++;
+			break;
+		case '3':
+			this->jump++;
+			break;
+		case '4':
+			this->current_chunk++;
+			break;
+		case '5':
+			fly = true;
+			break;
+		case '6':
+			this->heart--;
+			break;
+		case '7':
+			this->coins--;
+			break;
+		case '8':
+			this->jump--;
+			break;
+		case '9':
+			this->current_chunk--;
+			break;
+		case '0':
+			fly = false;
+			break;
+		case 's':  // set all custom 
+		{
+
+			hack.eraseScreen();
+			hack.drawText(2, 25 - hack.center("Super secret menu"), "Super secret menu");
+			hack.drawText(4, 25 - hack.center("WARNING: this menu is for skilled developers!"), "WARNING: this menu is for skilled developers!");
+			nostd::string options[4] = {"1. Set life", "2. Set coins", "3. Set jump", "4. Set level"};
+			for (int i = 0; i < 4; i++)
+			{
+				hack.drawText(7 + 2*i, 7, options[i]);
+			}
+			hack.refreshScreen();
+			
+			int secret = hack.getinput();
+			switch (secret){
+				case '1':
+				{
+					hack.eraseScreen();
+					hack.drawText(2, 25 - hack.center("Set life"), "Set life");
+					int custom = setCustom(hack);
+					if (custom != -1) this->heart = custom;
+					break;
+				}
+				case '2':
+				{
+					hack.eraseScreen();
+					hack.drawText(2, 25 - hack.center("Set coins"), "Set coins");
+					int custom = setCustom(hack);
+					if (custom != -1) this->coins = custom;
+					break;
+				}
+				case '3':
+				{
+					hack.eraseScreen();
+					hack.drawText(2, 25 - hack.center("Set jump"), "Set jump");
+					int custom = setCustom(hack);
+					if (custom != -1) this->jump = custom;
+					break;
+				}
+				case '4':
+				{
+					hack.eraseScreen();
+					hack.drawText(2, 25 - hack.center("Set level"), "Set level");
+					int custom = setCustom(hack);
+					if (custom != -1) this->current_chunk = custom;
+					break;
+				}
+				default:
+					break;
+			}
+			break;
+		}
+		default:
+			break;
+	}
+	hack.attrOff(COLOR_PAIR(2));
+	hack.eraseScreen();
+	hack.deleteWin();
+}
+
+int Game::setCustom(Draw hack){
+	int a = hack.getinput();
+	nostd::string set_chunk;
+	while (a != 10  && a != 27){ 
+		// controlla se l'input è un numero
+		if (a >= 48 && a <= 57) set_chunk = set_chunk + nostd::to_string(char(a));
+		// se è backspace cancella l'ultimo carattere
+		else if (a == 127) set_chunk = set_chunk.substr(0, set_chunk.length() - 1);
+		hack.clearLine(4, 0);
+		hack.drawText(4, 25 - hack.center(set_chunk), set_chunk);
+		a = hack.getinput();
+	}
+	if (a == 27) return -1;
+	else return stoi(set_chunk);
+}
+#endif
