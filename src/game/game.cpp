@@ -226,33 +226,32 @@ void Game::play(){
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() + phy::Point(1, 0));
 			}
-
-#ifdef USE_HACK
-			case (KEY_UP):
-				if (fly) player.set_position(player.get_position() + phy::Point(0, 1));
-				break;
-			case (KEY_LEFT):
-				if (fly) player.set_position(player.get_position() + phy::Point(-1, 0));
-				break;
-			case (KEY_DOWN):
-				if (fly) player.set_position(player.get_position() + phy::Point(0, -1));
-				break;
-			case (KEY_RIGHT):
-				if (fly) player.set_position(player.get_position() + phy::Point(1, 0));
-				break;
-				
-			case ((int) 'h'):
-				screen.nodel(false);
-				hack();
-				screen.nodel(true);
-				break;
-#endif
 			else if (input == 27)
 			{
 				bool quitGamepley = pauseGame(); // se true esci dal gioco
 				if (quitGamepley == true) exit = true;
 			}
-					}
+#ifdef USE_HACK
+			if (input == KEY_UP){
+				if (fly) player.set_position(player.get_position() + phy::Point(0, 1));
+			}
+			else if (input == KEY_LEFT){
+				if (fly) player.set_position(player.get_position() + phy::Point(-1, 0));
+			}
+			else if (input == KEY_DOWN){
+				if (fly) player.set_position(player.get_position() + phy::Point(0, -1));
+			}
+			else if (input == KEY_RIGHT){
+				if (fly) player.set_position(player.get_position() + phy::Point(1, 0));
+			}
+			else if (input == int ('h')){
+				screen.nodel(false);
+				hack();
+				screen.nodel(true);
+			}
+#endif
+
+			}
 		// player.update(0.05);
 #ifdef USE_HACK
 		if (!fly) phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));
