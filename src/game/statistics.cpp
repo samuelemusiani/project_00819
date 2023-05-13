@@ -81,3 +81,6 @@ void Statistics::redraw(){
     this->stats_scr.redraw();
 }
 
+void Statistics::noOutRefresh(){
+	this->stats_scr.noOutRefresh();
+}

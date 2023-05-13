@@ -23,11 +23,10 @@ double m_exp(double d)
 
 
 
-Game::Game() : stats(screen) 
+Game::Game()
 {	
 	this->screen = Draw();
 	screen.init();
-	stats = Statistics(screen);
 	File::initSettings();
 }	
 
@@ -143,7 +142,6 @@ void Game::start()
 	this->player.set_position(phy::Point(40, 20));
 	this->player.set_acceleration(phy::Vector(1, -90));
 	this->current_chunk = 0;
-	this->stats.setLevel(current_chunk);
 	play();
 
 }
@@ -151,11 +149,11 @@ void Game::start()
 void Game::play(){
 
 	
-
+	Statistics stats = Statistics(screen);
 	screen.drawMap(this->map, 0);
 	screen.drawPlayer(player.get_position());
 	screen.nodel(true);
-	this->stats.updateStats();
+	stats.updateStats();
 	
 
 	bool exit = false;
@@ -164,7 +162,7 @@ void Game::play(){
 	int count_not_key = 0;
 	int which_key = 0;
 	while (!exit){
-		this->stats.updateStats();
+		stats.updateStats();
 		bool right; 
 		int input = screen.getinput();
 
@@ -197,19 +195,19 @@ void Game::play(){
 				if (cumulative > 1 && which_key == 1 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 55));
-						this->stats.incrementJump();
+						stats.incrementJump();
 					}
 
 				else if (cumulative > 1 && which_key == 2 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 125));
-						this->stats.incrementJump();
+						stats.incrementJump();
 					}
 
 				else if (cumulative > 1 && which_key == 3 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 90));
-						this->stats.incrementJump();
+						stats.incrementJump();
 					}
 				cumulative = 0;
 			}
@@ -250,7 +248,7 @@ void Game::play(){
 #endif
 			case 27: // Pause menu con tasto esc
 			{
-				bool quitGamepley = pauseGame(); // se true esci dal gioco
+				bool quitGamepley = pauseGame(stats); // se true esci dal gioco
 				if (quitGamepley == true) exit = true;
 				break;
 			}
@@ -268,13 +266,13 @@ void Game::play(){
 		if (player.get_position().get_yPosition() < 0)
 		{
 			current_chunk--;
-			this->stats.setLevel(current_chunk);
+			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() + phy::Point(0, 42));
 		}
 		else if (player.get_position().get_yPosition() >= 42)  
 		{
 			current_chunk++;
-			this->stats.setLevel(current_chunk);
+			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() - phy::Point(0, 42)); 
 		}
 		screen.drawPlayer(player.get_position());
@@ -290,7 +288,7 @@ void Game::play(){
 	}
 	screen.nodel(false);	
 	screen.eraseScreen();
-	this->stats.deleteStats();
+	stats.deleteStats();
 }
 
 void Game::resume()
@@ -397,7 +395,7 @@ int Game::setDifficulty()
 }
 
 
-bool Game::pauseGame()
+bool Game::pauseGame(Statistics stats)
 {
 	screen.nodel(false);
 
@@ -406,7 +404,7 @@ bool Game::pauseGame()
 	int posY, posX;
 	screen.size(posY, posX, 46, 150);
 	
-	Draw pause = screen.newWindow(46, 60, posY, 90 + posX);
+	Draw pause = screen.newWindow(44, 60, posY + 2, 90 + posX);
 	while(!resumed) {
 
 		pause.clearwithoutbox();
@@ -416,9 +414,10 @@ bool Game::pauseGame()
 		int selected = 0;
 		bool choose = false;
 		
-		this->stats.redraw();
+		stats.redraw();
 		screen.redraw();
 		screen.noOutRefresh();
+		stats.noOutRefresh();
 		pause.noOutRefresh();
 		Screen::update();
 

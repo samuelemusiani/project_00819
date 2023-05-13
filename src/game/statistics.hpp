@@ -27,7 +27,10 @@ class Statistics {
         void incrementJump();
         void setCoins(int coins);
         void setHeart(int heart);
+        
+        // Queste due funzioni andranno cambiate ma per ora servono per far funzionare Stats nel pause menu
         void redraw();
+        void noOutRefresh();
 };
 
 #endif
