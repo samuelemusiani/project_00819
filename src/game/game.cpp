@@ -4,6 +4,7 @@
 #include "game.hpp"
 #include "menu.hpp"
 #include "file.hpp"
+#include "statistics.hpp"
 
 #include "save.hpp"
 #include "../physics/collisions.hpp"
@@ -22,10 +23,11 @@ double m_exp(double d)
 
 
 
-Game::Game()
+Game::Game() : stats(screen) 
 {	
 	this->screen = Draw();
 	screen.init();
+	stats = Statistics(screen);
 	File::initSettings();
 }	
 
@@ -135,27 +137,25 @@ bool Game::exitGame(){
 
 void Game::start()
 {
-	// clear the screen and draw the border
 	setDifficulty();
 	this->map = Map();
 	this->player = phy::Body();
 	this->player.set_position(phy::Point(40, 20));
 	this->player.set_acceleration(phy::Vector(1, -90));
 	this->current_chunk = 0;
+	this->stats.setLevel(current_chunk);
 	play();
 
 }
 
 void Game::play(){
 
-	screen.drawMap(this->map, 0);
-
 	
+
+	screen.drawMap(this->map, 0);
 	screen.drawPlayer(player.get_position());
-	screen.refreshScreen();
 	screen.nodel(true);
-	deb::debug(player.get_position(), "player position");
-	stats();
+	this->stats.updateStats();
 	
 
 	bool exit = false;
@@ -164,7 +164,7 @@ void Game::play(){
 	int count_not_key = 0;
 	int which_key = 0;
 	while (!exit){
-		updateStats();
+		this->stats.updateStats();
 		bool right; 
 		int input = screen.getinput();
 
@@ -197,19 +197,19 @@ void Game::play(){
 				if (cumulative > 1 && which_key == 1 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 55));
-						jump++;
+						this->stats.incrementJump();
 					}
 
 				else if (cumulative > 1 && which_key == 2 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 125));
-						jump++;
+						this->stats.incrementJump();
 					}
 
 				else if (cumulative > 1 && which_key == 3 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 90));
-						jump++;
+						this->stats.incrementJump();
 					}
 				cumulative = 0;
 			}
@@ -267,12 +267,14 @@ void Game::play(){
 		screen.eraseScreen();
 		if (player.get_position().get_yPosition() < 0)
 		{
-			current_chunk--; 
+			current_chunk--;
+			this->stats.setLevel(current_chunk);
 			player.set_position(player.get_position() + phy::Point(0, 42));
 		}
 		else if (player.get_position().get_yPosition() >= 42)  
 		{
 			current_chunk++;
+			this->stats.setLevel(current_chunk);
 			player.set_position(player.get_position() - phy::Point(0, 42)); 
 		}
 		screen.drawPlayer(player.get_position());
@@ -286,11 +288,9 @@ void Game::play(){
 		napms(5);
 	
 	}
-	screen.nodel(false);
-	stats_scr.clearwithoutbox();
-	stats_scr.refreshScreen();
-	stats_scr.deleteWin();	
+	screen.nodel(false);	
 	screen.eraseScreen();
+	this->stats.deleteStats();
 }
 
 void Game::resume()
@@ -396,31 +396,6 @@ int Game::setDifficulty()
 	return selected;
 }
 
-void Game::stats()
-{
-	int posY, posX;
-	screen.size(posY, posX, 44, 150);
-
-	this->stats_scr = screen.newWindow(3, 150, posY - 2, posX);
-	updateStats();
-}
-
-void Game::updateStats(){
-	this->stats_scr.clearwithoutbox();
-
-	this->stats_scr.drawRectagle(1, 0 , 3, 149);
-
-	this->stats_scr.drawText(2, 2, "Lives: " );
-	for (int i = 0; i < this->heart; i++)
-	{
-		this->stats_scr.drawText(2, 10 + i*2, "♥");
-	}
-	this->stats_scr.drawText(2, 50, "Level: " + nostd::to_string(this->current_chunk));
-	this->stats_scr.drawText(2, 70, "Jump: " + nostd::to_string(this->jump));
-	this->stats_scr.drawText(2, 90, "Coins: " + nostd::to_string(this->coins));
-	this->stats_scr.refreshScreen();
-}
-
 
 bool Game::pauseGame()
 {
@@ -441,10 +416,9 @@ bool Game::pauseGame()
 		int selected = 0;
 		bool choose = false;
 		
-		stats_scr.redraw();
+		this->stats.redraw();
 		screen.redraw();
 		screen.noOutRefresh();
-		stats_scr.noOutRefresh();
 		pause.noOutRefresh();
 		Screen::update();
 
