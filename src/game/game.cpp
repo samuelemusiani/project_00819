@@ -4,6 +4,7 @@
 #include "game.hpp"
 #include "menu.hpp"
 #include "file.hpp"
+#include "statistics.hpp"
 
 #include "save.hpp"
 #include "../physics/collisions.hpp"
@@ -135,7 +136,6 @@ bool Game::exitGame(){
 
 void Game::start()
 {
-	// clear the screen and draw the border
 	setDifficulty();
 	this->map = Map();
 	this->player = phy::Body();
@@ -148,14 +148,12 @@ void Game::start()
 
 void Game::play(){
 
-	screen.drawMap(this->map, 0);
-
 	
+	Statistics stats = Statistics(screen);
+	screen.drawMap(this->map, 0);
 	screen.drawPlayer(player.get_position());
-	screen.refreshScreen();
 	screen.nodel(true);
-	deb::debug(player.get_position(), "player position");
-	stats();
+	stats.updateStats();
 	
 
 	bool exit = false;
@@ -164,7 +162,7 @@ void Game::play(){
 	int count_not_key = 0;
 	int which_key = 0;
 	while (!exit){
-		updateStats();
+		stats.updateStats();
 		bool right; 
 		int input = screen.getinput();
 
@@ -197,19 +195,19 @@ void Game::play(){
 				if (cumulative > 1 && which_key == 1 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 55));
-						jump++;
+						stats.incrementJump();
 					}
 
 				else if (cumulative > 1 && which_key == 2 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 125));
-						jump++;
+						stats.incrementJump();
 					}
 
 				else if (cumulative > 1 && which_key == 3 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					{
 						player.set_velocity(phy::Vector(JUMPF, 90));
-						jump++;
+						stats.incrementJump();
 					}
 				cumulative = 0;
 			}
@@ -250,7 +248,7 @@ void Game::play(){
 #endif
 			case 27: // Pause menu con tasto esc
 			{
-				bool quitGamepley = pauseGame(); // se true esci dal gioco
+				bool quitGamepley = pauseGame(stats); // se true esci dal gioco
 				if (quitGamepley == true) exit = true;
 				break;
 			}
@@ -267,12 +265,14 @@ void Game::play(){
 		screen.eraseScreen();
 		if (player.get_position().get_yPosition() < 0)
 		{
-			current_chunk--; 
+			current_chunk--;
+			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() + phy::Point(0, 42));
 		}
 		else if (player.get_position().get_yPosition() >= 42)  
 		{
 			current_chunk++;
+			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() - phy::Point(0, 42)); 
 		}
 		screen.drawPlayer(player.get_position());
@@ -286,11 +286,9 @@ void Game::play(){
 		napms(5);
 	
 	}
-	screen.nodel(false);
-	stats_scr.clearwithoutbox();
-	stats_scr.refreshScreen();
-	stats_scr.deleteWin();	
+	screen.nodel(false);	
 	screen.eraseScreen();
+	stats.deleteStats();
 }
 
 void Game::resume()
@@ -396,33 +394,8 @@ int Game::setDifficulty()
 	return selected;
 }
 
-void Game::stats()
-{
-	int posY, posX;
-	screen.size(posY, posX, 44, 150);
 
-	this->stats_scr = screen.newWindow(3, 150, posY - 2, posX);
-	updateStats();
-}
-
-void Game::updateStats(){
-	this->stats_scr.clearwithoutbox();
-
-	this->stats_scr.drawRectagle(1, 0 , 3, 149);
-
-	this->stats_scr.drawText(2, 2, "Lives: " );
-	for (int i = 0; i < this->heart; i++)
-	{
-		this->stats_scr.drawText(2, 10 + i*2, "♥");
-	}
-	this->stats_scr.drawText(2, 50, "Level: " + nostd::to_string(this->current_chunk));
-	this->stats_scr.drawText(2, 70, "Jump: " + nostd::to_string(this->jump));
-	this->stats_scr.drawText(2, 90, "Coins: " + nostd::to_string(this->coins));
-	this->stats_scr.refreshScreen();
-}
-
-
-bool Game::pauseGame()
+bool Game::pauseGame(Statistics stats)
 {
 	screen.nodel(false);
 
@@ -431,7 +404,7 @@ bool Game::pauseGame()
 	int posY, posX;
 	screen.size(posY, posX, 46, 150);
 	
-	Draw pause = screen.newWindow(46, 60, posY, 90 + posX);
+	Draw pause = screen.newWindow(44, 60, posY + 2, 90 + posX);
 	while(!resumed) {
 
 		pause.clearwithoutbox();
@@ -441,10 +414,10 @@ bool Game::pauseGame()
 		int selected = 0;
 		bool choose = false;
 		
-		stats_scr.redraw();
+		stats.redraw();
 		screen.redraw();
 		screen.noOutRefresh();
-		stats_scr.noOutRefresh();
+		stats.noOutRefresh();
 		pause.noOutRefresh();
 		Screen::update();
 
