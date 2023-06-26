@@ -9,6 +9,7 @@
 #include "save.hpp"
 #include "../physics/collisions.hpp"
 #include "../../etc/logs/logs.hpp"
+#include "../entity/entity.hpp"
 
 #define JUMPF (1/(1+m_exp(-0.18 * (cumulative - 8)))*5)
 //#define JUMPF cumulative / (1 + cumulative)
@@ -24,7 +25,7 @@ double m_exp(double d)
 
 
 Game::Game()
-{	
+{
 	this->screen = Draw();
 	screen.init();
 	File::initSettings();
@@ -32,7 +33,7 @@ Game::Game()
 
 Game::~Game()
 {
-	
+
 	endwin();
 }
 
@@ -48,18 +49,19 @@ void Game::run()
 
 		Credits credits;
 		Settings settings;
-		
+
 		switch (sel)
 		{
-		
-		
-		case 0: 
+
+
+		case 0:
 			{// New Game
 			// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
 			this->start();
-			
+
+			// TODO: Implementing pause menu
 			break;}
-		case 1: 
+		case 1:
 			{// Resume game
 			
 			this->resume();
@@ -68,8 +70,8 @@ void Game::run()
 		case 2: 
 			{// Settings
 			settings.drawFirstSettings(this->screen);
-			
-			break; 
+
+			break;
 			}
 		case 3:
 		{
@@ -77,7 +79,7 @@ void Game::run()
 			credits = Credits();
 			int dev = credits.drawCredits(this->screen);
 			if (dev != -1) credits.openGithub(dev);
-			
+
 			break;
 		}
 		case 27:
@@ -86,7 +88,7 @@ void Game::run()
 				break;
 			}
 		}
-		
+
 
 	}
 }
@@ -99,7 +101,7 @@ bool Game::exitGame(){
 	nostd::string options[2] = {"Yes", "No"};
 	int selected = 0;
 	bool choose = false;
-	// Create two button (yes or no) to quit the game 	
+	// Create two button (yes or no) to quit the game
 	while (!choose){
 
 
@@ -128,8 +130,8 @@ bool Game::exitGame(){
 				break;
 		}
 
-		
-		
+
+
 	}
 	return selected == 0;
 }
@@ -148,13 +150,18 @@ void Game::start()
 
 void Game::play(){
 
-	
 	Statistics stats = Statistics(screen);
 	screen.drawMap(this->map, 0);
 	screen.drawPlayer(player.get_position());
 	screen.nodel(true);
 	stats.updateStats();
 	
+	//inizialize manager
+	Manager manager = Manager(map);
+	//time for moving
+	int time = 0;
+
+	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
 
 	bool exit = false;
 	screen.nodel(true);
@@ -172,8 +179,8 @@ void Game::play(){
 			which_key = 1;
 			cumulative++;
 			count_not_key = 0;
-		} 
-		else if (input == (int) 'a') 
+		}
+		else if (input == (int) 'a')
 		{
 			which_key = 2;
 			cumulative++;
@@ -181,11 +188,11 @@ void Game::play(){
 		}
 		else if (input == 'v'){
 			which_key = 3;
-			cumulative++; 
+			cumulative++;
 			count_not_key = 0;
 
 		}
-		else   
+		else
 		{
 			//deb::debug((int)cumulative, "cumulative");
 			//deb::debug((double) (JUMPF), "JUMPF");
@@ -212,8 +219,8 @@ void Game::play(){
 				cumulative = 0;
 			}
 
-		
-		
+
+
 		switch(input)
 		{
 			case ((int) 's'): // move player left
@@ -269,13 +276,25 @@ void Game::play(){
 			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() + phy::Point(0, 42));
 		}
-		else if (player.get_position().get_yPosition() >= 42)  
+		else if (player.get_position().get_yPosition() >= 42)
 		{
 			current_chunk++;
 			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() - phy::Point(0, 42)); 
 		}
 		screen.drawPlayer(player.get_position());
+
+		//qui vengono chiamate draw dei nemici e monete
+		manager.set_chunk(current_chunk, map);
+		manager.print_entity(screen);
+
+		//debugging
+		if(time == 1001) time = 0;
+		//if(time%100==0) deb::debug(time, "time");
+		if(time%1000==0) manager.print_enemy_list();
+
+		manager.move_enemies(time);
+
 		screen.drawMap(map, current_chunk);
 		screen.drawText(2, 1, nostd::to_string(current_chunk));
 		screen.drawText(1, 1, nostd::to_string(player.get_position().get_xPosition()));
@@ -284,7 +303,7 @@ void Game::play(){
 		//screen.drawText(2, 140, nostd::to_string(1+pow(1.1, - cumulative/50)));
 		screen.drawText(3, 140, nostd::to_string(cumulative));
 		napms(5);
-	
+
 	}
 	screen.nodel(false);	
 	screen.eraseScreen();

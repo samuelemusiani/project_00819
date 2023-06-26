@@ -6,6 +6,9 @@
 #include "screen.hpp"
 #include "../../etc/nostd/vector.hpp"
 #include "../../etc/nostd/string.hpp"
+#include "../entity/entity.hpp"
+
+
 
 #define OFFSET 42
 
@@ -14,8 +17,8 @@
 
 class Draw : public Screen{
 	private:
-		void drawPlatform(nostd::vector<Platform> &plat);
-		
+		void drawPlatform(nostd::vector<Platform> plat);
+
 	public:
 		void drawText(int posY, int posX, nostd::string s);
 		void drawText(int posY, int posX, const char t[]);
@@ -31,10 +34,13 @@ class Draw : public Screen{
 		static int centerX(nostd::string text);
 		static int centerX(const char* text);
 		void drawRectagle(int posY, int posX, int length, int width);
+
 		int center(nostd::string t);
 		Draw newSubWindow(int height, int width, int posY, int posX);
 		Draw newWindow(int height, int width, int posY, int posX);
 		void setWin(WINDOW *win);
-		
+
+		void drawEntity(Entity entity);
+
 };
 #endif

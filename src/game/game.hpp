@@ -2,11 +2,13 @@
 #define GAME_HPP
 
 #include <ncurses.h>
+
 #include "../draw/draw.hpp"
 #include "../physics/body.hpp"
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
 #include "statistics.hpp"
+#include "../entity/manager.hpp"
 
 
 class Game

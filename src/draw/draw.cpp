@@ -33,11 +33,11 @@ void Draw::attrOff(int c_pair) {
 //draw map
 void Draw::drawMap(Map map, int nChunk) {
 	//per adesso abbiamo solo il chunk 0
-	this->drawPlatform(*map.get_chunk(nChunk).get_platforms());
+	this->drawPlatform(map.get_chunk(nChunk).get_platforms());
 }
 
 //draw a platform that display
-void Draw::drawPlatform(nostd::vector<Platform> &plat) {
+void Draw::drawPlatform(nostd::vector<Platform> plat) {
 	for(int i = 0; i < plat.size(); i++) {
 		for(int j = 0; j < plat[i].get_length(); j++) {
 			mvwprintw(this->screen, OFFSET-plat[i].get_position().get_yPosition(), plat[i].get_position().get_xPosition()+j+1, "=");
@@ -49,7 +49,9 @@ void Draw::drawPlayer(phy::Point p) {
 	mvwprintw(this->screen, OFFSET - p.get_yPosition(), p.get_xPosition() + 1, "@");
 }
 
-
+void Draw::drawEntity(Entity entity) {
+	mvwprintw(this->screen, OFFSET - entity.get_y(), entity.get_x(), entity.get_id());
+}
 
 void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione del primo carattere
 	this->drawText(posY, posX, s);

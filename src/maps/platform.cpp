@@ -32,12 +32,11 @@ void Platform::set_length(int len)
 }
 
 
-phy::Point Platform::get_position()
-{
+phy::Point Platform::get_position() const {
     return this->position;
 }
 
-int Platform::get_length()
+int Platform::get_length() const
 {
     return this->length;
 }
