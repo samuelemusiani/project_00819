@@ -1,7 +1,8 @@
 #include "manager.hpp"
 
 Manager::Manager (Map map)
-    : Global_Entities(0), Global_Coins(0), Global_Enemies(0), current_chunk(-1)
+    : Global_Entities(0), Global_Coins(0), Global_Enemies(0), 
+        current_chunk(-1), Bullets(nullptr)
 {
     this->map = map;
     this->seed = map.getSeed();
@@ -9,6 +10,10 @@ Manager::Manager (Map map)
 
 void Manager::set_chunk(int Chunk, Map map)
 {
+    // For semplicity all bullets outside the current chunk despawn
+    if (this->current_chunk != Chunk)
+        this->Bullets = this->delete_all_bullets(this->Bullets);
+
     if(this->current_chunk < Chunk) {
         this->Enemies.push_back(nullptr);
         this->Coins.push_back(nullptr);
@@ -33,7 +38,7 @@ void Manager::set_chunk(int Chunk, Map map)
 
 void Manager::add_enemy(int Chunk, Enemy enemy, phy::Point p, bool dir)
 {
-    enemy.set_point(p);
+    enemy.set_position(p);
     enemy.set_direction(dir);
 
     head_insert(Chunk, enemy);
@@ -43,7 +48,7 @@ void Manager::add_enemy(int Chunk, Enemy enemy, phy::Point p, bool dir)
 
 void Manager::add_coin(int Chunk, Coin coin, phy::Point p)
 {
-    coin.set_point(p);
+    coin.set_position(p);
 
     head_insert(Chunk, coin);
     this->Global_Entities++;
@@ -106,19 +111,30 @@ void Manager::collect_coin(phy::Point player_position)
     this->Global_Entities--;
 }
 
-//time is in dec sec (sec*10^-1)
-void Manager::move_enemies(int& time)
+void Manager::make_player_shoot(phy::Point position, bool direction)
 {
-    if(time == 0) {
+    position = position + (direction ? phy::Point(1, 0) : phy::Point(-1, 0));
+
+    pbullets tmp = new bullets;
+    tmp->val = Bullet("-", position, direction);
+    tmp->next = this->Bullets;
+    this->Bullets = tmp;
+}
+
+//time is in dec sec (sec*10^-1)
+void Manager::move_entities(int& time)
+{
+    // Enemies
+    if(time % 100 == 0) {
         pnemici tmp = this->Enemies[this->current_chunk];
         Chunk chunk = map.get_chunk(this->current_chunk);
-        while(tmp != NULL) {
+        while(tmp != nullptr) {
             if(tmp->val.isItAlive()) {
                 if(tmp->val.canMove(chunk)) {
                     if(tmp->val.get_direction()) 
-                        tmp->val.set_point(tmp->val.get_position() + phy::Point(1,0));
+                        tmp->val.set_position(tmp->val.get_position() + phy::Point(1,0));
                     else 
-                        tmp->val.set_point(tmp->val.get_position() + phy::Point(-1,0));
+                        tmp->val.set_position(tmp->val.get_position() + phy::Point(-1,0));
                 }
                 else 
                     tmp->val.set_direction(!tmp->val.get_direction()); 
@@ -126,22 +142,43 @@ void Manager::move_enemies(int& time)
             tmp = tmp->next;
         }
     } 
+
+    // Bullets
+    if(time % 25 == 0) {
+        pbullets tmp = this->Bullets;
+
+        while(tmp != nullptr) {
+            phy::Point tmp_pos = tmp->val.get_position();
+            tmp_pos = tmp_pos + (tmp->val.get_direction() ? phy::Point(1, 0) 
+                    : phy::Point(-1, 0));
+            tmp->val.set_position(tmp_pos);
+            tmp = tmp->next;
+        }
+
+        //TODO: Delete bullets out of screen
+    }
 }
 
 void Manager::draw_entities(Draw screen)
 {
     pnemici p = this->Enemies[this->current_chunk];
-    while(p != NULL) {
+    while(p != nullptr) {
         screen.drawEntity(p->val);
         p = p->next;
     }
 
     pmonete q = this->Coins[this->current_chunk];
-    while(q != NULL) {
+    while(q != nullptr) {
         if(!q->val.is_collected())
             screen.drawEntity(q->val);
 
         q = q->next;
+    }
+
+    pbullets b = this->Bullets;
+    while(b != nullptr) {
+        screen.drawEntity(b->val);
+        b = b->next;
     }
 }
 
@@ -230,6 +267,18 @@ nostd::vector<phy::Point> Manager::get_all_entities_positions_in_chunk(int Chunk
     }
     return(v);
 }
+
+pbullets Manager::delete_all_bullets(pbullets p)
+{
+    if(p != nullptr)
+    {
+        delete_all_bullets(p->next);
+        delete p;
+        p = nullptr;
+    }
+    return p;
+}
+
 //ONLY FOR DEBUGING
 // void Manager::print_enemy_list()
 // {

@@ -22,8 +22,6 @@ double m_exp(double d)
 		return 1/exp(-d);
 }
 
-
-
 Game::Game()
 {
 	this->screen = Draw();
@@ -92,7 +90,6 @@ void Game::run()
 
 	}
 }
-
 
 bool Game::exitGame(){
 	// Esci dal gioco
@@ -231,6 +228,14 @@ void Game::play(){
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
 
+            case ((int) 'w'): // shoot left
+                manager.make_player_shoot(player.get_position(), false);
+                break;
+
+            case ((int) 'e'): //shoot right
+                manager.make_player_shoot(player.get_position(), true);
+                break;
+
 #ifdef USE_HACK
 			case (KEY_UP):
 				if (fly) player.set_position(player.get_position() + phy::Point(0, 1));
@@ -286,7 +291,7 @@ void Game::play(){
         /* ENTITIES */
 		manager.set_chunk(current_chunk, map);
 		manager.draw_entities(screen);
-		manager.move_enemies(entity_time);
+		manager.move_entities(entity_time);
         manager.collect_coin(player.get_position());
         entity_time = ++entity_time % 100;
 

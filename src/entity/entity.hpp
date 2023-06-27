@@ -13,7 +13,7 @@ class Entity
         Entity(const char* id, phy::Point p);
         Entity();
         void init_entity(const char* id, phy::Point p);
-        void set_point(phy::Point p);
+        void set_position(phy::Point p);
         int get_x();
         int get_y();
         phy::Point get_position();

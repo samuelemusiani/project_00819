@@ -14,10 +14,10 @@ void Entity::init_entity(const char* id, phy::Point p)
     // char tmp[2] = "$";
     // strcpy(this->id, tmp);
     strcpy(this->id, id);
-    this->set_point(p);
+    this->set_position(p);
 }
 
-void Entity::set_point(phy::Point p)
+void Entity::set_position(phy::Point p)
 {
     this->p = p;
 }
