@@ -14,7 +14,7 @@ void Manager::set_chunk(int Chunk, Map map)
     if (this->current_chunk != Chunk)
         this->Bullets = this->delete_all_bullets(this->Bullets);
 
-    if(this->current_chunk < Chunk) {
+    if(this->current_chunk < Chunk && Enemies.size() < Chunk + 1) {
         this->Enemies.push_back(nullptr);
         this->Coins.push_back(nullptr);
 
