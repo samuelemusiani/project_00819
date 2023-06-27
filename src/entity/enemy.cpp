@@ -1,9 +1,9 @@
 #include "enemy.hpp"
 
-Enemy::Enemy(const char* id, phy::Point p, int hp, int ms, int damg)
-    : Entity(id, p)
+Enemy::Enemy(const char* id, phy::Point p, int damg)
+    : Entity(id, p), _damage(damg), _alive(true)
 {
-    this->init_enemy(hp, ms, damg);
+
 };
 
 Enemy::Enemy()
@@ -11,69 +11,33 @@ Enemy::Enemy()
 
 }
 
-void Enemy::init_enemy(int hp, int ms, int damg)  {
-
-    this->set_state(true);
-    this->set_hp(hp);
-    this->ms = ms;
-    this->damg = damg;
-
-}
-
-void Enemy::set_hp(int hp)
+int Enemy::get_damage()
 {
-
-    this->hp = hp;
-
+    return this->_damage;
 }
 
-void Enemy::got_hit(int damGot)
+bool Enemy::get_direction()
 {
-
-    //Draw::drawHit();  (prima o poi la faccio)
-    this->set_hp(this->hp - damGot);
-
+    return this->_direction;
 }
 
-void Enemy::set_state(bool s) {
-
-    this->isAlive = s;
-
+void Enemy::set_direction(bool dir)
+{
+    this->_direction = dir;
 }
 
-bool Enemy::canMove(Chunk chunk) {
-    if(this->dir == true) {
-        if(chunk.is_there_a_platform(this->p + phy::Point(1, -1))) {
-            return(true);
-        } else return(false);
-    } else {
-        if (chunk.is_there_a_platform(this->p + phy::Point(-1, -1))) {
-            return(true);
-        } else return(false);
-    }
-    //check if there is a player or smth else
+bool Enemy::can_move(Chunk chunk)
+{
+    phy::Point next_pos = this->_direction ? phy::Point(1, -1) : phy::Point(-1, -1);
+    return chunk.is_there_a_platform(this->p + next_pos);
 }
 
-bool Enemy::isItAlive() {
-
-    return(this->isAlive);
-
+bool Enemy::is_alive()
+{
+    return this->_alive;
 }
 
-/*DIRECTION_POSSIBILITY Enemy::get_direction() {
-
-  return(this->dir);
-
-  }*/
-
-void Enemy::set_direction(bool dir) {
-
-    this->dir = dir;
-
-}
-
-bool Enemy::get_direction() {
-
-    return(this->dir);
-
+void Enemy::kill()
+{
+    this->_alive = false;
 }

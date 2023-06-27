@@ -52,14 +52,13 @@ class Manager
         void add_coin(int Chunk, Coin coin, phy::Point p);
         void head_insert(int Chunk, Enemy enemy);
         void head_insert(int Chunk, Coin coin);
-        pbullets clean_out_of_screen_bullets(pbullets p);
+        pbullets bullets_collisions(pbullets p);
         pbullets delete_all_bullets(pbullets p);
 
     public:
         Manager(Map map);
 
         void set_chunk(int Chunk, Map map);
-        // void kill_entity(int Chunk, Enemy enemy);
         void collect_coin(phy::Point player_position);
         void make_player_shoot(phy::Point position, bool direction);
         void move_entities(int& time);
@@ -70,8 +69,5 @@ class Manager
         pnemici get_all_enemies_in_chunk(int Chunk);
         pmonete get_all_coins_in_chunk(int Chunk);
         nostd::vector<phy::Point> get_all_entities_positions_in_chunk(int Chunk);
-
-        //ONLY FOR DEBUGING
-        // void print_enemy_list();
 };
 #endif

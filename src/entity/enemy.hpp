@@ -8,30 +8,23 @@
 
 class Enemy : public Entity {
     protected:
-
-        int hp;
-        double ms;
-        int damg;
-        //DIRECTION_POSSIBILITY dir;
-        bool dir;
-        bool isAlive;
+        int _damage;
+        bool _direction;
+        bool _alive;
 
     public:
 
-        Enemy(const char* id, phy::Point p, int hp, int ms, int damg) ;
+        Enemy(const char* id, phy::Point p, int damage) ;
         Enemy();
 
-        void init_enemy(int hp, int ms, int damg);
-        void set_hp(int hp);
-        void got_hit(int damGot);
-        void set_state(bool s);
-        //void set_direction(DIRECTION_POSSIBILITY dir);
-        void set_direction(bool dir);
-        bool canMove(Chunk chunk);
-        bool isItAlive();
-        //DIRECTION_POSSIBILITY get_direction();
+        int get_damage();
         bool get_direction();
 
+        void set_direction(bool dir);
 
+        bool can_move(Chunk chunk);
+        bool is_alive();
+
+        void kill();
 };
 #endif
