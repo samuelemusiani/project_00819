@@ -155,8 +155,28 @@ void Manager::move_entities(int& time)
             tmp = tmp->next;
         }
 
-        //TODO: Delete bullets out of screen
+        // I need to delete all the bullets that goes out of screeen
+        this->Bullets = clean_out_of_screen_bullets(this->Bullets);
     }
+}
+
+pbullets Manager::clean_out_of_screen_bullets(pbullets p)
+{
+    if(p != nullptr) {
+        int x_pos = p->val.get_position().get_xPosition();
+
+        if(x_pos < 0 || x_pos > 147) {
+            pbullets tmp = p->next;
+            delete p;
+            return this->clean_out_of_screen_bullets(tmp);
+        }
+        else {
+            p->next = this->clean_out_of_screen_bullets(p->next);
+            return p;
+        }
+    }
+
+    return p;
 }
 
 void Manager::draw_entities(Draw screen)

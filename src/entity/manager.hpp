@@ -52,6 +52,7 @@ class Manager
         void add_coin(int Chunk, Coin coin, phy::Point p);
         void head_insert(int Chunk, Enemy enemy);
         void head_insert(int Chunk, Coin coin);
+        pbullets clean_out_of_screen_bullets(pbullets p);
         pbullets delete_all_bullets(pbullets p);
 
     public:
