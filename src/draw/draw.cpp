@@ -50,7 +50,7 @@ void Draw::drawPlayer(phy::Point p) {
 }
 
 void Draw::drawEntity(Entity entity) {
-	mvwprintw(this->screen, OFFSET - entity.get_y(), entity.get_x(), entity.get_id());
+	mvwprintw(this->screen, OFFSET - entity.get_y(), entity.get_x() + 1, entity.get_id());
 }
 
 void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione del primo carattere
