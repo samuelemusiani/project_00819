@@ -292,7 +292,7 @@ void Game::play(){
 		manager.set_chunk(current_chunk, map);
 		manager.draw_entities(screen);
 		manager.move_entities(entity_time);
-        manager.collect_coin(player.get_position());
+        stats.setCoins(stats.getCoins() + manager.collect_coin(player.get_position()));
         entity_time = ++entity_time % 100;
 
 		screen.drawMap(map, current_chunk);

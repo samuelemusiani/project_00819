@@ -59,7 +59,7 @@ class Manager
         Manager(Map map);
 
         void set_chunk(int Chunk, Map map);
-        void collect_coin(phy::Point player_position);
+        int collect_coin(phy::Point player_position);
         void make_player_shoot(phy::Point position, bool direction);
         void move_entities(int& time);
         void draw_entities(Draw screen); //This method must be called afther set_chunk()

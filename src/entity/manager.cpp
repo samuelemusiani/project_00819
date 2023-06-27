@@ -86,18 +86,24 @@ void Manager::head_insert(int Chunk, Coin coin)
     }
 }
 
-void Manager::collect_coin(phy::Point player_position)
+int Manager::collect_coin(phy::Point player_position)
 {
+    bool collected_something = false;
     pmonete tmp = this->Coins[this->current_chunk];
     while (tmp != nullptr) {
-        if(tmp->val.get_position() == player_position)
+        if(tmp->val.get_position() == player_position && 
+                !tmp->val.is_collected())
+        {
             tmp->val.make_collected();
-
+            collected_something = true;
+        }
         tmp = tmp->next;
     }
 
     this->Global_Coins--;
     this->Global_Entities--;
+
+    return (collected_something ? 1 : 0);
 }
 
 void Manager::make_player_shoot(phy::Point position, bool direction)
