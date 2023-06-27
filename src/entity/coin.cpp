@@ -1,27 +1,27 @@
 #include "coin.hpp"
 
 Coin::Coin(const char* id, phy::Point p, int value)
-  : Entity(id, p)
+    : Entity(id, p)
 {
-  this->init_coin(value);
+    this->value = value;
+    this->collected = false;
 }
 
 Coin::Coin():Entity()
 {
 }
 
-void Coin::init_coin(int value)
-{
-  this->value = value;
-  this->set_state(false);
-}
-
 int Coin::get_value()
 {
-  return(this->value);
+    return(this->value);
 }
 
-void Coin::set_state(bool s)
+void Coin::make_collected()
 {
-  this->alredyCollected = s;
+    this->collected = true;
+}
+
+bool Coin::is_collected()
+{
+    return this->collected;
 }

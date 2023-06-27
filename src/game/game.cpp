@@ -282,16 +282,12 @@ void Game::play(){
 		}
 		screen.drawPlayer(player.get_position());
 
-		//qui vengono chiamate draw dei nemici e monete
+
+        /* ENTITIES */
 		manager.set_chunk(current_chunk, map);
 		manager.draw_entities(screen);
-
-		// //debugging
-		// if(time == 1001) time = 0;
-		// //if(time%100==0) deb::debug(time, "time");
-		// if(time%1000==0) manager.print_enemy_list();
-
 		manager.move_enemies(entity_time);
+        manager.collect_coin(player.get_position());
         entity_time = ++entity_time % 100;
 
 		screen.drawMap(map, current_chunk);

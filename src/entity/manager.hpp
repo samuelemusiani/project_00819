@@ -47,7 +47,7 @@ class Manager
 
         void set_chunk(int Chunk, Map map);
         // void kill_entity(int Chunk, Enemy enemy);
-        // void collect_coin(int Chunk, Coin coin);
+        void collect_coin(phy::Point player_position);
         void move_enemies(int& time);
         void draw_entities(Draw screen); //This method must be called afther set_chunk()
         bool is_there_an_entity_in_platform(Map map, int Chunk, int plat);

@@ -37,7 +37,7 @@ const char* Entity::get_id()
     return(this->id);
 }
 
-phy::Point Entity::get_point()
+phy::Point Entity::get_position()
 {
     return(this->p);
 }

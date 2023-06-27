@@ -4,19 +4,18 @@
 #define ENTITY_COIN
 
 class Coin : public Entity {
-protected:
+    protected:
+        int value;
+        bool collected;
 
-  int value;
-  bool alredyCollected;
+    public:
+        //We need to use a wider character for storing the coins signs
+        Coin(const char* id, phy::Point p, int value);
+        Coin();
 
-public:
-  //We need to use a wider character for storing the coins signs
-  Coin(const char* id, phy::Point p, int value);
-  Coin();
-  
-  void init_coin(int value);
-  int get_value();
-  void set_state(bool s);
+        int get_value();
+        void make_collected();
+        bool is_collected();
 
 };
 #endif

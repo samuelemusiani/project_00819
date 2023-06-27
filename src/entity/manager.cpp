@@ -85,22 +85,26 @@ void Manager::head_insert(int Chunk, Coin coin)
 // void Manager::kill_entity(int Chunk, Enemy enemy)
 // {
 //     pnemici tmp = this->Enemies[Chunk];
-//     while (tmp != NULL || enemy.get_point() == tmp->val.get_point())
+//     while (tmp != NULL || enemy.get_position() == tmp->val.get_position())
 //         tmp->val.set_state(false);
 //
 //     this->Global_Enemies--;
 //     this->Global_Entities--;
 // }
 
-// void Manager::collect_coin(int Chunk, Coin coin)
-// {
-//     pmonete tmp = this->Coins[Chunk];
-//     while (tmp != NULL || coin.get_point() == tmp->val.get_point())
-//         tmp->val.set_state(true);
-//
-//     this->Global_Coins--;
-//     this->Global_Entities--;
-// }
+void Manager::collect_coin(phy::Point player_position)
+{
+    pmonete tmp = this->Coins[this->current_chunk];
+    while (tmp != NULL) {
+        if(tmp->val.get_position() == player_position)
+            tmp->val.make_collected();
+
+        tmp = tmp->next;
+    }
+
+    this->Global_Coins--;
+    this->Global_Entities--;
+}
 
 //time is in dec sec (sec*10^-1)
 void Manager::move_enemies(int& time)
@@ -112,9 +116,9 @@ void Manager::move_enemies(int& time)
             if(tmp->val.isItAlive()) {
                 if(tmp->val.canMove(chunk)) {
                     if(tmp->val.get_direction()) 
-                        tmp->val.set_point(tmp->val.get_point() + phy::Point(1,0));
+                        tmp->val.set_point(tmp->val.get_position() + phy::Point(1,0));
                     else 
-                        tmp->val.set_point(tmp->val.get_point() + phy::Point(-1,0));
+                        tmp->val.set_point(tmp->val.get_position() + phy::Point(-1,0));
                 }
                 else 
                     tmp->val.set_direction(!tmp->val.get_direction()); 
@@ -134,7 +138,9 @@ void Manager::draw_entities(Draw screen)
 
     pmonete q = this->Coins[this->current_chunk];
     while(q != NULL) {
-        screen.drawEntity(q->val);
+        if(!q->val.is_collected())
+            screen.drawEntity(q->val);
+
         q = q->next;
     }
 }
@@ -214,12 +220,12 @@ nostd::vector<phy::Point> Manager::get_all_entities_positions_in_chunk(int Chunk
     pmonete q = this->Coins[Chunk];
 
     while (p != nullptr) {
-        v.push_back(p->val.get_point());
+        v.push_back(p->val.get_position());
         p = p->next;
     }
 
     while (q != nullptr) {
-        v.push_back(q->val.get_point());
+        v.push_back(q->val.get_position());
         q = q->next;
     }
     return(v);
@@ -231,7 +237,7 @@ nostd::vector<phy::Point> Manager::get_all_entities_positions_in_chunk(int Chunk
 //     int c = 0;
 //     while (p != nullptr) {
 //         deb::debug(p->val.get_id(), "type");
-//         deb::debug(p->val.get_point(), "current point");
+//         deb::debug(p->val.get_position(), "current point");
 //         p = p->next;
 //         c++;
 //     }
