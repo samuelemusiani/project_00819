@@ -156,10 +156,8 @@ void Game::play(){
 	screen.nodel(true);
 	stats.updateStats();
 	
-	//inizialize manager
 	Manager manager = Manager(map);
-	//time for moving
-	int time = 0;
+	int entity_time= 0;
 
 	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
 
@@ -286,14 +284,15 @@ void Game::play(){
 
 		//qui vengono chiamate draw dei nemici e monete
 		manager.set_chunk(current_chunk, map);
-		manager.print_entity(screen);
+		manager.draw_entities(screen);
 
-		//debugging
-		if(time == 1001) time = 0;
-		//if(time%100==0) deb::debug(time, "time");
-		if(time%1000==0) manager.print_enemy_list();
+		// //debugging
+		// if(time == 1001) time = 0;
+		// //if(time%100==0) deb::debug(time, "time");
+		// if(time%1000==0) manager.print_enemy_list();
 
-		manager.move_enemies(time);
+		manager.move_enemies(entity_time);
+        entity_time = ++entity_time % 100;
 
 		screen.drawMap(map, current_chunk);
 		screen.drawText(2, 1, nostd::to_string(current_chunk));
@@ -549,31 +548,31 @@ void Game::hack(){
 	int x = hack.getinput();
 	switch (x){
 		case '1':
-			this->heart++;
+			// this->heart++;
 			break;
 		case '2':
-			this->coins++;
+			// this->coins++;
 			break;
 		case '3':
-			this->jump++;
+			// this->jump++;
 			break;
 		case '4':
-			this->current_chunk++;
+			// this->current_chunk++;
 			break;
 		case '5':
 			fly = true;
 			break;
 		case '6':
-			this->heart--;
+			// this->heart--;
 			break;
 		case '7':
-			this->coins--;
+			// this->coins--;
 			break;
 		case '8':
-			this->jump--;
+			// this->jump--;
 			break;
 		case '9':
-			this->current_chunk--;
+			// this->current_chunk--;
 			break;
 		case '0':
 			fly = false;
@@ -598,7 +597,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set life"), "Set life");
 					int custom = setCustom(hack);
-					if (custom != -1) this->heart = custom;
+					// if (custom != -1) this->heart = custom;
 					break;
 				}
 				case '2':
@@ -606,7 +605,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set coins"), "Set coins");
 					int custom = setCustom(hack);
-					if (custom != -1) this->coins = custom;
+					// if (custom != -1) this->coins = custom;
 					break;
 				}
 				case '3':
@@ -614,7 +613,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set jump"), "Set jump");
 					int custom = setCustom(hack);
-					if (custom != -1) this->jump = custom;
+					// if (custom != -1) this->jump = custom;
 					break;
 				}
 				case '4':
@@ -622,7 +621,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set level"), "Set level");
 					int custom = setCustom(hack);
-					if (custom != -1) this->current_chunk = custom;
+					// if (custom != -1) this->current_chunk = custom;
 					break;
 				}
 				default:
