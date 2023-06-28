@@ -2,11 +2,13 @@
 #define GAME_HPP
 
 #include <ncurses.h>
+
 #include "../draw/draw.hpp"
 #include "../physics/body.hpp"
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
 #include "statistics.hpp"
+#include "../entity/manager.hpp"
 
 
 class Game
@@ -15,14 +17,14 @@ class Game
 		Draw screen;
 		Map map;
 		int current_chunk = 0;
+		phy::Body player;
+
 #ifdef USE_HACK
 		bool fly = false;
-#endif
-		phy::Body player;
-#ifdef USE_HACK
 		void hack();
 		int setCustom(Draw hack);
 #endif
+
 	public:
 		Game();
 		~Game();
@@ -36,7 +38,6 @@ class Game
 		int setDifficulty();
 
 		bool pauseGame(Statistics stats); 
-
 };
 
 #endif

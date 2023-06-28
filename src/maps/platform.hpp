@@ -25,8 +25,8 @@ class Platform
         void set_position(phy::Point x);
         void set_length(int len);
 
-        phy::Point get_position();
-        int get_length();
+        phy::Point get_position() const;
+        int get_length() const;
 };
 
 #endif

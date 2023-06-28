@@ -5,7 +5,7 @@ project(project_00819
 	LANGUAGES CXX)
 
 
-# LIB: ncurses 
+# LIB: ncurses
 find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIR})
 
@@ -20,6 +20,9 @@ file(GLOB_RECURSE SRC_ENGINE_FILES src/engine/*.cpp)
 
 # MAPS:
 file(GLOB_RECURSE SRC_MAPS_FILES src/maps/*.cpp)
+
+# ENTITY:
+file(GLOB_RECURSE SRC_ENTITY_FILES src/entity/*.cpp)
 
 # PHYSICS:
 file(GLOB_RECURSE SRC_PHYSYCS_FILES src/physics/*.cpp)
@@ -38,7 +41,8 @@ add_executable(game src/main.cpp
 		${SRC_PHYSYCS_FILES}
 		${SRC_MAPS_FILES}
 		${ETC_LOGS_FILES}
-		${ETC_NOSTD_FILES})
+		${ETC_NOSTD_FILES}
+		${SRC_ENTITY_FILES})
 
 target_link_libraries(game ${CURSES_LIBRARIES})
 target_compile_features(game PRIVATE cxx_std_14)

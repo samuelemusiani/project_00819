@@ -9,6 +9,7 @@
 #include "save.hpp"
 #include "../physics/collisions.hpp"
 #include "../../etc/logs/logs.hpp"
+#include "../entity/entity.hpp"
 
 #define JUMPF (1/(1+m_exp(-0.18 * (cumulative - 8)))*5)
 //#define JUMPF cumulative / (1 + cumulative)
@@ -21,10 +22,8 @@ double m_exp(double d)
 		return 1/exp(-d);
 }
 
-
-
 Game::Game()
-{	
+{
 	this->screen = Draw();
 	screen.init();
 	File::initSettings();
@@ -32,7 +31,7 @@ Game::Game()
 
 Game::~Game()
 {
-	
+
 	endwin();
 }
 
@@ -48,18 +47,19 @@ void Game::run()
 
 		Credits credits;
 		Settings settings;
-		
+
 		switch (sel)
 		{
-		
-		
-		case 0: 
+
+
+		case 0:
 			{// New Game
 			// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
 			this->start();
-			
+
+			// TODO: Implementing pause menu
 			break;}
-		case 1: 
+		case 1:
 			{// Resume game
 			
 			this->resume();
@@ -68,8 +68,8 @@ void Game::run()
 		case 2: 
 			{// Settings
 			settings.drawFirstSettings(this->screen);
-			
-			break; 
+
+			break;
 			}
 		case 3:
 		{
@@ -77,7 +77,7 @@ void Game::run()
 			credits = Credits();
 			int dev = credits.drawCredits(this->screen);
 			if (dev != -1) credits.openGithub(dev);
-			
+
 			break;
 		}
 		case 27:
@@ -86,11 +86,10 @@ void Game::run()
 				break;
 			}
 		}
-		
+
 
 	}
 }
-
 
 bool Game::exitGame(){
 	// Esci dal gioco
@@ -99,7 +98,7 @@ bool Game::exitGame(){
 	nostd::string options[2] = {"Yes", "No"};
 	int selected = 0;
 	bool choose = false;
-	// Create two button (yes or no) to quit the game 	
+	// Create two button (yes or no) to quit the game
 	while (!choose){
 
 
@@ -128,8 +127,8 @@ bool Game::exitGame(){
 				break;
 		}
 
-		
-		
+
+
 	}
 	return selected == 0;
 }
@@ -148,13 +147,16 @@ void Game::start()
 
 void Game::play(){
 
-	
 	Statistics stats = Statistics(screen);
 	screen.drawMap(this->map, 0);
 	screen.drawPlayer(player.get_position());
 	screen.nodel(true);
 	stats.updateStats();
 	
+	Manager manager = Manager(map);
+	int entity_time= 0;
+
+	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
 
 	bool exit = false;
 	screen.nodel(true);
@@ -172,8 +174,8 @@ void Game::play(){
 			which_key = 1;
 			cumulative++;
 			count_not_key = 0;
-		} 
-		else if (input == (int) 'a') 
+		}
+		else if (input == (int) 'a')
 		{
 			which_key = 2;
 			cumulative++;
@@ -181,11 +183,11 @@ void Game::play(){
 		}
 		else if (input == 'v'){
 			which_key = 3;
-			cumulative++; 
+			cumulative++;
 			count_not_key = 0;
 
 		}
-		else   
+		else
 		{
 			//deb::debug((int)cumulative, "cumulative");
 			//deb::debug((double) (JUMPF), "JUMPF");
@@ -212,8 +214,8 @@ void Game::play(){
 				cumulative = 0;
 			}
 
-		
-		
+
+
 		switch(input)
 		{
 			case ((int) 's'): // move player left
@@ -225,6 +227,14 @@ void Game::play(){
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() + phy::Point(1, 0));
 				break;
+
+            case ((int) 'w'): // shoot left
+                manager.shoot(player.get_position(), false);
+                break;
+
+            case ((int) 'e'): //shoot right
+                manager.shoot(player.get_position(), true);
+                break;
 
 #ifdef USE_HACK
 			case (KEY_UP):
@@ -269,13 +279,22 @@ void Game::play(){
 			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() + phy::Point(0, 42));
 		}
-		else if (player.get_position().get_yPosition() >= 42)  
+		else if (player.get_position().get_yPosition() >= 42)
 		{
 			current_chunk++;
 			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() - phy::Point(0, 42)); 
 		}
 		screen.drawPlayer(player.get_position());
+
+
+        /* ENTITIES */
+		manager.set_chunk(current_chunk, map);
+		manager.update_entities(entity_time, player, stats);
+        stats.setCoins(stats.getCoins() + manager.collect_coin(player.get_position()));
+        entity_time = ++entity_time % 100;
+		manager.draw_entities(screen);
+
 		screen.drawMap(map, current_chunk);
 		screen.drawText(2, 1, nostd::to_string(current_chunk));
 		screen.drawText(1, 1, nostd::to_string(player.get_position().get_xPosition()));
@@ -284,7 +303,7 @@ void Game::play(){
 		//screen.drawText(2, 140, nostd::to_string(1+pow(1.1, - cumulative/50)));
 		screen.drawText(3, 140, nostd::to_string(cumulative));
 		napms(5);
-	
+
 	}
 	screen.nodel(false);	
 	screen.eraseScreen();
@@ -530,31 +549,31 @@ void Game::hack(){
 	int x = hack.getinput();
 	switch (x){
 		case '1':
-			this->heart++;
+			// this->heart++;
 			break;
 		case '2':
-			this->coins++;
+			// this->coins++;
 			break;
 		case '3':
-			this->jump++;
+			// this->jump++;
 			break;
 		case '4':
-			this->current_chunk++;
+			// this->current_chunk++;
 			break;
 		case '5':
 			fly = true;
 			break;
 		case '6':
-			this->heart--;
+			// this->heart--;
 			break;
 		case '7':
-			this->coins--;
+			// this->coins--;
 			break;
 		case '8':
-			this->jump--;
+			// this->jump--;
 			break;
 		case '9':
-			this->current_chunk--;
+			// this->current_chunk--;
 			break;
 		case '0':
 			fly = false;
@@ -579,7 +598,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set life"), "Set life");
 					int custom = setCustom(hack);
-					if (custom != -1) this->heart = custom;
+					// if (custom != -1) this->heart = custom;
 					break;
 				}
 				case '2':
@@ -587,7 +606,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set coins"), "Set coins");
 					int custom = setCustom(hack);
-					if (custom != -1) this->coins = custom;
+					// if (custom != -1) this->coins = custom;
 					break;
 				}
 				case '3':
@@ -595,7 +614,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set jump"), "Set jump");
 					int custom = setCustom(hack);
-					if (custom != -1) this->jump = custom;
+					// if (custom != -1) this->jump = custom;
 					break;
 				}
 				case '4':
@@ -603,7 +622,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set level"), "Set level");
 					int custom = setCustom(hack);
-					if (custom != -1) this->current_chunk = custom;
+					// if (custom != -1) this->current_chunk = custom;
 					break;
 				}
 				default:
