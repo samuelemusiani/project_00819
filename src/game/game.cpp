@@ -302,11 +302,14 @@ void Game::play(){
 		screen.drawText(3, 140, nostd::to_string(cumulative));
 		napms(5);
 
-        exit = stats.getHeart() <= 0;
+        if(stats.getHeart() <= 0)
+        {
+            this->over();
+            exit = true;
+        }
 	}
 
 	screen.nodel(false);	
-    this->over();
 	stats.deleteStats();
 }
 
@@ -527,6 +530,7 @@ bool Game::pauseGame(Statistics stats)
 
 void Game::over()
 {
+	screen.nodel(false);	
 	int posX, posY;
 	screen.size(posY, posX, 8, 50);
 	Draw over_win = screen.newWindow(8, 50, posY, posX);
