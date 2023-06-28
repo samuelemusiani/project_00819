@@ -189,8 +189,6 @@ void Game::play(){
 		}
 		else
 		{
-			//deb::debug((int)cumulative, "cumulative");
-			//deb::debug((double) (JUMPF), "JUMPF");
 			count_not_key++;
 			if(count_not_key > 30)
 			{
@@ -304,9 +302,11 @@ void Game::play(){
 		screen.drawText(3, 140, nostd::to_string(cumulative));
 		napms(5);
 
+        exit = stats.getHeart() <= 0;
 	}
+
 	screen.nodel(false);	
-	screen.eraseScreen();
+    this->over();
 	stats.deleteStats();
 }
 
@@ -523,6 +523,20 @@ bool Game::pauseGame(Statistics stats)
 			
 		}
 		} pause.deleteWin(); return exit;
+}
+
+void Game::over()
+{
+	int posX, posY;
+	screen.size(posY, posX, 8, 50);
+	Draw over_win = screen.newWindow(8, 50, posY, posX);
+	over_win.drawBox();
+	over_win.drawText(2, 25 - over_win.center("GAME OVER"), "GAME OVER");
+	over_win.attrOn(COLOR_PAIR(1));
+	over_win.drawText(5, 25 - over_win.center("Back to menu") , "Back to menu");
+	over_win.attrOn(COLOR_PAIR(1));
+	over_win.refreshScreen();
+	int x = over_win.getinput();
 }
 
 #ifdef USE_HACK
