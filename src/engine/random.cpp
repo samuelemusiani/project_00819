@@ -26,7 +26,8 @@ void Random::seedSrand(Seed seed, int chunk, int offset)
 
 int Random::generateEnemies(Seed seed, int chunk) {
 	seedSrand(seed, chunk, 11);
-    return std::min(7, chunk / 2 + rand() % 3);
+    // return std::min(7, chunk / 2 + rand() % 3);
+    return (5 + chunk);
 }
 
 int Random::generateCoins(Seed seed, int chunk) {
@@ -85,6 +86,9 @@ phy::Point Random::generateEnemyPosition(Map map, int chunk,nostd::vector<phy::P
 	bool found;
 	phy::Point add;
 	add.set_yPosition(1);
+
+    // I can put all enemies on different platforms
+    bool platform_are_not_enough = p.size() <= entityPos.size();
 	do {
 		found = true;
 		if(chunk==0)
@@ -94,7 +98,7 @@ phy::Point Random::generateEnemyPosition(Map map, int chunk,nostd::vector<phy::P
 		for(int i=0;i<p[random].get_length();i++)
 		{
 			add.set_xPosition(i);
-			if(is_there_an_entity(entityPos,p[random].get_position()+add))
+			if(is_there_an_entity(entityPos,p[random].get_position()+add) && !platform_are_not_enough)
 				found = false;
 		}
 	} while(!found);
