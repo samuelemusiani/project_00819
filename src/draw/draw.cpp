@@ -50,7 +50,38 @@ void Draw::drawPlayer(phy::Point p) {
 }
 
 void Draw::drawEntity(Entity entity) {
-	mvwprintw(this->screen, OFFSET - entity.get_y(), entity.get_x() + 1, entity.get_id());
+    phy::Point pos = entity.get_position();
+	mvwprintw(this->screen, OFFSET - pos.get_yPosition(), pos.get_xPosition() + 1, "entity");
+}
+
+void Draw::drawEntity(Coin coin) {
+    phy::Point pos = coin.get_position();
+	mvwprintw(this->screen, OFFSET - pos.get_yPosition(), pos.get_xPosition() + 1, "$");
+}
+
+void Draw::drawEntity(Bullet bullet) {
+    phy::Point pos = bullet.get_position();
+
+    char symbol[2];
+    symbol[1] = '\0';
+
+    if(bullet.get_type() == 0)
+        symbol[0] = '-';
+    else if(bullet.get_type() == 1)
+    {
+        if(bullet.get_direction())
+            symbol[0] = ')';
+        else
+            symbol[0] = '(';
+    }
+	mvwprintw(this->screen, OFFSET - pos.get_yPosition(), pos.get_xPosition() + 1, symbol);
+}
+
+void Draw::drawEntity(Enemy enemy) {
+    phy::Point pos = enemy.get_position();
+
+    char symbol[2] = {(char) ('0' + enemy.get_type()), '\0'};
+	mvwprintw(this->screen, OFFSET - pos.get_yPosition(), pos.get_xPosition() + 1, symbol);
 }
 
 void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione del primo carattere

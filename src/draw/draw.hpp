@@ -1,13 +1,16 @@
 #include <ncurses.h>
+#include "screen.hpp"
 #include "../maps/map.hpp"
 #include "../maps/chunk.hpp"
 #include "../maps/platform.hpp"
 #include "../physics/point.hpp"
-#include "screen.hpp"
+#include "../entity/entity.hpp"
+#include "../entity/enemy.hpp"
+#include "../entity/coin.hpp"
+#include "../entity/bullet.hpp"
+
 #include "../../etc/nostd/vector.hpp"
 #include "../../etc/nostd/string.hpp"
-#include "../entity/entity.hpp"
-
 
 
 #define OFFSET 42
@@ -41,6 +44,9 @@ class Draw : public Screen{
 		void setWin(WINDOW *win);
 
 		void drawEntity(Entity entity);
+		void drawEntity(Enemy enemy);
+		void drawEntity(Coin coint);
+		void drawEntity(Bullet bullet);
 
 };
 #endif

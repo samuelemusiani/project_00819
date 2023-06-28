@@ -1,18 +1,17 @@
 #include "bullet.hpp"
 
-Bullet::Bullet()
-    : Entity(), direction(false)
-{
-
-}
-
-Bullet::Bullet(const char* id, phy::Point p, int direction)
-    : Entity(id, p), direction(direction)
+Bullet::Bullet(phy::Point p, bool direction, int type)
+    : Entity(p), _direction(direction), _type(type)
 {
 
 }
 
 bool Bullet::get_direction()
 {
-    return this->direction;
+    return this->_direction;
+}
+
+bool Bullet::get_type()
+{
+    return this->_type;
 }

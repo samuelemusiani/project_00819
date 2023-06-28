@@ -229,11 +229,11 @@ void Game::play(){
 				break;
 
             case ((int) 'w'): // shoot left
-                manager.make_player_shoot(player.get_position(), false);
+                manager.shoot(player.get_position(), false);
                 break;
 
             case ((int) 'e'): //shoot right
-                manager.make_player_shoot(player.get_position(), true);
+                manager.shoot(player.get_position(), true);
                 break;
 
 #ifdef USE_HACK
@@ -290,10 +290,10 @@ void Game::play(){
 
         /* ENTITIES */
 		manager.set_chunk(current_chunk, map);
-		manager.draw_entities(screen);
-		manager.move_entities(entity_time);
+		manager.update_entities(entity_time, player, stats);
         stats.setCoins(stats.getCoins() + manager.collect_coin(player.get_position()));
         entity_time = ++entity_time % 100;
+		manager.draw_entities(screen);
 
 		screen.drawMap(map, current_chunk);
 		screen.drawText(2, 1, nostd::to_string(current_chunk));

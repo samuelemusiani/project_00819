@@ -4,21 +4,19 @@
 #ifndef ENTITY_ENEMY
 #define ENTITY_ENEMY
 
-//enum DIRECTION_POSSIBILITY {dx, sx};
-
 class Enemy : public Entity {
     protected:
         int _damage;
         bool _direction;
         bool _alive;
+        int _type;
 
     public:
-
-        Enemy(const char* id, phy::Point p, int damage) ;
-        Enemy();
+        Enemy(int type, phy::Point p, bool direction) ;
 
         int get_damage();
         bool get_direction();
+        int get_type();
 
         void set_direction(bool dir);
 
@@ -26,5 +24,6 @@ class Enemy : public Entity {
         bool is_alive();
 
         void kill();
+        void move();
 };
 #endif

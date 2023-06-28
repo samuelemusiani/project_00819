@@ -6,13 +6,14 @@
 class Bullet : public Entity 
 {
     private:
-        bool direction;
+        bool _direction;
+        int _type;
 
     public:
-        Bullet();
-        Bullet(const char* id, phy::Point p, int direction);
+        Bullet(phy::Point p, bool direction, int type);
 
         bool get_direction();
+        bool get_type();
 };
 
 #endif

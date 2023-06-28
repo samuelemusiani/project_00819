@@ -17,14 +17,14 @@ class Game
 		Draw screen;
 		Map map;
 		int current_chunk = 0;
+		phy::Body player;
+
 #ifdef USE_HACK
 		bool fly = false;
-#endif
-		phy::Body player;
-#ifdef USE_HACK
 		void hack();
 		int setCustom(Draw hack);
 #endif
+
 	public:
 		Game();
 		~Game();
@@ -38,7 +38,6 @@ class Game
 		int setDifficulty();
 
 		bool pauseGame(Statistics stats); 
-
 };
 
 #endif
