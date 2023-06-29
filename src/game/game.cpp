@@ -54,6 +54,7 @@ void Game::run()
 
 		case 0:
 			{// New Game
+            this->stats = Statistics();
 			// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
 			this->start();
 
@@ -155,8 +156,6 @@ void Game::play(){
 	screen.size(posY, posX, 44, 150);
 	Draw stats_scr = screen.newWindow(3, 150, posY - 2, posX);
 
-	stats_scr.updateStats(stats);
-	
 	Manager manager = Manager(map);
 	int entity_time= 0;
 
@@ -544,6 +543,8 @@ void Game::over()
 	over_win.attrOn(COLOR_PAIR(1));
 	over_win.refreshScreen();
 	int x = over_win.getinput();
+    over_win.eraseScreen();
+    over_win.deleteWin();
 }
 
 #ifdef USE_HACK
