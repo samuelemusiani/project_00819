@@ -89,17 +89,23 @@ bool File::isAlreadySaved(Map m)
 		return false; // file does not exist yet
 }
 
-void File::appendSave(Map m,int chunk,phy::Point pos,nostd::string name)
+void File::appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string name)
 {
 	std::fstream file;
 	if(openFile(file,"./save.txt","app")) {
-		file << "[ Name: " << name << " ]\nSeed: " << m.getSeed().getSeed() << "\nCoins&Enemies: " << m.getCoinsAndEnemies()
-		<< "\nChunk: " << chunk << "\nPlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition()<< "\nLastSave: " << dateAndTime() << "\n\n";
+		file << "[ Name: " << name 
+             << " ]\nSeed: " << m.getSeed().getSeed() 
+             << "\nCoins&Enemies: " << m.getCoinsAndEnemies()
+		     << "\nChunk: " << chunk 
+             << "\nPlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition()
+             << "\nLastSave: " << dateAndTime() 
+             << "\nStatistics: " << stats.getLevel() << " " << stats.getCoins() 
+                << " " << stats.getJumps() << " " << stats.getHearts() << "\n\n";
 		file.close();
 	}
 }
 
-void File::updateSave(Map m,int chunk,phy::Point pos)
+void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats)
 {
 	// the only way to do this is to rewrite the entire file
 	std::fstream file;
@@ -122,7 +128,11 @@ void File::updateSave(Map m,int chunk,phy::Point pos)
 		nostd::getline(file,buff);
 		tmp << "PlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition() << "\n";
 		nostd::getline(file,buff);
-		tmp << "LastSave: " << dateAndTime() << "\n\n";
+		tmp << "LastSave: " << dateAndTime() << "\n";
+		nostd::getline(file,buff);
+        tmp << "Statistics: " << stats.getLevel() << " " << stats.getCoins() 
+                << " " << stats.getJumps() << " " << stats.getHearts() << "\n\n";
+
 		while(nostd::getline(file,buff))
 			tmp << buff << "\n";
 		file.close();
@@ -131,16 +141,16 @@ void File::updateSave(Map m,int chunk,phy::Point pos)
 	}
 }
 
-void File::saveMap(Map m,int chunk,phy::Point pos,nostd::string name)
+void File::saveMap(Map m, int chunk, phy::Point pos, Statistics stats, nostd::string name)
 {
 	if(!isAlreadySaved(m)) {
 		if (!name.empty())
-			appendSave(m,chunk,pos,name);
+			appendSave(m,chunk,pos, stats, name);
 		else
-			appendSave(m,chunk,pos,"Player"); // this shouldn't happen
+			appendSave(m,chunk,pos, stats, "Player"); // this shouldn't happen
 	}
 	else
-		updateSave(m,chunk,pos);
+		updateSave(m,chunk,pos, stats);
 }
 
 void File::changeName(nostd::string oldName,nostd::string newName)
@@ -297,6 +307,49 @@ phy::Point File::getPoint(nostd::string name)
 			file.close();
 	}
 	return newPos; // this shouldn't happen
+}
+
+Statistics File::getStatistics(nostd::string name)
+{
+    // Why is there a Draw on Statistics?????
+    // The Draw must be overwrite bey the caller
+    Statistics stats = Statistics();
+
+	std::fstream file;
+	if(openFile(file,"./save.txt","r")) {
+		nostd::string search = "[ Name: " + name + " ]";
+		nostd::string buff;
+		bool found = false;
+		while (!found && nostd::getline(file, buff))
+			if (buff == search)
+				found = true;
+
+        if(found)
+        {
+			for (int i = 0; i < 6; i++)
+				nostd::getline(file, buff);
+
+            // I can't think tonight...forgive me
+            int pos_space[5];
+            int i = 0;
+            int k = 0;
+            while(i < buff.length()) {
+                if(buff[i] == ' ') {
+                    pos_space[k] = i;
+                    k++;
+                }
+                i++;
+            }
+            pos_space[4] = buff.length();
+
+            stats.setLevel(nostd::stoi(buff.substr(pos_space[0] + 1, pos_space[1] - pos_space[0] - 1)));
+            stats.setCoins(nostd::stoi(buff.substr(pos_space[1] + 1, pos_space[2] - pos_space[1] - 1)));
+            stats.setJumps(nostd::stoi(buff.substr(pos_space[2] + 1, pos_space[3] - pos_space[2] - 1)));
+            stats.setHearts(nostd::stoi(buff.substr(pos_space[3] + 1, pos_space[4] - pos_space[3] - 1)));
+        }
+	}
+
+    return stats;
 }
 
 void File::getSettings()

@@ -8,6 +8,7 @@
 #include "../entity/enemy.hpp"
 #include "../entity/coin.hpp"
 #include "../entity/bullet.hpp"
+#include "../game/statistics.hpp"
 
 #include "../../etc/nostd/vector.hpp"
 #include "../../etc/nostd/string.hpp"
@@ -48,5 +49,7 @@ class Draw : public Screen{
 		void drawEntity(Coin coint);
 		void drawEntity(Bullet bullet);
 
+        void updateStats(Statistics stats);
+        void deleteStats();
 };
 #endif

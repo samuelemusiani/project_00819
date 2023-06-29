@@ -1,6 +1,6 @@
 #include "save.hpp"
 
-void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
+void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos, Statistics stats){
     bool nosaved = false;
     if (File::isAlreadySaved(map)) {
         saveGame(screen);
@@ -128,7 +128,7 @@ void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
         }
     
     }
-    if (!nosaved) File::saveMap(map, chunk, PlayerPos, nome);
+    if (!nosaved) File::saveMap(map, chunk, PlayerPos, stats, nome);
     
 }
 
@@ -148,7 +148,7 @@ void Save::saveGame(Draw screen){
     napms(700);
 }
 
-void Save::quitGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
+void Save::quitGame(Draw screen, Map map, int chunk, phy::Point PlayerPos, Statistics stats){
     int posY, posX;
     screen.size(posY, posX, 15, 55);
     
@@ -191,7 +191,7 @@ void Save::quitGame(Draw screen, Map map, int chunk, phy::Point PlayerPos){
 			Draw save_scr = quit_scr.newWindow(44, 150, posY, posX);
 
 			
-            saveNewGame(save_scr, map, chunk, PlayerPos);
+            saveNewGame(save_scr, map, chunk, PlayerPos, stats);
 			save_scr.eraseScreen();
 			save_scr.deleteWin();
     }

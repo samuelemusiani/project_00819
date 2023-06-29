@@ -1,86 +1,61 @@
 #include "statistics.hpp"
 
-Statistics::Statistics(Draw screen){
-	int posY, posX;
-	screen.size(posY, posX, 44, 150);
-	this->stats_scr = screen.newWindow(3, 150, posY - 2, posX);
-	// in realtà deve prenderli dal file di salvataggio
-	this->level = 0;
-	this->jump = 0;
-	this->coins = 0;
-	this->heart = 10;
-}
-
-/*Statistics::~Statistics() {
-    this->stats_scr.deleteWin();
-}*/
-
-void Statistics::initStats(Draw screen){
+Statistics::Statistics()
+    : _level(0), _jump(0), _coins(0), _heart(10)
+{
 
 }
 
-void Statistics::updateStats(){
-	this->stats_scr.clearwithoutbox();
+Statistics::Statistics(int level, int coins, int jump, int heart)
+    : _level(level), _jump(jump), _coins(coins), _heart(heart)
+{
 
-	this->stats_scr.drawRectagle(1, 0 , 3, 149);
-
-	this->stats_scr.drawText(2, 2, "Lives: " );
-	for (int i = 0; i < this->heart; i++)
-	{
-		this->stats_scr.drawText(2, 10 + i*2, "♥");
-	}
-	this->stats_scr.drawText(2, 50, "Level: " + nostd::to_string(this->level));
-	this->stats_scr.drawText(2, 70, "Jump: " + nostd::to_string(this->jump));
-	this->stats_scr.drawText(2, 90, "Coins: " + nostd::to_string(this->coins));
-	this->stats_scr.refreshScreen();
-}
-
-void Statistics::deleteStats(){
-	this->stats_scr.clearwithoutbox();
-	this->stats_scr.refreshScreen();
-	//this->stats_scr.deleteWin();
 }
 
 void Statistics::setLevel(int level){
-    this->level = level;
-}
-
-void Statistics::setJump(int jump){
-    this->jump = jump;
-}
-
-void Statistics::incrementJump(){
-    this->jump++;
+    this->_level = level;
 }
 
 void Statistics::setCoins(int coins){
-    this->coins = coins;
+    this->_coins = coins;
 }
 
-void Statistics::setHeart(int heart){
-    this->heart = heart;
+void Statistics::setJumps(int jump){
+    this->_jump = jump;
+}
+
+void Statistics::setHearts(int heart){
+    this->_heart = heart;
 }
 
 int Statistics::getLevel(){
-    return this->level;
-}
-
-int Statistics::getJump(){
-    return this->jump;
+    return this->_level;
 }
 
 int Statistics::getCoins(){
-    return this->coins;
+    return this->_coins;
 }
 
-int Statistics::getHeart(){
-    return this->heart;
+int Statistics::getJumps(){
+    return this->_jump;
 }
 
-void Statistics::redraw(){
-    this->stats_scr.redraw();
+int Statistics::getHearts(){
+    return this->_heart;
 }
 
-void Statistics::noOutRefresh(){
-	this->stats_scr.noOutRefresh();
+void Statistics::incrementJumps(int delta) {
+    this->_jump += delta;
+}
+
+void Statistics::incrementCoins(int delta) {
+    this->_coins += delta;
+}
+
+void Statistics::incrementLevel(int delta) {
+    this->_level += delta;
+}
+
+void Statistics::incrementHearts(int delta) {
+    this->_heart += delta;
 }

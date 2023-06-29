@@ -119,7 +119,6 @@ void Manager::update_entities(int time, phy::Body& player, Statistics& stats)
      * Enemy 1: If the player is on his radious then he shoot at the player
      * Enemy 2: Follow the player and the explodes near him (like a creeper)
      */
-    // Enemies movements (NO AI)
     if(time % 100 == 0) {
         list_enemies tmp = this->Enemies[this->current_chunk];
         Chunk chunk = map.get_chunk(this->current_chunk);
@@ -134,7 +133,7 @@ void Manager::update_entities(int time, phy::Body& player, Statistics& stats)
 
 
                     if(tmp->val.get_position() == player.get_position()) 
-                        stats.setHeart(stats.getHeart() - 1);
+                        stats.incrementHearts(-1);
                 }
                 else if(tmp->val.get_type() == 1)
                 {
@@ -157,7 +156,7 @@ void Manager::update_entities(int time, phy::Body& player, Statistics& stats)
                             tmp->val.set_direction(!tmp->val.get_direction()); 
 
                         if(tmp->val.get_position() == player.get_position()) 
-                            stats.setHeart(stats.getHeart() - 1);
+                            stats.incrementHearts(-1);
                     }
                 }
                 else if(tmp->val.get_type() == 2)
@@ -243,9 +242,9 @@ list_bullets Manager::bullets_collisions(list_bullets p, phy::Body& player, Stat
             have_to_go = true;
             
             if(p->val.get_type() == 0)
-                stats.setHeart(stats.getHeart() - 1);
+                stats.incrementHearts(-1);
             else if(p->val.get_type() == 1)
-                stats.setHeart(stats.getHeart() - 2);
+                stats.incrementHearts(-2);
         }
 
         have_to_go |= p->expiration == 0;

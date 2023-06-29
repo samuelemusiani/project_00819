@@ -18,6 +18,7 @@ class Game
 		Map map;
 		int current_chunk = 0;
 		phy::Body player;
+        Statistics stats;
 
 #ifdef USE_HACK
 		bool fly = false;
@@ -38,7 +39,7 @@ class Game
 		// Funzione che chiede all'utente di scegliere la dificoltà e ritorna: 0 per facile, 1 per medio, 2 per difficile
 		int setDifficulty();
 
-		bool pauseGame(Statistics stats); 
+		bool pauseGame(Draw stats_scr, Statistics stats); 
 };
 
 #endif

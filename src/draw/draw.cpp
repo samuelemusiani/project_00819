@@ -160,3 +160,23 @@ Draw Draw::newWindow(int height, int width, int posY, int posX) {
 void Draw::setWin(WINDOW *win) {
 	this->screen = win;
 }
+
+void Draw::updateStats(Statistics stats) {
+    this->clearwithoutbox();
+
+    drawRectagle(1, 0 , 3, 149);
+    drawText(2, 2, "Lives: " );
+
+    for (int i = 0; i < stats.getHearts(); i++) {
+        drawText(2, 10 + i*2, "♥");
+    }
+    drawText(2, 50, "Level: " + nostd::to_string(stats.getLevel()));
+    drawText(2, 70, "Jump: " + nostd::to_string(stats.getJumps()));
+    drawText(2, 90, "Coins: " + nostd::to_string(stats.getCoins()));
+    refreshScreen();
+}
+
+void Draw::deleteStats() {
+	clearwithoutbox();
+	refreshScreen();
+}

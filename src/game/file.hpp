@@ -11,12 +11,15 @@
 #include <fstream>
 #include <chrono>
 #include <iomanip>
-#include "../maps/map.hpp"
-#include "../../etc/nostd/string.hpp"
-#include "../../etc/logs/logs.hpp"
-#include "../physics/body.hpp"
+
 #include "settings.hpp"
 #include "global.hpp"
+#include "../maps/map.hpp"
+#include "../physics/body.hpp"
+#include "../game/statistics.hpp"
+
+#include "../../etc/nostd/string.hpp"
+#include "../../etc/logs/logs.hpp"
 
 #ifndef GAME_FILE
 #define GAME_FILE
@@ -27,7 +30,8 @@ class File
 		static bool openFile(std::fstream &file,nostd::string path,nostd::string mode="rw"); // mode can be r,w,rw,app; default is rw
 		static bool exist(std::fstream &file,nostd::string path);
 		static void appendSave(Map m,int chunk,phy::Point pos,nostd::string name);
-		static void updateSave(Map m,int chunk,phy::Point pos);
+		static void appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string name);
+		static void updateSave(Map m,int chunk,phy::Point pos, Statistics stats);
 		static void getSettings();
 public:
 		File();
@@ -35,7 +39,7 @@ public:
 		static void saveSettings();
 		static bool isCalibrated();
 		static bool isAlreadySaved(Map m);
-		static void saveMap(Map m,int chunk,phy::Point pos,nostd::string name="");
+		static void saveMap(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string name="");
 		static void changeName(nostd::string oldName,nostd::string newName);
 		static nostd::vector<nostd::string> getNames();
 		static nostd::vector<nostd::string> getLastSaves();
@@ -43,6 +47,7 @@ public:
 		static Map getMap(nostd::string name);
 		static int getChunk(nostd::string name);
 		static phy::Point getPoint(nostd::string name);
+		static Statistics getStatistics(nostd::string name);
 		static void deleteSave(nostd::string name);
 		static int countSaves();
 };
