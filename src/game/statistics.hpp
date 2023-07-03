@@ -1,5 +1,3 @@
-#include "game.hpp"
-
 #ifndef STATISTICS_HPP
 #define STATISTICS_HPP
 
