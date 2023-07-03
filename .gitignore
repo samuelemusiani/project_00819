@@ -1,6 +1,13 @@
 #Ignore build files
 build/*
 !build/.gitkepp
+.idea/*
+cmake-build-debug/*
+
+*logs.txt
+
+# This hard path is ugly but it's temporary
+src/physics/test/TEST
 
 # Prerequisites
 *.d

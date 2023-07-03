@@ -1,6 +1,9 @@
 #include <string>
 #include <ncurses.h>
 #include "../draw/draw.hpp"
+#include "credits.hpp"
+#include "game.hpp"
+#include "settings.hpp"
 
 #define NUMBER_OF_OPTIONS 4
 
@@ -10,11 +13,26 @@ class Menu
 	private:
 		int posY;
 		int posX;
-		std::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Help", "Credits"};
+		nostd::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Settings", "Credits"};
+		nostd::string Jump[6] =		{"     ██╗██╗   ██╗███╗   ███╗██████╗ ",
+									 "     ██║██║   ██║████╗ ████║██╔══██╗",
+									 "     ██║██║   ██║██╔████╔██║██████╔ ",
+									 "██   ██║██║   ██║██║╚██╔╝██║██╔═══╝ ",
+									 "╚█████╔╝╚██████╔╝██║ ╚═╝ ██║██║     ",
+								 	 " ╚════╝  ╚═════╝ ╚═╝     ╚═╝╚═╝      "};
+
+		nostd::string King[6] = {		" ██╗  ██╗██╗███╗   ██╗ ██████╗ ",
+                        				" ██║ ██╔╝██║████╗  ██║██╔════╝ ",
+                    				    " █████╔╝ ██║██╔██╗ ██║██║  ███╗",
+                    				    " ██╔═██╗ ██║██║╚██╗██║██║   ██║",
+										" ██║  ██╗██║██║ ╚████║╚██████╔╝",
+										" ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ "};
 	public:
 
-		Menu(int LINES, int COLS);
+		Menu(int x, int y);
 
-		void drawMenu();
+		void drawMenu(Draw screen); // Disegna il menu
+		void drawFirstMenu(Draw screen); // Disegna il menu iniziale
+		int get_selected_option(Draw screen);
 		
 };
