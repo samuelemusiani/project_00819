@@ -214,8 +214,6 @@ void Game::play(){
 					}
 				cumulative = 0;
 			}
-
-		
 		
 			if (input == SETTINGS_CONTROL_KEYS[0]) // move player left
 			{
@@ -227,11 +225,11 @@ void Game::play(){
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() + phy::Point(1, 0));
 			}
-            else if(input == (int) 'w')
+            else if(input == SETTINGS_CONTROL_KEYS[5]) // Shoot left
             {
                  manager.shoot(player.get_position(), false);
             }
-            else if(input == (int) 'e')
+            else if(input == SETTINGS_CONTROL_KEYS[6]) // Shoot right
             {
                  manager.shoot(player.get_position(), true);
             }

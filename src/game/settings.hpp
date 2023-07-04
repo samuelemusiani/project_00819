@@ -9,16 +9,22 @@
 class Settings
 {
     private:
-        nostd::string controls[8] = {"Move left: ", "Move right: ", "Jump left: ", "Jump right: ", "Shoot: ",  "Bomb: ", "Jump: ",  "Other: "};
-        nostd::string options[4] = {"Controls", "Calibration", "Audio", "Sensibility"};
+        nostd::string controls[8] = {
+            "Move left: ", "Move right: ", "Jump left: ", "Jump right: ", 
+            "Jump vertical: ",  "Shoot left: ", "Shoot right: ",  "Special: "
+        };
+        nostd::string options[4] = {
+            "Controls", "Calibration", "Audio", "Sensibility"
+        };
         void resetControls();
+
     public:
-        //Settings();
+        //Settings(); ??? Why...
         //~Settings();
         void drawFirstSettings(Draw settings);
         void ControlKeys(Draw settings);
         void calibrateKeys(Draw settings);
-       
+
         // controlla se esiste il file dei salvataggi per controllare se è stata fatta la calibrazione
         bool checkifcalibrated(Draw settings);
 

@@ -137,8 +137,6 @@ void Settings::ControlKeys(Draw settings){
             case 10:{
                         settings.drawCenterText(6, "Press the key you want to use: ");
                         int x = settings.getinput();
-                        deb::debug("xstr: " , nostd::to_string(x));
-                        deb::debug("char(x): ", nostd::to_string(char(x)));
                         if (is_alpha(x)) SETTINGS_CONTROL_KEYS[selectedOption] = char(x);
                         break;
                     }
@@ -156,14 +154,14 @@ void Settings::ControlKeys(Draw settings){
 }
 
 void Settings::resetControls(){
-    SETTINGS_CONTROL_KEYS[0] = 's';
-    SETTINGS_CONTROL_KEYS[1] = 'd';
-    SETTINGS_CONTROL_KEYS[2] = 'a';
-    SETTINGS_CONTROL_KEYS[3] = 'f';
-    SETTINGS_CONTROL_KEYS[4] = 'v';
-    SETTINGS_CONTROL_KEYS[5] = 'o';
-    SETTINGS_CONTROL_KEYS[6] = 'p';
-    SETTINGS_CONTROL_KEYS[7] = 'm';
+    SETTINGS_CONTROL_KEYS[0] = 's'; // Move left
+    SETTINGS_CONTROL_KEYS[1] = 'd'; // Move right
+    SETTINGS_CONTROL_KEYS[2] = 'a'; // Jump left
+    SETTINGS_CONTROL_KEYS[3] = 'f'; // Jump right
+    SETTINGS_CONTROL_KEYS[4] = 'v'; // Jump vertical
+    SETTINGS_CONTROL_KEYS[5] = 'w'; // Shoot left
+    SETTINGS_CONTROL_KEYS[6] = 'e'; // Shoot right
+    SETTINGS_CONTROL_KEYS[7] = 'm'; // Special ??
 }
 
 bool Settings::is_alpha(int ch){
