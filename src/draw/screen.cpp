@@ -2,7 +2,6 @@
 #include <unistd.h>
 #include <locale.h>
 
-
 Screen::Screen()
 {
 }
@@ -41,18 +40,6 @@ void Screen::init()
 	wrefresh(this->screen);
 }
 
-void Screen::size(int &posY, int &posX, int offsetY, int offsetX){
-	int xMaxSize, yMaxSize;
-	getmaxyx(stdscr, yMaxSize, xMaxSize);
-    posY = ((yMaxSize - offsetY) / 2);
-    posX = (xMaxSize - offsetX) / 2;
-}
-
-void Screen::nodel(bool value)
-{
-	nodelay(this->screen, value);
-}
-
 int Screen::get_maxX()
 {
 	return this->max_x;
@@ -76,19 +63,24 @@ void Screen::eraseScreen()
 	box(this->screen, 0, 0);
 }
 
+void Screen::nodel(bool value)
+{
+    nodelay(this->screen, value);
+}
+
 void Screen::refreshScreen()
 {
-	wrefresh(this->screen);
+    wrefresh(this->screen);
+}
+
+int Screen::getinput()
+{
+    return wgetch(this->screen);
 }
 
 void Screen::clearwithoutbox()
 {
 	werase(this->screen);
-}
-
-int Screen::getinput()
-{
-	return wgetch(this->screen);
 }
 
 void Screen::clearLine(int y, int x)
@@ -100,27 +92,30 @@ void Screen::clearLine(int y, int x)
 	
 }
 
-void Screen::drawVerticalLine(int x, int y1, int y2)
+void Screen::deleteWin()
 {
-	for (int i = y1; i < y2; i++)
-	{
-		mvwaddch(this->screen, i, x, ACS_VLINE);
-	}
-}
-
-void Screen::deleteWin(){
 	delwin(this->screen);
 }
 
-void Screen::noOutRefresh(){  // copy information from a window data structure to the virtual screen
- 							  // utilizzando wnoutrefresh, il refresh del terminale avviene solo al doupdate()
+void Screen::size(int &posY, int &posX, int offsetY, int offsetX)
+{
+	int xMaxSize, yMaxSize;
+	getmaxyx(stdscr, yMaxSize, xMaxSize);
+    posY = ((yMaxSize - offsetY) / 2);
+    posX = (xMaxSize - offsetX) / 2;
+}
+
+void Screen::noOutRefresh()
+{  
 	wnoutrefresh(this->screen);
 }
 
-void Screen::update(){  // aggiorna il terminale. Quindi si evita il flicker dato dal tempo che intercorre tra l'aggiornamento di due window usando il classico refresh
-	doupdate();
+void Screen::redraw()
+{
+    redrawwin(this->screen);
 }
 
-void Screen::redraw(){
-	redrawwin(this->screen);
+void Screen::update()
+{
+	doupdate();
 }

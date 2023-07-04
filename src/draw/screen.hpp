@@ -15,7 +15,7 @@ class Screen
 
 	public:
 		Screen();
-		void init(); // Inzializza lo schermo e la WINDOW al centro del terminale
+		void init();
 		int get_maxX();
 		int get_maxY();
 		void clearScreen();
@@ -24,17 +24,26 @@ class Screen
 		void refreshScreen();
 		int getinput();
 		void clearwithoutbox();
-		// Funzione che cancella la riga y a partire dalla colonnna x 
-		void clearLine(int y, int x);
 
-		// Funzione che disegna una linea verticale a x, da y1 a y2
-		void drawVerticalLine(int x, int y1, int y2);
+        // Delete the y line starting from the x column 
+		void clearLine(int y, int x);
 
 		void deleteWin();
 		void size(int &posY, int &posX, int offsetY, int offsetX);
+
+        /* Copy information from the current window to the virtual screen. In 
+         * this way the terminal refreshes only when update() is called
+         */
 		void noOutRefresh();
-		static void update(); // Why static??
 		void redraw();
+
+        /* Update the temrminal without causing flicker. If we use the classic 
+         * refresh, the amount of time from the update of two separate windos 
+         * would cause flicker as experienced 
+         * The functions is 'static' because it does not depend on a WINDOW but
+         * is general, even if the screen is not inizialized
+         */
+        static void update(); // Why static??
 };
 
 #endif
