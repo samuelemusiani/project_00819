@@ -13,17 +13,17 @@ void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos, St
             int selected = 0;
             while (!deleted && !exit){
             screen.eraseScreen();
-            screen.drawText(3, Draw::centerX("You can't create more than 5 saves"), "You can't create more than 5 saves");
-            screen.drawText(5, Draw::centerX("Delete one your old saved map"), "Delete one your old saved map");
+            screen.drawCenterText(3, "You can't create more than 5 saves");
+            screen.drawCenterText(5, "Delete one your old saved map");
             nostd::vector<nostd::string> savedMaps = File::getNames();
             nostd::vector<nostd::string> savedDate = File::getLastSaves();
             for (int i = 0; i < savedMaps.size(); i++)
                 {
-                    screen.drawSquareAround(savedMaps[i] + " " + savedDate[i], 13 + 4*i, screen.centerX(savedMaps[i] + " " + savedDate[i]));
+                    screen.drawCenterSquareAround(savedMaps[i] + " " + savedDate[i], 13 + 4*i);
                 }
 
             screen.attrOn(COLOR_PAIR(1));
-            screen.drawText(13 + 4*selected, screen.centerX(savedMaps[selected] + " " + savedDate[selected]), savedMaps[selected] + " " + savedDate[selected]);
+            screen.drawCenterText(13 + 4*selected, savedMaps[selected] + " " + savedDate[selected]);
             screen.attrOff(COLOR_PAIR(1));
 
             switch (screen.getinput())
@@ -71,12 +71,12 @@ void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos, St
                 } 
                 else if (nome.length() == 27) {
                     screen.clearLine(23, 0);
-                    screen.drawText(23, Draw::centerX("Max length reached"),  "Max length reached");
+                    screen.drawCenterText(23, "Max length reached");
                     screen.refreshScreen();
                 }
                 else if (nome.empty() == true && ch == 10) {
                     screen.clearLine(23, 0);
-                    screen.drawText(23, Draw::centerX("Insert a name"),  "Insert a name");
+                    screen.drawCenterText(23,  "Insert a name");
                     screen.refreshScreen();
                 }
                 else {
@@ -88,7 +88,7 @@ void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos, St
                     else 
                         {   
                             screen.clearLine(23, 0);
-                            screen.drawText(23, Draw::centerX("Only alphanumeric characters"),  "Only alphanumeric characters");
+                            screen.drawCenterText(23,  "Only alphanumeric characters");
                             screen.refreshScreen();
                             }
                 }
@@ -98,7 +98,7 @@ void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos, St
                     if (isalnum(ch)){
                         screen.clearLine(23, 0);
                         screen.attrOn(COLOR_PAIR(1));
-                        screen.drawText(23, Draw::centerX("Press enter to confirm"), "Press enter to confirm");
+                        screen.drawCenterText(23, "Press enter to confirm");
                         screen.attrOff(COLOR_PAIR(1));
                         screen.refreshScreen();
                     }
@@ -110,13 +110,13 @@ void Save::saveNewGame(Draw screen, Map map, int chunk, phy::Point PlayerPos, St
                         // se ci sono errori ritornati dalla funzione per salvare printare Error saving file
                         
                         // controllare se non esiste già un file con lo stesso nome
-                        if (File::nameAlreadyInUse(nome)) screen.drawText(23, Draw::centerX("Name already in use"), "Name already in use");
+                        if (File::nameAlreadyInUse(nome)) screen.drawCenterText(23, "Name already in use");
                         else {
                             saved = true;
-                        screen.drawText(23, Draw::centerX("File saved"), "File saved");
+                        screen.drawCenterText(23, "File saved");
 
                         screen.attrOn(COLOR_PAIR(1));
-                        screen.drawText(25, Draw::centerX("Press enter to exit"), "Press enter to exit");
+                        screen.drawCenterText(25, "Press enter to exit");
                         screen.attrOff(COLOR_PAIR(1));
                         screen.refreshScreen();
                         screen.getinput();

@@ -6,17 +6,27 @@ void Draw::drawText(int posY, int posX, nostd::string s) {
 	mvwprintw(this->screen, posY, posX, s.c_str());
 }
 
-void Draw::drawUpperText(int posY, int posX, nostd::string s) {
-	for (int i = 0; i < s.length(); i++)
-		mvwaddch(this->screen, posY, posX + i, s[i] + 'A' - 'a');
+
+void Draw::drawText(int posY, int posX, const char* t) {
+    mvwprintw(this->screen, posY, posX, t);
 }
 
 void Draw::drawText(int posY, int posX, const char s) {
 	mvwaddch(this->screen, posY, posX, s);
 }
 
-void Draw::drawText(int posY, int posX, const char t[]) {
-	mvwprintw(this->screen, posY, posX, t);
+void Draw::drawCenterText(int posY, nostd::string s) {
+	mvwprintw(this->screen, posY, this->centerX(s), s.c_str());
+}
+
+
+void Draw::drawCenterText(int posY, const char* t) {
+    mvwprintw(this->screen, posY, this->centerX(t), t);
+}
+
+void Draw::drawUpperText(int posY, int posX, nostd::string s) {
+    for (int i = 0; i < s.length(); i++)
+        mvwaddch(this->screen, posY, posX + i, s[i] + 'A' - 'a');
 }
 
 void Draw::drawBox(){
@@ -85,6 +95,35 @@ void Draw::drawEntity(Enemy enemy) {
 }
 
 void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione del primo carattere
+	this->drawText(posY, posX, s);
+
+	//calcolo della lunghezza della stringa
+	int x = strlen(s.c_str());
+
+	//le coordinate posX e posY indicano la posizione dell'angolo in alto a sx
+	posX--;
+	posY--;
+
+	//questo ciclo disegna i bordi orizzontali
+	for(int i = 0; i < x+1; i++) {
+		mvwaddch(this->screen, posY, posX+i, ACS_HLINE);
+		mvwaddch(this->screen, posY+2, posX+i, ACS_HLINE);
+	}
+
+	//questi due comandi disegnano i bordi verticali (assumendo che il testo sia alto 1 quadrato)
+	mvwaddch(this->screen, posY+1, posX, ACS_VLINE);
+	mvwaddch(this->screen, posY+1, posX+x+1, ACS_VLINE);
+
+	//corners of the rectangle
+	mvwaddch(this->screen, posY, posX, ACS_ULCORNER);
+	mvwaddch(this->screen, posY+2, posX, ACS_LLCORNER);
+	mvwaddch(this->screen, posY, posX+x+1, ACS_URCORNER);
+	mvwaddch(this->screen, posY+2, posX+x+1, ACS_LRCORNER);
+
+}
+
+void Draw::drawCenterSquareAround(nostd::string s, int posY) { //posizione del primo carattere
+    int posX = this->centerX(s);
 	this->drawText(posY, posX, s);
 
 	//calcolo della lunghezza della stringa

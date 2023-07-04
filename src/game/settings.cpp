@@ -14,7 +14,7 @@ void Settings::drawFirstSettings(Draw screen){
         screen.eraseScreen();
 
         // Disegno le opzioni
-        screen.drawText(3, (Draw::centerX("Settings")), "Settings");
+        screen.drawCenterText(3, "Settings");
         for (int i = 0; i < 4; i++){
             screen.drawText(10 + 3*i, 45, options[i]);
         }
@@ -94,7 +94,7 @@ void Settings::ControlKeys(Draw settings){
     while (!selected){
         int a = 0;
         settings.eraseScreen();
-        settings.drawText(3, (Draw::centerX("Settings")), "Settings");
+        settings.drawCenterText(3, "Settings");
         for (int i = 0; i < 2; i++){
             for (int j = 0; j < 4; j++){
                 settings.drawText(10 + 3*j, 45 + 45*i, controls[a]);
@@ -134,7 +134,7 @@ void Settings::ControlKeys(Draw settings){
                 selected = true;
                 break;
             case 10:
-                settings.drawText(6, (Draw::centerX("Press the key you want to use")), "Press the key you want to use: ");
+                settings.drawCenterText(6, "Press the key you want to use: ");
                 int x = settings.getinput();
                 deb::debug("xstr: " , nostd::to_string(x));
                 deb::debug("char(x): ", nostd::to_string(char(x)));
@@ -154,8 +154,8 @@ bool Settings::is_alpha(int ch){
 
 void Settings::calibrateKeys(Draw settings){
     settings.eraseScreen();
-    settings.drawText(6, settings.centerX("Keep pressing the key!"), "Keep pressing the key!");
-    settings.drawText(8, settings.centerX("Calibration in progress..."), "Calibration in progress...");
+    settings.drawCenterText(6, "Keep pressing the key!");
+    settings.drawCenterText(8, "Calibration in progress...");
     settings.refreshScreen();
     bool finished = false;
     double mediakey = 20; 
@@ -182,10 +182,10 @@ void Settings::calibrateKeys(Draw settings){
     
     }
     if (keypressed < 30) {
-        settings.drawText(12, settings.centerX("Calibration failed!"), "Calibration failed!");
+        settings.drawCenterText(12, "Calibration failed!");
         keypressed = 0;
     }
-    else settings.drawText(12, settings.centerX("Calibration completed!"), "Calibration completed!");
+    else settings.drawCenterText(12, "Calibration completed!");
     settings.refreshScreen();
     settings.nodel(false);
     napms(1800);

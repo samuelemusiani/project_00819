@@ -95,7 +95,7 @@ void Game::run()
 bool Game::exitGame(){
 	// Esci dal gioco
 	screen.clearScreen();
-	screen.drawText(16, Draw::centerX("Are you sure you want to quit?"), "Are you sure you want to quit?");	
+	screen.drawCenterText(16, "Are you sure you want to quit?");	
 	nostd::string options[2] = {"Yes", "No"};
 	int selected = 0;
 	bool choose = false;
@@ -325,7 +325,7 @@ void Game::resume()
 	nostd::vector<nostd::string> savedMaps = File::getNames();
 	nostd::vector<nostd::string> savedDate = File::getLastSaves();
 	if (savedMaps.size() == 0) {
-		screen.drawText(5, (Draw::centerX("No saved maps")), "No saved maps");
+		screen.drawCenterText(5, "No saved maps");
 		screen.refreshScreen();
 		screen.getinput();
 	}
@@ -335,16 +335,16 @@ void Game::resume()
 		bool exit = false;
 		
 		while (!choose && !exit){
-			screen.drawText(3, (Draw::centerX("Load your game from a saved file")), "Load your game from a saved file");
-			screen.drawText(7, (Draw::centerX("Press enter to play")), "Press enter to play");
-			screen.drawText(9, (Draw::centerX("Press 'r' to remove a saved game")), "Press 'r' to remove a saved game");
+			screen.drawCenterText(3, "Load your game from a saved file");
+			screen.drawCenterText(7, "Press enter to play");
+			screen.drawCenterText(9, "Press 'r' to remove a saved game");
 			for (int i = 0; i < savedMaps.size(); i++)
 			{
-				screen.drawSquareAround(savedMaps[i] + " " + savedDate[i], 13 + 4*i, screen.centerX(savedMaps[i] + " " + savedDate[i]));
+				screen.drawCenterSquareAround(savedMaps[i] + " " + savedDate[i], 13 + 4*i);
 			}
 
 			screen.attrOn(COLOR_PAIR(1));
-			screen.drawText(13 + 4*selected, screen.centerX(savedMaps[selected] + " " + savedDate[selected]), savedMaps[selected] + " " + savedDate[selected]);
+			screen.drawCenterText(13 + 4*selected, savedMaps[selected] + " " + savedDate[selected]);
 			screen.attrOff(COLOR_PAIR(1));
 
 			switch (screen.getinput())
@@ -387,7 +387,7 @@ void Game::resume()
 int Game::setDifficulty()
 {
 	screen.clearScreen();
-	screen.drawText(3, (Draw::centerX("Select the difficulty")), "Select the difficulty");
+	screen.drawCenterText(3, "Select the difficulty");
 	nostd::string options[3] = {"Easy", "Medium", "Hard"};
 	int selected = 0;
 	bool choose = false;

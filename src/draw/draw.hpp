@@ -1,5 +1,8 @@
 #include <ncurses.h>
+
 #include "screen.hpp"
+
+#include "../game/statistics.hpp"
 #include "../maps/map.hpp"
 #include "../maps/chunk.hpp"
 #include "../maps/platform.hpp"
@@ -8,7 +11,6 @@
 #include "../entity/enemy.hpp"
 #include "../entity/coin.hpp"
 #include "../entity/bullet.hpp"
-#include "../game/statistics.hpp"
 
 #include "../../etc/nostd/vector.hpp"
 #include "../../etc/nostd/string.hpp"
@@ -23,10 +25,17 @@ class Draw : public Screen{
 	private:
 		void drawPlatform(nostd::vector<Platform> plat);
 
+        int centerX(nostd::string text);
+        int centerX(const char* text);
+
 	public:
 		void drawText(int posY, int posX, nostd::string s);
-		void drawText(int posY, int posX, const char t[]);
+		void drawText(int posY, int posX, const char* t);
 		void drawText(int posY, int posX, const char s);
+
+		void drawCenterText(int posY, nostd::string s);
+		void drawCenterText(int posY, const char* t);
+
 		void drawUpperText(int posY, int posX, nostd::string s);
 		void attrOff(int c_pair);
 		void drawBox();
@@ -34,10 +43,12 @@ class Draw : public Screen{
 		void clearWindow();
 		void drawMap(Map map, int nChunck);
 		void drawPlayer(phy::Point p);
+
 		void drawSquareAround(nostd::string s, int posY, int posX);
-		static int centerX(nostd::string text);
-		static int centerX(const char* text);
+        void drawCenterSquareAround(nostd::string s, int posY);
+                                                               //
 		void drawRectagle(int posY, int posX, int length, int width);
+
 
 		int center(nostd::string t);
 		Draw newSubWindow(int height, int width, int posY, int posX);
