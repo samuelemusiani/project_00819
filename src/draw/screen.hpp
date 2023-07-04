@@ -9,12 +9,11 @@ class Screen
 	private:
 		int max_x;
 		int max_y;
+
 	protected:
 		WINDOW *screen;
 
-
 	public:
-		
 		Screen();
 		void init(); // Inzializza lo schermo e la WINDOW al centro del terminale
 		int get_maxX();
@@ -31,12 +30,10 @@ class Screen
 		// Funzione che disegna una linea verticale a x, da y1 a y2
 		void drawVerticalLine(int x, int y1, int y2);
 
-		WINDOW* getScreen();
 		void deleteWin();
-		void setScreen(WINDOW* w);
 		void size(int &posY, int &posX, int offsetY, int offsetX);
 		void noOutRefresh();
-		static void update();
+		static void update(); // Why static??
 		void redraw();
 };
 

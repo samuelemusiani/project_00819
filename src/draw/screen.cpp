@@ -108,16 +108,8 @@ void Screen::drawVerticalLine(int x, int y1, int y2)
 	}
 }
 
-WINDOW* Screen::getScreen(){
-	return this->screen;
-}
-
 void Screen::deleteWin(){
 	delwin(this->screen);
-}
-
-void Screen::setScreen(WINDOW* w) {
-	this->screen = w;
 }
 
 void Screen::noOutRefresh(){  // copy information from a window data structure to the virtual screen

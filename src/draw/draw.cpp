@@ -185,14 +185,14 @@ int Draw::center(nostd::string t){
 Draw Draw::newSubWindow(int height, int width, int posY, int posX) {
 	Draw d;
 	d.setWin(derwin(this->screen, height, width, posY, posX));
-	keypad(d.getScreen(), true);
+	keypad(d.screen, true);
 	return d;
 }
 
 Draw Draw::newWindow(int height, int width, int posY, int posX) {
 	Draw d;
 	d.setWin(newwin(height, width, posY, posX));
-	keypad(d.getScreen(), true);
+	keypad(d.screen, true);
 	return d;
 }
 

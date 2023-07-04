@@ -155,7 +155,6 @@ void Save::quitGame(Draw screen, Map map, int chunk, phy::Point PlayerPos, Stati
     Draw quit_scr = screen.newWindow(15, 55, posY, posX);
     quit_scr.eraseScreen();
     quit_scr.drawBox();
-    keypad(quit_scr.getScreen(), true);
     quit_scr.drawText(2, 27 - (strlen("Quit wihout saving?") / 2), "Quit without saving?");
     // creare due buttoni yes e no
     bool choose = false;

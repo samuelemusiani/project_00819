@@ -513,7 +513,7 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
 				{
 				pause.clearScreen();
 				pause.deleteWin();
-				redrawwin(screen.getScreen());	
+				screen.redraw();
 				screen.refreshScreen();
 
 				
