@@ -94,14 +94,15 @@ void Settings::ControlKeys(Draw settings){
     while (!selected){
         int a = 0;
         settings.eraseScreen();
-        settings.drawCenterText(3, "Settings");
+        settings.drawCenterText(3, "Controls");
+        settings.drawCenterText(30, "Press 'tab' to reset controls");
         for (int i = 0; i < 2; i++){
             for (int j = 0; j < 4; j++){
                 settings.drawText(10 + 3*j, 45 + 45*i, controls[a]);
                 // Una volta implementata la funziona drawSquare userò quella
                 settings.drawSquareAround(SETTINGS_CONTROL_KEYS[a], 10 + 3*j, 60 + 45*i);
                 
-                settings.drawUpperText(10 + 3*j, 60 + 45*i, SETTINGS_CONTROL_KEYS[a] );
+                settings.drawUpperText(10 + 3*j, 60 + 45*i, SETTINGS_CONTROL_KEYS[a]);
                 a = a +1; 
             }
         }
@@ -133,18 +134,36 @@ void Settings::ControlKeys(Draw settings){
             case 27:
                 selected = true;
                 break;
-            case 10:
-                settings.drawCenterText(6, "Press the key you want to use: ");
-                int x = settings.getinput();
-                deb::debug("xstr: " , nostd::to_string(x));
-                deb::debug("char(x): ", nostd::to_string(char(x)));
-                if (is_alpha(x)) SETTINGS_CONTROL_KEYS[selectedOption] = nostd::to_string(char(x));
-                break;
+            case 10:{
+                        settings.drawCenterText(6, "Press the key you want to use: ");
+                        int x = settings.getinput();
+                        deb::debug("xstr: " , nostd::to_string(x));
+                        deb::debug("char(x): ", nostd::to_string(char(x)));
+                        if (is_alpha(x)) SETTINGS_CONTROL_KEYS[selectedOption] = char(x);
+                        break;
+                    }
+            case 9:
+                    {
+                        resetControls();
+                        break;
+                    }
+            default:
+                    break;
         }
 
     }
     
-    
+}
+
+void Settings::resetControls(){
+    SETTINGS_CONTROL_KEYS[0] = 's';
+    SETTINGS_CONTROL_KEYS[1] = 'd';
+    SETTINGS_CONTROL_KEYS[2] = 'a';
+    SETTINGS_CONTROL_KEYS[3] = 'f';
+    SETTINGS_CONTROL_KEYS[4] = 'v';
+    SETTINGS_CONTROL_KEYS[5] = 'o';
+    SETTINGS_CONTROL_KEYS[6] = 'p';
+    SETTINGS_CONTROL_KEYS[7] = 'm';
 }
 
 bool Settings::is_alpha(int ch){

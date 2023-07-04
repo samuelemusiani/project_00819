@@ -171,20 +171,20 @@ void Game::play(){
 		bool right; 
 		int input = screen.getinput();
 
-		if (input == (int) 'f')
+		if (input == SETTINGS_CONTROL_KEYS[3]) // jump right
 
 		{
 			which_key = 1;
 			cumulative++;
 			count_not_key = 0;
 		}
-		else if (input == (int) 'a')
+		else if (input == SETTINGS_CONTROL_KEYS[2]) // jump left
 		{
 			which_key = 2;
 			cumulative++;
 			count_not_key = 0;
 		}
-		else if (input == 'v'){
+		else if (input == SETTINGS_CONTROL_KEYS[4]){ // jump vertical
 			which_key = 3;
 			cumulative++;
 			count_not_key = 0;
@@ -215,59 +215,82 @@ void Game::play(){
 				cumulative = 0;
 			}
 
-
-
-		switch(input)
-		{
-			case ((int) 's'): // move player left
+		
+		
+			if (input == SETTINGS_CONTROL_KEYS[0]) // move player left
+			{
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() - phy::Point(1, 0));
-				break;
-
-			case ((int) 'd'): // move player right
+			}
+			else if (input == SETTINGS_CONTROL_KEYS[1]) // move player right
+			{
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() + phy::Point(1, 0));
-				break;
-
-            case ((int) 'w'): // shoot left
-                manager.shoot(player.get_position(), false);
-                break;
-
-            case ((int) 'e'): //shoot right
-                manager.shoot(player.get_position(), true);
-                break;
-
-#ifdef USE_HACK
-			case (KEY_UP):
-				if (fly) player.set_position(player.get_position() + phy::Point(0, 1));
-				break;
-			case (KEY_LEFT):
-				if (fly) player.set_position(player.get_position() + phy::Point(-1, 0));
-				break;
-			case (KEY_DOWN):
-				if (fly) player.set_position(player.get_position() + phy::Point(0, -1));
-				break;
-			case (KEY_RIGHT):
-				if (fly) player.set_position(player.get_position() + phy::Point(1, 0));
-				break;
-				
-			case ((int) 'h'):
-				screen.nodel(false);
-				hack();
-				screen.nodel(true);
-				break;
-#endif
-			case 27: // Pause menu con tasto esc
+			}
+            else if(input == (int) 'w')
+            {
+                 manager.shoot(player.get_position(), false);
+            }
+            else if(input == (int) 'e')
+            {
+                 manager.shoot(player.get_position(), true);
+            }
+			else if (input == 27) // Pause menu con tasto esc
 			{
 				bool quitGamepley = pauseGame(stats_scr, stats); // se true esci dal gioco
 				if (quitGamepley == true) exit = true;
-				break;
 			}
-			default:
-				break;
-		}
+#ifdef USE_HACK
+            else if (input == KEY_UP)
+            {
+                if(fly) 
+                    player.set_position(player.get_position() + phy::Point(0, 1));
+            }
+            else if (input == KEY_LEFT)
+            {
+                if (fly) 
+                    player.set_position(player.get_position() + phy::Point(-1, 0));
+            }
+            else if (input == KEY_DOWN)
+            {
+                if (fly) 
+                    player.set_position(player.get_position() + phy::Point(0, -1));
+            }
+            else if (input == KEY_RIGHT)
+            {
+                if (fly) 
+                    player.set_position(player.get_position() + phy::Point(0, -1));
+                if (fly) 
+                    player.set_position(player.get_position() + phy::Point(1, 0));
+            }
+            else if(input == (int) 'h')
+            {
+				screen.nodel(false);
+				hack();
+				screen.nodel(true);
+            }
+
+			if (input == KEY_UP){
+				if (fly) player.set_position(player.get_position() + phy::Point(0, 1));
+			}
+			else if (input == KEY_LEFT){
+				if (fly) player.set_position(player.get_position() + phy::Point(-1, 0));
+			}
+			else if (input == KEY_DOWN){
+				if (fly) player.set_position(player.get_position() + phy::Point(0, -1));
+			}
+			else if (input == KEY_RIGHT){
+				if (fly) player.set_position(player.get_position() + phy::Point(1, 0));
+			}
+			else if (input == int ('h')){
+				screen.nodel(false);
+				hack();
+				screen.nodel(true);
+			}
+#endif
 		}
 		// player.update(0.05);
+
 #ifdef USE_HACK
 		if (!fly) phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));
 #else
