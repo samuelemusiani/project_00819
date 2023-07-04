@@ -3,12 +3,12 @@
 
 
 void Draw::drawText(int posY, int posX, nostd::string s) {
-	mvwprintw(this->screen, posY, posX, s.c_str());
+	mvwprintw(this->screen, posY, posX, "%s", s.c_str());
 }
 
 
 void Draw::drawText(int posY, int posX, const char* s) {
-    mvwprintw(this->screen, posY, posX, s);
+    mvwprintw(this->screen, posY, posX, "%s", s);
 }
 
 void Draw::drawText(int posY, int posX, const char s) {
@@ -16,12 +16,12 @@ void Draw::drawText(int posY, int posX, const char s) {
 }
 
 void Draw::drawCenterText(int posY, nostd::string s) {
-	mvwprintw(this->screen, posY, this->centerX(s), s.c_str());
+	mvwprintw(this->screen, posY, this->centerX(s), "%s", s.c_str());
 }
 
 
 void Draw::drawCenterText(int posY, const char* s) {
-    mvwprintw(this->screen, posY, this->centerX(s), s);
+    mvwprintw(this->screen, posY, this->centerX(s), "%s", s);
 }
 
 void Draw::drawUpperText(int posY, int posX, nostd::string s) {
@@ -119,7 +119,7 @@ void Draw::drawEntity(Enemy enemy) {
     phy::Point pos = enemy.get_position();
 
     char symbol[2] = {(char) ('0' + enemy.get_type()), '\0'};
-	mvwprintw(this->screen, OFFSET - pos.get_yPosition(), pos.get_xPosition() + 1, symbol);
+	mvwprintw(this->screen, OFFSET - pos.get_yPosition(), pos.get_xPosition() + 1, "%s", symbol);
 }
 
 void Draw::drawEntity(Coin coin) {
@@ -142,7 +142,7 @@ void Draw::drawEntity(Bullet bullet) {
         else
             symbol[0] = '(';
     }
-	mvwprintw(this->screen, OFFSET - pos.get_yPosition(), pos.get_xPosition() + 1, symbol);
+	mvwprintw(this->screen, OFFSET - pos.get_yPosition(), pos.get_xPosition() + 1, "%s", symbol);
 }
 
 void Draw::updateStats(Statistics stats) {
