@@ -28,34 +28,40 @@ bool File::openFile(std::fstream &file,nostd::string path,nostd::string mode)
 	return file.is_open();
 }
 
-void File::initSettings() {
+void File::initSettings(Settings& sett) {
 	std::fstream file;
 	if (!exist(file, "./settings.txt"))
 	{
 		if (openFile(file, "./settings.txt", "w"))
 		{
-			file << "[ KeyBindings ]\nml=s\nmr=d\njl=a\njr=f\njp=v\nsh=o\nbb=p\not=m\n\n"
-					"[ Preferences ]\nCalibration=-1\nVolume=10\nSensitivity=10\n\n";
+			file << "[ KeyBindings ]\n";
+            //TEMPORANEO
+            file << sett.getControlsKeys();
+            file << "\n\n[ Preferences ]\nCalibration=-1\nVolume=10\nSensitivity=10\n\n";
 			file.close();
 		}
 	}
-	getSettings();
+	getSettings(sett);
 }
 
-void File::saveSettings()
-{
-	std::fstream file;
-	if(openFile(file,"./settings.txt","w"))
-		file << "[ KeyBindings ]\nml="<<SETTINGS_CONTROL_KEYS[0]<<"\nmr="<<SETTINGS_CONTROL_KEYS[1]<<"\n"
-				"jl="<<SETTINGS_CONTROL_KEYS[2]<<"\njr="<<SETTINGS_CONTROL_KEYS[3]<<"\njp="<<SETTINGS_CONTROL_KEYS[4]<<"\n"
-				"sh="<<SETTINGS_CONTROL_KEYS[5]<<"\nbb="<<SETTINGS_CONTROL_KEYS[6]<<"\not="<<SETTINGS_CONTROL_KEYS[7]<<"\n\n"
-				"[ Preferences ]\nCalibration="<<SETTINGS_PRESSURE_CALIBRATION<<"\nVolume="<<SETTINGS_VOLUME_LEVEL<<"\nSensitivity="<<SETTINGS_SENSITIVITY_LEVEL<<"\n";
-	file.close();
+void File::saveSettings(Settings& sett) {
+    std::fstream file;
+    if (openFile(file, "./settings.txt", "w")) {
+			file << "[ KeyBindings ]\n";
+            //TEMPORANEO
+            file << sett.getControlsKeys();
+
+            file << "\n\n[ Preferences ]\nCalibration="
+                << sett.getCalibration()
+                << "\nVolume=" << sett.getVolume()
+                << "\nSensitivity=" << sett.getSensitivity() << "\n";
+    }
+    file.close();
 }
 
-bool File::isCalibrated()
+bool File::isCalibrated(Settings& sett)
 {
-	return (SETTINGS_PRESSURE_CALIBRATION!=-1);
+	return sett.getCalibration() != -1 ;
 }
 
 bool File::exist(std::fstream &file, nostd::string path)
@@ -352,26 +358,24 @@ Statistics File::getStatistics(nostd::string name)
     return stats;
 }
 
-void File::getSettings()
+void File::getSettings(Settings& sett)
 {
 	std::fstream file;
 	if(openFile(file,"./settings.txt","r"))
 	{
 		nostd::string buff;
 		nostd::getline(file,buff); // [ KeyBindings ]
-		for(int i=0;i<8;i++)
-		{
-			nostd::getline(file,buff);
-			SETTINGS_CONTROL_KEYS[i] = buff.substr(3)[0];
-		}
+        nostd::getline(file,buff);
+        sett.setControlsKeys(buff.c_str());
+
 		nostd::getline(file,buff); // empty line
 		nostd::getline(file,buff); // [ Preferences ]
 		nostd::getline(file,buff);
-		SETTINGS_PRESSURE_CALIBRATION = nostd::stoi(buff.substr(12));
+		sett.setCalibration(nostd::stoi(buff.substr(12)));
 		nostd::getline(file,buff);
-		SETTINGS_VOLUME_LEVEL = nostd::stoi(buff.substr(7));
+		sett.setVolume(nostd::stoi(buff.substr(7)));
 		nostd::getline(file,buff);
-		SETTINGS_SENSITIVITY_LEVEL = nostd::stoi(buff.substr(12));
+		sett.setSensitivity(nostd::stoi(buff.substr(12)));
 		file.close();
 	}
 }

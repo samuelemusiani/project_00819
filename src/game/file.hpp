@@ -13,7 +13,6 @@
 #include <iomanip>
 
 #include "settings.hpp"
-#include "global.hpp"
 #include "../maps/map.hpp"
 #include "../physics/body.hpp"
 #include "../game/statistics.hpp"
@@ -32,12 +31,12 @@ class File
 		static void appendSave(Map m,int chunk,phy::Point pos,nostd::string name);
 		static void appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string name);
 		static void updateSave(Map m,int chunk,phy::Point pos, Statistics stats);
-		static void getSettings();
+		static void getSettings(Settings& sett);
 public:
 		File();
-		static void initSettings();
-		static void saveSettings();
-		static bool isCalibrated();
+		static void initSettings(Settings& sett);
+		static void saveSettings(Settings& sett);
+		static bool isCalibrated(Settings& sett);
 		static bool isAlreadySaved(Map m);
 		static void saveMap(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string name="");
 		static void changeName(nostd::string oldName,nostd::string newName);

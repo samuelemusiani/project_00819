@@ -4,7 +4,6 @@
 #include "game.hpp"
 #include "menu.hpp"
 #include "file.hpp"
-#include "statistics.hpp"
 
 #include "save.hpp"
 #include "../physics/collisions.hpp"
@@ -26,7 +25,7 @@ Game::Game()
 {
 	this->screen = Draw();
 	screen.init();
-	File::initSettings();
+	File::initSettings(settings);
 }	
 
 Game::~Game()
@@ -46,7 +45,6 @@ void Game::run()
 		int sel = menu.get_selected_option(this->screen);
 
 		Credits credits;
-		Settings settings;
 
 		switch (sel)
 		{
@@ -68,7 +66,8 @@ void Game::run()
 			}
 		case 2: 
 			{// Settings
-			settings.drawFirstSettings(this->screen);
+            deb::debug(settings.getControlsKeys(), "ControlKeys");
+			this->settings.drawFirstSettings(this->screen);
 
 			break;
 			}
@@ -159,32 +158,32 @@ void Game::play(){
 	Manager manager = Manager(map);
 	int entity_time= 0;
 
-	// Implementare che con KEY_LEFT, KEY_RIGHT si sposta il giocatore utilizzando il metodo setPosition di body e poi disegnare il giocatore in quella posizione con drawPlayer
-
 	bool exit = false;
 	screen.nodel(true);
 	int cumulative = 0;
 	int count_not_key = 0;
 	int which_key = 0;
+
+    const char* control_keys = this->settings.getControlsKeys();
 	while (!exit){
 		stats_scr.updateStats(stats);
 		bool right; 
 		int input = screen.getinput();
 
-		if (input == SETTINGS_CONTROL_KEYS[3]) // jump right
+		if (input == control_keys[3]) // jump right
 
 		{
 			which_key = 1;
 			cumulative++;
 			count_not_key = 0;
 		}
-		else if (input == SETTINGS_CONTROL_KEYS[2]) // jump left
+		else if (input == control_keys[2]) // jump left
 		{
 			which_key = 2;
 			cumulative++;
 			count_not_key = 0;
 		}
-		else if (input == SETTINGS_CONTROL_KEYS[4]){ // jump vertical
+		else if (input == control_keys[4]){ // jump vertical
 			which_key = 3;
 			cumulative++;
 			count_not_key = 0;
@@ -215,21 +214,21 @@ void Game::play(){
 				cumulative = 0;
 			}
 		
-			if (input == SETTINGS_CONTROL_KEYS[0]) // move player left
+			if (input == control_keys[0]) // move player left
 			{
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() - phy::Point(1, 0));
 			}
-			else if (input == SETTINGS_CONTROL_KEYS[1]) // move player right
+			else if (input == control_keys[1]) // move player right
 			{
 				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
 					player.set_position(player.get_position() + phy::Point(1, 0));
 			}
-            else if(input == SETTINGS_CONTROL_KEYS[5]) // Shoot left
+            else if(input == control_keys[5]) // Shoot left
             {
                  manager.shoot(player.get_position(), false);
             }
-            else if(input == SETTINGS_CONTROL_KEYS[6]) // Shoot right
+            else if(input == control_keys[6]) // Shoot right
             {
                  manager.shoot(player.get_position(), true);
             }
