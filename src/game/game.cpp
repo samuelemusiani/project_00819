@@ -27,7 +27,8 @@ Game::Game()
 	this->screen = new Draw(SCREEN_HEIGHT, SCREEN_WIDTH);
 	screen->init();
 	File::initSettings(settings);
-}	
+}
+
 
 Game::~Game()
 {

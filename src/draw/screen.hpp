@@ -16,6 +16,10 @@ class Screen
 	public:
 		Screen(int height, int width, int posY, int posX);
         ~Screen();
+
+        Screen(const Screen& other) = delete;
+        Screen& operator=(const Screen&) = delete;
+
 		void init();
 		void clearScreen();
 		void eraseScreen();

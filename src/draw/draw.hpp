@@ -31,6 +31,9 @@ class Draw : public Screen{
 	public:
 		Draw(int height, int width, int posY = 0, int posX = 0);
 
+        Draw(const Draw& other) = delete;
+        Draw& operator=(const Draw&) = delete;
+
 		void drawText(int posY, int posX, nostd::string s);
 		void drawText(int posY, int posX, const char* s);
 		void drawText(int posY, int posX, const char s);
