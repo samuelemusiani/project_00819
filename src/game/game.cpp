@@ -164,8 +164,9 @@ void Game::play(){
 	int count_not_key = 0;
 	int which_key = 0;
 
-    const char* control_keys = this->settings.getControlsKeys();
 	while (!exit){
+        const char* control_keys = this->settings.getControlsKeys();
+
 		stats_scr.updateStats(stats);
 		bool right; 
 		int input = screen.getinput();
@@ -441,113 +442,110 @@ int Game::setDifficulty()
 
 bool Game::pauseGame(Draw stats_scr, Statistics stats)
 {
-	screen.nodel(false);
+    screen.nodel(false);
 
-	bool resumed = false;
-	bool exit = false;
-	int posY, posX;
-	screen.size(posY, posX, 46, 150);
-	
-	Draw pause = screen.newWindow(44, 60, posY + 2, 90 + posX);
-	while(!resumed) {
+    bool resumed = false;
+    bool exit = false;
+    int posY, posX;
+    screen.size(posY, posX, 46, 150);
 
-		pause.clearwithoutbox();
-		pause.drawBox();
-		pause.drawText(3, 30 - pause.center("Game Paused"),  "Game Paused");
-		nostd::string options[4] = {"Resume", "Settings", "Save", "Exit"};
-		int selected = 0;
-		bool choose = false;
-		
-		stats_scr.redraw();
-		screen.redraw();
-		screen.noOutRefresh();
-		stats_scr.noOutRefresh();
-		pause.noOutRefresh();
-		Screen::update();
+    Draw pause = screen.newWindow(44, 60, posY + 2, 90 + posX);
+    while(!resumed) {
 
+        pause.clearwithoutbox();
+        pause.drawBox();
+        pause.drawText(3, 30 - pause.center("Game Paused"),  "Game Paused");
+        nostd::string options[4] = {"Resume", "Settings", "Save", "Exit"};
+        int selected = 0;
+        bool choose = false;
 
+        stats_scr.redraw();
+        screen.redraw();
+        screen.noOutRefresh();
+        stats_scr.noOutRefresh();
+        pause.noOutRefresh();
+        Screen::update();
 
-		while (!choose){	
-			for (int i = 0; i < 4; i++)
-			{
-				pause.drawSquareAround(options[i], 20 + 4*i, 30 - (options[i].length() / 2));
-			}
-			pause.attrOn(COLOR_PAIR(1));
-			pause.drawText(20 + 4*selected, 30 - (options[selected].length() / 2), options[selected]);
-			pause.attrOff(COLOR_PAIR(1));
-			switch (pause.getinput())
-			{
-				case KEY_UP:
-					if (selected == 0) selected = 3;
-					else selected = selected - 1;
-					break;
-				case KEY_DOWN:
-					if (selected == 3) selected = 0;
-					else selected = selected + 1;
-					break;
-				case 10:
-					choose = true;
-					break;
-				default: 
-					break;
-			}
-		}
-		pause.refreshScreen();
-		Save save = Save();
-		switch (selected)
-		{
-			case 0:
-				screen.nodel(true);
-				pause.deleteWin();
+        while (!choose){	
+            for (int i = 0; i < 4; i++)
+            {
+                pause.drawSquareAround(options[i], 20 + 4*i, 30 - (options[i].length() / 2));
+            }
+            pause.attrOn(COLOR_PAIR(1));
+            pause.drawText(20 + 4*selected, 30 - (options[selected].length() / 2), options[selected]);
+            pause.attrOff(COLOR_PAIR(1));
+            switch (pause.getinput())
+            {
+                case KEY_UP:
+                    if (selected == 0) selected = 3;
+                    else selected = selected - 1;
+                    break;
+                case KEY_DOWN:
+                    if (selected == 3) selected = 0;
+                    else selected = selected + 1;
+                    break;
+                case 10:
+                    choose = true;
+                    break;
+                default: 
+                    break;
+            }
+        }
+        pause.refreshScreen();
+        Save save = Save();
+        switch (selected)
+        {
+            case 0:
+                screen.nodel(true);
+                pause.deleteWin();
 
-				resumed = true;
-				break;
+                resumed = true;
+                break;
 
-			case 1:{
-				Settings settings = Settings();
-				int posX, posY;
-				screen.size(posY, posX, 46, 150);
-				Draw settings_scr = screen.newWindow(46, 150, posY, posX);
-				settings.drawFirstSettings(settings_scr);
-				settings_scr.eraseScreen();
-				settings_scr.deleteWin();
-				
+            case 1:{
+                       int posX, posY;
+                       screen.size(posY, posX, 46, 150);
+                       Draw settings_scr = screen.newWindow(46, 150, posY, posX);
+                       this->settings.drawFirstSettings(settings_scr);
+                       settings_scr.eraseScreen();
+                       settings_scr.deleteWin();
 
 
-				break;
-			}
-			case 2:
-			{
-				int posY, posX;
-				screen.size(posY, posX, 46, 150);
-				
-				Draw save_scr = screen.newWindow(46, 150, posY, posX);
 
-				save.saveNewGame(save_scr, map, current_chunk, player.get_position(), stats);
-				save_scr.eraseScreen();
-				save_scr.deleteWin();
-				break;
-			}
-				
-			case 3: 
-				{
-				pause.clearScreen();
-				pause.deleteWin();
-				screen.redraw();
-				screen.refreshScreen();
+                       break;
+                   }
+            case 2:
+                   {
+                       int posY, posX;
+                       screen.size(posY, posX, 46, 150);
 
-				
-				save.quitGame(screen, map, current_chunk, player.get_position(), stats);
+                       Draw save_scr = screen.newWindow(46, 150, posY, posX);
 
-				resumed = true; 
-				exit = true; 
-				break;
-				}	
-			default:
-				break;
-			
-		}
-		} pause.deleteWin(); return exit;
+                       save.saveNewGame(save_scr, map, current_chunk, player.get_position(), stats);
+                       save_scr.eraseScreen();
+                       save_scr.deleteWin();
+                       break;
+                   }
+
+            case 3: 
+                   {
+                       pause.clearScreen();
+                       pause.deleteWin();
+                       screen.redraw();
+                       screen.refreshScreen();
+
+
+                       save.quitGame(screen, map, current_chunk, player.get_position(), stats);
+
+                       resumed = true; 
+                       exit = true; 
+                       break;
+                   }	
+            default:
+                   break;
+
+        }
+    } pause.deleteWin(); return exit;
 }
 
 void Game::over()
