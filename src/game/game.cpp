@@ -561,9 +561,7 @@ void Game::over()
 #ifdef USE_HACK
 
 void Game::hack(){
-	int posX, posY;
-	this->screen->size(posY, posX, 20, 50);
-	Draw hack = Draw(20, 50, posY, posX);
+	Draw hack = Draw(20, 50);
 	hack.attrOn(COLOR_PAIR(2));
 	hack.drawBox();
 	hack.drawText(2, 25 - hack.center("Hack Menu"), "Hack Menu");
@@ -582,31 +580,31 @@ void Game::hack(){
 	int x = hack.getinput();
 	switch (x){
 		case '1':
-			// this->heart++;
+			this->stats.incrementHearts();
 			break;
 		case '2':
-			// this->coins++;
+			this->stats.incrementCoins();
 			break;
 		case '3':
-			// this->jump++;
+			this->stats.incrementJumps();
 			break;
 		case '4':
-			// this->current_chunk++;
+			this->current_chunk++;
 			break;
 		case '5':
 			fly = true;
 			break;
 		case '6':
-			// this->heart--;
+			this->stats.incrementHearts(-1);
 			break;
 		case '7':
-			// this->coins--;
+			this->stats.incrementCoins(-1);
 			break;
 		case '8':
-			// this->jump--;
+			this->stats.incrementJumps(-1);
 			break;
 		case '9':
-			// this->current_chunk--;
+			this->current_chunk++;
 			break;
 		case '0':
 			fly = false;
@@ -630,32 +628,32 @@ void Game::hack(){
 				{
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set life"), "Set life");
-					int custom = setCustom(hack);
-					// if (custom != -1) this->heart = custom;
+					int custom = setCustom(&hack);
+					if (custom != -1) this->stats.setHearts(custom);
 					break;
 				}
 				case '2':
 				{
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set coins"), "Set coins");
-					int custom = setCustom(hack);
-					// if (custom != -1) this->coins = custom;
+					int custom = setCustom(&hack);
+					if (custom != -1) this->stats.setCoins(custom); 
 					break;
 				}
 				case '3':
 				{
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set jump"), "Set jump");
-					int custom = setCustom(hack);
-					// if (custom != -1) this->jump = custom;
+					int custom = setCustom(&hack);
+					if (custom != -1) this->stats.setJumps(custom);  
 					break;
 				}
 				case '4':
 				{
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set level"), "Set level");
-					int custom = setCustom(hack);
-					// if (custom != -1) this->current_chunk = custom;
+					int custom = setCustom(&hack);
+					if (custom != -1) this->current_chunk = custom;
 					break;
 				}
 				default:
@@ -671,17 +669,17 @@ void Game::hack(){
 	hack.deleteWin();
 }
 
-int Game::setCustom(Draw hack){
-	int a = hack.getinput();
+int Game::setCustom(Draw* hack){
+	int a = hack->getinput();
 	nostd::string set_chunk;
 	while (a != 10  && a != 27){ 
 		// controlla se l'input è un numero
 		if (a >= 48 && a <= 57) set_chunk = set_chunk + nostd::to_string(char(a));
 		// se è backspace cancella l'ultimo carattere
 		else if (a == 127) set_chunk = set_chunk.substr(0, set_chunk.length() - 1);
-		hack.clearLine(4, 0);
-		hack.drawText(4, 25 - hack.center(set_chunk), set_chunk);
-		a = hack.getinput();
+		hack->clearLine(4, 0);
+		hack->drawText(4, 25 - hack->center(set_chunk), set_chunk);
+		a = hack->getinput();
 	}
 	if (a == 27) return -1;
 	else return stoi(set_chunk);

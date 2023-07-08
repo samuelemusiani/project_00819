@@ -26,7 +26,7 @@ class Game
 #ifdef USE_HACK
 		bool fly = false;
 		void hack();
-		int setCustom(Draw hack);
+		int setCustom(Draw* hack);
 #endif
 
 	public:
