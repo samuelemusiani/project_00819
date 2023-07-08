@@ -190,13 +190,28 @@ void Settings::ControlKeys(Draw settings){
             case 27:
                 selected = true;
                 break;
-            case 10:{
+            case 10:{ // <ENTER> to change a key
                         settings.drawCenterText(6, "Press the key you want to use: ");
                         int x = settings.getinput();
-                        if (is_alpha(x)) keybinds[selectedOption] = char(x);
+                        if (this->is_alpha(x) ) 
+                        {
+                            if(!this->is_used(x))
+                                keybinds[selectedOption] = char(x);
+                            else if(keybinds[selectedOption] != x)
+                            {
+                                // This could be done a lot better but only if 
+                                // we start to use colors in the whole game
+                                settings.clearLine(6, 0);
+                                init_pair(2, COLOR_RED, COLOR_BLACK);
+                                settings.attrOn(COLOR_PAIR(2));
+                                settings.drawCenterText(6, "THE KEY IS ALREADY IN USE");
+                                settings.attrOff(COLOR_PAIR(2));
+                                settings.getinput();
+                            }
+                        }
                         break;
                     }
-            case 9:
+            case 9: // <TAB> to reset
                     {
                         resetControls();
                         break;
@@ -207,6 +222,19 @@ void Settings::ControlKeys(Draw settings){
 
     }
     
+}
+
+bool Settings::is_used(int ch)
+{
+    bool found = false;
+
+    int i = 0;
+    while(!found && i < 8)
+    {
+        found = this->keybinds[i] == ch;
+        i++;
+    }
+    return found;
 }
 
 bool Settings::is_alpha(int ch){

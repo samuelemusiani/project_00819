@@ -24,6 +24,8 @@ class Settings
         int volume_level;
         int sensitivity_level;
 
+        bool is_used(int ch);
+
     public:
         Settings();
 
