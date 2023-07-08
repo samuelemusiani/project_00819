@@ -42,7 +42,7 @@ class Game
 		// Funzione che chiede all'utente di scegliere la dificoltà e ritorna: 0 per facile, 1 per medio, 2 per difficile
 		int setDifficulty();
 
-		bool pauseGame(Draw stats_scr, Statistics stats); 
+		bool pauseGame(Draw* stats_scr, Statistics stats); 
 };
 
 #endif

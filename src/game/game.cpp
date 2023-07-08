@@ -222,7 +222,7 @@ void Game::play(){
             }
 			else if (input == 27) // Pause menu con tasto esc
 			{
-				exit = pauseGame(stats_scr, stats); // se true esci dal gioco
+				exit = pauseGame(&stats_scr, stats); // se true esci dal gioco
 			}
 #ifdef USE_HACK
             else if (input == KEY_UP)
@@ -425,29 +425,32 @@ int Game::setDifficulty()
 	return selected;
 }
 
-bool Game::pauseGame(Draw stats_scr, Statistics stats) {
+bool Game::pauseGame(Draw* stats_scr, Statistics stats) {
     this->screen->nodel(false);
+
+    int posY, posX;
+    this->screen->size(posY, posX, SCREEN_HEIGHT, 60);
+    Draw pause =
+        Draw(SCREEN_HEIGHT, 60, posY, posX + (SCREEN_WIDTH - 60) / 2);
 
     bool resumed = false;
     bool exit = false;
-    int posY, posX;
-    this->screen->size(posY, posX, 46, 150);
 
-    Draw pause = Draw(44, 60, posY + 2, 90 + posX);
     while (!resumed) {
 
         pause.clearwithoutbox();
         pause.drawBox();
-        pause.drawText(3, 30 - pause.center("Game Paused"), "Game Paused");
+        pause.drawText(3, 30 - pause.center("Game Paused"),
+                "Game Paused");
         nostd::string options[4] = {"Resume", "Settings", "Save",
             "Exit"};
         int selected = 0;
         bool choose = false;
 
-        stats_scr.redraw();
+        stats_scr->redraw();
         this->screen->redraw();
         this->screen->noOutRefresh();
-        stats_scr.noOutRefresh();
+        stats_scr->noOutRefresh();
         pause.noOutRefresh();
         Screen::update();
 
@@ -457,7 +460,9 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats) {
                         30 - (options[i].length() / 2));
             }
             pause.attrOn(COLOR_PAIR(1));
-            pause.drawText( 20 + 4 * selected, 30 - (options[selected].length() / 2),
+            pause.drawText(
+                    20 + 4 * selected,
+                    30 - (options[selected].length() / 2),
                     options[selected]);
             pause.attrOff(COLOR_PAIR(1));
             switch (pause.getinput()) {
@@ -487,13 +492,13 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats) {
         pause.refreshScreen();
         Save save = Save();
         switch (selected) {
-            case 0:
-                this->screen->nodel(true);
-                pause.deleteWin();
+            case 0: {
+                        this->screen->nodel(true);
+                        pause.deleteWin();
 
-                resumed = true;
-                break;
-
+                        resumed = true;
+                        break;
+                    }
             case 1: {
                         this->settings.drawFirstSettings();
                         break;
@@ -510,7 +515,6 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats) {
                         save_scr.deleteWin();
                         break;
                     }
-
             case 3: {
                         pause.clearScreen();
                         pause.deleteWin();
@@ -524,13 +528,14 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats) {
                         exit = true;
                         break;
                     }
-            default:
-                    resumed = true;
-                    exit = false;
-                    break;
+            default: {
+                         resumed = true;
+                         exit = false;
+                         break;
+                     }
         }
     }
-        pause.deleteWin();
+        // pause.deleteWin();
         this->screen->nodel(true);
         return exit;
 }
