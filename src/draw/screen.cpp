@@ -28,8 +28,6 @@ Screen::Screen(int height, int width, int posY, int posX)
 	this->screen = newwin(height, width, tmp_posY, tmp_posX);
 	keypad(this->screen, true);
 	set_escdelay(1);
-	this-> max_x = getmaxx(this->screen); 
-	this-> max_y = getmaxy(this->screen);
 	// Setto il background nero
 	wbkgd(this->screen, COLOR_BLACK);
 	wrefresh(this->screen);
@@ -53,16 +51,6 @@ void Screen::init()
 	init_pair(1, COLOR_WHITE, COLOR_BLUE);
 	// Ridefinisco il colore nero a 0,0,0 per alcuni terminali che mostrano un colore diverso
 	init_color(COLOR_BLACK, 0, 0, 0);
-}
-
-int Screen::get_maxX()
-{
-	return this->max_x;
-}
-
-int Screen::get_maxY()
-{
-	return this->max_y;
 }
 
 void Screen::clearScreen()

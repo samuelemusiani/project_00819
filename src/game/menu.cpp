@@ -1,8 +1,8 @@
 #include "menu.hpp"
 
-Menu::Menu(int y, int x) {
-    this->posX = x;
-    this->posY = y;
+Menu::Menu() {
+    this->posX = SCREEN_WIDTH;
+    this->posY = SCREEN_HEIGHT;
 }
 
 void Menu::drawIntroAnimation(Draw* screen) {

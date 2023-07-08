@@ -35,7 +35,7 @@ Game::~Game()
 }
 
 void Game::run() {
-    Menu menu = Menu(this->screen->get_maxY(), this->screen->get_maxX());
+    Menu menu = Menu();
     menu.drawIntroAnimation(this->screen);
     bool exit = false;
     while (!exit) {

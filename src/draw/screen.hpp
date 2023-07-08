@@ -9,10 +9,6 @@
 
 class Screen
 {
-	private:
-		int max_x;
-		int max_y;
-
 	protected:
 		WINDOW *screen;
         bool is_screen_deleted;
@@ -21,8 +17,6 @@ class Screen
 		Screen(int height, int width, int posY, int posX);
         ~Screen();
 		void init();
-		int get_maxX();
-		int get_maxY();
 		void clearScreen();
 		void eraseScreen();
 		void nodel(bool value);
