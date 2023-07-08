@@ -26,6 +26,17 @@ class Settings
 
         bool is_used(int ch);
 
+        void ControlKeys(Draw* settings);
+        void calibrateKeys(Draw* settings);
+
+        // controlla se esiste il file dei salvataggi per controllare se è stata fatta la calibrazione
+        bool checkifcalibrated(Draw* settings);
+
+        // funzione getkeys
+        void changeKeys(Draw* settings);
+
+        bool is_alpha(int ch);
+
     public:
         Settings();
 
@@ -41,19 +52,7 @@ class Settings
         void setVolume(int n);
         void setSensitivity(int n);
 
-
-        /* --------------- DA RIFARE --------------- */
-        void drawFirstSettings(Draw settings);
-        void ControlKeys(Draw settings);
-        void calibrateKeys(Draw settings);
-
-        // controlla se esiste il file dei salvataggi per controllare se è stata fatta la calibrazione
-        bool checkifcalibrated(Draw settings);
-
-        // funzione getkeys
-        void changeKeys(Draw settings);
-
-        bool is_alpha(int ch);
+        void drawFirstSettings();
 };
 
 #endif

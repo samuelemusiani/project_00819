@@ -4,20 +4,23 @@
 #ifndef DRAW_SCREEN 
 #define DRAW_SCREEN
 
+#define SCREEN_HEIGHT 44
+#define SCREEN_WIDTH 150
+
 class Screen
 {
-	private:
-		int max_x;
-		int max_y;
-
 	protected:
 		WINDOW *screen;
+        bool is_screen_deleted;
 
 	public:
-		Screen();
+		Screen(int height, int width, int posY, int posX);
+        ~Screen();
+
+        Screen(const Screen& other) = delete;
+        Screen& operator=(const Screen&) = delete;
+
 		void init();
-		int get_maxX();
-		int get_maxY();
 		void clearScreen();
 		void eraseScreen();
 		void nodel(bool value);

@@ -83,7 +83,7 @@ class Manager
         int collect_coin(phy::Point player_position);
         void shoot(phy::Point position, bool direction, int type = 0);
         void update_entities(int time, phy::Body& player, Statistics& stats);
-        void draw_entities(Draw screen); //This method must be called afther set_chunk()
+        void draw_entities(Draw* screen); //This method must be called afther set_chunk()
 
         bool is_there_an_entity_in_platform(Map map, int Chunk, int plat);
         bool is_there_an_entity_in_point(int Chunk, phy::Point point);

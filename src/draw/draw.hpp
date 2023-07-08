@@ -29,6 +29,11 @@ class Draw : public Screen{
         int centerX(const char* text);
 
 	public:
+		Draw(int height, int width, int posY = 0, int posX = 0);
+
+        Draw(const Draw& other) = delete;
+        Draw& operator=(const Draw&) = delete;
+
 		void drawText(int posY, int posX, nostd::string s);
 		void drawText(int posY, int posX, const char* s);
 		void drawText(int posY, int posX, const char s);
@@ -63,11 +68,5 @@ class Draw : public Screen{
 
         void updateStats(Statistics stats);
         void deleteStats();
-
-        // I dont't like this way of generation a new win. We should make a new
-        // Draw object and the constructor would take care of everything
-		Draw newSubWindow(int height, int width, int posY, int posX);
-		Draw newWindow(int height, int width, int posY, int posX);
-		void setWin(WINDOW *win);
 };
 #endif

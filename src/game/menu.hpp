@@ -28,11 +28,9 @@ class Menu
 										" ██║  ██╗██║██║ ╚████║╚██████╔╝",
 										" ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ "};
 	public:
-
-		Menu(int x, int y);
-
-		void drawMenu(Draw screen); // Disegna il menu
-		void drawFirstMenu(Draw screen); // Disegna il menu iniziale
-		int get_selected_option(Draw screen);
+		Menu();
+		void drawMenu(Draw* screen); // Disegna il menu
+		void drawIntroAnimation(Draw* screen); // Disegna il menu iniziale
+		int get_selected_option(Draw* screen);
 		
 };

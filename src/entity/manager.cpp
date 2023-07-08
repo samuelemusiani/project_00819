@@ -263,26 +263,26 @@ list_bullets Manager::bullets_collisions(list_bullets p, phy::Body& player, Stat
     return p;
 }
 
-void Manager::draw_entities(Draw screen)
+void Manager::draw_entities(Draw* screen)
 {
     list_enemies p = this->Enemies[this->current_chunk];
     while(p != nullptr) {
         if(p->val.is_alive())
-            screen.drawEntity(p->val);
+            screen->drawEntity(p->val);
         p = p->next;
     }
 
     list_coins q = this->Coins[this->current_chunk];
     while(q != nullptr) {
         if(!q->val.is_collected())
-            screen.drawEntity(q->val);
+            screen->drawEntity(q->val);
 
         q = q->next;
     }
 
     list_bullets b = this->Bullets;
     while(b != nullptr) {
-        screen.drawEntity(b->val);
+        screen->drawEntity(b->val);
         b = b->next;
     }
 }
