@@ -2,16 +2,11 @@
 #include <unistd.h>
 #include <locale.h>
 
-Screen::Screen()
+Screen::Screen(int height, int width, int posY, int posX)
+    : is_screen_deleted(false)
 {
-}
+    this->init();
 
-void Screen::init()
-{
-	setlocale(LC_ALL, "");
-	initscr();
-	cbreak();
-	noecho();
 	if (LINES < 48 || COLS < 150)
 	{
 		printw("Your terminal is too small. Please resize it at least to 44x150");
@@ -22,22 +17,35 @@ void Screen::init()
 			sleep(1); // attendo 1 secondo per non mandare la cpu a 100%
 		}
 	}
-	curs_set(0);
-	start_color();
-	int posY, posX;
-	size(posY, posX, 44	, 150);
-	this->screen = newwin(44, 150, posY + 1 , posX);
+	// size(posY, posX, height	, width);
+	this->screen = newwin(height, width, posY, posX);
 	keypad(this->screen, true);
 	set_escdelay(1);
 	this-> max_x = getmaxx(this->screen); 
 	this-> max_y = getmaxy(this->screen);
+	// Setto il background nero
+	wbkgd(this->screen, COLOR_BLACK);
+	wrefresh(this->screen);
+}
+
+Screen::~Screen()
+{
+    if(!is_screen_deleted)
+        delwin(this->screen);
+}
+
+void Screen::init()
+{
+	setlocale(LC_ALL, "");
+	initscr();
+	cbreak();
+	noecho();
+	curs_set(0);
+	start_color();
 	init_pair(2, COLOR_GREEN, COLOR_BLACK);
 	init_pair(1, COLOR_WHITE, COLOR_BLUE);
 	// Ridefinisco il colore nero a 0,0,0 per alcuni terminali che mostrano un colore diverso
 	init_color(COLOR_BLACK, 0, 0, 0);
-	// Setto il background nero
-	wbkgd(this->screen, COLOR_BLACK);
-	wrefresh(this->screen);
 }
 
 int Screen::get_maxX()
@@ -94,7 +102,10 @@ void Screen::clearLine(int y, int x)
 
 void Screen::deleteWin()
 {
-	delwin(this->screen);
+    if(!is_screen_deleted)
+        delwin(this->screen);
+
+    is_screen_deleted = true;
 }
 
 void Screen::size(int &posY, int &posX, int offsetY, int offsetX)

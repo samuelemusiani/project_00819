@@ -31,8 +31,8 @@ class Menu
 
 		Menu(int x, int y);
 
-		void drawMenu(Draw screen); // Disegna il menu
-		void drawFirstMenu(Draw screen); // Disegna il menu iniziale
-		int get_selected_option(Draw screen);
+		void drawMenu(Draw* screen); // Disegna il menu
+		void drawFirstMenu(Draw* screen); // Disegna il menu iniziale
+		int get_selected_option(Draw* screen);
 		
 };

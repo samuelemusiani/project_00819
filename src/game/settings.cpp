@@ -61,7 +61,8 @@ void Settings::setControlsKeys(const char* s)
     strcpy(this->keybinds, s);
 }
 
-void Settings::drawFirstSettings(Draw screen){
+void Settings::drawFirstSettings(int posY, int posX){
+    Draw screen = Draw(46, 150, posY, posX);
     // Variabili interne alla funzione
     int selectedOption = 0;
     bool saved = false;
@@ -125,9 +126,9 @@ void Settings::drawFirstSettings(Draw screen){
         else if (input == 10)
         {
             if (selectedOption == 0)
-                this->ControlKeys(screen);
+                this->ControlKeys(&screen);
             else if (selectedOption == 1)
-                calibrateKeys(screen);
+                calibrateKeys(&screen);
         }
         else if (input == 27)
         {
@@ -142,31 +143,31 @@ void Settings::drawFirstSettings(Draw screen){
     }
 }
 
-void Settings::ControlKeys(Draw settings){
+void Settings::ControlKeys(Draw* screen){
     
-    settings.clearScreen(); 
+    screen->clearScreen(); 
     int selectedOption = 0;
     bool selected = false;
     while (!selected){
         int a = 0;
-        settings.eraseScreen();
-        settings.drawCenterText(3, "Controls");
-        settings.drawCenterText(30, "Press 'tab' to reset controls");
+        screen->eraseScreen();
+        screen->drawCenterText(3, "Controls");
+        screen->drawCenterText(30, "Press 'tab' to reset controls");
         for (int i = 0; i < 2; i++){
             for (int j = 0; j < 4; j++){
-                settings.drawText(10 + 3*j, 45 + 45*i, controls[a]);
+                screen->drawText(10 + 3*j, 45 + 45*i, controls[a]);
                 // Una volta implementata la funziona drawSquare userò quella
-                settings.drawSquareAround(keybinds[a], 10 + 3*j, 60 + 45*i);
+                screen->drawSquareAround(keybinds[a], 10 + 3*j, 60 + 45*i);
                 
-                settings.drawUpperText(10 + 3*j, 60 + 45*i, keybinds[a]);
+                screen->drawUpperText(10 + 3*j, 60 + 45*i, keybinds[a]);
                 a = a +1; 
             }
         }
-        settings.attrOn(COLOR_PAIR(1));
-        if (selectedOption < 4) settings.drawUpperText(10 + 3*selectedOption, 60, keybinds[selectedOption]);
-        else settings.drawUpperText(10 + 3*(selectedOption - 4), 105, keybinds[selectedOption]);
-        settings.attrOff(COLOR_PAIR(1));
-        switch (settings.getinput()){
+        screen->attrOn(COLOR_PAIR(1));
+        if (selectedOption < 4) screen->drawUpperText(10 + 3*selectedOption, 60, keybinds[selectedOption]);
+        else screen->drawUpperText(10 + 3*(selectedOption - 4), 105, keybinds[selectedOption]);
+        screen->attrOff(COLOR_PAIR(1));
+        switch (screen->getinput()){
             case KEY_UP:
                 if (selectedOption > 0){
                     selectedOption = selectedOption - 1;
@@ -191,8 +192,8 @@ void Settings::ControlKeys(Draw settings){
                 selected = true;
                 break;
             case 10:{ // <ENTER> to change a key
-                        settings.drawCenterText(6, "Press the key you want to use: ");
-                        int x = settings.getinput();
+                        screen->drawCenterText(6, "Press the key you want to use: ");
+                        int x = screen->getinput();
                         if (this->is_alpha(x) ) 
                         {
                             if(!this->is_used(x))
@@ -201,12 +202,12 @@ void Settings::ControlKeys(Draw settings){
                             {
                                 // This could be done a lot better but only if 
                                 // we start to use colors in the whole game
-                                settings.clearLine(6, 0);
+                                screen->clearLine(6, 0);
                                 init_pair(2, COLOR_RED, COLOR_BLACK);
-                                settings.attrOn(COLOR_PAIR(2));
-                                settings.drawCenterText(6, "THE KEY IS ALREADY IN USE");
-                                settings.attrOff(COLOR_PAIR(2));
-                                settings.getinput();
+                                screen->attrOn(COLOR_PAIR(2));
+                                screen->drawCenterText(6, "THE KEY IS ALREADY IN USE");
+                                screen->attrOff(COLOR_PAIR(2));
+                                screen->getinput();
                             }
                         }
                         break;
@@ -242,21 +243,21 @@ bool Settings::is_alpha(int ch){
 }
 
 
-void Settings::calibrateKeys(Draw settings){
-    settings.eraseScreen();
-    settings.drawCenterText(6, "Keep pressing the key!");
-    settings.drawCenterText(8, "Calibration in progress...");
-    settings.refreshScreen();
+void Settings::calibrateKeys(Draw* screen){
+    screen->eraseScreen();
+    screen->drawCenterText(6, "Keep pressing the key!");
+    screen->drawCenterText(8, "Calibration in progress...");
+    screen->refreshScreen();
     bool finished = false;
     double mediakey = 20; 
     unsigned int errorkey = 0;
     int keypressed = 0;
-    settings.getinput();
-    settings.nodel(true);
-    settings.drawText(12, 69, "[");
-    settings.drawText(12, 80, "]");
+    screen->getinput();
+    screen->nodel(true);
+    screen->drawText(12, 69, "[");
+    screen->drawText(12, 80, "]");
     for (int i = 0; i < 1000; i++) {
-        int key = settings.getinput();
+        int key = screen->getinput();
         if (key == ERR) {
             errorkey++;
         } else {
@@ -264,20 +265,20 @@ void Settings::calibrateKeys(Draw settings){
             errorkey = 0;
         }
         for (int j = 0; j < i /100; j++)
-            settings.drawText(12, 70 + j, "#");
+            screen->drawText(12, 70 + j, "#");
 
-        settings.refreshScreen();        
+        screen->refreshScreen();        
         napms(5);
 
     
     }
     if (keypressed < 30) {
-        settings.drawCenterText(12, "Calibration failed!");
+        screen->drawCenterText(12, "Calibration failed!");
         keypressed = 0;
     }
-    else settings.drawCenterText(12, "Calibration completed!");
-    settings.refreshScreen();
-    settings.nodel(false);
+    else screen->drawCenterText(12, "Calibration completed!");
+    screen->refreshScreen();
+    screen->nodel(false);
     napms(1800);
     pressure_calibration = keypressed;
 }

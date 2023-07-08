@@ -11,10 +11,10 @@ class Save {
         bool alreadySaved; // per controllare se esiste già il nome del file di salvataggio
         nostd::string nome;
     public: 
-        void saveNewGame(Draw screen, Map map, int chunk, phy::Point, Statistics stats);
-        void saveGame(Draw saved);
+        void saveNewGame(Draw* screen, Map map, int chunk, phy::Point, Statistics stats);
+        void saveGame(Draw* saved);
 
-        void quitGame(Draw screen, Map map, int chunk, phy::Point, Statistics stats);
+        void quitGame(Draw* screen, Map map, int chunk, phy::Point, Statistics stats);
 };
 
 

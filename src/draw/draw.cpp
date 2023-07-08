@@ -1,6 +1,11 @@
 #include "draw.hpp"
 #include <cstring>
 
+Draw::Draw(int height, int width, int posY, int posX)
+    : Screen(height, width, posY, posX)
+{
+
+}
 
 void Draw::drawText(int posY, int posX, nostd::string s) {
 	mvwprintw(this->screen, posY, posX, "%s", s.c_str());
@@ -184,24 +189,6 @@ void Draw::updateStats(Statistics stats) {
 void Draw::deleteStats() {
 	clearwithoutbox();
 	refreshScreen();
-}
-
-Draw Draw::newSubWindow(int height, int width, int posY, int posX) {
-	Draw d;
-	d.setWin(derwin(this->screen, height, width, posY, posX));
-	keypad(d.screen, true);
-	return d;
-}
-
-Draw Draw::newWindow(int height, int width, int posY, int posX) {
-	Draw d;
-	d.setWin(newwin(height, width, posY, posX));
-	keypad(d.screen, true);
-	return d;
-}
-
-void Draw::setWin(WINDOW *win) {
-	this->screen = win;
 }
 
 void Draw::drawPlatform(nostd::vector<Platform> plat) {

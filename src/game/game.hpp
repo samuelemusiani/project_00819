@@ -16,7 +16,7 @@
 class Game
 {
 	private:
-		Draw screen;
+		Draw* screen;
 		Map map;
 		int current_chunk = 0;
 		phy::Body player;

@@ -23,22 +23,21 @@ double m_exp(double d)
 
 Game::Game()
 {
-	this->screen = Draw();
-	screen.init();
+	this->screen = new Draw(SCREEN_HEIGHT, SCREEN_WIDTH, 0, 0);
+	screen->init();
 	File::initSettings(settings);
 }	
 
 Game::~Game()
 {
-
-	endwin();
+    delete this->screen;
 }
 
 void Game::run()
 {
-	Menu menu = Menu(screen.get_maxX(), screen.get_maxY());
+	Menu menu = Menu(screen->get_maxX(), screen->get_maxY());
 	bool exit = false;
-	menu.drawFirstMenu(this->screen);
+	menu.drawFirstMenu(screen);
 	while (!exit) {
 
 		menu.drawMenu(this->screen);
@@ -67,7 +66,9 @@ void Game::run()
 		case 2: 
 			{// Settings
             deb::debug(settings.getControlsKeys(), "ControlKeys");
-			this->settings.drawFirstSettings(this->screen);
+            int posX, posY;
+            this->screen->size(posY, posX, 46, 150);
+			this->settings.drawFirstSettings(posY, posX);
 
 			break;
 			}
@@ -93,8 +94,8 @@ void Game::run()
 
 bool Game::exitGame(){
 	// Esci dal gioco
-	screen.clearScreen();
-	screen.drawCenterText(16, "Are you sure you want to quit?");	
+	this->screen->clearScreen();
+	this->screen->drawCenterText(16, "Are you sure you want to quit?");	
 	nostd::string options[2] = {"Yes", "No"};
 	int selected = 0;
 	bool choose = false;
@@ -104,15 +105,15 @@ bool Game::exitGame(){
 
 		for (int i = 0; i < 2; i++)
 		{
-			screen.drawSquareAround(options[i], 20, 65 + 15*i);
+			this->screen->drawSquareAround(options[i], 20, 65 + 15*i);
 		}
 		// Set the selected button to blue
-		screen.attrOn(COLOR_PAIR(1));
-		screen.drawText(20, 65 + 15*selected, options[selected]);
-		screen.attrOff(COLOR_PAIR(1));
+		this->screen->attrOn(COLOR_PAIR(1));
+		this->screen->drawText(20, 65 + 15*selected, options[selected]);
+		this->screen->attrOff(COLOR_PAIR(1));
 
 		// Wait for the user to press a key
-		switch (screen.getinput())
+		switch (this->screen->getinput())
 		{
 			case KEY_LEFT:
 				if (selected == 1) selected = selected - 1;
@@ -146,20 +147,20 @@ void Game::start()
 }
 
 void Game::play(){
-	screen.drawMap(this->map, 0);
-	screen.drawPlayer(player.get_position());
-	screen.nodel(true);
+	this->screen->drawMap(this->map, 0);
+	this->screen->drawPlayer(player.get_position());
+	this->screen->nodel(true);
     
     // Creating a screen for statistics
 	int posY, posX;
-	screen.size(posY, posX, 44, 150);
-	Draw stats_scr = screen.newWindow(3, 150, posY - 2, posX);
+	this->screen->size(posY, posX, 44, 150);
+	Draw stats_scr = Draw(3, 150, posY - 2, posX);
 
 	Manager manager = Manager(map);
 	int entity_time= 0;
 
 	bool exit = false;
-	screen.nodel(true);
+	this->screen->nodel(true);
 	int cumulative = 0;
 	int count_not_key = 0;
 	int which_key = 0;
@@ -169,7 +170,7 @@ void Game::play(){
 
 		stats_scr.updateStats(stats);
 		bool right; 
-		int input = screen.getinput();
+		int input = this->screen->getinput();
 
 		if (input == control_keys[3]) // jump right
 
@@ -262,9 +263,9 @@ void Game::play(){
             }
             else if(input == (int) 'h')
             {
-				screen.nodel(false);
+				this->screen->nodel(false);
 				hack();
-				screen.nodel(true);
+				this->screen->nodel(true);
             }
 
 			if (input == KEY_UP){
@@ -280,9 +281,9 @@ void Game::play(){
 				if (fly) player.set_position(player.get_position() + phy::Point(1, 0));
 			}
 			else if (input == int ('h')){
-				screen.nodel(false);
+				this->screen->nodel(false);
 				hack();
-				screen.nodel(true);
+				this->screen->nodel(true);
 			}
 #endif
 		}
@@ -293,7 +294,7 @@ void Game::play(){
 #else
 		phy::updateWithCollisions(player, 0.15, map.get_chunk(current_chunk));
 #endif
-		screen.eraseScreen();
+		this->screen->eraseScreen();
 		if (player.get_position().get_yPosition() < 0)
 		{
 			current_chunk--;
@@ -306,7 +307,7 @@ void Game::play(){
 			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() - phy::Point(0, 42)); 
 		}
-		screen.drawPlayer(player.get_position());
+		this->screen->drawPlayer(player.get_position());
 
 
         /* ENTITIES */
@@ -316,13 +317,13 @@ void Game::play(){
         entity_time = ++entity_time % 100;
 		manager.draw_entities(screen);
 
-		screen.drawMap(map, current_chunk);
-		screen.drawText(2, 1, nostd::to_string(current_chunk));
-		screen.drawText(1, 1, nostd::to_string(player.get_position().get_xPosition()));
-		screen.drawText(1, 5, nostd::to_string(player.get_position().get_yPosition()));
-		screen.drawText(1, 140, nostd::to_string(JUMPF));
-		//screen.drawText(2, 140, nostd::to_string(1+pow(1.1, - cumulative/50)));
-		screen.drawText(3, 140, nostd::to_string(cumulative));
+		this->screen->drawMap(map, current_chunk);
+		this->screen->drawText(2, 1, nostd::to_string(current_chunk));
+		this->screen->drawText(1, 1, nostd::to_string(player.get_position().get_xPosition()));
+		this->screen->drawText(1, 5, nostd::to_string(player.get_position().get_yPosition()));
+		this->screen->drawText(1, 140, nostd::to_string(JUMPF));
+		//this->screen->drawText(2, 140, nostd::to_string(1+pow(1.1, - cumulative/50)));
+		this->screen->drawText(3, 140, nostd::to_string(cumulative));
 		napms(5);
 
         if(stats.getHearts() <= 0)
@@ -332,7 +333,7 @@ void Game::play(){
         }
 	}
 
-	screen.nodel(false);	
+	this->screen->nodel(false);	
 	stats_scr.deleteStats();
 }
 
@@ -340,14 +341,14 @@ void Game::resume()
 {	
 	bool deleted = false; 
 	do {
-	screen.clearScreen();
+	this->screen->clearScreen();
 	deleted = false;
 	nostd::vector<nostd::string> savedMaps = File::getNames();
 	nostd::vector<nostd::string> savedDate = File::getLastSaves();
 	if (savedMaps.size() == 0) {
-		screen.drawCenterText(5, "No saved maps");
-		screen.refreshScreen();
-		screen.getinput();
+		this->screen->drawCenterText(5, "No saved maps");
+		this->screen->refreshScreen();
+		this->screen->getinput();
 	}
 	else {
 		int selected = 0;
@@ -355,19 +356,19 @@ void Game::resume()
 		bool exit = false;
 		
 		while (!choose && !exit){
-			screen.drawCenterText(3, "Load your game from a saved file");
-			screen.drawCenterText(7, "Press enter to play");
-			screen.drawCenterText(9, "Press 'r' to remove a saved game");
+			this->screen->drawCenterText(3, "Load your game from a saved file");
+			this->screen->drawCenterText(7, "Press enter to play");
+			this->screen->drawCenterText(9, "Press 'r' to remove a saved game");
 			for (int i = 0; i < savedMaps.size(); i++)
 			{
-				screen.drawCenterSquareAround(savedMaps[i] + " " + savedDate[i], 13 + 4*i);
+				this->screen->drawCenterSquareAround(savedMaps[i] + " " + savedDate[i], 13 + 4*i);
 			}
 
-			screen.attrOn(COLOR_PAIR(1));
-			screen.drawCenterText(13 + 4*selected, savedMaps[selected] + " " + savedDate[selected]);
-			screen.attrOff(COLOR_PAIR(1));
+			this->screen->attrOn(COLOR_PAIR(1));
+			this->screen->drawCenterText(13 + 4*selected, savedMaps[selected] + " " + savedDate[selected]);
+			this->screen->attrOff(COLOR_PAIR(1));
 
-			switch (screen.getinput())
+			switch (this->screen->getinput())
 			{
 				case KEY_UP:
 					if (selected == 0) selected = savedMaps.size() - 1;
@@ -391,7 +392,7 @@ void Game::resume()
 				default:
 					break;
 			}
-			screen.eraseScreen();
+			this->screen->eraseScreen();
 		}
 		if (choose) {
 			this->map = File::getMap(savedMaps[selected]);
@@ -406,21 +407,21 @@ void Game::resume()
 
 int Game::setDifficulty()
 {
-	screen.clearScreen();
-	screen.drawCenterText(3, "Select the difficulty");
+	this->screen->clearScreen();
+	this->screen->drawCenterText(3, "Select the difficulty");
 	nostd::string options[3] = {"Easy", "Medium", "Hard"};
 	int selected = 0;
 	bool choose = false;
 	while (!choose){
 		for (int i = 0; i < 3; i++)
 		{
-			screen.drawSquareAround(options[i], 20, 58 + 15*i);
+			this->screen->drawSquareAround(options[i], 20, 58 + 15*i);
 		}
-		screen.attrOn(COLOR_PAIR(1));
-		screen.drawText(20, 58 + 15*selected, options[selected]);
-		screen.attrOff(COLOR_PAIR(1));
+		this->screen->attrOn(COLOR_PAIR(1));
+		this->screen->drawText(20, 58 + 15*selected, options[selected]);
+		this->screen->attrOff(COLOR_PAIR(1));
 
-		switch (screen.getinput())
+		switch (this->screen->getinput())
 		{
 			case KEY_LEFT:
 				if (selected == 0) selected = 2;
@@ -441,14 +442,14 @@ int Game::setDifficulty()
 
 bool Game::pauseGame(Draw stats_scr, Statistics stats)
 {
-    screen.nodel(false);
+    this->screen->nodel(false);
 
     bool resumed = false;
     bool exit = false;
     int posY, posX;
-    screen.size(posY, posX, 46, 150);
+    this->screen->size(posY, posX, 46, 150);
 
-    Draw pause = screen.newWindow(44, 60, posY + 2, 90 + posX);
+    Draw pause = Draw(44, 60, posY + 2, 90 + posX);
     while(!resumed) {
 
         pause.clearwithoutbox();
@@ -459,8 +460,8 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
         bool choose = false;
 
         stats_scr.redraw();
-        screen.redraw();
-        screen.noOutRefresh();
+        this->screen->redraw();
+        this->screen->noOutRefresh();
         stats_scr.noOutRefresh();
         pause.noOutRefresh();
         Screen::update();
@@ -499,7 +500,7 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
         switch (selected)
         {
             case 0:
-                screen.nodel(true);
+                this->screen->nodel(true);
                 pause.deleteWin();
 
                 resumed = true;
@@ -507,11 +508,8 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
 
             case 1:{
                        int posX, posY;
-                       screen.size(posY, posX, 46, 150);
-                       Draw settings_scr = screen.newWindow(46, 150, posY, posX);
-                       this->settings.drawFirstSettings(settings_scr);
-                       settings_scr.eraseScreen();
-                       settings_scr.deleteWin();
+                       this->screen->size(posY, posX, 46, 150);
+                       this->settings.drawFirstSettings(posY, posX);
 
 
 
@@ -520,11 +518,11 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
             case 2:
                    {
                        int posY, posX;
-                       screen.size(posY, posX, 46, 150);
+                       this->screen->size(posY, posX, 46, 150);
 
-                       Draw save_scr = screen.newWindow(46, 150, posY, posX);
+                       Draw save_scr = Draw(46, 150, posY, posX);
 
-                       save.saveNewGame(save_scr, map, current_chunk, player.get_position(), stats);
+                       save.saveNewGame(&save_scr, map, current_chunk, player.get_position(), stats);
                        save_scr.eraseScreen();
                        save_scr.deleteWin();
                        break;
@@ -534,8 +532,8 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
                    {
                        pause.clearScreen();
                        pause.deleteWin();
-                       screen.redraw();
-                       screen.refreshScreen();
+                       this->screen->redraw();
+                       this->screen->refreshScreen();
 
 
                        save.quitGame(screen, map, current_chunk, player.get_position(), stats);
@@ -551,16 +549,16 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
 
         }
     } pause.deleteWin(); 
-    screen.nodel(true);
+    this->screen->nodel(true);
     return exit;
 }
 
 void Game::over()
 {
-	screen.nodel(false);	
+	this->screen->nodel(false);	
 	int posX, posY;
-	screen.size(posY, posX, 8, 50);
-	Draw over_win = screen.newWindow(8, 50, posY, posX);
+	this->screen->size(posY, posX, 8, 50);
+	Draw over_win = Draw(8, 50, posY, posX);
 	over_win.drawBox();
 	over_win.drawText(2, 25 - over_win.center("GAME OVER"), "GAME OVER");
 	over_win.attrOn(COLOR_PAIR(1));
@@ -576,8 +574,8 @@ void Game::over()
 
 void Game::hack(){
 	int posX, posY;
-	screen.size(posY, posX, 20, 50);
-	Draw hack = screen.newWindow(20, 50, posY, posX);
+	this->screen->size(posY, posX, 20, 50);
+	Draw hack = Draw(20, 50, posY, posX);
 	hack.attrOn(COLOR_PAIR(2));
 	hack.drawBox();
 	hack.drawText(2, 25 - hack.center("Hack Menu"), "Hack Menu");

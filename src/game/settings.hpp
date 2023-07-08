@@ -42,16 +42,15 @@ class Settings
         void setSensitivity(int n);
 
 
-        /* --------------- DA RIFARE --------------- */
-        void drawFirstSettings(Draw settings);
-        void ControlKeys(Draw settings);
-        void calibrateKeys(Draw settings);
+        void drawFirstSettings(int posY, int posX);
+        void ControlKeys(Draw* settings);
+        void calibrateKeys(Draw* settings);
 
         // controlla se esiste il file dei salvataggi per controllare se è stata fatta la calibrazione
-        bool checkifcalibrated(Draw settings);
+        bool checkifcalibrated(Draw* settings);
 
         // funzione getkeys
-        void changeKeys(Draw settings);
+        void changeKeys(Draw* settings);
 
         bool is_alpha(int ch);
 };

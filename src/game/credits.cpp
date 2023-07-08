@@ -1,18 +1,17 @@
 #include "credits.hpp"
-#include "../draw/screen.hpp"
 #include <string.h>
 
 
 
-int Credits::drawCredits(Draw settings){
+int Credits::drawCredits(Draw* screen){
 
-	settings.clearScreen();	
+	screen->clearScreen();	
 	
 	nostd::string developers[4] = {"@SuperMitic", "@musianisamuele", "@lorenzoperonese", "@Jabbar03"};
 	nostd::string creditstext[6] = {"JumpKing Game", "Alma Mater Studiorum Bologna University: project-00819", "This game has been developed", "in the year 2023 by", "Argonni Emanuele, Musiani Samuele", "Peronese Lorenzo, Ayache Omar"};
 	int selectedOption = 0;
 	bool selected = false; 
-	settings.nodel(true);
+	screen->nodel(true);
 
 	const int TIME_UPDATE_CREDITS = 100;
 	int CYCLES = 0;
@@ -21,13 +20,13 @@ int Credits::drawCredits(Draw settings){
 	for(int i = 42; i > -6 && !selected; i = i-1) {
 		if (i == -5) i = 42;
 
-		settings.eraseScreen();
+		screen->eraseScreen();
 	
-		settings.drawText(8, 20 - (strlen("Who we are?")/2), "Who we are?");
+		screen->drawText(8, 20 - (strlen("Who we are?")/2), "Who we are?");
 
 		// for loop to draw the developers
 		for(int j = 0; j < 4; j++){
-			settings.drawText(10 + 2*j, 20 - (developers[j].length()/2), developers[j]);
+			screen->drawText(10 + 2*j, 20 - (developers[j].length()/2), developers[j]);
 		}
 
 		if(!NEED_TO_REDRAW) i++;
@@ -35,16 +34,16 @@ int Credits::drawCredits(Draw settings){
 		//for loop to draw the credits
 		for (int j = 0; j < 6; j++){
 			if(i + j > 0 && i + j < 43)
-				settings.drawCenterText(i + j, creditstext[j]);
+				screen->drawCenterText(i + j, creditstext[j]);
 		}
 
 		bool EXIT = false;
 		
-		settings.attrOn(A_UNDERLINE);
-		settings.drawText(10 + 2*selectedOption, 20 - (developers[selectedOption].length()/2), developers[selectedOption]);
-		settings.attrOff(A_UNDERLINE);
+		screen->attrOn(A_UNDERLINE);
+		screen->drawText(10 + 2*selectedOption, 20 - (developers[selectedOption].length()/2), developers[selectedOption]);
+		screen->attrOff(A_UNDERLINE);
 
-		settings.refreshScreen();
+		screen->refreshScreen();
 		NEED_TO_REDRAW = false;
 
 		for(int j = 0; j < 50 && !selected && !EXIT; j++) {
@@ -59,7 +58,7 @@ int Credits::drawCredits(Draw settings){
 				break;
 			}
 			
-			switch (settings.getinput()) {
+			switch (screen->getinput()) {
 				case KEY_UP:
 					if (selectedOption > 0) {
 						selectedOption--;

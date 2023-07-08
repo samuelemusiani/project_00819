@@ -4,6 +4,9 @@
 #ifndef DRAW_SCREEN 
 #define DRAW_SCREEN
 
+#define SCREEN_HEIGHT 44
+#define SCREEN_WIDTH 150
+
 class Screen
 {
 	private:
@@ -12,9 +15,11 @@ class Screen
 
 	protected:
 		WINDOW *screen;
+        bool is_screen_deleted;
 
 	public:
-		Screen();
+		Screen(int height, int width, int posY, int posX);
+        ~Screen();
 		void init();
 		int get_maxX();
 		int get_maxY();
