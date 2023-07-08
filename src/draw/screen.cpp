@@ -17,8 +17,9 @@ Screen::Screen(int height, int width, int posY, int posX)
 			sleep(1); // attendo 1 secondo per non mandare la cpu a 100%
 		}
 	}
-	// size(posY, posX, height	, width);
-	this->screen = newwin(height, width, posY, posX);
+    int tmp_posY, tmp_posX;
+	this->size(tmp_posY, tmp_posX, height, width);
+	this->screen = newwin(height, width, tmp_posY + posY, tmp_posX + posX);
 	keypad(this->screen, true);
 	set_escdelay(1);
 	this-> max_x = getmaxx(this->screen); 

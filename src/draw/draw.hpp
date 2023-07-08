@@ -29,7 +29,7 @@ class Draw : public Screen{
         int centerX(const char* text);
 
 	public:
-		Draw(int height, int width, int posY, int posX);
+		Draw(int height, int width, int posY = 0, int posX = 0);
 
 		void drawText(int posY, int posX, nostd::string s);
 		void drawText(int posY, int posX, const char* s);

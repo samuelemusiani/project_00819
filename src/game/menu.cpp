@@ -1,16 +1,14 @@
 #include "menu.hpp"
 
-Menu::Menu(int x, int y) {
-    posX = x;
-    posY = y;
-
+Menu::Menu(int y, int x) {
+    this->posX = x;
+    this->posY = y;
 }
 
-void Menu::drawFirstMenu(Draw* screen) {
-	
+void Menu::drawIntroAnimation(Draw* screen) {
 	screen->clearScreen();
-	bool selected = false;
 	screen->nodel(true);
+    bool selected = false;
 
 	// animazione del titolo all'avvio del gioco dai lati al centro
 	for (int i = 0; i < 42 && !selected ; i++) {

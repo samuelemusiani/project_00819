@@ -23,7 +23,7 @@ double m_exp(double d)
 
 Game::Game()
 {
-	this->screen = new Draw(SCREEN_HEIGHT, SCREEN_WIDTH, 0, 0);
+	this->screen = new Draw(SCREEN_HEIGHT, SCREEN_WIDTH);
 	screen->init();
 	File::initSettings(settings);
 }	
@@ -35,9 +35,9 @@ Game::~Game()
 
 void Game::run()
 {
-	Menu menu = Menu(screen->get_maxX(), screen->get_maxY());
-	bool exit = false;
-	menu.drawFirstMenu(screen);
+	Menu menu = Menu(this->screen->get_maxY(), this->screen->get_maxX());
+	menu.drawIntroAnimation(this->screen);
+    bool exit = false;
 	while (!exit) {
 
 		menu.drawMenu(this->screen);
