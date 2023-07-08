@@ -19,7 +19,13 @@ Screen::Screen(int height, int width, int posY, int posX)
 	}
     int tmp_posY, tmp_posX;
 	this->size(tmp_posY, tmp_posX, height, width);
-	this->screen = newwin(height, width, tmp_posY + posY, tmp_posX + posX);
+
+    if(posY != 0 || posX != 0)
+    {
+        tmp_posY = posY;
+        tmp_posX = posX;
+    }
+	this->screen = newwin(height, width, tmp_posY, tmp_posX);
 	keypad(this->screen, true);
 	set_escdelay(1);
 	this-> max_x = getmaxx(this->screen); 

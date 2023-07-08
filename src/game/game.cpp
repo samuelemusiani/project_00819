@@ -139,8 +139,8 @@ void Game::play(){
     
     // Creating a screen for statistics
 	int posY, posX;
-	this->screen->size(posY, posX, 44, 150);
-	Draw stats_scr = Draw(3, 150, posY - 2, posX);
+	this->screen->size(posY, posX, SCREEN_HEIGHT, SCREEN_WIDTH);
+	Draw stats_scr = Draw(3, SCREEN_WIDTH, posY - 3, posX);
 
 	Manager manager = Manager(map);
 	int entity_time= 0;
@@ -547,7 +547,7 @@ void Game::over()
 	over_win.drawText(5, 25 - over_win.center("Back to menu") , "Back to menu");
 	over_win.attrOn(COLOR_PAIR(1));
 	over_win.refreshScreen();
-	int x = over_win.getinput();
+	over_win.getinput();
     over_win.eraseScreen();
     over_win.deleteWin();
 }
