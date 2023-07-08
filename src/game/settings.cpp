@@ -61,8 +61,8 @@ void Settings::setControlsKeys(const char* s)
     strcpy(this->keybinds, s);
 }
 
-void Settings::drawFirstSettings(int posY, int posX){
-    Draw screen = Draw(46, 150, posY, posX);
+void Settings::drawFirstSettings(){
+    Draw screen = Draw(SCREEN_HEIGHT, SCREEN_WIDTH);
     // Variabili interne alla funzione
     int selectedOption = 0;
     bool saved = false;

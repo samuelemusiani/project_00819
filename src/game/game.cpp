@@ -4,11 +4,12 @@
 #include "game.hpp"
 #include "menu.hpp"
 #include "file.hpp"
-
 #include "save.hpp"
+
 #include "../physics/collisions.hpp"
-#include "../../etc/logs/logs.hpp"
 #include "../entity/entity.hpp"
+
+#include "../../etc/logs/logs.hpp"
 
 #define JUMPF (1/(1+m_exp(-0.18 * (cumulative - 8)))*5)
 //#define JUMPF cumulative / (1 + cumulative)
@@ -33,70 +34,55 @@ Game::~Game()
     delete this->screen;
 }
 
-void Game::run()
-{
-	Menu menu = Menu(this->screen->get_maxY(), this->screen->get_maxX());
-	menu.drawIntroAnimation(this->screen);
+void Game::run() {
+    Menu menu = Menu(this->screen->get_maxY(), this->screen->get_maxX());
+    menu.drawIntroAnimation(this->screen);
     bool exit = false;
-	while (!exit) {
+    while (!exit) {
 
-		menu.drawMenu(this->screen);
-		int sel = menu.get_selected_option(this->screen);
+        menu.drawMenu(this->screen);
+        int sel = menu.get_selected_option(this->screen);
 
-		Credits credits;
+        Credits credits;
 
-		switch (sel)
-		{
+        switch (sel) {
+            case 0: { // New Game
+                        this->stats = Statistics();
+                        this->start();
+                        break;
+                    }
+            case 1: {
+                        this->resume();
+                        break;
+                    }
+            case 2: {
+                        this->settings.drawFirstSettings();
 
+                        break;
+                    }
+            case 3: {
+                        // chiama la funziona credits che si trova in credits.cpp
+                        credits = Credits();
+                        int dev = credits.drawCredits(this->screen);
+                        if (dev != -1)
+                            credits.openGithub(dev);
 
-		case 0:
-			{// New Game
-            this->stats = Statistics();
-			// Chiama la funzione start della classe game che si trova in game.cpp che non è statica
-			this->start();
-
-			// TODO: Implementing pause menu
-			break;}
-		case 1:
-			{// Resume game
-			
-			this->resume();
-			break;
-			}
-		case 2: 
-			{// Settings
-            deb::debug(settings.getControlsKeys(), "ControlKeys");
-            int posX, posY;
-            this->screen->size(posY, posX, 46, 150);
-			this->settings.drawFirstSettings(posY, posX);
-
-			break;
-			}
-		case 3:
-		{
-			// chiama la funziona credits che si trova in credits.cpp
-			credits = Credits();
-			int dev = credits.drawCredits(this->screen);
-			if (dev != -1) credits.openGithub(dev);
-
-			break;
-		}
-		case 27:
-			{
-				if (exitGame() == true) exit = true;
-				break;
-			}
-		}
-
-
-	}
+                        break;
+                    }
+            case 27: {
+                         if (exitGame() == true)
+                             exit = true;
+                         break;
+                     }
+        }
+    }
 }
 
 bool Game::exitGame(){
-	// Esci dal gioco
-	this->screen->clearScreen();
-	this->screen->drawCenterText(16, "Are you sure you want to quit?");	
-	nostd::string options[2] = {"Yes", "No"};
+    // Esci dal gioco
+    this->screen->clearScreen();
+    this->screen->drawCenterText(16, "Are you sure you want to quit?");	
+    nostd::string options[2] = {"Yes", "No"};
 	int selected = 0;
 	bool choose = false;
 	// Create two button (yes or no) to quit the game
@@ -439,9 +425,7 @@ int Game::setDifficulty()
 	return selected;
 }
 
-
-bool Game::pauseGame(Draw stats_scr, Statistics stats)
-{
+bool Game::pauseGame(Draw stats_scr, Statistics stats) {
     this->screen->nodel(false);
 
     bool resumed = false;
@@ -450,12 +434,13 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
     this->screen->size(posY, posX, 46, 150);
 
     Draw pause = Draw(44, 60, posY + 2, 90 + posX);
-    while(!resumed) {
+    while (!resumed) {
 
         pause.clearwithoutbox();
         pause.drawBox();
-        pause.drawText(3, 30 - pause.center("Game Paused"),  "Game Paused");
-        nostd::string options[4] = {"Resume", "Settings", "Save", "Exit"};
+        pause.drawText(3, 30 - pause.center("Game Paused"), "Game Paused");
+        nostd::string options[4] = {"Resume", "Settings", "Save",
+            "Exit"};
         int selected = 0;
         bool choose = false;
 
@@ -466,23 +451,27 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
         pause.noOutRefresh();
         Screen::update();
 
-        while (!choose){	
-            for (int i = 0; i < 4; i++)
-            {
-                pause.drawSquareAround(options[i], 20 + 4*i, 30 - (options[i].length() / 2));
+        while (!choose) {
+            for (int i = 0; i < 4; i++) {
+                pause.drawSquareAround(options[i], 20 + 4 * i,
+                        30 - (options[i].length() / 2));
             }
             pause.attrOn(COLOR_PAIR(1));
-            pause.drawText(20 + 4*selected, 30 - (options[selected].length() / 2), options[selected]);
+            pause.drawText( 20 + 4 * selected, 30 - (options[selected].length() / 2),
+                    options[selected]);
             pause.attrOff(COLOR_PAIR(1));
-            switch (pause.getinput())
-            {
+            switch (pause.getinput()) {
                 case KEY_UP:
-                    if (selected == 0) selected = 3;
-                    else selected = selected - 1;
+                    if (selected == 0)
+                        selected = 3;
+                    else
+                        selected = selected - 1;
                     break;
                 case KEY_DOWN:
-                    if (selected == 3) selected = 0;
-                    else selected = selected + 1;
+                    if (selected == 3)
+                        selected = 0;
+                    else
+                        selected = selected + 1;
                     break;
                 case 10:
                     choose = true;
@@ -497,8 +486,7 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
         }
         pause.refreshScreen();
         Save save = Save();
-        switch (selected)
-        {
+        switch (selected) {
             case 0:
                 this->screen->nodel(true);
                 pause.deleteWin();
@@ -506,51 +494,45 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
                 resumed = true;
                 break;
 
-            case 1:{
-                       int posX, posY;
-                       this->screen->size(posY, posX, 46, 150);
-                       this->settings.drawFirstSettings(posY, posX);
+            case 1: {
+                        this->settings.drawFirstSettings();
+                        break;
+                    }
+            case 2: {
+                        int posY, posX;
+                        this->screen->size(posY, posX, 46, 150);
 
+                        Draw save_scr = Draw(46, 150, posY, posX);
 
+                        save.saveNewGame(&save_scr, map, current_chunk,
+                                player.get_position(), stats);
+                        save_scr.eraseScreen();
+                        save_scr.deleteWin();
+                        break;
+                    }
 
-                       break;
-                   }
-            case 2:
-                   {
-                       int posY, posX;
-                       this->screen->size(posY, posX, 46, 150);
+            case 3: {
+                        pause.clearScreen();
+                        pause.deleteWin();
+                        this->screen->redraw();
+                        this->screen->refreshScreen();
 
-                       Draw save_scr = Draw(46, 150, posY, posX);
+                        save.quitGame(screen, map, current_chunk,
+                                player.get_position(), stats);
 
-                       save.saveNewGame(&save_scr, map, current_chunk, player.get_position(), stats);
-                       save_scr.eraseScreen();
-                       save_scr.deleteWin();
-                       break;
-                   }
-
-            case 3: 
-                   {
-                       pause.clearScreen();
-                       pause.deleteWin();
-                       this->screen->redraw();
-                       this->screen->refreshScreen();
-
-
-                       save.quitGame(screen, map, current_chunk, player.get_position(), stats);
-
-                       resumed = true; 
-                       exit = true; 
-                       break;
-                   }	
+                        resumed = true;
+                        exit = true;
+                        break;
+                    }
             default:
-                   resumed = true;
-                   exit = false;
-                   break;
-
+                    resumed = true;
+                    exit = false;
+                    break;
         }
-    } pause.deleteWin(); 
-    this->screen->nodel(true);
-    return exit;
+    }
+        pause.deleteWin();
+        this->screen->nodel(true);
+        return exit;
 }
 
 void Game::over()
