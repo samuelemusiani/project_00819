@@ -235,8 +235,7 @@ void Game::play(){
             }
 			else if (input == 27) // Pause menu con tasto esc
 			{
-				bool quitGamepley = pauseGame(stats_scr, stats); // se true esci dal gioco
-				if (quitGamepley == true) exit = true;
+				exit = pauseGame(stats_scr, stats); // se true esci dal gioco
 			}
 #ifdef USE_HACK
             else if (input == KEY_UP)
@@ -487,7 +486,11 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
                 case 10:
                     choose = true;
                     break;
-                default: 
+                case 27:
+                    selected = -1;
+                    choose = true;
+                    break;
+                default:
                     break;
             }
         }
@@ -542,10 +545,14 @@ bool Game::pauseGame(Draw stats_scr, Statistics stats)
                        break;
                    }	
             default:
+                   resumed = true;
+                   exit = false;
                    break;
 
         }
-    } pause.deleteWin(); return exit;
+    } pause.deleteWin(); 
+    screen.nodel(true);
+    return exit;
 }
 
 void Game::over()
