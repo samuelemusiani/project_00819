@@ -1,9 +1,65 @@
 #include "settings.hpp"
-#include "global.hpp"
 #include <ncurses.h>
 #include "file.hpp"
 #include "../../etc/logs/logs.hpp"
 #include <locale>
+
+Settings::Settings()
+    : pressure_calibration(-1), volume_level(10), sensitivity_level(10)
+{
+    // used as an initializer
+    this->resetControls();
+}
+
+void Settings::resetControls()
+{
+    strcpy(keybinds, "sdafvwemm");
+}
+
+const char* Settings::getControlsKeys()
+{
+    return this->keybinds;
+}
+
+int Settings::getCalibration()
+{
+    return pressure_calibration;
+}
+
+int Settings::getVolume()
+{
+    return volume_level;
+}
+
+int Settings::getSensitivity()
+{
+    return sensitivity_level;
+}
+
+void Settings::setCalibration(int n)
+{
+    this->pressure_calibration = n;
+}
+
+void Settings::setVolume(int n)
+{
+    this->volume_level = n;
+}
+
+void Settings::setSensitivity(int n)
+{
+    this->sensitivity_level = n;
+}
+
+void Settings::setControlsKeys(int pos, char val)
+{
+    this->keybinds[pos] = val;
+}
+
+void Settings::setControlsKeys(const char* s)
+{
+    strcpy(this->keybinds, s);
+}
 
 void Settings::drawFirstSettings(Draw screen){
     // Variabili interne alla funzione
@@ -27,7 +83,7 @@ void Settings::drawFirstSettings(Draw screen){
         // Disegno le barre
         for (int i = 0; i < 2; i++)
         {
-            int tmp = i == 0 ? SETTINGS_VOLUME_LEVEL : SETTINGS_SENSITIVITY_LEVEL;
+            int tmp = i == 0 ? volume_level : sensitivity_level;
 
             for (int j = 0; j < tmp; j++)
                 screen.drawText(16 + i*3, 66 + j, "#");
@@ -55,21 +111,21 @@ void Settings::drawFirstSettings(Draw screen){
 
             if (selectedOption == 2)
             {
-                SETTINGS_VOLUME_LEVEL += delta;
-                SETTINGS_VOLUME_LEVEL = std::min(MAX_VOLUME_LEVEL, SETTINGS_VOLUME_LEVEL);
-                SETTINGS_VOLUME_LEVEL = std::max(MIN_VOLUME_LEVEL, SETTINGS_VOLUME_LEVEL);
+                volume_level += delta;
+                volume_level = std::min(20, volume_level);
+                volume_level = std::max(0, volume_level);
             }
             else if (selectedOption == 3)
             {
-                SETTINGS_SENSITIVITY_LEVEL += delta;
-                SETTINGS_SENSITIVITY_LEVEL = std::min(MAX_SENSITIVITY_LEVEL, SETTINGS_SENSITIVITY_LEVEL);
-                SETTINGS_SENSITIVITY_LEVEL = std::max(MIN_SENSITIVITY_LEVEL, SETTINGS_SENSITIVITY_LEVEL);
+                sensitivity_level += delta;
+                sensitivity_level = std::min(20, sensitivity_level);
+                sensitivity_level = std::max(0, sensitivity_level);
             }
         } 
         else if (input == 10)
         {
             if (selectedOption == 0)
-                ControlKeys(screen);
+                this->ControlKeys(screen);
             else if (selectedOption == 1)
                 calibrateKeys(screen);
         }
@@ -80,7 +136,7 @@ void Settings::drawFirstSettings(Draw screen){
             // In realtà andrebbe fatto un check se le impostazioni
             // sono state salvate e quindi aggiungere un tastos
 
-            File::saveSettings();
+            File::saveSettings(*this);
             saved = true;
         }
     }
@@ -94,20 +150,21 @@ void Settings::ControlKeys(Draw settings){
     while (!selected){
         int a = 0;
         settings.eraseScreen();
-        settings.drawCenterText(3, "Settings");
+        settings.drawCenterText(3, "Controls");
+        settings.drawCenterText(30, "Press 'tab' to reset controls");
         for (int i = 0; i < 2; i++){
             for (int j = 0; j < 4; j++){
                 settings.drawText(10 + 3*j, 45 + 45*i, controls[a]);
                 // Una volta implementata la funziona drawSquare userò quella
-                settings.drawSquareAround(SETTINGS_CONTROL_KEYS[a], 10 + 3*j, 60 + 45*i);
+                settings.drawSquareAround(keybinds[a], 10 + 3*j, 60 + 45*i);
                 
-                settings.drawUpperText(10 + 3*j, 60 + 45*i, SETTINGS_CONTROL_KEYS[a] );
+                settings.drawUpperText(10 + 3*j, 60 + 45*i, keybinds[a]);
                 a = a +1; 
             }
         }
         settings.attrOn(COLOR_PAIR(1));
-        if (selectedOption < 4) settings.drawUpperText(10 + 3*selectedOption, 60, SETTINGS_CONTROL_KEYS[selectedOption]);
-        else settings.drawUpperText(10 + 3*(selectedOption - 4), 105, SETTINGS_CONTROL_KEYS[selectedOption]);
+        if (selectedOption < 4) settings.drawUpperText(10 + 3*selectedOption, 60, keybinds[selectedOption]);
+        else settings.drawUpperText(10 + 3*(selectedOption - 4), 105, keybinds[selectedOption]);
         settings.attrOff(COLOR_PAIR(1));
         switch (settings.getinput()){
             case KEY_UP:
@@ -133,17 +190,22 @@ void Settings::ControlKeys(Draw settings){
             case 27:
                 selected = true;
                 break;
-            case 10:
-                settings.drawCenterText(6, "Press the key you want to use: ");
-                int x = settings.getinput();
-                deb::debug("xstr: " , nostd::to_string(x));
-                deb::debug("char(x): ", nostd::to_string(char(x)));
-                if (is_alpha(x)) SETTINGS_CONTROL_KEYS[selectedOption] = nostd::to_string(char(x));
-                break;
+            case 10:{
+                        settings.drawCenterText(6, "Press the key you want to use: ");
+                        int x = settings.getinput();
+                        if (is_alpha(x)) keybinds[selectedOption] = char(x);
+                        break;
+                    }
+            case 9:
+                    {
+                        resetControls();
+                        break;
+                    }
+            default:
+                    break;
         }
 
     }
-    
     
 }
 
@@ -189,5 +251,5 @@ void Settings::calibrateKeys(Draw settings){
     settings.refreshScreen();
     settings.nodel(false);
     napms(1800);
-    SETTINGS_PRESSURE_CALIBRATION = keypressed;
+    pressure_calibration = keypressed;
 }

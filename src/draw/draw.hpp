@@ -35,12 +35,16 @@ class Draw : public Screen{
 		void drawCenterText(int posY, nostd::string s);
 		void drawCenterText(int posY, const char* t);
 		void drawUpperText(int posY, int posX, nostd::string s);
+		void drawUpperText(int posY, int posX, const char s);
+		void drawUpperText(int posY, int posX, const char* s);
 
         void attrOn(int c_pair);
 		void attrOff(int c_pair);
 
 		void drawBox();
 		void drawSquareAround(nostd::string s, int posY, int posX);
+        void drawSquareAround(const char s, int posY, int posX);
+		void drawSquareAround(const char* s, int posY, int posX);
         void drawCenterSquareAround(nostd::string s, int posY);
 		void drawRectagle(int posY, int posX, int length, int width);
 

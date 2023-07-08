@@ -3,11 +3,13 @@
 
 #include <ncurses.h>
 
+#include "statistics.hpp"
+#include "settings.hpp"
+
 #include "../draw/draw.hpp"
 #include "../physics/body.hpp"
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
-#include "statistics.hpp"
 #include "../entity/manager.hpp"
 
 
@@ -19,6 +21,7 @@ class Game
 		int current_chunk = 0;
 		phy::Body player;
         Statistics stats;
+        Settings settings;
 
 #ifdef USE_HACK
 		bool fly = false;

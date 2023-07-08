@@ -25,7 +25,16 @@ void Draw::drawCenterText(int posY, const char* s) {
 }
 
 void Draw::drawUpperText(int posY, int posX, nostd::string s) {
-    for (int i = 0; i < s.length(); i++)
+    this->drawUpperText(posY, posX, s.c_str());
+}
+
+void Draw::drawUpperText(int posY, int posX, const char s) {
+        mvwaddch(this->screen, posY, posX, s + 'A' - 'a');
+}
+
+void Draw::drawUpperText(int posY, int posX, const char* s) {
+    int l = strlen(s);
+    for (int i = 0; i < l; i++)
         mvwaddch(this->screen, posY, posX + i, s[i] + 'A' - 'a');
 }
 
@@ -41,11 +50,23 @@ void Draw::drawBox(){
 	box(this->screen, 0, 0);
 }
 
-void Draw::drawSquareAround(nostd::string s, int posY, int posX) { //posizione del primo carattere
+void Draw::drawSquareAround(nostd::string s, int posY, int posX)
+{
+    this->drawSquareAround(s.c_str(), posY, posX);
+}
+
+void Draw::drawSquareAround(const char s, int posY, int posX)
+{
+    char tmp[2] = "a";
+    tmp[0] = s;
+    this->drawSquareAround(tmp, posY, posX);
+}
+                                                                 //
+void Draw::drawSquareAround(const char* s, int posY, int posX) { //posizione del primo carattere
 	this->drawText(posY, posX, s);
 
 	//calcolo della lunghezza della stringa
-	int x = strlen(s.c_str());
+	int x = strlen(s);
 
 	//le coordinate posX e posY indicano la posizione dell'angolo in alto a sx
 	posX--;
