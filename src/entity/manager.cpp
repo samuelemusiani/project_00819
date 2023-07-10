@@ -385,3 +385,12 @@ list_bullets Manager::delete_all_bullets(list_bullets p)
     return p;
 }
 
+nostd::string Manager::get_entities_status()
+{
+    return nostd::string("Not implemented, yet");
+}
+
+void Manager::set_entities_status(nostd::string s)
+{
+
+}

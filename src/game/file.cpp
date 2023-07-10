@@ -95,7 +95,7 @@ bool File::isAlreadySaved(Map m)
 		return false; // file does not exist yet
 }
 
-void File::appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string name)
+void File::appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string entities, nostd::string name)
 {
 	std::fstream file;
 	if(openFile(file,"./save.txt","app")) {
@@ -106,12 +106,13 @@ void File::appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::s
              << "\nPlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition()
              << "\nLastSave: " << dateAndTime() 
              << "\nStatistics: " << stats.getLevel() << " " << stats.getCoins() 
-                << " " << stats.getJumps() << " " << stats.getHearts() << "\n\n";
+                 << " " << stats.getJumps() << " " << stats.getHearts() 
+             << "\nEntities: " << entities << "\n\n";
 		file.close();
 	}
 }
 
-void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats)
+void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string entities)
 {
 	// the only way to do this is to rewrite the entire file
 	std::fstream file;
@@ -137,7 +138,9 @@ void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats)
 		tmp << "LastSave: " << dateAndTime() << "\n";
 		nostd::getline(file,buff);
         tmp << "Statistics: " << stats.getLevel() << " " << stats.getCoins() 
-                << " " << stats.getJumps() << " " << stats.getHearts() << "\n\n";
+                << " " << stats.getJumps() << " " << stats.getHearts() << "\n";
+		nostd::getline(file,buff);
+		tmp << "Entities: " << entities << "\n";
 
 		while(nostd::getline(file,buff))
 			tmp << buff << "\n";
@@ -147,16 +150,16 @@ void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats)
 	}
 }
 
-void File::saveMap(Map m, int chunk, phy::Point pos, Statistics stats, nostd::string name)
+void File::saveMap(Map m, int chunk, phy::Point pos, Statistics stats, nostd::string entities, nostd::string name)
 {
 	if(!isAlreadySaved(m)) {
 		if (!name.empty())
-			appendSave(m,chunk,pos, stats, name);
+			appendSave(m,chunk,pos, stats, entities, name);
 		else
-			appendSave(m,chunk,pos, stats, "Player"); // this shouldn't happen
+			appendSave(m,chunk,pos, stats, entities, "Player"); // this shouldn't happen
 	}
 	else
-		updateSave(m,chunk,pos, stats);
+		updateSave(m,chunk,pos, stats, entities);
 }
 
 void File::changeName(nostd::string oldName,nostd::string newName)
@@ -378,6 +381,11 @@ void File::getSettings(Settings& sett)
 		sett.setSensitivity(nostd::stoi(buff.substr(12)));
 		file.close();
 	}
+}
+
+nostd::string File::getEntitiesStatus(nostd::string name)
+{
+    return nostd::string("Not implemented");
 }
 
 void File::deleteSave(nostd::string name)

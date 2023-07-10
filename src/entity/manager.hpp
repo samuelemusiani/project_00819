@@ -90,5 +90,9 @@ class Manager
         list_enemies get_all_enemies_in_chunk(int Chunk);
         list_coins get_all_coins_in_chunk(int Chunk);
         nostd::vector<phy::Point> get_all_entities_positions_in_chunk(int Chunk);
+
+        //Saving
+        nostd::string get_entities_status();
+        void set_entities_status(nostd::string s);
 };
 #endif

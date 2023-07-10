@@ -47,9 +47,16 @@ void Game::run() {
         Credits credits;
 
         switch (sel) {
-            case 0: { // New Game
-                        this->stats = Statistics();
-                        this->start();
+            case 0: { // The brackets are mandatory in order to call the
+                      // distructor of each elements when a game finish
+                        setDifficulty();
+                        Map map = Map();
+                        int current_chunk = 0;
+                        phy::Body player = phy::Body(phy::Point(40, 20), phy::Vector(1, -90), phy::Vector(0, 0));
+                        Statistics stats = Statistics();
+                        Manager manager = Manager(map);
+
+                        this->play(map, current_chunk, player, stats, manager);
                         break;
                     }
             case 1: {
@@ -121,20 +128,9 @@ bool Game::exitGame(){
 	return selected == 0;
 }
 
-void Game::start()
-{
-	setDifficulty();
-	this->map = Map();
-	this->player = phy::Body();
-	this->player.set_position(phy::Point(40, 20));
-	this->player.set_acceleration(phy::Vector(1, -90));
-	this->current_chunk = 0;
-	play();
+void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& stats, Manager& manager){
 
-}
-
-void Game::play(){
-	this->screen->drawMap(this->map, 0);
+	this->screen->drawMap(map, 0);
 	this->screen->drawPlayer(player.get_position());
 	this->screen->nodel(true);
     
@@ -143,7 +139,6 @@ void Game::play(){
 	this->screen->size(posY, posX, SCREEN_HEIGHT, SCREEN_WIDTH);
 	Draw stats_scr = Draw(3, SCREEN_WIDTH, posY - 3, posX);
 
-	Manager manager = Manager(map);
 	int entity_time= 0;
 
 	bool exit = false;
@@ -223,7 +218,8 @@ void Game::play(){
             }
 			else if (input == 27) // Pause menu con tasto esc
 			{
-				exit = pauseGame(&stats_scr, stats); // se true esci dal gioco
+                // The return value indicate if we have to quit the game
+				exit = pauseGame(&stats_scr, map, current_chunk, player, stats, manager);
 			}
 #ifdef USE_HACK
             else if (input == KEY_UP)
@@ -251,7 +247,7 @@ void Game::play(){
             else if(input == (int) 'h')
             {
 				this->screen->nodel(false);
-				hack();
+				hack(current_chunk, stats);
 				this->screen->nodel(true);
             }
 
@@ -269,7 +265,7 @@ void Game::play(){
 			}
 			else if (input == int ('h')){
 				this->screen->nodel(false);
-				hack();
+				hack(current_chunk, stats);
 				this->screen->nodel(true);
 			}
 #endif
@@ -382,11 +378,13 @@ void Game::resume()
 			this->screen->eraseScreen();
 		}
 		if (choose) {
-			this->map = File::getMap(savedMaps[selected]);
-			this->current_chunk = File::getChunk(savedMaps[selected]);
-			this->player.set_position(File::getPoint(savedMaps[selected]));
-            this->stats = File::getStatistics(savedMaps[selected]);
-			play();
+			Map map = File::getMap(savedMaps[selected]);
+			int current_chunk = File::getChunk(savedMaps[selected]);
+            phy::Body player = phy::Body(File::getPoint(savedMaps[selected]), phy::Vector(0, 0), phy::Vector(0, 0));
+            Statistics stats = File::getStatistics(savedMaps[selected]);
+            Manager manager = Manager(map);
+            manager.set_entities_status(File::getEntitiesStatus(savedMaps[selected]));
+			play(map, current_chunk, player, stats, manager);
 		}
 	}
 	} while (deleted);
@@ -426,7 +424,8 @@ int Game::setDifficulty()
 	return selected;
 }
 
-bool Game::pauseGame(Draw* stats_scr, Statistics stats) {
+bool Game::pauseGame(Draw* stats_scr, Map& map, int& current_chunk, 
+        phy::Body& player, Statistics& stats, Manager& manager) {
     this->screen->nodel(false);
 
     int posY, posX;
@@ -511,7 +510,7 @@ bool Game::pauseGame(Draw* stats_scr, Statistics stats) {
                         Draw save_scr = Draw(46, 150, posY, posX);
 
                         save.saveNewGame(&save_scr, map, current_chunk,
-                                player.get_position(), stats);
+                                player, stats, manager);
                         save_scr.eraseScreen();
                         save_scr.deleteWin();
                         break;
@@ -523,7 +522,7 @@ bool Game::pauseGame(Draw* stats_scr, Statistics stats) {
                         this->screen->refreshScreen();
 
                         save.quitGame(screen, map, current_chunk,
-                                player.get_position(), stats);
+                                player, stats, manager);
 
                         resumed = true;
                         exit = true;
@@ -560,7 +559,7 @@ void Game::over()
 
 #ifdef USE_HACK
 
-void Game::hack(){
+void Game::hack(int& current_chunk, Statistics& stats){
 	Draw hack = Draw(20, 50);
 	hack.attrOn(COLOR_PAIR(2));
 	hack.drawBox();
@@ -580,31 +579,31 @@ void Game::hack(){
 	int x = hack.getinput();
 	switch (x){
 		case '1':
-			this->stats.incrementHearts();
+			stats.incrementHearts();
 			break;
 		case '2':
-			this->stats.incrementCoins();
+			stats.incrementCoins();
 			break;
 		case '3':
-			this->stats.incrementJumps();
+			stats.incrementJumps();
 			break;
 		case '4':
-			this->current_chunk++;
+			current_chunk++;
 			break;
 		case '5':
 			fly = true;
 			break;
 		case '6':
-			this->stats.incrementHearts(-1);
+			stats.incrementHearts(-1);
 			break;
 		case '7':
-			this->stats.incrementCoins(-1);
+			stats.incrementCoins(-1);
 			break;
 		case '8':
-			this->stats.incrementJumps(-1);
+			stats.incrementJumps(-1);
 			break;
 		case '9':
-			this->current_chunk++;
+			current_chunk++;
 			break;
 		case '0':
 			fly = false;
@@ -629,7 +628,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set life"), "Set life");
 					int custom = setCustom(&hack);
-					if (custom != -1) this->stats.setHearts(custom);
+					if (custom != -1) stats.setHearts(custom);
 					break;
 				}
 				case '2':
@@ -637,7 +636,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set coins"), "Set coins");
 					int custom = setCustom(&hack);
-					if (custom != -1) this->stats.setCoins(custom); 
+					if (custom != -1) stats.setCoins(custom); 
 					break;
 				}
 				case '3':
@@ -645,7 +644,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set jump"), "Set jump");
 					int custom = setCustom(&hack);
-					if (custom != -1) this->stats.setJumps(custom);  
+					if (custom != -1) stats.setJumps(custom);  
 					break;
 				}
 				case '4':
@@ -653,7 +652,7 @@ void Game::hack(){
 					hack.eraseScreen();
 					hack.drawText(2, 25 - hack.center("Set level"), "Set level");
 					int custom = setCustom(&hack);
-					if (custom != -1) this->current_chunk = custom;
+					if (custom != -1) current_chunk = custom;
 					break;
 				}
 				default:
