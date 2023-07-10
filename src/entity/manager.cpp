@@ -419,9 +419,41 @@ list_bullets Manager::delete_all_bullets(list_bullets p)
     return p;
 }
 
+/* All entities can be alive (1) or dead (0) so we use a bit (0 or 1) to tell 
+ * if the entity is alive. For the coins alive means not collected by the player. 
+ * Every time get_entities_status iterate through the Enemies and coins vector
+ * and write who is alive.
+ */
+
 nostd::string Manager::get_entities_status()
 {
-    return nostd::string("Not implemented, yet");
+    nostd::string save;
+    //Enemies and Coins should have the same size
+    for(int i = 0; i < this->Enemies.size(); i++)
+    {
+        list_enemies tmp = this->Enemies[i];
+        while(tmp != nullptr)
+        {
+            if(tmp->val.is_alive())
+                save.push_back('1');
+            else
+                save.push_back('0');
+
+            tmp = tmp->next;
+        }
+
+        list_coins tmp2 = this->Coins[i];
+        while(tmp2 != nullptr)
+        {
+            if(tmp2->val.is_collected())
+                save.push_back('0');
+            else
+                save.push_back('1');
+
+            tmp2 = tmp2->next;
+        }
+    }
+    return save;
 }
 
 void Manager::set_entities_status(nostd::string s)
