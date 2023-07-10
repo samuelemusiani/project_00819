@@ -320,8 +320,6 @@ phy::Point File::getPoint(nostd::string name)
 
 Statistics File::getStatistics(nostd::string name)
 {
-    // Why is there a Draw on Statistics?????
-    // The Draw must be overwrite bey the caller
     Statistics stats = Statistics();
 
 	std::fstream file;
@@ -385,7 +383,26 @@ void File::getSettings(Settings& sett)
 
 nostd::string File::getEntitiesStatus(nostd::string name)
 {
-    return nostd::string("Not implemented");
+	std::fstream file;
+	if(openFile(file,"./save.txt","r")) {
+		nostd::string search = "[ Name: " + name + " ]";
+		nostd::string buff;
+		bool found = false;
+		while (!found && nostd::getline(file, buff))
+			if (buff == search)
+				found = true;
+
+        if(found)
+        {
+			for (int i = 0; i < 7; i++)
+				nostd::getline(file, buff);
+
+            return buff.substr(10);
+        }
+	}
+
+    // Error
+    return nostd::string("");
 }
 
 void File::deleteSave(nostd::string name)
