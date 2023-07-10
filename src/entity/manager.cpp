@@ -460,4 +460,29 @@ nostd::string Manager::get_entities_status()
 
 void Manager::set_entities_status(int number_of_chunks, nostd::string s)
 {
+    this->set_chunk(number_of_chunks);
+
+    int global_index = 0;
+    for(int i = 0; i < this->Enemies.size(); i++)
+    {
+        list_enemies tmp = this->Enemies[i];
+        while(tmp != nullptr)
+        {
+            if(s[global_index] == '0')
+                tmp->val.kill();
+
+            tmp = tmp->next;
+            global_index++;
+        }
+
+        list_coins tmp2 = this->Coins[i];
+        while(tmp2 != nullptr)
+        {
+            if(s[global_index] == '0')
+                tmp2->val.make_collected();
+
+            tmp2 = tmp2->next;
+            global_index++;
+        }
+    }
 }
