@@ -42,7 +42,7 @@ Manager::~Manager()
     }
 }
 
-void Manager::set_chunk(int Chunk, Map map)
+void Manager::set_chunk(int Chunk)
 {
     // For semplicity all bullets outside the current chunk despawn
     if (this->current_chunk != Chunk)
@@ -54,18 +54,18 @@ void Manager::set_chunk(int Chunk, Map map)
         this->Enemies.push_back(nullptr);
         this->Coins.push_back(nullptr);
 
-        int number_of_enemies = map.getEnemies(this->current_chunk);
+        int number_of_enemies = this->map.getEnemies(this->current_chunk);
         for(int i = 0; i < number_of_enemies; i++) {
             this->add_enemy(this->current_chunk, Enemy(
                     Random::generateEnemyType(this->seed, this->current_chunk, i) - 1, 
-                    Random::generateEnemyPosition(map, this->current_chunk, 
+                    Random::generateEnemyPosition(this->map, this->current_chunk, 
                         this->get_all_entities_positions_in_chunk(this->current_chunk)), 
                             i % 2 == 0));
         }
 
-        int number_of_coins = map.getCoins(this->current_chunk);
+        int number_of_coins = this->map.getCoins(this->current_chunk);
         for(int i = 0; i < number_of_coins; i++)
-            this->add_coin(this->current_chunk, Coin(Random::generateCoinPosition(map, this->current_chunk, 
+            this->add_coin(this->current_chunk, Coin(Random::generateCoinPosition(this->map, this->current_chunk, 
                             this->get_all_entities_positions_in_chunk(this->current_chunk))));
     }
     this->current_chunk = Chunk;
@@ -324,10 +324,10 @@ void Manager::draw_entities(Draw* screen)
 }
 
 
-bool Manager::is_there_an_entity_in_platform(Map map, int Chunk, int plat)
+bool Manager::is_there_an_entity_in_platform(int Chunk, int plat)
 {
     bool check = false;
-    Platform platform = map.get_chunk(Chunk).get_platforms()[plat];
+    Platform platform = this->map.get_chunk(Chunk).get_platforms()[plat];
 
     int start = platform.get_position().get_xPosition();
     int end = platform.get_position().get_xPosition() + platform.get_length();
@@ -458,7 +458,6 @@ nostd::string Manager::get_entities_status()
     return save;
 }
 
-void Manager::set_entities_status(nostd::string s)
+void Manager::set_entities_status(int number_of_chunks, nostd::string s)
 {
-
 }

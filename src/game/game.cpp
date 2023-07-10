@@ -294,7 +294,7 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 
 
         /* ENTITIES */
-		manager.set_chunk(current_chunk, map);
+		manager.set_chunk(current_chunk);
 		manager.update_entities(entity_time, player, stats);
         stats.setCoins(stats.getCoins() + manager.collect_coin(player.get_position()));
         entity_time = ++entity_time % 100;
@@ -383,7 +383,7 @@ void Game::resume()
             phy::Body player = phy::Body(File::getPoint(savedMaps[selected]), phy::Vector(0, 0), phy::Vector(0, 0));
             Statistics stats = File::getStatistics(savedMaps[selected]);
             Manager manager = Manager(map);
-            manager.set_entities_status(File::getEntitiesStatus(savedMaps[selected]));
+            manager.set_entities_status(current_chunk, File::getEntitiesStatus(savedMaps[selected]));
 			play(map, current_chunk, player, stats, manager);
 		}
 	}
