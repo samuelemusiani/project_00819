@@ -48,23 +48,25 @@ void Manager::set_chunk(int Chunk, Map map)
     if (this->current_chunk != Chunk)
         this->Bullets = this->delete_all_bullets(this->Bullets);
 
-    if(this->current_chunk < Chunk && Enemies.size() < Chunk + 1) {
+    while(this->current_chunk < Chunk && Enemies.size() < Chunk + 1) {
+        this->current_chunk++;
+
         this->Enemies.push_back(nullptr);
         this->Coins.push_back(nullptr);
 
-        int number_of_enemies = map.getEnemies(Chunk);
+        int number_of_enemies = map.getEnemies(this->current_chunk);
         for(int i = 0; i < number_of_enemies; i++) {
-            this->add_enemy(Chunk, Enemy(
-                    Random::generateEnemyType(this->seed, Chunk, i) - 1, 
-                    Random::generateEnemyPosition(map, Chunk, 
-                        this->get_all_entities_positions_in_chunk(Chunk)), 
+            this->add_enemy(this->current_chunk, Enemy(
+                    Random::generateEnemyType(this->seed, this->current_chunk, i) - 1, 
+                    Random::generateEnemyPosition(map, this->current_chunk, 
+                        this->get_all_entities_positions_in_chunk(this->current_chunk)), 
                             i % 2 == 0));
         }
 
-        int number_of_coins = map.getCoins(Chunk);
+        int number_of_coins = map.getCoins(this->current_chunk);
         for(int i = 0; i < number_of_coins; i++)
-            this->add_coin(Chunk, Coin(Random::generateCoinPosition(map, Chunk, 
-                            this->get_all_entities_positions_in_chunk(Chunk))));
+            this->add_coin(this->current_chunk, Coin(Random::generateCoinPosition(map, this->current_chunk, 
+                            this->get_all_entities_positions_in_chunk(this->current_chunk))));
     }
     this->current_chunk = Chunk;
 }
