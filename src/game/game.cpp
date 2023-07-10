@@ -48,7 +48,7 @@ void Game::run() {
 
         switch (sel) {
             case 0: { // The brackets are mandatory in order to call the
-                      // distructor of each elements when a game finish
+                      // destructor of each elements when a game finish
                         setDifficulty();
                         Map map = Map();
                         int current_chunk = 0;

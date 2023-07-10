@@ -78,6 +78,7 @@ class Manager
 
     public:
         Manager(Map map);
+        ~Manager();
 
         void set_chunk(int Chunk, Map map);
         int collect_coin(phy::Point player_position);

@@ -8,6 +8,40 @@ Manager::Manager (Map map)
     this->seed = map.getSeed();
 }
 
+Manager::~Manager()
+{
+    for(int i = 0; i < this->Enemies.size(); i++)
+    {
+        list_enemies tmp = this->Enemies[i];
+
+        while(tmp != nullptr)
+        {
+            list_enemies tmp2 = tmp->next;
+            delete tmp; 
+            tmp = tmp2;
+        }
+    }
+
+    for(int i = 0; i < this->Coins.size(); i++)
+    {
+        list_coins tmp = this->Coins[i];
+
+        while(tmp != nullptr)
+        {
+            list_coins tmp2 = tmp->next;
+            delete tmp; 
+            tmp = tmp2;
+        }
+    }
+
+    while(this->Bullets != nullptr)
+    {
+        list_bullets tmp = this->Bullets->next;
+        delete tmp; 
+        this->Bullets = tmp;
+    }
+}
+
 void Manager::set_chunk(int Chunk, Map map)
 {
     // For semplicity all bullets outside the current chunk despawn
