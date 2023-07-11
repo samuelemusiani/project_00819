@@ -427,9 +427,13 @@ list_bullets Manager::delete_all_bullets(list_bullets p)
  * and write who is alive.
  */
 
+
+static nostd::string compress_save(nostd::vector<bool>& v);
+static nostd::vector<bool> uncompress_save(nostd::string s);
+
 nostd::string Manager::get_entities_status()
 {
-    nostd::string save;
+    nostd::vector<bool> save;
     //Enemies and Coins should have the same size
     for(int i = 0; i < this->Enemies.size(); i++)
     {
@@ -437,9 +441,9 @@ nostd::string Manager::get_entities_status()
         while(tmp != nullptr)
         {
             if(tmp->val.is_alive())
-                save.push_back('1');
+                save.push_back(1);
             else
-                save.push_back('0');
+                save.push_back(0);
 
             tmp = tmp->next;
         }
@@ -448,19 +452,20 @@ nostd::string Manager::get_entities_status()
         while(tmp2 != nullptr)
         {
             if(tmp2->val.is_collected())
-                save.push_back('0');
+                save.push_back(0);
             else
-                save.push_back('1');
+                save.push_back(1);
 
             tmp2 = tmp2->next;
         }
     }
-    return save;
+    return compress_save(save);
 }
 
 void Manager::set_entities_status(int number_of_chunks, nostd::string s)
 {
     this->set_chunk(number_of_chunks);
+    nostd::vector<bool> save = uncompress_save(s);
 
     int global_index = 0;
     for(int i = 0; i < this->Enemies.size(); i++)
@@ -468,7 +473,7 @@ void Manager::set_entities_status(int number_of_chunks, nostd::string s)
         list_enemies tmp = this->Enemies[i];
         while(tmp != nullptr)
         {
-            if(s[global_index] == '0')
+            if(!save[global_index])
                 tmp->val.kill();
 
             tmp = tmp->next;
@@ -478,7 +483,7 @@ void Manager::set_entities_status(int number_of_chunks, nostd::string s)
         list_coins tmp2 = this->Coins[i];
         while(tmp2 != nullptr)
         {
-            if(s[global_index] == '0')
+            if(!save[global_index])
                 tmp2->val.make_collected();
 
             tmp2 = tmp2->next;
@@ -486,3 +491,106 @@ void Manager::set_entities_status(int number_of_chunks, nostd::string s)
         }
     }
 }
+
+static char convert_to_64(int n) {
+    if(0 <= n && n < 26)
+        return 'a' + n;
+    else if(26 <= n && n < 52)
+        return 'A' + (n - 26);
+    else if(52 <= n && n < 62)
+        return '0' + (n - 52);
+    else if(n == 62)
+        return '!';
+    else if(n == 63)
+        return '@';
+
+    return -1; // Error
+}
+
+static nostd::string compress_save(nostd::vector<bool>& v)
+{
+    // We use a base 64 (26 lowercase letters, 26 uppercase letter + 10 digits
+    // + 2 random SCII characters: !@)
+    // The original string is in binary (base 2) and we convert to base 64, so
+    // we converto a chunk of 6 binary digit to 1 single digit.
+    // The lenght of the orignal vector could not be perfectly divisible by 6,
+    // so when we need to decompress the string we don't know how many 0 were
+    // at the beggining. So at the end we append an integer that tell how many
+    // 0 need to be removed to have a correct conversion.
+    
+    nostd::string s;
+
+    int index = v.size();
+    while(index >= 6)
+    {
+        index -= 6;
+        int tmp = 0;
+        for(int i = 0; i < 6; i++)
+        {
+            tmp = tmp << 1;
+            if(v[index + i])
+                tmp++;
+        }
+        s.push_back(convert_to_64(tmp));
+    }
+    if(index != 0)
+    {
+        int tmp = 0;
+        for(int i = 0; i < index; i++)
+        {
+            tmp = tmp << 1;
+            if(v[i])
+                tmp++;
+        }
+        s.push_back(convert_to_64(tmp));
+    }
+    s.push_back(6 - index + '0');
+
+    // This is slow but optimizing it require a lot of code :(
+    nostd::string s_reversed;
+    for(int i = s.length() - 1; i >= 0; i--)
+        s_reversed.push_back(s[i]);
+
+    return s_reversed;
+}
+
+static int base_64_to_decimal(char c) {
+    if('a' <= c && c <= 'z')
+        return (int) (c - 'a');
+    else if('A' <= c && c <= 'Z')
+        return (int) (c - 'A') + 26;
+    else if('0' <= c && c <= '9')
+        return (int) (c - '0') + 52;
+    else if(c == '!')
+        return 62;
+    else if(c == '@')
+        return 63;
+
+    return -1; // Error
+}
+
+static nostd::vector<bool> uncompress_save(nostd::string s)
+{
+    nostd::vector<bool> v;
+    int number_of_zeros = s[0] - '0';
+    for(int i = 1; i < s.length(); i++)
+    {
+        int tmp = base_64_to_decimal(s[i]);
+        // std::cout << tmp << "\n";
+
+        for(int i = 5; i >= 0; i--)
+        {
+            if(number_of_zeros == 0)
+            {
+                if(tmp & 1 << i)
+                    v.push_back(1);
+                else
+                    v.push_back(0);
+            }
+            else
+                number_of_zeros--;
+        }
+    }
+    return v;
+}
+
