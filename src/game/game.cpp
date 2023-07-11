@@ -240,8 +240,6 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
             else if (input == KEY_RIGHT)
             {
                 if (fly) 
-                    player.set_position(player.get_position() + phy::Point(0, -1));
-                if (fly) 
                     player.set_position(player.get_position() + phy::Point(1, 0));
             }
             else if(input == (int) 'h')
@@ -250,24 +248,6 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 				hack(current_chunk, stats);
 				this->screen->nodel(true);
             }
-
-			if (input == KEY_UP){
-				if (fly) player.set_position(player.get_position() + phy::Point(0, 1));
-			}
-			else if (input == KEY_LEFT){
-				if (fly) player.set_position(player.get_position() + phy::Point(-1, 0));
-			}
-			else if (input == KEY_DOWN){
-				if (fly) player.set_position(player.get_position() + phy::Point(0, -1));
-			}
-			else if (input == KEY_RIGHT){
-				if (fly) player.set_position(player.get_position() + phy::Point(1, 0));
-			}
-			else if (input == int ('h')){
-				this->screen->nodel(false);
-				hack(current_chunk, stats);
-				this->screen->nodel(true);
-			}
 #endif
 		}
 		// player.update(0.05);
