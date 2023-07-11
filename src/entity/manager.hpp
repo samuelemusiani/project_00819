@@ -78,17 +78,22 @@ class Manager
 
     public:
         Manager(Map map);
+        ~Manager();
 
-        void set_chunk(int Chunk, Map map);
+        void set_chunk(int Chunk);
         int collect_coin(phy::Point player_position);
         void shoot(phy::Point position, bool direction, int type = 0);
         void update_entities(int time, phy::Body& player, Statistics& stats);
         void draw_entities(Draw* screen); //This method must be called afther set_chunk()
 
-        bool is_there_an_entity_in_platform(Map map, int Chunk, int plat);
+        bool is_there_an_entity_in_platform(int Chunk, int plat);
         bool is_there_an_entity_in_point(int Chunk, phy::Point point);
         list_enemies get_all_enemies_in_chunk(int Chunk);
         list_coins get_all_coins_in_chunk(int Chunk);
         nostd::vector<phy::Point> get_all_entities_positions_in_chunk(int Chunk);
+
+        //Saving
+        nostd::string get_entities_status();
+        void set_entities_status(int number_of_chunks, nostd::string s);
 };
 #endif

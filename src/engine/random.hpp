@@ -16,6 +16,9 @@
 #ifndef ENGINE_RANDOM
 #define ENGINE_RANDOM
 
+#define MAX_COINS_IN_CHUNK 10
+#define MAX_ENEMIES_IN_CHUNK 8
+
 class Random {
 	public:
 		Random();
