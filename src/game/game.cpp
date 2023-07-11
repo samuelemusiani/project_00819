@@ -64,11 +64,14 @@ void Game::run() {
                         break;
                     }
             case 2: {
-                        this->settings.drawFirstSettings();
-
+                        this->market.draw();
                         break;
                     }
             case 3: {
+                        this->settings.drawFirstSettings();
+                        break;
+                    }
+            case 4: {
                         // chiama la funziona credits che si trova in credits.cpp
                         credits = Credits();
                         int dev = credits.drawCredits(this->screen);

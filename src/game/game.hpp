@@ -11,6 +11,7 @@
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
 #include "../entity/manager.hpp"
+#include "../market/market.hpp"
 
 
 class Game
@@ -18,6 +19,7 @@ class Game
 	private:
 		Draw* screen;
         Settings settings;
+        Market market;
 
 #ifdef USE_HACK
 		bool fly = false;

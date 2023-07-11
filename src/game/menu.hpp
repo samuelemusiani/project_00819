@@ -5,7 +5,7 @@
 #include "game.hpp"
 #include "settings.hpp"
 
-#define NUMBER_OF_OPTIONS 4
+#define NUMBER_OF_OPTIONS 5
 
 
 class Menu
@@ -13,7 +13,7 @@ class Menu
 	private:
 		int posY;
 		int posX;
-		nostd::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Settings", "Credits"};
+		nostd::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Marker", "Settings", "Credits"};
 		nostd::string Jump[6] =		{"     ██╗██╗   ██╗███╗   ███╗██████╗ ",
 									 "     ██║██║   ██║████╗ ████║██╔══██╗",
 									 "     ██║██║   ██║██╔████╔██║██████╔ ",
