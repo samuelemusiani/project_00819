@@ -7,12 +7,12 @@ Ability::Ability()
 
 }
 
-Ability::Ability(const char* n)
+Ability::Ability(nostd::string n)
 {
-    strcpy(this->_name, n);
+    this->_name = n;
 }
 
-const char* Ability::get_name()
+nostd::string Ability::get_name()
 {
     return this->_name;
 }

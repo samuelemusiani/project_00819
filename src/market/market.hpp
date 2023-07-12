@@ -11,16 +11,21 @@ const int MARKET_MAX_SUBMENUS = 3;
 class Market
 {
     private:
-        Gun current_gun;
-        Ability current_ability;
+        int current_gun;
+        int current_ability;
 
-        char summenues[MARKET_MAX_SUBMENUS][15] = {"Guns", "Abilities", "Health"};
+        nostd::string summenues[MARKET_MAX_SUBMENUS] = {"Guns", "Abilities", "Health"};
 
         Gun all_guns[MARKET_MAX_GUN];
         Ability all_abilities[MARKET_MAX_ABILITY];
 
+        void set_current_gun();
+        void set_current_ability();
     public:
         Market();
+
+        Gun get_current_gun();
+        Ability get_current_ability();
 
         void draw();
 };

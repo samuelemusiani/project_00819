@@ -1,16 +1,18 @@
+#include "../../etc/nostd/string.hpp"
+
 #ifndef MARKET_ABILITY
 #define MARKET_ABILITY
 
 class Ability
 {
     private:
-        char _name[30];
+        nostd::string _name;
 
     public:
         Ability();
-        Ability(const char* n);
+        Ability(nostd::string n);
 
-        const char* get_name();
+        nostd::string get_name();
 };
 
 #endif

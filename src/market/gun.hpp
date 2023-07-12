@@ -1,10 +1,12 @@
+#include "../../etc/nostd/string.hpp"
+
 #ifndef MARKET_GUN
 #define MARKET_GUN
 
 class Gun
 {
     private:
-        char _name[30];
+        nostd::string _name;
 
         // We should probably point to a specific bullets type, but we don't
         // have the classes right now
@@ -12,10 +14,10 @@ class Gun
 
     public:
         Gun();
-        Gun(const char* n);
-        Gun(const char* n, int d);
+        Gun(nostd::string n);
+        Gun(nostd::string n, int d);
 
-        const char* get_name();
+        nostd::string get_name();
         int get_damage();
 };
 

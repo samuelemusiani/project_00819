@@ -7,20 +7,20 @@ Gun::Gun()
 
 }
 
-Gun::Gun(const char* n)
+Gun::Gun(nostd::string n)
     : _damage(1)
 {
-    strcpy(this->_name, n);
+    this->_name = n;
 }
 
-Gun::Gun(const char* n, int d)
+Gun::Gun(nostd::string n, int d)
 {
-    strcpy(this->_name, n);
+    this->_name = n;
     this->_damage = d;
 }
 
 
-const char* Gun::get_name()
+nostd::string Gun::get_name()
 {
     return this->_name;
 }
