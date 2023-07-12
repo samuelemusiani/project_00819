@@ -2,7 +2,7 @@
 #include "../draw/draw.hpp"
 
 Market::Market()
-    : current_gun(0), current_ability(0)
+    : current_gun(0), current_ability(0), current_coins(0)
 {
 
 }
@@ -15,6 +15,16 @@ Gun Market::get_current_gun()
 Ability Market::get_current_ability()
 {
     return this->all_abilities[this->current_ability];
+}
+
+int Market::get_current_coins()
+{
+    return this->current_coins;
+}
+
+void Market::set_current_coins(int c)
+{
+    this->current_coins = c;
 }
 
 void Market::draw()
@@ -42,40 +52,72 @@ void Market::draw()
                 screen.attrOff(COLOR_PAIR(1));
         }
 
+        screen.drawSquareAround("  COINS: " + nostd::to_string(this->current_coins) + " $  ", 36, 20);
+
+
         if(orizzontal_selection == 0)
         {
+            for(int i = 0; i < 6; i++)
+                screen.drawText(34 + i, 50, this->gun_art[i]);
+
             for(int i = 0; i < MARKET_MAX_GUN; i++)
             {
                 if(i == vertical_selection)
                     screen.attrOn(COLOR_PAIR(1));
 
                 if(i == this->current_gun)
-                    screen.drawSquareAround(" * " + this->all_guns[i].get_name() + " ", 3 * i + 16, 20);
+                {
+                    Gun gun = this->all_guns[this->current_gun];
+                    screen.drawSquareAround(" * " + gun.get_name() + " ", 3 * i + 16, 20);
+
+                    if(i == vertical_selection)
+                        screen.attrOff(COLOR_PAIR(1));
+
+                    screen.drawSquareAround("  PRICE: " + nostd::to_string(gun.get_price()) + " $  ", 36, 120);
+                    screen.drawText(16, 60, "Name: \t\t" + gun.get_name());
+                    screen.drawText(18, 60, "Damage: \t\t" + nostd::to_string(gun.get_damage()));
+                    screen.drawText(20, 60, "Bullet type: \t" + nostd::to_string(2));
+                    screen.drawText(22, 60, "Price: \t\t" + nostd::to_string(gun.get_price()));
+                }
                 else
                     screen.drawSquareAround(" " + this->all_guns[i].get_name() + " ", 3 * i + 16, 20);
 
-                if(i == vertical_selection)
-                    screen.attrOff(COLOR_PAIR(1));
+                screen.attrOff(COLOR_PAIR(1));
             }
         }
         else if(orizzontal_selection == 1)
         {
+            for(int i = 0; i < 8; i++)
+                screen.drawText(32 + i, 60, this->book_art[i]);
+
             for(int i = 0; i < MARKET_MAX_ABILITY; i++)
             {
                 if(i == vertical_selection)
                     screen.attrOn(COLOR_PAIR(1));
 
                 if(i == this->current_ability)
-                    screen.drawSquareAround(" * " + this->all_abilities[i].get_name() + " ", 3 * i + 16, 20);
+                {
+                    Ability ability = this->all_abilities[this->current_ability];
+                    screen.drawSquareAround(" * " + ability.get_name() + " ", 3 * i + 16, 20);
+
+                    if(i == vertical_selection)
+                        screen.attrOff(COLOR_PAIR(1));
+
+                    screen.drawSquareAround("  PRICE: " + nostd::to_string(ability.get_price()) + " $  ", 36, 120);
+                    screen.drawText(16, 60, "Name: \t\t" + ability.get_name());
+                    screen.drawText(18, 60, "Type : \t\tNot set");
+                    screen.drawText(20, 60, "Price: \t\t" + nostd::to_string(ability.get_price()));
+                }
                 else
                     screen.drawSquareAround(" " + this->all_abilities[i].get_name() + " ", 3 * i + 16, 20);
 
-                if(i == vertical_selection)
-                    screen.attrOff(COLOR_PAIR(1));
+                screen.attrOff(COLOR_PAIR(1));
             }
         }
         else if(orizzontal_selection == 2)
         {
+            for(int i = 0; i < 11; i++)
+                screen.drawText(30 + i, 66, this->poison_art[i]);
             // Print helth (that can be bougth)
         }
 

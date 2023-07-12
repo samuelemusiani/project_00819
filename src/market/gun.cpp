@@ -2,7 +2,7 @@
 #include <cstring>
 
 Gun::Gun()
-    : _name("Not set"), _damage(1)
+    : _name("Not set"), _damage(1), _price(10)
 {
 
 }
@@ -28,4 +28,9 @@ nostd::string Gun::get_name()
 int Gun::get_damage()
 {
     return this->_damage;
+}
+
+int Gun::get_price()
+{
+    return this->_price;
 }

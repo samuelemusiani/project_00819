@@ -11,6 +11,7 @@ class Gun
         // We should probably point to a specific bullets type, but we don't
         // have the classes right now
         int _damage;
+        int _price;
 
     public:
         Gun();
@@ -19,6 +20,7 @@ class Gun
 
         nostd::string get_name();
         int get_damage();
+        int get_price();
 };
 
 #endif
