@@ -12,6 +12,12 @@ Ability::Ability(nostd::string n)
     this->_name = n;
 }
 
+Ability::Ability(nostd::string n, int p)
+{
+    this->_name = n;
+    this->_price = p;
+}
+
 nostd::string Ability::get_name()
 {
     return this->_name;

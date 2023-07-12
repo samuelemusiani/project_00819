@@ -17,6 +17,7 @@ class Gun
         Gun();
         Gun(nostd::string n);
         Gun(nostd::string n, int d);
+        Gun(nostd::string n, int d, int p);
 
         nostd::string get_name();
         int get_damage();

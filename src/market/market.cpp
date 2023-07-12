@@ -4,6 +4,14 @@
 Market::Market()
     : current_gun(0), current_ability(0), current_coins(0)
 {
+    this->all_guns[0] = Gun("Basic", 1, 0);
+    this->all_guns[1] = Gun("Revolver", 2, 10);
+    this->all_guns[2] = Gun("Mitra", 1, 25);
+    this->all_guns[3] = Gun("TOO MUCH", 4, 40);
+
+    this->all_abilities[0] = Ability("Shield", 4);
+    this->all_abilities[1] = Ability("Explosion", 8);
+    this->all_abilities[2] = Ability("No gravity", 10);
 
 }
 
@@ -66,24 +74,20 @@ void Market::draw()
                     screen.attrOn(COLOR_PAIR(1));
 
                 if(i == this->current_gun)
-                {
-                    Gun gun = this->all_guns[this->current_gun];
-                    screen.drawSquareAround(" * " + gun.get_name() + " ", 3 * i + 16, 20);
-
-                    if(i == vertical_selection)
-                        screen.attrOff(COLOR_PAIR(1));
-
-                    screen.drawSquareAround("  PRICE: " + nostd::to_string(gun.get_price()) + " $  ", 36, 120);
-                    screen.drawText(16, 60, "Name: \t\t" + gun.get_name());
-                    screen.drawText(18, 60, "Damage: \t\t" + nostd::to_string(gun.get_damage()));
-                    screen.drawText(20, 60, "Bullet type: \t" + nostd::to_string(2));
-                    screen.drawText(22, 60, "Price: \t\t" + nostd::to_string(gun.get_price()));
-                }
+                    screen.drawSquareAround(" * " + this->all_guns[i].get_name() + " ", 3 * i + 16, 20);
                 else
                     screen.drawSquareAround(" " + this->all_guns[i].get_name() + " ", 3 * i + 16, 20);
 
                 screen.attrOff(COLOR_PAIR(1));
             }
+
+            Gun gun = this->all_guns[vertical_selection];
+
+            screen.drawSquareAround("  PRICE: " + nostd::to_string(gun.get_price()) + " $  ", 36, 120);
+            screen.drawText(16, 60, "Name: \t\t" + gun.get_name());
+            screen.drawText(18, 60, "Damage: \t\t" + nostd::to_string(gun.get_damage()));
+            screen.drawText(20, 60, "Bullet type: \t" + nostd::to_string(2));
+            screen.drawText(22, 60, "Price: \t\t" + nostd::to_string(gun.get_price()));
         }
         else if(orizzontal_selection == 1)
         {
@@ -96,23 +100,18 @@ void Market::draw()
                     screen.attrOn(COLOR_PAIR(1));
 
                 if(i == this->current_ability)
-                {
-                    Ability ability = this->all_abilities[this->current_ability];
-                    screen.drawSquareAround(" * " + ability.get_name() + " ", 3 * i + 16, 20);
-
-                    if(i == vertical_selection)
-                        screen.attrOff(COLOR_PAIR(1));
-
-                    screen.drawSquareAround("  PRICE: " + nostd::to_string(ability.get_price()) + " $  ", 36, 120);
-                    screen.drawText(16, 60, "Name: \t\t" + ability.get_name());
-                    screen.drawText(18, 60, "Type : \t\tNot set");
-                    screen.drawText(20, 60, "Price: \t\t" + nostd::to_string(ability.get_price()));
-                }
+                    screen.drawSquareAround(" * " + this->all_abilities[i].get_name() + " ", 3 * i + 16, 20);
                 else
                     screen.drawSquareAround(" " + this->all_abilities[i].get_name() + " ", 3 * i + 16, 20);
 
                 screen.attrOff(COLOR_PAIR(1));
             }
+            Ability ability = this->all_abilities[vertical_selection];
+
+            screen.drawSquareAround("  PRICE: " + nostd::to_string(ability.get_price()) + " $  ", 36, 120);
+            screen.drawText(16, 60, "Name: \t\t" + ability.get_name());
+            screen.drawText(18, 60, "Type : \t\tNot set");
+            screen.drawText(20, 60, "Price: \t\t" + nostd::to_string(ability.get_price()));
         }
         else if(orizzontal_selection == 2)
         {

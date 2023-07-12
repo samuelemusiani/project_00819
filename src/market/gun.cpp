@@ -8,17 +8,21 @@ Gun::Gun()
 }
 
 Gun::Gun(nostd::string n)
-    : _damage(1)
+    : Gun(n, 1)
 {
-    this->_name = n;
 }
 
 Gun::Gun(nostd::string n, int d)
+   : Gun(n, d, 0) 
+{
+}
+
+Gun::Gun(nostd::string n, int d, int p)
 {
     this->_name = n;
     this->_damage = d;
+    this->_price = p;
 }
-
 
 nostd::string Gun::get_name()
 {

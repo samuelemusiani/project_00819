@@ -13,6 +13,7 @@ class Ability
     public:
         Ability();
         Ability(nostd::string n);
+        Ability(nostd::string n, int p);
 
         nostd::string get_name();
 
