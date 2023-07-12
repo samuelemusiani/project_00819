@@ -13,6 +13,9 @@ Market::Market()
     this->all_abilities[1] = Ability("Explosion", 8);
     this->all_abilities[2] = Ability("No gravity", 10);
 
+    this->all_health[0] = "1 Heart";
+    this->all_health[1] = "Full life";
+
 }
 
 Gun Market::get_current_gun()
@@ -117,7 +120,23 @@ void Market::draw()
         {
             for(int i = 0; i < 11; i++)
                 screen.drawText(30 + i, 66, this->poison_art[i]);
-            // Print helth (that can be bougth)
+
+            for(int i = 0; i < 2; i++)
+            {
+                if(i == vertical_selection)
+                    screen.attrOn(COLOR_PAIR(1));
+
+                screen.drawSquareAround(" " + this->all_health[i] + " ", 3 * i + 16, 20);
+
+                screen.attrOff(COLOR_PAIR(1));
+            }
+            int price;
+            if(vertical_selection == 0)
+                price = 2;
+            else
+                price = 8;
+                
+            screen.drawSquareAround("  PRICE: " + nostd::to_string(price) + " $  ", 36, 120);
         }
 
         switch(screen.getinput())
@@ -143,6 +162,8 @@ void Market::draw()
                                    max_down = MARKET_MAX_GUN;
                                else if(orizzontal_selection == 1)
                                    max_down = MARKET_MAX_ABILITY;
+                               else if(orizzontal_selection == 2)
+                                   max_down = 2;
                                else
                                    max_down = 0;
 

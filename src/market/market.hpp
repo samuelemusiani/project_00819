@@ -19,6 +19,7 @@ class Market
 
         Gun all_guns[MARKET_MAX_GUN];
         Ability all_abilities[MARKET_MAX_ABILITY];
+        nostd::string all_health[2];
 
         const nostd::string gun_art[6] = {
 "                           ______",
