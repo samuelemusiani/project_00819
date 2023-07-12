@@ -25,9 +25,6 @@ class Draw : public Screen{
 	private:
 		void drawPlatform(nostd::vector<Platform> plat);
 
-        int centerX(nostd::string text);
-        int centerX(const char* text);
-
 	public:
 		Draw(int height, int width, int posY = 0, int posX = 0);
 

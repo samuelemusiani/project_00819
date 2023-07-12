@@ -21,12 +21,14 @@ void Draw::drawText(int posY, int posX, const char s) {
 }
 
 void Draw::drawCenterText(int posY, nostd::string s) {
-	mvwprintw(this->screen, posY, this->centerX(s), "%s", s.c_str());
+    int maxX = getmaxx(this->screen);
+	mvwprintw(this->screen, posY, (maxX - s.length()) / 2, "%s", s.c_str());
 }
 
 
 void Draw::drawCenterText(int posY, const char* s) {
-    mvwprintw(this->screen, posY, this->centerX(s), "%s", s);
+    int maxX = getmaxx(this->screen);
+    mvwprintw(this->screen, posY, (maxX - strlen(s)) / 2, "%s", s);
 }
 
 void Draw::drawUpperText(int posY, int posX, nostd::string s) {
@@ -96,8 +98,8 @@ void Draw::drawSquareAround(const char* s, int posY, int posX) { //posizione del
 }
 
 void Draw::drawCenterSquareAround(nostd::string s, int posY) {
-    int posX = this->centerX(s);
-    this->drawSquareAround(s, posY, this->centerX(s));
+    int posX = (getmaxx(this->screen) - s.length()) / 2;
+    this->drawSquareAround(s, posY, posX);
 }
 
 void Draw::drawRectagle(int posY, int posX, int length, int width) {
@@ -199,14 +201,3 @@ void Draw::drawPlatform(nostd::vector<Platform> plat) {
         }
     }
 }
-
-int Draw::centerX(nostd::string text){
-	int x = 75 - (strlen(text.c_str()) / 2);
-	return x;
-}
-
-int Draw::centerX(const char* text){
-	int x = 75 - (strlen(text) / 2);
-	return x;
-}
-
