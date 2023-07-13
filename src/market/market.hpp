@@ -18,7 +18,10 @@ class Market
         nostd::string summenues[MARKET_MAX_SUBMENUS] = {"Guns", "Abilities", "Health"};
 
         Gun all_guns[MARKET_MAX_GUN];
+        bool guns_bought[MARKET_MAX_GUN];
+
         Ability all_abilities[MARKET_MAX_ABILITY];
+        bool abilities_bought[MARKET_MAX_ABILITY];
         nostd::string all_health[2];
 
         const nostd::string gun_art[6] = {

@@ -2,7 +2,7 @@
 #include "../draw/draw.hpp"
 
 Market::Market()
-    : current_gun(0), current_ability(0), current_coins(0)
+    : current_gun(0), current_ability(0), current_coins(100)
 {
     this->all_guns[0] = Gun("Basic", 1, 0);
     this->all_guns[1] = Gun("Revolver", 2, 10);
@@ -16,6 +16,13 @@ Market::Market()
     this->all_health[0] = "1 Heart";
     this->all_health[1] = "Full life";
 
+    this->guns_bought[0] = 1;
+    for(int i = 1; i < MARKET_MAX_GUN; i++)
+        this->guns_bought[i] = 0;
+
+    this->abilities_bought[0] = 1;
+    for(int i = 1; i < MARKET_MAX_ABILITY; i++)
+        this->abilities_bought[i] = 0;
 }
 
 Gun Market::get_current_gun()
@@ -66,6 +73,7 @@ void Market::draw()
         screen.drawSquareAround("  COINS: " + nostd::to_string(this->current_coins) + " $  ", 36, 20);
 
 
+        int price = -1;
         if(orizzontal_selection == 0)
         {
             for(int i = 0; i < 6; i++)
@@ -86,11 +94,16 @@ void Market::draw()
 
             Gun gun = this->all_guns[vertical_selection];
 
-            screen.drawSquareAround("  PRICE: " + nostd::to_string(gun.get_price()) + " $  ", 36, 120);
             screen.drawText(16, 60, "Name: \t\t" + gun.get_name());
             screen.drawText(18, 60, "Damage: \t\t" + nostd::to_string(gun.get_damage()));
             screen.drawText(20, 60, "Bullet type: \t" + nostd::to_string(2));
-            screen.drawText(22, 60, "Price: \t\t" + nostd::to_string(gun.get_price()));
+
+            if(!this->guns_bought[vertical_selection]) {
+                price = gun.get_price();
+                screen.drawText(22, 60, "Price: \t\t" + nostd::to_string(price));
+            }
+            else
+                screen.drawText(22, 60, "Price: \t\t You already have this gun!");
         }
         else if(orizzontal_selection == 1)
         {
@@ -109,12 +122,19 @@ void Market::draw()
 
                 screen.attrOff(COLOR_PAIR(1));
             }
+
             Ability ability = this->all_abilities[vertical_selection];
 
-            screen.drawSquareAround("  PRICE: " + nostd::to_string(ability.get_price()) + " $  ", 36, 120);
             screen.drawText(16, 60, "Name: \t\t" + ability.get_name());
             screen.drawText(18, 60, "Type : \t\tNot set");
-            screen.drawText(20, 60, "Price: \t\t" + nostd::to_string(ability.get_price()));
+
+            if(!this->abilities_bought[vertical_selection])
+            {
+                price = ability.get_price();
+                screen.drawText(20, 60, "Price: \t\t You already have this ability!");
+            }
+            else
+                screen.drawText(20, 60, "Price: \t\t" + nostd::to_string(price));
         }
         else if(orizzontal_selection == 2)
         {
@@ -130,7 +150,6 @@ void Market::draw()
 
                 screen.attrOff(COLOR_PAIR(1));
             }
-            int price;
             if(vertical_selection == 0)
                 price = 2;
             else
@@ -138,6 +157,10 @@ void Market::draw()
                 
             screen.drawSquareAround("  PRICE: " + nostd::to_string(price) + " $  ", 36, 120);
         }
+        if(price == -1)
+            screen.drawSquareAround("  PRICE: You have it!  ", 36, 114);
+        else
+            screen.drawSquareAround("  PRICE: " + nostd::to_string(price) + " $  ", 36, 120);
 
         switch(screen.getinput())
         {
@@ -171,12 +194,53 @@ void Market::draw()
                                break;
                            }
             case 10: {
-                         // TODO: Make the selection buy the gun/ability with coins
-                         if(orizzontal_selection == 0)
-                             this->current_gun = vertical_selection;
-                         else if(orizzontal_selection == 1)
-                             this->current_ability = vertical_selection;
+                         if(price <= this->current_coins)
+                         {
 
+                             if (orizzontal_selection == 0) {
+                                 if (!this->guns_bought[vertical_selection])
+                                     this->current_coins -= price;
+
+                                 this->current_gun = vertical_selection;
+                                 this->guns_bought[vertical_selection] = 1;
+                             }
+                             else if(orizzontal_selection == 1)
+                             {
+                                 if(!this->abilities_bought [vertical_selection])
+                                     this->current_coins -= price;
+
+                                 this->current_ability = vertical_selection;
+                                 this->abilities_bought[vertical_selection] = 1;
+                             } 
+                             else
+                                 this->current_coins -= price;
+                         }
+                         else
+                         {
+                             // Can't buy the item
+                             Draw win = Draw(SCREEN_HEIGHT / 4, SCREEN_WIDTH / 3);
+                             win.clearScreen();
+                             win.nodel(false);
+
+                             // This should probably go in draw to make it global
+                             init_pair(3, COLOR_RED, COLOR_BLACK);
+                             win.attrOn(COLOR_PAIR(3));
+                             win.drawCenterText(3, "You can't buy this item, you are poor!");
+                             init_pair(4, COLOR_BLACK, COLOR_RED);
+                             win.attrOn(COLOR_PAIR(4));
+                             win.drawCenterText(7, "Ok...");
+                             win.attrOff(COLOR_PAIR(1));
+
+                             win.refreshScreen();
+
+                             int input;
+                             do {
+                                 input = win.getinput();
+                             } while(input != 10);
+
+                             win.nodel(true);
+                             win.deleteWin();
+                         }
                          break;
                      }
             default:
