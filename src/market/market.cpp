@@ -243,6 +243,10 @@ void Market::draw()
                          }
                          break;
                      }
+            case 27: {
+                         exit = true;
+                         break;
+                     }
             default:
                         break;
         }
