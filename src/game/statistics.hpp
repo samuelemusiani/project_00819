@@ -1,12 +1,15 @@
 #ifndef STATISTICS_HPP
 #define STATISTICS_HPP
 
+#define MAX_POSSIBLE_HEARTS 10
+
 class Statistics {
     private:
         int _level = 0;
         int _jump = 0;
         int _coins = 0;
         int _heart = 10;
+
     public:
         Statistics();
         Statistics(int level, int coins, int jump, int heart);
