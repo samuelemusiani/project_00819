@@ -63,6 +63,8 @@ void Market::draw() {
     }
 
     screen.drawSquareAround(
+        "  HEARTS: " + nostd::to_string(this->current_hearts) + "  ", 33, 20);
+    screen.drawSquareAround(
         "  COINS: " + nostd::to_string(this->current_coins) + " $  ", 36, 20);
 
     int price = -1;
