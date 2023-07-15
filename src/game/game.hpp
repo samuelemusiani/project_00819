@@ -31,7 +31,7 @@ class Game
 		Game();
 		~Game();
 		void run();
-		void play(Map& map, int& current_chunk, phy::Body& player, Statistics& stats, Manager& manager);
+		void play(Map& map, int& current_chunk, phy::Body& player, Statistics& stats, Manager& manager, Market& market);
 		void resume();
 		bool exitGame();
         void over();

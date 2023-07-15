@@ -55,8 +55,9 @@ void Game::run() {
                         phy::Body player = phy::Body(phy::Point(40, 20), phy::Vector(1, -90), phy::Vector(0, 0));
                         Statistics stats = Statistics();
                         Manager manager = Manager(map);
+                        Market market = Market();
 
-                        this->play(map, current_chunk, player, stats, manager);
+                        this->play(map, current_chunk, player, stats, manager, market);
                         break;
                     }
             case 1: {
@@ -124,7 +125,7 @@ bool Game::exitGame(){
 	return selected == 0;
 }
 
-void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& stats, Manager& manager){
+void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& stats, Manager& manager, Market& market){
 
 	this->screen->drawMap(map, 0);
 	this->screen->drawPlayer(player.get_position());
@@ -354,7 +355,7 @@ void Game::resume()
             Statistics stats = File::getStatistics(savedMaps[selected]);
             Manager manager = Manager(map);
             manager.set_entities_status(current_chunk, File::getEntitiesStatus(savedMaps[selected]));
-			play(map, current_chunk, player, stats, manager);
+			play(map, current_chunk, player, stats, manager, market);
 		}
 	}
 	} while (deleted);
@@ -409,7 +410,7 @@ bool Game::pauseGame(Map& map, int& current_chunk,
         local_screen.drawBox();
         local_screen.drawText(3, 30 - local_screen.center("Game Paused"),
                 "Game Paused");
-        nostd::string options[4] = {"Resume", "Settings", "Save",
+        nostd::string options[5] = {"Resume", "Market", "Settings", "Save",
             "Exit"};
         int selected = 0;
         bool choose = false;
@@ -421,7 +422,7 @@ bool Game::pauseGame(Map& map, int& current_chunk,
         Screen::update();
 
         while (!choose) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 5; i++) {
                 local_screen.drawSquareAround(options[i], 20 + 4 * i,
                         30 - (options[i].length() / 2));
             }
@@ -434,12 +435,12 @@ bool Game::pauseGame(Map& map, int& current_chunk,
             switch (local_screen.getinput()) {
                 case KEY_UP:
                     if (selected == 0)
-                        selected = 3;
+                        selected = 4;
                     else
                         selected = selected - 1;
                     break;
                 case KEY_DOWN:
-                    if (selected == 3)
+                    if (selected == 4)
                         selected = 0;
                     else
                         selected = selected + 1;
@@ -465,15 +466,19 @@ bool Game::pauseGame(Map& map, int& current_chunk,
                         break;
                     }
             case 1: {
-                        this->settings.drawFirstSettings();
+                        this->market.open(stats);
                         break;
                     }
             case 2: {
+                        this->settings.drawFirstSettings();
+                        break;
+                    }
+            case 3: {
                         save.saveNewGame(map, current_chunk,
                                 player, stats, manager);
                         break;
                     }
-            case 3: {
+            case 4: {
                         local_screen.clearScreen();
                         local_screen.deleteWin();
                         this->screen->redraw();
