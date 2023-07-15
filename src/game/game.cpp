@@ -410,7 +410,8 @@ bool Game::pauseGame(Map& map, int& current_chunk,
         local_screen.drawBox();
         local_screen.drawText(3, 30 - local_screen.center("Game Paused"),
                 "Game Paused");
-        nostd::string options[5] = {"Resume", "Market", "Settings", "Save",
+        const int max_options = 5;
+        nostd::string options[max_options] = {"Resume", "Market", "Settings", "Save",
             "Exit"};
         int selected = 0;
         bool choose = false;
@@ -422,7 +423,7 @@ bool Game::pauseGame(Map& map, int& current_chunk,
         Screen::update();
 
         while (!choose) {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < max_options; i++) {
                 local_screen.drawSquareAround(options[i], 20 + 4 * i,
                         30 - (options[i].length() / 2));
             }
@@ -435,12 +436,12 @@ bool Game::pauseGame(Map& map, int& current_chunk,
             switch (local_screen.getinput()) {
                 case KEY_UP:
                     if (selected == 0)
-                        selected = 4;
+                        selected = max_options - 1;
                     else
                         selected = selected - 1;
                     break;
                 case KEY_DOWN:
-                    if (selected == 4)
+                    if (selected == max_options - 1)
                         selected = 0;
                     else
                         selected = selected + 1;
