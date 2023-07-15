@@ -4,7 +4,7 @@
 #ifndef DRAW_SCREEN 
 #define DRAW_SCREEN
 
-#define SCREEN_HEIGHT 44
+#define SCREEN_HEIGHT 46
 #define SCREEN_WIDTH 150
 
 class Screen

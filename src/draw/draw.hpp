@@ -16,7 +16,7 @@
 #include "../../etc/nostd/string.hpp"
 
 
-#define OFFSET 42
+#define OFFSET 44 // SCREEN_HEIGHT - STATS_HEIGHT
 
 #ifndef DRAW_DRAW
 #define DRAW_DRAW
@@ -63,7 +63,7 @@ class Draw : public Screen{
 		void drawEntity(Coin coint);
 		void drawEntity(Bullet bullet);
 
-        void updateStats(Statistics stats);
+        void drawStats(Statistics stats);
         void deleteStats();
 };
 #endif

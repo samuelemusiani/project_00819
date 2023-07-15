@@ -2,6 +2,8 @@
 #include <unistd.h>
 #include <locale.h>
 
+#include "../../etc/logs/logs.hpp"
+
 Screen::Screen(int height, int width, int posY, int posX)
     : is_screen_deleted(false)
 {
@@ -20,11 +22,9 @@ Screen::Screen(int height, int width, int posY, int posX)
     int tmp_posY, tmp_posX;
 	this->size(tmp_posY, tmp_posX, height, width);
 
-    if(posY != 0 || posX != 0)
-    {
-        tmp_posY = posY;
-        tmp_posX = posX;
-    }
+    tmp_posY += -posY;
+    tmp_posX += posX;
+
 	this->screen = newwin(height, width, tmp_posY, tmp_posX);
 	keypad(this->screen, true);
 	set_escdelay(1);

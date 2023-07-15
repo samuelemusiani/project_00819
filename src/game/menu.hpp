@@ -13,7 +13,7 @@ class Menu
 	private:
 		int posY;
 		int posX;
-		nostd::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Market", "Settings", "Credits"};
+		nostd::string options[NUMBER_OF_OPTIONS] = {"New Game", "Resume Game from saved file", "Settings", "Credits"};
 		nostd::string Jump[6] =		{"     ██╗██╗   ██╗███╗   ███╗██████╗ ",
 									 "     ██║██║   ██║████╗ ████║██╔══██╗",
 									 "     ██║██║   ██║██╔████╔██║██████╔ ",
