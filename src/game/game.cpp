@@ -501,8 +501,6 @@ bool Game::pauseGame(Map& map, int& current_chunk,
 void Game::over()
 {
 	this->screen->nodel(false);	
-	int posX, posY;
-	this->screen->size(posY, posX, 8, 50);
 	Draw over_win = Draw(8, 50);
 	over_win.drawBox();
 	over_win.drawText(2, 25 - over_win.center("GAME OVER"), "GAME OVER");
