@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "statistics.hpp"
 
 Statistics::Statistics()
@@ -25,7 +27,7 @@ void Statistics::setJumps(int jump){
 }
 
 void Statistics::setHearts(int heart){
-    this->_heart = heart;
+    this->_heart = std::min(heart, MAX_POSSIBLE_HEARTS);
 }
 
 int Statistics::getLevel(){

@@ -55,8 +55,9 @@ void Game::run() {
                         phy::Body player = phy::Body(phy::Point(40, 20), phy::Vector(1, -90), phy::Vector(0, 0));
                         Statistics stats = Statistics();
                         Manager manager = Manager(map);
+                        Market market = Market();
 
-                        this->play(map, current_chunk, player, stats, manager);
+                        this->play(map, current_chunk, player, stats, manager, market);
                         break;
                     }
             case 1: {
@@ -65,7 +66,6 @@ void Game::run() {
                     }
             case 2: {
                         this->settings.drawFirstSettings();
-
                         break;
                     }
             case 3: {
@@ -121,24 +121,16 @@ bool Game::exitGame(){
 				choose = true;
 				break;
 		}
-
-
-
 	}
 	return selected == 0;
 }
 
-void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& stats, Manager& manager){
+void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& stats, Manager& manager, Market& market){
 
 	this->screen->drawMap(map, 0);
 	this->screen->drawPlayer(player.get_position());
 	this->screen->nodel(true);
     
-    // Creating a screen for statistics
-	int posY, posX;
-	this->screen->size(posY, posX, SCREEN_HEIGHT, SCREEN_WIDTH);
-	Draw stats_scr = Draw(3, SCREEN_WIDTH, posY - 3, posX);
-
 	int entity_time= 0;
 
 	bool exit = false;
@@ -150,7 +142,7 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 	while (!exit){
         const char* control_keys = this->settings.getControlsKeys();
 
-		stats_scr.updateStats(stats);
+		screen->drawStats(stats);
 		bool right; 
 		int input = this->screen->getinput();
 
@@ -219,7 +211,7 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 			else if (input == 27) // Pause menu con tasto esc
 			{
                 // The return value indicate if we have to quit the game
-				exit = pauseGame(&stats_scr, map, current_chunk, player, stats, manager);
+				exit = this->pauseGame(map, current_chunk, player, stats, manager);
 			}
 #ifdef USE_HACK
             else if (input == KEY_UP)
@@ -281,12 +273,12 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 		manager.draw_entities(screen);
 
 		this->screen->drawMap(map, current_chunk);
-		this->screen->drawText(2, 1, nostd::to_string(current_chunk));
-		this->screen->drawText(1, 1, nostd::to_string(player.get_position().get_xPosition()));
-		this->screen->drawText(1, 5, nostd::to_string(player.get_position().get_yPosition()));
-		this->screen->drawText(1, 140, nostd::to_string(JUMPF));
+		this->screen->drawText(5, 1, nostd::to_string(current_chunk));
+		this->screen->drawText(4, 1, nostd::to_string(player.get_position().get_xPosition()));
+		this->screen->drawText(4, 5, nostd::to_string(player.get_position().get_yPosition()));
+		this->screen->drawText(4, 140, nostd::to_string(JUMPF));
 		//this->screen->drawText(2, 140, nostd::to_string(1+pow(1.1, - cumulative/50)));
-		this->screen->drawText(3, 140, nostd::to_string(cumulative));
+		this->screen->drawText(6, 140, nostd::to_string(cumulative));
 		napms(5);
 
         if(stats.getHearts() <= 0)
@@ -297,7 +289,6 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 	}
 
 	this->screen->nodel(false);	
-	stats_scr.deleteStats();
 }
 
 void Game::resume()
@@ -364,7 +355,7 @@ void Game::resume()
             Statistics stats = File::getStatistics(savedMaps[selected]);
             Manager manager = Manager(map);
             manager.set_entities_status(current_chunk, File::getEntitiesStatus(savedMaps[selected]));
-			play(map, current_chunk, player, stats, manager);
+			play(map, current_chunk, player, stats, manager, market);
 		}
 	}
 	} while (deleted);
@@ -404,56 +395,53 @@ int Game::setDifficulty()
 	return selected;
 }
 
-bool Game::pauseGame(Draw* stats_scr, Map& map, int& current_chunk, 
+bool Game::pauseGame(Map& map, int& current_chunk, 
         phy::Body& player, Statistics& stats, Manager& manager) {
     this->screen->nodel(false);
 
-    int posY, posX;
-    this->screen->size(posY, posX, SCREEN_HEIGHT, 60);
-    Draw pause =
-        Draw(SCREEN_HEIGHT, 60, posY, posX + (SCREEN_WIDTH - 60) / 2);
+    Draw local_screen = Draw(SCREEN_HEIGHT, 60, 0, (SCREEN_WIDTH - 60) / 2);
 
     bool resumed = false;
     bool exit = false;
 
     while (!resumed) {
 
-        pause.clearwithoutbox();
-        pause.drawBox();
-        pause.drawText(3, 30 - pause.center("Game Paused"),
+        local_screen.clearwithoutbox();
+        local_screen.drawBox();
+        local_screen.drawText(3, 30 - local_screen.center("Game Paused"),
                 "Game Paused");
-        nostd::string options[4] = {"Resume", "Settings", "Save",
+        const int max_options = 5;
+        nostd::string options[max_options] = {"Resume", "Market", "Settings", "Save",
             "Exit"};
         int selected = 0;
         bool choose = false;
 
-        stats_scr->redraw();
+        this->screen->drawStats(stats);
         this->screen->redraw();
         this->screen->noOutRefresh();
-        stats_scr->noOutRefresh();
-        pause.noOutRefresh();
+        local_screen.noOutRefresh();
         Screen::update();
 
         while (!choose) {
-            for (int i = 0; i < 4; i++) {
-                pause.drawSquareAround(options[i], 20 + 4 * i,
+            for (int i = 0; i < max_options; i++) {
+                local_screen.drawSquareAround(options[i], 20 + 4 * i,
                         30 - (options[i].length() / 2));
             }
-            pause.attrOn(COLOR_PAIR(1));
-            pause.drawText(
+            local_screen.attrOn(COLOR_PAIR(1));
+            local_screen.drawText(
                     20 + 4 * selected,
                     30 - (options[selected].length() / 2),
                     options[selected]);
-            pause.attrOff(COLOR_PAIR(1));
-            switch (pause.getinput()) {
+            local_screen.attrOff(COLOR_PAIR(1));
+            switch (local_screen.getinput()) {
                 case KEY_UP:
                     if (selected == 0)
-                        selected = 3;
+                        selected = max_options - 1;
                     else
                         selected = selected - 1;
                     break;
                 case KEY_DOWN:
-                    if (selected == 3)
+                    if (selected == max_options - 1)
                         selected = 0;
                     else
                         selected = selected + 1;
@@ -469,39 +457,35 @@ bool Game::pauseGame(Draw* stats_scr, Map& map, int& current_chunk,
                     break;
             }
         }
-        pause.refreshScreen();
+        local_screen.refreshScreen();
         Save save = Save();
         switch (selected) {
             case 0: {
                         this->screen->nodel(true);
-                        pause.deleteWin();
-
+                        local_screen.deleteWin();
                         resumed = true;
                         break;
                     }
             case 1: {
-                        this->settings.drawFirstSettings();
+                        this->market.open(stats);
                         break;
                     }
             case 2: {
-                        int posY, posX;
-                        this->screen->size(posY, posX, 46, 150);
-
-                        Draw save_scr = Draw(46, 150, posY, posX);
-
-                        save.saveNewGame(&save_scr, map, current_chunk,
-                                player, stats, manager);
-                        save_scr.eraseScreen();
-                        save_scr.deleteWin();
+                        this->settings.drawFirstSettings();
                         break;
                     }
             case 3: {
-                        pause.clearScreen();
-                        pause.deleteWin();
+                        save.saveNewGame(map, current_chunk,
+                                player, stats, manager);
+                        break;
+                    }
+            case 4: {
+                        local_screen.clearScreen();
+                        local_screen.deleteWin();
                         this->screen->redraw();
                         this->screen->refreshScreen();
 
-                        save.quitGame(screen, map, current_chunk,
+                        save.quitGame(map, current_chunk,
                                 player, stats, manager);
 
                         resumed = true;
@@ -523,9 +507,7 @@ bool Game::pauseGame(Draw* stats_scr, Map& map, int& current_chunk,
 void Game::over()
 {
 	this->screen->nodel(false);	
-	int posX, posY;
-	this->screen->size(posY, posX, 8, 50);
-	Draw over_win = Draw(8, 50, posY, posX);
+	Draw over_win = Draw(8, 50);
 	over_win.drawBox();
 	over_win.drawText(2, 25 - over_win.center("GAME OVER"), "GAME OVER");
 	over_win.attrOn(COLOR_PAIR(1));

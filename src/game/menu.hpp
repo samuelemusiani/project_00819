@@ -5,7 +5,7 @@
 #include "game.hpp"
 #include "settings.hpp"
 
-#define NUMBER_OF_OPTIONS 4
+#define NUMBER_OF_OPTIONS 5
 
 
 class Menu

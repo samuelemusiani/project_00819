@@ -11,7 +11,6 @@ void Draw::drawText(int posY, int posX, nostd::string s) {
 	mvwprintw(this->screen, posY, posX, "%s", s.c_str());
 }
 
-
 void Draw::drawText(int posY, int posX, const char* s) {
     mvwprintw(this->screen, posY, posX, "%s", s);
 }
@@ -21,12 +20,14 @@ void Draw::drawText(int posY, int posX, const char s) {
 }
 
 void Draw::drawCenterText(int posY, nostd::string s) {
-	mvwprintw(this->screen, posY, this->centerX(s), "%s", s.c_str());
+    int maxX = getmaxx(this->screen);
+	mvwprintw(this->screen, posY, (maxX - s.length()) / 2, "%s", s.c_str());
 }
 
 
 void Draw::drawCenterText(int posY, const char* s) {
-    mvwprintw(this->screen, posY, this->centerX(s), "%s", s);
+    int maxX = getmaxx(this->screen);
+    mvwprintw(this->screen, posY, (maxX - strlen(s)) / 2, "%s", s);
 }
 
 void Draw::drawUpperText(int posY, int posX, nostd::string s) {
@@ -96,8 +97,8 @@ void Draw::drawSquareAround(const char* s, int posY, int posX) { //posizione del
 }
 
 void Draw::drawCenterSquareAround(nostd::string s, int posY) {
-    int posX = this->centerX(s);
-    this->drawSquareAround(s, posY, this->centerX(s));
+    int posX = (getmaxx(this->screen) - s.length()) / 2;
+    this->drawSquareAround(s, posY, posX);
 }
 
 void Draw::drawRectagle(int posY, int posX, int length, int width) {
@@ -171,18 +172,17 @@ void Draw::drawEntity(Bullet bullet) {
 	mvwprintw(this->screen, OFFSET - pos.get_yPosition(), pos.get_xPosition() + 1, "%s", symbol);
 }
 
-void Draw::updateStats(Statistics stats) {
-    this->clearwithoutbox();
-
-    drawRectagle(1, 0 , 3, 149);
-    drawText(2, 2, "Lives: " );
+void Draw::drawStats(Statistics stats) {
+    wmove(this->screen, 2, 1);
+    whline(this->screen, ACS_HLINE, SCREEN_WIDTH - 2);
+    drawText(1, 2, "Lives: " );
 
     for (int i = 0; i < stats.getHearts(); i++) {
-        drawText(2, 10 + i*2, "♥");
+        drawText(1, 10 + i*2, "♥");
     }
-    drawText(2, 50, "Level: " + nostd::to_string(stats.getLevel()));
-    drawText(2, 70, "Jump: " + nostd::to_string(stats.getJumps()));
-    drawText(2, 90, "Coins: " + nostd::to_string(stats.getCoins()));
+    drawText(1, 50, "Level: " + nostd::to_string(stats.getLevel()));
+    drawText(1, 70, "Jump: " + nostd::to_string(stats.getJumps()));
+    drawText(1, 90, "Coins: " + nostd::to_string(stats.getCoins()));
     refreshScreen();
 }
 
@@ -194,19 +194,8 @@ void Draw::deleteStats() {
 void Draw::drawPlatform(nostd::vector<Platform> plat) {
     for(int i = 0; i < plat.size(); i++) {
         for(int j = 0; j < plat[i].get_length(); j++) {
-            mvwprintw(this->screen, OFFSET-plat[i].get_position().get_yPosition(), 
+            mvwprintw(this->screen, OFFSET - plat[i].get_position().get_yPosition(), 
                     plat[i].get_position().get_xPosition()+j+1, "=");
         }
     }
 }
-
-int Draw::centerX(nostd::string text){
-	int x = 75 - (strlen(text.c_str()) / 2);
-	return x;
-}
-
-int Draw::centerX(const char* text){
-	int x = 75 - (strlen(text) / 2);
-	return x;
-}
-
