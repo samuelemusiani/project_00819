@@ -128,24 +128,29 @@ int Manager::collect_coin(phy::Point player_position) {
   return (collected_something ? 1 : 0);
 }
 
-void Manager::shoot(phy::Point position, bool direction, int type) {
+void Manager::player_shoot(phy::Point position, bool direction,
+                           int bullet_type) {
   if (reloading_gun == 0) {
-    position = position + (direction ? phy::Point(1, 0) : phy::Point(-1, 0));
+    this->shoot(position, direction, bullet_type);
 
-    list_bullets tmp = new node_bullet;
-    tmp->val = Bullet(position, direction, type);
-
-    if (type == 1)
-      tmp->expiration = 10;
-
-    tmp->next = this->Bullets;
-    this->Bullets = tmp;
-
-    if (type == 0)
+    if (bullet_type == 0)
       this->reloading_gun = 5;
-    else if (type == 1)
+    else if (bullet_type == 1)
       this->reloading_gun = 10;
   }
+}
+
+void Manager::shoot(phy::Point position, bool direction, int bullet_type) {
+  position = position + (direction ? phy::Point(1, 0) : phy::Point(-1, 0));
+
+  list_bullets tmp = new node_bullet;
+  tmp->val = Bullet(position, direction, bullet_type);
+
+  if (bullet_type == 1)
+    tmp->expiration = 10;
+
+  tmp->next = this->Bullets;
+  this->Bullets = tmp;
 }
 
 void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {

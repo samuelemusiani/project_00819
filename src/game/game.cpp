@@ -202,11 +202,11 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 			}
             else if(input == control_keys[5]) // Shoot left
             {
-                 manager.shoot(player.get_position(), false, 0);
+                 manager.player_shoot(player.get_position(), false, 1);
             }
             else if(input == control_keys[6]) // Shoot right
             {
-                 manager.shoot(player.get_position(), true, 0);
+                 manager.player_shoot(player.get_position(), true, 1);
             }
 			else if (input == 27) // Pause menu con tasto esc
 			{

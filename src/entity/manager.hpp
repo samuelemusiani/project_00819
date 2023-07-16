@@ -75,13 +75,15 @@ private:
                                   Statistics &stats);
   list_bullets delete_all_bullets(list_bullets p);
 
+  void shoot(phy::Point position, bool direction, int type);
+
 public:
   Manager(Map map);
   ~Manager();
 
   void set_chunk(int Chunk);
   int collect_coin(phy::Point player_position);
-  void shoot(phy::Point position, bool direction, int type);
+  void player_shoot(phy::Point position, bool direction, int type);
   void update_entities(int time, phy::Body &player, Statistics &stats);
   void
   draw_entities(Draw *screen); // This method must be called afther set_chunk()
