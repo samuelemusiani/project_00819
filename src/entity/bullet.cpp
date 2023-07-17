@@ -11,7 +11,7 @@ bool Bullet::get_direction()
     return this->_direction;
 }
 
-bool Bullet::get_type()
+int Bullet::get_type()
 {
     return this->_type;
 }

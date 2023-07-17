@@ -13,7 +13,7 @@ class Bullet : public Entity
         Bullet(phy::Point p, bool direction, int type);
 
         bool get_direction();
-        bool get_type();
+        int get_type();
 };
 
 #endif

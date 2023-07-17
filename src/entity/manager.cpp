@@ -133,6 +133,7 @@ void Manager::player_shoot(phy::Point position, bool direction,
   if (reloading_gun == 0) {
     this->shoot(position, direction, bullet_type);
 
+    // Positive bullets are for the play, negative are for the enemies
     if (bullet_type == 0)
       this->reloading_gun = 5;
     else if (bullet_type == 1)
@@ -146,7 +147,7 @@ void Manager::shoot(phy::Point position, bool direction, int bullet_type) {
   list_bullets tmp = new node_bullet;
   tmp->val = Bullet(position, direction, bullet_type);
 
-  if (bullet_type == 1)
+  if (bullet_type == -1)
     tmp->expiration = 10;
 
   tmp->next = this->Bullets;
@@ -201,8 +202,8 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
               distance <= MOVING_RADIOUS) {
             if (distance <= 3) {
               tmp->val.kill();
-              this->shoot(epos, true, 1);
-              this->shoot(epos, false, 1);
+              this->shoot(epos, true, -1);
+              this->shoot(epos, false, -1);
             } else {
               tmp->val.set_direction(distance < 0);
 
