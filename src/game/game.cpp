@@ -202,16 +202,16 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 			}
             else if(input == control_keys[5]) // Shoot left
             {
-                 manager.shoot(player.get_position(), false);
+                 manager.player_shoot(player.get_position(), false, market.get_current_gun());
             }
             else if(input == control_keys[6]) // Shoot right
             {
-                 manager.shoot(player.get_position(), true);
+                 manager.player_shoot(player.get_position(), true, market.get_current_gun());
             }
 			else if (input == 27) // Pause menu con tasto esc
 			{
                 // The return value indicate if we have to quit the game
-				exit = this->pauseGame(map, current_chunk, player, stats, manager);
+				exit = this->pauseGame(map, current_chunk, player, stats, manager, market);
 			}
 #ifdef USE_HACK
             else if (input == KEY_UP)
@@ -273,6 +273,7 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 		manager.draw_entities(screen);
 
 		this->screen->drawMap(map, current_chunk);
+		this->screen->drawText(6, 1, market.get_current_gun().get_name());
 		this->screen->drawText(5, 1, nostd::to_string(current_chunk));
 		this->screen->drawText(4, 1, nostd::to_string(player.get_position().get_xPosition()));
 		this->screen->drawText(4, 5, nostd::to_string(player.get_position().get_yPosition()));
@@ -355,7 +356,9 @@ void Game::resume()
             Statistics stats = File::getStatistics(savedMaps[selected]);
             Manager manager = Manager(map);
             manager.set_entities_status(current_chunk, File::getEntitiesStatus(savedMaps[selected]));
-			play(map, current_chunk, player, stats, manager, market);
+            // We need to implement the market save
+            Market tmp_market = Market();
+			play(map, current_chunk, player, stats, manager, tmp_market);
 		}
 	}
 	} while (deleted);
@@ -395,8 +398,8 @@ int Game::setDifficulty()
 	return selected;
 }
 
-bool Game::pauseGame(Map& map, int& current_chunk, 
-        phy::Body& player, Statistics& stats, Manager& manager) {
+bool Game::pauseGame(Map& map, int& current_chunk, phy::Body& player, 
+        Statistics& stats, Manager& manager, Market& market) {
     this->screen->nodel(false);
 
     Draw local_screen = Draw(SCREEN_HEIGHT, 60, 0, (SCREEN_WIDTH - 60) / 2);
@@ -467,7 +470,7 @@ bool Game::pauseGame(Map& map, int& current_chunk,
                         break;
                     }
             case 1: {
-                        this->market.open(stats);
+                        market.open(stats);
                         break;
                     }
             case 2: {

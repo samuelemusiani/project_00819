@@ -162,12 +162,19 @@ void Draw::drawEntity(Bullet bullet) {
 
     if(bullet.get_type() == 0)
         symbol[0] = '-';
-    else if(bullet.get_type() == 1)
+    else if(bullet.get_type() == -1)
     {
         if(bullet.get_direction())
             symbol[0] = ')';
         else
             symbol[0] = '(';
+    }
+    else if(bullet.get_type() == 1)
+    {
+        if(bullet.get_direction())
+            symbol[0] = '>';
+        else
+            symbol[0] = '<';
     }
 	mvwprintw(this->screen, OFFSET - pos.get_yPosition(), pos.get_xPosition() + 1, "%s", symbol);
 }

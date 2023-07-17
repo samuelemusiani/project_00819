@@ -37,6 +37,7 @@ Screen::~Screen()
 {
     if(!is_screen_deleted)
         delwin(this->screen);
+    endwin();
 }
 
 void Screen::init()

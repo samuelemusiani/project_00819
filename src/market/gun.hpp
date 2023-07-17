@@ -3,25 +3,21 @@
 #ifndef MARKET_GUN
 #define MARKET_GUN
 
-class Gun
-{
-    private:
-        nostd::string _name;
+class Gun {
+private:
+  nostd::string _name;
+  int _price;
+  int _bullet_type;
+  int _reloading_time;
 
-        // We should probably point to a specific bullets type, but we don't
-        // have the classes right now
-        int _damage;
-        int _price;
+public:
+  Gun();
+  Gun(nostd::string name, int price, int bullet_type, int reloading_time);
 
-    public:
-        Gun();
-        Gun(nostd::string n);
-        Gun(nostd::string n, int d);
-        Gun(nostd::string n, int d, int p);
-
-        nostd::string get_name();
-        int get_damage();
-        int get_price();
+  nostd::string get_name();
+  int get_price();
+  int get_bullet_type();
+  int get_reloading_time();
 };
 
 #endif
