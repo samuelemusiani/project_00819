@@ -16,13 +16,11 @@
 Map::Map() {
 	srand(time(nullptr));
 	this->seed.setSeed(rand());
-	this->coinsAndEnemies = "notImplementedYet:)";
 	initialize_chunks();
 }
 
-Map::Map(int seed,nostd::string coinsAndEnemies) {
+Map::Map(int seed) {
 	this->seed.setSeed(seed);
-	this->coinsAndEnemies = coinsAndEnemies;
 	initialize_chunks();
 }
 
@@ -80,9 +78,4 @@ int Map::getEnemies(int n) {
 Seed Map::getSeed()
 {
 	return this->seed;
-}
-
-nostd::string Map::getCoinsAndEnemies()
-{
-	return this->coinsAndEnemies;
 }

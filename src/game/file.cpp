@@ -101,7 +101,6 @@ void File::appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::s
 	if(openFile(file,"./save.txt","app")) {
 		file << "[ Name: " << name 
              << " ]\nSeed: " << m.getSeed().getSeed() 
-             << "\nCoins&Enemies: " << m.getCoinsAndEnemies()
 		     << "\nChunk: " << chunk 
              << "\nPlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition()
              << "\nLastSave: " << dateAndTime() 
@@ -129,8 +128,6 @@ void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::s
 			if(buff==search)
 				found=true;
 		}
-		nostd::getline(file,buff);
-		tmp << "Coins&Enemies: " << m.getCoinsAndEnemies() << "\n";
 		nostd::getline(file,buff);
 		tmp << "Chunk: " << chunk << "\n";
 		nostd::getline(file,buff);
@@ -262,9 +259,8 @@ Map File::getMap(nostd::string name)
 		if (found) {
 			nostd::string anotherBuff;
 			nostd::getline(file, buff);
-			nostd::getline(file, anotherBuff);
 			file.close();
-			Map m(nostd::stoi(buff.substr(6)), anotherBuff.substr(15));
+			Map m(nostd::stoi(buff.substr(6)));
 			return m;
 		} else
 			file.close();
@@ -284,7 +280,7 @@ int File::getChunk(nostd::string name)
 			if (buff == search)
 				found = true;
 		if(found) {
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 2; i++)
 				nostd::getline(file, buff);
 			file.close();
 			return nostd::stoi(buff.substr(7));
@@ -308,7 +304,7 @@ phy::Point File::getPoint(nostd::string name)
 			if (buff == search)
 				found = true;
 		if (found) {
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < 3; i++)
 				nostd::getline(file, buff);
 			pos.set_xPosition(nostd::stoi(buff.substr(11, buff.find(',') - 11)));
 			pos.set_yPosition(nostd::stoi(buff.substr(buff.find(',') + 1)));
@@ -336,7 +332,7 @@ Statistics File::getStatistics(nostd::string name)
 
         if(found)
         {
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 5; i++)
 				nostd::getline(file, buff);
 
             // I can't think tonight...forgive me
@@ -397,7 +393,7 @@ nostd::string File::getEntitiesStatus(nostd::string name)
 
         if(found)
         {
-			for (int i = 0; i < 7; i++)
+			for (int i = 0; i < 6; i++)
 				nostd::getline(file, buff);
 
             return buff.substr(10);
@@ -421,7 +417,7 @@ nostd::string File::getMarketSave(nostd::string name)
 
         if(found)
         {
-			for (int i = 0; i < 8; i++)
+			for (int i = 0; i < 7; i++)
 				nostd::getline(file, buff);
 
             return buff.substr(8);
@@ -456,7 +452,7 @@ void File::deleteSave(nostd::string name)
 				nostd::getline(file, buff);
 				tmp << buff << "\n";
 			}
-			for (int i = 0; i < 7; i++)
+			for (int i = 0; i < 8; i++)
 				nostd::getline(file, buff);
 			while (nostd::getline(file, buff))
 				tmp << buff << "\n";

@@ -26,14 +26,12 @@ class Map
         Chunk possible_chunks[NUM_MAPS];
         void initialize_chunks();
 		Seed seed;
-		nostd::string coinsAndEnemies;
     public:
         Map();
-		Map(int seed,nostd::string coinsAndEnemies);
+		Map(int seed);
         Chunk get_chunk(int n);
 		int getCoins(int n);
 		int getEnemies(int n);
-		nostd::string getCoinsAndEnemies();
 		Seed getSeed();
 };
 
