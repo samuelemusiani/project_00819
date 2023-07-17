@@ -154,9 +154,9 @@ void Market::draw() {
 
       if (!this->abilities_bought[vertical_selection]) {
         price = ability.get_price();
-        screen.drawText(20, 60, "Price: \t\t You already have this ability!");
-      } else
         screen.drawText(20, 60, "Price: \t\t" + nostd::to_string(price));
+      } else
+        screen.drawText(20, 60, "Price: \t\t You already have this ability!");
     } else if (orizzontal_selection == 2) {
       for (int i = 0; i < 11; i++)
         screen.drawText(30 + i, 66, this->poison_art[i]);
