@@ -136,7 +136,6 @@ void Save::saveNewGame(Map& map, int& chunk, phy::Body& player,
 
 void Save::saveGame(){
     Draw local_screen = Draw(5, 20);
-    // local_screen.drawText(2, 10 - (strlen("Game Saved") / 2), "Game Saved");
     local_screen.eraseScreen();
     local_screen.drawBox();
     local_screen.drawCenterText(2, "Game saved");
@@ -152,7 +151,7 @@ void Save::quitGame(Map& map, int& chunk, phy::Body& player,
     Draw quit_scr = Draw(15, 55);
     quit_scr.eraseScreen();
     quit_scr.drawBox();
-    quit_scr.drawText(2, 27 - (strlen("Quit wihout saving?") / 2), "Quit without saving?");
+    quit_scr.drawCenterText(2, "Quit without saving?");
     // creare due buttoni yes e no
     bool choose = false;
     int selected = 0;

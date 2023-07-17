@@ -411,8 +411,7 @@ bool Game::pauseGame(Map& map, int& current_chunk, phy::Body& player,
 
         local_screen.clearwithoutbox();
         local_screen.drawBox();
-        local_screen.drawText(3, 30 - local_screen.center("Game Paused"),
-                "Game Paused");
+        local_screen.drawCenterText(3, "Game Paused");
         const int max_options = 5;
         nostd::string options[max_options] = {"Resume", "Market", "Settings", "Save",
             "Exit"};
@@ -512,9 +511,9 @@ void Game::over()
 	this->screen->nodel(false);	
 	Draw over_win = Draw(8, 50);
 	over_win.drawBox();
-	over_win.drawText(2, 25 - over_win.center("GAME OVER"), "GAME OVER");
+	over_win.drawCenterText(2, "GAME OVER");
 	over_win.attrOn(COLOR_PAIR(1));
-	over_win.drawText(5, 25 - over_win.center("Back to menu") , "Back to menu");
+	over_win.drawCenterText(5, "Back to menu");
 	over_win.attrOn(COLOR_PAIR(1));
 	over_win.refreshScreen();
 	over_win.getinput();
@@ -528,8 +527,8 @@ void Game::hack(int& current_chunk, Statistics& stats){
 	Draw hack = Draw(20, 50);
 	hack.attrOn(COLOR_PAIR(2));
 	hack.drawBox();
-	hack.drawText(2, 25 - hack.center("Hack Menu"), "Hack Menu");
-	hack.drawText(4, 25 - hack.center("Only use for development purposes!") , "Only use for development purposes!");
+	hack.drawCenterText(2, "Hack Menu");
+	hack.drawCenterText(4, "Only use for development purposes!");
 	hack.drawText(7, 7, "1. Add life");
 	hack.drawText(7, 25, "6. Remove life");
 	hack.drawText(9, 7, "2. Add coin");
@@ -577,8 +576,8 @@ void Game::hack(int& current_chunk, Statistics& stats){
 		{
 
 			hack.eraseScreen();
-			hack.drawText(2, 25 - hack.center("Super secret menu"), "Super secret menu");
-			hack.drawText(4, 25 - hack.center("WARNING: this menu is for skilled developers!"), "WARNING: this menu is for skilled developers!");
+			hack.drawCenterText(2, "Super secret menu");
+			hack.drawCenterText(4, "WARNING: this menu is for skilled developers!");
 			nostd::string options[4] = {"1. Set life", "2. Set coins", "3. Set jump", "4. Set level"};
 			for (int i = 0; i < 4; i++)
 			{
@@ -591,7 +590,7 @@ void Game::hack(int& current_chunk, Statistics& stats){
 				case '1':
 				{
 					hack.eraseScreen();
-					hack.drawText(2, 25 - hack.center("Set life"), "Set life");
+					hack.drawCenterText(2, "Set life");
 					int custom = setCustom(&hack);
 					if (custom != -1) stats.setHearts(custom);
 					break;
@@ -599,7 +598,7 @@ void Game::hack(int& current_chunk, Statistics& stats){
 				case '2':
 				{
 					hack.eraseScreen();
-					hack.drawText(2, 25 - hack.center("Set coins"), "Set coins");
+					hack.drawCenterText(2, "Set coins");
 					int custom = setCustom(&hack);
 					if (custom != -1) stats.setCoins(custom); 
 					break;
@@ -607,7 +606,7 @@ void Game::hack(int& current_chunk, Statistics& stats){
 				case '3':
 				{
 					hack.eraseScreen();
-					hack.drawText(2, 25 - hack.center("Set jump"), "Set jump");
+					hack.drawCenterText(2, "Set jump");
 					int custom = setCustom(&hack);
 					if (custom != -1) stats.setJumps(custom);  
 					break;
@@ -615,7 +614,7 @@ void Game::hack(int& current_chunk, Statistics& stats){
 				case '4':
 				{
 					hack.eraseScreen();
-					hack.drawText(2, 25 - hack.center("Set level"), "Set level");
+					hack.drawCenterText(2, "Set level");
 					int custom = setCustom(&hack);
 					if (custom != -1) current_chunk = custom;
 					break;

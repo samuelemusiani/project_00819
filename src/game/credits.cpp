@@ -22,7 +22,7 @@ int Credits::drawCredits(Draw* screen){
 
 		screen->eraseScreen();
 	
-		screen->drawText(8, 20 - (strlen("Who we are?")/2), "Who we are?");
+		screen->drawCenterText(8, "Who we are?");
 
 		// for loop to draw the developers
 		for(int j = 0; j < 4; j++){
