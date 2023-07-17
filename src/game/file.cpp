@@ -95,7 +95,7 @@ bool File::isAlreadySaved(Map m)
 		return false; // file does not exist yet
 }
 
-void File::appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string entities, nostd::string name)
+void File::appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string entities, nostd::string market, nostd::string name)
 {
 	std::fstream file;
 	if(openFile(file,"./save.txt","app")) {
@@ -107,12 +107,13 @@ void File::appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::s
              << "\nLastSave: " << dateAndTime() 
              << "\nStatistics: " << stats.getLevel() << " " << stats.getCoins() 
                  << " " << stats.getJumps() << " " << stats.getHearts() 
-             << "\nEntities: " << entities << "\n\n";
+             << "\nEntities: " << entities
+             << "\nMarket: " << market << "\n\n";
 		file.close();
 	}
 }
 
-void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string entities)
+void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string entities, nostd::string market)
 {
 	// the only way to do this is to rewrite the entire file
 	std::fstream file;
@@ -141,6 +142,8 @@ void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::s
                 << " " << stats.getJumps() << " " << stats.getHearts() << "\n";
 		nostd::getline(file,buff);
 		tmp << "Entities: " << entities << "\n";
+		nostd::getline(file,buff);
+		tmp << "Market: " << market << "\n";
 
 		while(nostd::getline(file,buff))
 			tmp << buff << "\n";
@@ -150,16 +153,16 @@ void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::s
 	}
 }
 
-void File::saveMap(Map m, int chunk, phy::Point pos, Statistics stats, nostd::string entities, nostd::string name)
+void File::saveMap(Map m, int chunk, phy::Point pos, Statistics stats, nostd::string entities, nostd::string market, nostd::string name)
 {
 	if(!isAlreadySaved(m)) {
 		if (!name.empty())
-			appendSave(m,chunk,pos, stats, entities, name);
+			appendSave(m,chunk,pos, stats, entities, market, name);
 		else
-			appendSave(m,chunk,pos, stats, entities, "Player"); // this shouldn't happen
+			appendSave(m,chunk,pos, stats, entities, market, "Player"); // this shouldn't happen
 	}
 	else
-		updateSave(m,chunk,pos, stats, entities);
+		updateSave(m,chunk,pos, stats, market, entities);
 }
 
 void File::changeName(nostd::string oldName,nostd::string newName)
@@ -398,6 +401,30 @@ nostd::string File::getEntitiesStatus(nostd::string name)
 				nostd::getline(file, buff);
 
             return buff.substr(10);
+        }
+	}
+
+    // Error
+    return nostd::string("");
+}
+
+nostd::string File::getMarketSave(nostd::string name)
+{
+	std::fstream file;
+	if(openFile(file,"./save.txt","r")) {
+		nostd::string search = "[ Name: " + name + " ]";
+		nostd::string buff;
+		bool found = false;
+		while (!found && nostd::getline(file, buff))
+			if (buff == search)
+				found = true;
+
+        if(found)
+        {
+			for (int i = 0; i < 8; i++)
+				nostd::getline(file, buff);
+
+            return buff.substr(8);
         }
 	}
 

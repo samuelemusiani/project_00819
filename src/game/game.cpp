@@ -357,8 +357,9 @@ void Game::resume()
             Manager manager = Manager(map);
             manager.set_entities_status(current_chunk, File::getEntitiesStatus(savedMaps[selected]));
             // We need to implement the market save
-            Market tmp_market = Market();
-			play(map, current_chunk, player, stats, manager, tmp_market);
+            Market market = Market();
+            market.set_save(File::getMarketSave(savedMaps[selected]));
+			play(map, current_chunk, player, stats, manager, market);
 		}
 	}
 	} while (deleted);
@@ -478,7 +479,7 @@ bool Game::pauseGame(Map& map, int& current_chunk, phy::Body& player,
                     }
             case 3: {
                         save.saveNewGame(map, current_chunk,
-                                player, stats, manager);
+                                player, stats, manager, market);
                         break;
                     }
             case 4: {
@@ -488,7 +489,7 @@ bool Game::pauseGame(Map& map, int& current_chunk, phy::Body& player,
                         this->screen->refreshScreen();
 
                         save.quitGame(map, current_chunk,
-                                player, stats, manager);
+                                player, stats, manager, market);
 
                         resumed = true;
                         exit = true;

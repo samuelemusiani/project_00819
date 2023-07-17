@@ -65,6 +65,9 @@ public:
 
   // The stats are for the hearts
   void open(Statistics &stats);
+
+  nostd::string get_save();
+  void set_save(nostd::string save);
 };
 
 #endif

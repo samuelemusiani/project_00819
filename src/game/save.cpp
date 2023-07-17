@@ -1,7 +1,7 @@
 #include "save.hpp"
 
 void Save::saveNewGame(Map& map, int& chunk, phy::Body& player, 
-        Statistics& stats, Manager& manager){
+        Statistics& stats, Manager& manager, Market& market){
     bool nosaved = false;
     if (File::isAlreadySaved(map)) {
         saveGame();
@@ -131,7 +131,7 @@ void Save::saveNewGame(Map& map, int& chunk, phy::Body& player,
     
     }
     if (!nosaved) 
-        File::saveMap(map, chunk, player.get_position(), stats, manager.get_entities_status(), nome);
+        File::saveMap(map, chunk, player.get_position(), stats, manager.get_entities_status(), market.get_save(), nome);
 }
 
 void Save::saveGame(){
@@ -147,7 +147,7 @@ void Save::saveGame(){
 }
 
 void Save::quitGame(Map& map, int& chunk, phy::Body& player, 
-        Statistics& stats, Manager& manager){
+        Statistics& stats, Manager& manager, Market& market){
     Draw quit_scr = Draw(15, 55);
     quit_scr.eraseScreen();
     quit_scr.drawBox();
@@ -180,7 +180,7 @@ void Save::quitGame(Map& map, int& chunk, phy::Body& player,
     
     } 
     if (selected == 1) { // Se l'utente vuole salvare prima di uscire
-            saveNewGame(map, chunk, player, stats, manager);
+            saveNewGame(map, chunk, player, stats, manager, market);
     }
     quit_scr.eraseScreen();
     quit_scr.deleteWin();

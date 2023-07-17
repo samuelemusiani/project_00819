@@ -1,6 +1,6 @@
 #include "market.hpp"
-#include "../draw/draw.hpp"
 #include "../../etc/logs/logs.hpp"
+#include "../draw/draw.hpp"
 
 Market::Market() : current_gun(0), current_ability(0), current_coins(0) {
   this->all_guns[0] = Gun("Basic", 0, 0, 5);
@@ -24,9 +24,9 @@ Market::Market() : current_gun(0), current_ability(0), current_coins(0) {
     this->abilities_bought[i] = 0;
 }
 
-Gun Market::get_current_gun() { 
-    deb::debug(this->current_gun, nostd::to_string(__LINE__));
-    return this->all_guns[this->current_gun]; 
+Gun Market::get_current_gun() {
+  deb::debug(this->current_gun, nostd::to_string(__LINE__));
+  return this->all_guns[this->current_gun];
 }
 
 Ability Market::get_current_ability() {
@@ -41,6 +41,31 @@ void Market::open(Statistics &stats) {
 
   stats.setHearts(this->current_hearts);
   stats.setCoins(this->current_coins);
+}
+
+nostd::string Market::get_save() {
+  nostd::string save;
+  save.push_back(this->current_gun + '0');
+  save.push_back(this->current_ability + '0');
+
+  for (int i = 0; i < MARKET_MAX_GUN; i++)
+    save.push_back(this->guns_bought[i] + '0');
+
+  for (int i = 0; i < MARKET_MAX_ABILITY; i++)
+    save.push_back(this->abilities_bought[i] + '0');
+
+  return save;
+}
+
+void Market::set_save(nostd::string save) {
+  this->current_gun = save[0] - '0';
+  this->current_ability = save[1] - '0';
+
+  for (int i = 0; i < MARKET_MAX_GUN; i++)
+    this->guns_bought[i] = save[2 + i] - '0';
+
+  for (int i = 0; i < MARKET_MAX_ABILITY; i++)
+    this->abilities_bought[i] = save[2 + MARKET_MAX_GUN + i] - '0';
 }
 
 void Market::draw() {
