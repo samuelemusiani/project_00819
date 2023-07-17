@@ -1,11 +1,12 @@
 #include "market.hpp"
 #include "../draw/draw.hpp"
+#include "../../etc/logs/logs.hpp"
 
-Market::Market() : current_gun(0), current_ability(0), current_coins(100) {
-  this->all_guns[0] = Gun("Basic", 1, 0);
-  this->all_guns[1] = Gun("Revolver", 2, 10);
-  this->all_guns[2] = Gun("Mitra", 1, 25);
-  this->all_guns[3] = Gun("TOO MUCH", 4, 40);
+Market::Market() : current_gun(0), current_ability(0), current_coins(0) {
+  this->all_guns[0] = Gun("Basic", 0, 0, 5);
+  this->all_guns[1] = Gun("Revolver", 10, 1, 10);
+  this->all_guns[2] = Gun("Mitra", 25, 0, 1);
+  this->all_guns[3] = Gun("TOO MUCH", 40, 2, 15);
 
   this->all_abilities[0] = Ability("Shield", 4);
   this->all_abilities[1] = Ability("Explosion", 8);
@@ -23,7 +24,10 @@ Market::Market() : current_gun(0), current_ability(0), current_coins(100) {
     this->abilities_bought[i] = 0;
 }
 
-Gun Market::get_current_gun() { return this->all_guns[this->current_gun]; }
+Gun Market::get_current_gun() { 
+    deb::debug(this->current_gun, nostd::to_string(__LINE__));
+    return this->all_guns[this->current_gun]; 
+}
 
 Ability Market::get_current_ability() {
   return this->all_abilities[this->current_ability];
@@ -90,7 +94,9 @@ void Market::draw() {
 
       screen.drawText(16, 60, "Name: \t\t" + gun.get_name());
       screen.drawText(18, 60,
-                      "Damage: \t\t" + nostd::to_string(gun.get_damage()));
+                      "Damage: \t\t" +
+                          nostd::to_string(Bullet::get_bullet_damage(
+                              gun.get_bullet_type())));
       screen.drawText(20, 60, "Bullet type: \t" + nostd::to_string(2));
 
       if (!this->guns_bought[vertical_selection]) {
@@ -190,6 +196,7 @@ void Market::draw() {
           if (!this->guns_bought[vertical_selection])
             this->current_coins -= price;
 
+          deb::debug(vertical_selection);
           this->current_gun = vertical_selection;
           this->guns_bought[vertical_selection] = 1;
         } else if (orizzontal_selection == 1) {

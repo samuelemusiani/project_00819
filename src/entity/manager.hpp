@@ -3,6 +3,7 @@
 #include "../game/statistics.hpp"
 #include "../maps/map.hpp"
 #include "../physics/body.hpp"
+#include "../market/gun.hpp"
 #include "bullet.hpp"
 
 #include "../../etc/logs/logs.hpp"
@@ -83,7 +84,7 @@ public:
 
   void set_chunk(int Chunk);
   int collect_coin(phy::Point player_position);
-  void player_shoot(phy::Point position, bool direction, int type);
+  void player_shoot(phy::Point position, bool direction, Gun gun);
   void update_entities(int time, phy::Body &player, Statistics &stats);
   void
   draw_entities(Draw *screen); // This method must be called afther set_chunk()

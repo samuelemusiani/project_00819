@@ -17,7 +17,7 @@ private:
   int current_coins;
   int current_hearts;
 
-  nostd::string summenues[MARKET_MAX_SUBMENUS] = {"Guns", "Abilities",
+  const nostd::string summenues[MARKET_MAX_SUBMENUS] = {"Guns", "Abilities",
                                                   "Health"};
 
   Gun all_guns[MARKET_MAX_GUN];

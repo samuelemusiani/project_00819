@@ -128,16 +128,11 @@ int Manager::collect_coin(phy::Point player_position) {
   return (collected_something ? 1 : 0);
 }
 
-void Manager::player_shoot(phy::Point position, bool direction,
-                           int bullet_type) {
+void Manager::player_shoot(phy::Point position, bool direction, Gun gun) {
   if (reloading_gun == 0) {
-    this->shoot(position, direction, bullet_type);
+    this->shoot(position, direction, gun.get_bullet_type());
 
-    // Positive bullets are for the play, negative are for the enemies
-    if (bullet_type == 0)
-      this->reloading_gun = 5;
-    else if (bullet_type == 1)
-      this->reloading_gun = 10;
+    this->reloading_gun = gun.get_reloading_time();
   }
 }
 

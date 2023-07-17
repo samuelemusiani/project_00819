@@ -2,39 +2,19 @@
 #include <cstring>
 
 Gun::Gun()
-    : _name("Not set"), _damage(1), _price(10)
-{
+    : _name("Not set"), _price(10), _reloading_time(10), _bullet_type(0) {}
 
+Gun::Gun(nostd::string name, int price, int bullet_type, int reloading_time) {
+  this->_name = name;
+  this->_price = price;
+  this->_bullet_type = bullet_type;
+  this->_reloading_time = reloading_time;
 }
 
-Gun::Gun(nostd::string n)
-    : Gun(n, 1)
-{
-}
+nostd::string Gun::get_name() { return this->_name; }
 
-Gun::Gun(nostd::string n, int d)
-   : Gun(n, d, 0) 
-{
-}
+int Gun::get_price() { return this->_price; }
 
-Gun::Gun(nostd::string n, int d, int p)
-{
-    this->_name = n;
-    this->_damage = d;
-    this->_price = p;
-}
+int Gun::get_bullet_type() { return this->_bullet_type; }
 
-nostd::string Gun::get_name()
-{
-    return this->_name;
-}
-
-int Gun::get_damage()
-{
-    return this->_damage;
-}
-
-int Gun::get_price()
-{
-    return this->_price;
-}
+int Gun::get_reloading_time() { return this->_reloading_time; }
