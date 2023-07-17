@@ -10,7 +10,7 @@
 #include "../physics/body.hpp"
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
-#include "../entity/manager.hpp"
+#include "../engine/manager.hpp"
 #include "../market/market.hpp"
 
 

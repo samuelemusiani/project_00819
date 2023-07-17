@@ -4,7 +4,7 @@
 #include "../maps/map.hpp"
 #include "../physics/body.hpp"
 #include "../market/gun.hpp"
-#include "bullet.hpp"
+#include "../entity/bullet.hpp"
 
 #include "../../etc/logs/logs.hpp"
 #include "../../etc/nostd/vector.hpp"
