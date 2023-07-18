@@ -12,23 +12,6 @@
 #ifndef ENTITY_MANAGER
 #define ENTITY_MANAGER
 
-/* Per ora i diversi tipi di nemici e di bullets li ho gestiti
- * inserendo un campo ausiliario nella classe e facendo i chek
- * nelle funzioni in cui la differenza effettivamente conta.
- * Il modo corretto sarebbe usare l'ereditarieta' e nella lista
- * mettere dei puntatori alla classe padre. Con un metodo definito
- * nel padre, ma che poi nei figli e' necessario fare l'override, e
- * con un enum possiamo distinguere che tipo di classe specifico
- * e' l'oggetto e quindi fare un cast esplicito ed usare quello.
- *
- * A livello teorico e' piu' elegante come soluzione ma sicuramente
- * piu' complessa da gestire in quando si avrebbe una lista di puntatori
- * e non sarebbe semplice poi evitare errori es. memory leak.
- * Se ho tempo implemento la nostd::list cosi' parte del lavoro
- * si semplifica, ma per il momento mi basta che funzioni il tutto
- * e rimango cosi'
- */
-
 struct node_enemy {
   // Avoid calling the default constructor
   Enemy val = Enemy(0, phy::Point(0, 0), false);
