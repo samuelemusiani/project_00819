@@ -214,6 +214,7 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
             else if(input == control_keys[7]) // Shoot right
             {
                 events.make_ability_happen(market.get_current_ability(), manager, player.get_position());
+                market.make_ability_used();
             }
 			else if (input == 27) // Pause menu con tasto esc
 			{
@@ -285,6 +286,7 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 		manager.draw_entities(screen);
 
 		this->screen->drawMap(map, current_chunk);
+        this->screen->drawText(7, 1, market.get_current_ability().get_name());
 		this->screen->drawText(6, 1, market.get_current_gun().get_name());
 		this->screen->drawText(5, 1, nostd::to_string(current_chunk));
 		this->screen->drawText(4, 1, nostd::to_string(player.get_position().get_xPosition()));

@@ -25,6 +25,7 @@ private:
 
   Ability all_abilities[MARKET_MAX_ABILITY];
   bool abilities_bought[MARKET_MAX_ABILITY];
+  bool consumable_abilities[MARKET_MAX_ABILITY];
   nostd::string all_health[2];
 
   const nostd::string gun_art[6] = {
@@ -62,6 +63,8 @@ public:
 
   Gun get_current_gun();
   Ability get_current_ability();
+
+  void make_ability_used();
 
   // The stats are for the hearts
   void open(Statistics &stats);

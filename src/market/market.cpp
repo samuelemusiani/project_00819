@@ -9,8 +9,11 @@ Market::Market() : current_gun(0), current_ability(0), current_coins(0) {
   this->all_guns[3] = Gun("TOO MUCH", 40, 2, 15);
 
   this->all_abilities[0] = Ability("Shield", 4, 0);
+  this->consumable_abilities[0] = 0;
   this->all_abilities[1] = Ability("Stop time", 8, 1);
+  this->consumable_abilities[1] = 1;
   this->all_abilities[2] = Ability("Reduce enemy", 10, 1);
+  this->consumable_abilities[2] = 1;
 
   this->all_health[0] = "1 Heart";
   this->all_health[1] = "Full life";
@@ -30,6 +33,13 @@ Gun Market::get_current_gun() {
 
 Ability Market::get_current_ability() {
   return this->all_abilities[this->current_ability];
+}
+
+void Market::make_ability_used() {
+  if (this->consumable_abilities[this->current_ability]) {
+    this->abilities_bought[this->current_ability] = 0;
+    this->current_ability = 0; // I'm shure that it's free
+  }
 }
 
 void Market::open(Statistics &stats) {
