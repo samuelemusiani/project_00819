@@ -29,7 +29,7 @@ public:
 
   void make_ability_happen(Ability ability, Manager &manager,
                            phy::Point player_pos);
-  void update();
+  void update(Manager &manager);
   void draw(Draw *screen);
 };
 

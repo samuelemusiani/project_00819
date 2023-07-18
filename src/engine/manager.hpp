@@ -58,6 +58,8 @@ private:
   Seed seed;
   int current_chunk;
 
+  bool must_stop_time;
+
   nostd::vector<list_enemies> Enemies;
   nostd::vector<list_coins> Coins;
   list_bullets Bullets;
@@ -94,6 +96,9 @@ public:
   list_enemies get_all_enemies_in_chunk(int Chunk);
   list_coins get_all_coins_in_chunk(int Chunk);
   nostd::vector<phy::Point> get_all_entities_positions_in_chunk(int Chunk);
+
+  void stop_time();
+  void unstop_time();
 
   // Saving
   nostd::string get_entities_status();

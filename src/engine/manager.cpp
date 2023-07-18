@@ -2,7 +2,7 @@
 
 Manager::Manager(Map map)
     : Global_Entities(0), Global_Coins(0), Global_Enemies(0), current_chunk(-1),
-      Bullets(nullptr), reloading_gun(0) {
+      Bullets(nullptr), reloading_gun(0), must_stop_time(false) {
   this->map = map;
   this->seed = map.getSeed();
 }
@@ -155,30 +155,14 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
    * Enemy 2: Follow the player and the explodes near him (like a creeper)
    */
 
-  if (time % 100 == 0) {
-    list_enemies tmp = this->Enemies[this->current_chunk];
-    Chunk chunk = map.get_chunk(this->current_chunk);
-    while (tmp != nullptr) {
-      if (tmp->val.is_alive()) {
-        if (tmp->val.get_type() == 0) {
-          if (tmp->val.can_move(chunk))
-            tmp->val.move();
-          else
-            tmp->val.set_direction(!tmp->val.get_direction());
+  if (!this->must_stop_time) {
 
-          if (tmp->val.get_position() == player.get_position())
-            stats.incrementHearts(-1);
-        } else if (tmp->val.get_type() == 1) {
-          const int SHOOTING_RADIOUS = 14;
-          phy::Point ppos = player.get_position();
-          phy::Point epos = tmp->val.get_position();
-
-          // the shooting for now is only orizzontal
-          int distance = epos.get_xPosition() - ppos.get_xPosition();
-          if (epos.get_yPosition() == ppos.get_yPosition() &&
-              abs(distance) <= SHOOTING_RADIOUS) {
-            shoot(epos, distance < 0, 0);
-          } else {
+    if (time % 100 == 0) {
+      list_enemies tmp = this->Enemies[this->current_chunk];
+      Chunk chunk = map.get_chunk(this->current_chunk);
+      while (tmp != nullptr) {
+        if (tmp->val.is_alive()) {
+          if (tmp->val.get_type() == 0) {
             if (tmp->val.can_move(chunk))
               tmp->val.move();
             else
@@ -186,52 +170,71 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
 
             if (tmp->val.get_position() == player.get_position())
               stats.incrementHearts(-1);
-          }
-        } else if (tmp->val.get_type() == 2) {
-          const int MOVING_RADIOUS = 24;
-          phy::Point ppos = player.get_position();
-          phy::Point epos = tmp->val.get_position();
-          int distance = epos.get_xPosition() - ppos.get_xPosition();
+          } else if (tmp->val.get_type() == 1) {
+            const int SHOOTING_RADIOUS = 14;
+            phy::Point ppos = player.get_position();
+            phy::Point epos = tmp->val.get_position();
 
-          if (epos.get_yPosition() == ppos.get_yPosition() &&
-              distance <= MOVING_RADIOUS) {
-            if (abs(distance) <= 3) {
-              tmp->val.kill();
-              this->shoot(epos, true, -1);
-              this->shoot(epos, false, -1);
+            // the shooting for now is only orizzontal
+            int distance = epos.get_xPosition() - ppos.get_xPosition();
+            if (epos.get_yPosition() == ppos.get_yPosition() &&
+                abs(distance) <= SHOOTING_RADIOUS) {
+              shoot(epos, distance < 0, 0);
             } else {
-              tmp->val.set_direction(distance < 0);
-
               if (tmp->val.can_move(chunk))
                 tmp->val.move();
+              else
+                tmp->val.set_direction(!tmp->val.get_direction());
+
+              if (tmp->val.get_position() == player.get_position())
+                stats.incrementHearts(-1);
             }
-          } else {
-            if (tmp->val.can_move(chunk))
-              tmp->val.move();
-            else
-              tmp->val.set_direction(!tmp->val.get_direction());
+          } else if (tmp->val.get_type() == 2) {
+            const int MOVING_RADIOUS = 24;
+            phy::Point ppos = player.get_position();
+            phy::Point epos = tmp->val.get_position();
+            int distance = epos.get_xPosition() - ppos.get_xPosition();
+
+            if (epos.get_yPosition() == ppos.get_yPosition() &&
+                distance <= MOVING_RADIOUS) {
+              if (abs(distance) <= 3) {
+                tmp->val.kill();
+                this->shoot(epos, true, -1);
+                this->shoot(epos, false, -1);
+              } else {
+                tmp->val.set_direction(distance < 0);
+
+                if (tmp->val.can_move(chunk))
+                  tmp->val.move();
+              }
+            } else {
+              if (tmp->val.can_move(chunk))
+                tmp->val.move();
+              else
+                tmp->val.set_direction(!tmp->val.get_direction());
+            }
           }
         }
+        tmp = tmp->next;
       }
-      tmp = tmp->next;
-    }
-  }
-
-  if (time % 20 == 0) {
-    this->reloading_gun = std::max(--this->reloading_gun, 0);
-
-    list_bullets tmp = this->Bullets;
-
-    while (tmp != nullptr) {
-      phy::Point tmp_pos = tmp->val.get_position();
-      tmp_pos = tmp_pos + (tmp->val.get_direction() ? phy::Point(1, 0)
-                                                    : phy::Point(-1, 0));
-      tmp->val.set_position(tmp_pos);
-      tmp->expiration--;
-      tmp = tmp->next;
     }
 
-    this->Bullets = bullets_collisions(this->Bullets, player, stats);
+    if (time % 20 == 0) {
+      this->reloading_gun = std::max(--this->reloading_gun, 0);
+
+      list_bullets tmp = this->Bullets;
+
+      while (tmp != nullptr) {
+        phy::Point tmp_pos = tmp->val.get_position();
+        tmp_pos = tmp_pos + (tmp->val.get_direction() ? phy::Point(1, 0)
+                                                      : phy::Point(-1, 0));
+        tmp->val.set_position(tmp_pos);
+        tmp->expiration--;
+        tmp = tmp->next;
+      }
+
+      this->Bullets = bullets_collisions(this->Bullets, player, stats);
+    }
   }
 }
 
@@ -388,6 +391,10 @@ Manager::get_all_entities_positions_in_chunk(int Chunk) {
   }
   return v;
 }
+
+void Manager::stop_time() { this->must_stop_time = true; }
+
+void Manager::unstop_time() { this->must_stop_time = false; }
 
 list_bullets Manager::delete_all_bullets(list_bullets p) {
   if (p != nullptr) {

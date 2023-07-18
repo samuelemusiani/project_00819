@@ -16,19 +16,30 @@ void Events::make_ability_happen(Ability ability, Manager &manager,
       this->_start = this->_time;
       break;
     }
+    case 2:
+      manager.stop_time();
+      this->_ability_type = 2;
+      this->_start = this->_time;
+      break;
     default:
       break;
     }
   }
 }
 
-void Events::update() {
+void Events::update(Manager &manager) {
   unsigned long long int diff = this->_time - this->_start;
   if (diff != 0) {
     switch (this->_ability_type) {
     case 0:
       if (diff >= 100) {
         this->_to_draw = this->delete_type(this->_to_draw, 0);
+        this->_start = 0;
+      }
+      break;
+    case 2:
+      if (diff >= 1000) {
+        manager.unstop_time();
         this->_start = 0;
       }
       break;

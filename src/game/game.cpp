@@ -275,7 +275,7 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 
         /* EVENTS */
         events.draw(this->screen);
-        events.update();
+        events.update(manager);
 
 
         /* ENTITIES */

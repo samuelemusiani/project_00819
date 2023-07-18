@@ -10,9 +10,9 @@ Market::Market() : current_gun(0), current_ability(0), current_coins(0) {
 
   this->all_abilities[0] = Ability("Shield", 4, 0);
   this->consumable_abilities[0] = 0;
-  this->all_abilities[1] = Ability("Stop time", 8, 1);
+  this->all_abilities[1] = Ability("Reduce enemy", 8, 1);
   this->consumable_abilities[1] = 1;
-  this->all_abilities[2] = Ability("Reduce enemy", 10, 1);
+  this->all_abilities[2] = Ability("Stop time", 10, 2);
   this->consumable_abilities[2] = 1;
 
   this->all_health[0] = "1 Heart";
