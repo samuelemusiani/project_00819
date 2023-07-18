@@ -1,10 +1,10 @@
 #include "events.hpp"
 
-Events::Events() : _time(0), _start(0), _to_draw(nullptr) {}
+Events::Events() : _time(0), _start(0), _cooldown(0), _to_draw(nullptr) {}
 
 void Events::make_ability_happen(Ability ability, Manager &manager,
                                  phy::Point player_pos, int chunk) {
-  if (this->_start == 0) {
+  if (this->_start == 0 && this->_cooldown == 0) {
     switch (ability.get_type()) {
     case 0: { // Shild
       this->_to_draw =
@@ -26,6 +26,8 @@ void Events::make_ability_happen(Ability ability, Manager &manager,
 
         l = l->next;
       }
+      this->_ability_type = 1;
+      this->_cooldown = this->_time;
       break;
     }
     case 2: {
@@ -40,20 +42,67 @@ void Events::make_ability_happen(Ability ability, Manager &manager,
   }
 }
 
+nostd::string Events::get_indicator() {
+  nostd::string s;
+
+  int indicator = 10;
+
+  if (this->_cooldown != 0) {
+    unsigned long long int diff = this->_time - this->_cooldown;
+    switch (this->_ability_type) {
+    case 0:
+      this->_cooldown = 0; // Shild does not recharge
+      break;
+    case 1:
+      if (diff >= 2000)
+        this->_cooldown = 0;
+
+      indicator = (int)diff * 10 / 2000;
+      break;
+    case 2:
+      if (diff >= 1000)
+        this->_cooldown = 0;
+
+      indicator = (int)diff * 10 / 1000;
+      break;
+    default:
+      indicator = 10;
+      break;
+    }
+  } else if (this->_start != 0) {
+    unsigned long long int diff = this->_time - this->_start;
+    switch (this->_ability_type) {
+    case 2:
+      indicator = 10 - ((int)diff * 10 / 1000);
+      break;
+    default:
+      indicator = 10;
+      break;
+    }
+  }
+
+  for (int i = 0; i < indicator; i++)
+    s.push_back('>');
+
+  return s;
+}
+
 void Events::update(Manager &manager) {
   unsigned long long int diff = this->_time - this->_start;
-  if (diff != 0) {
+  if (this->_start != 0) {
     switch (this->_ability_type) {
     case 0:
       if (diff >= 100) {
         this->_to_draw = this->delete_type(this->_to_draw, 0);
         this->_start = 0;
+        this->_cooldown = this->_time;
       }
       break;
     case 2:
       if (diff >= 1000) {
         manager.unstop_time();
         this->_start = 0;
+        this->_cooldown = this->_time;
       }
       break;
     default:

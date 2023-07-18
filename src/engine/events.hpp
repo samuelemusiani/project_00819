@@ -17,6 +17,7 @@ private:
   unsigned long long int _time;
 
   unsigned long long int _start;
+  unsigned long long int _cooldown;
   int _ability_type;
 
   drawable *_to_draw;
@@ -29,6 +30,7 @@ public:
 
   void make_ability_happen(Ability ability, Manager &manager,
                            phy::Point player_pos, int chunk);
+  nostd::string get_indicator();
   void update(Manager &manager);
   void draw(Draw *screen);
 };
