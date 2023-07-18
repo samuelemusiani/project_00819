@@ -3,7 +3,7 @@
 Events::Events() : _time(0), _start(0), _to_draw(nullptr) {}
 
 void Events::make_ability_happen(Ability ability, Manager &manager,
-                                 phy::Point player_pos) {
+                                 phy::Point player_pos, int chunk) {
   if (this->_start == 0) {
     switch (ability.get_type()) {
     case 0: { // Shild
@@ -16,11 +16,24 @@ void Events::make_ability_happen(Ability ability, Manager &manager,
       this->_start = this->_time;
       break;
     }
-    case 2:
+    case 1: {
+      list_enemies l = manager.get_all_enemies_in_chunk(chunk);
+      while (l != nullptr) {
+        if (l->val.get_type() == 0)
+          l->val.kill();
+        else
+          l->val.set_type(l->val.get_type() - 1);
+
+        l = l->next;
+      }
+      break;
+    }
+    case 2: {
       manager.stop_time();
       this->_ability_type = 2;
       this->_start = this->_time;
       break;
+    }
     default:
       break;
     }

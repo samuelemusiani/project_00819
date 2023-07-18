@@ -26,6 +26,11 @@ void Enemy::set_direction(bool dir)
     this->_direction = dir;
 }
 
+void Enemy::set_type(int type)
+{
+    this->_type = type;
+}
+
 bool Enemy::can_move(Chunk chunk)
 {
     phy::Point next_pos = this->_direction ? phy::Point(1, -1) : phy::Point(-1, -1);

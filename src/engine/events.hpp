@@ -28,7 +28,7 @@ public:
   Events();
 
   void make_ability_happen(Ability ability, Manager &manager,
-                           phy::Point player_pos);
+                           phy::Point player_pos, int chunk);
   void update(Manager &manager);
   void draw(Draw *screen);
 };

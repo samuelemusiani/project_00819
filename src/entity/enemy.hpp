@@ -19,6 +19,7 @@ class Enemy : public Entity {
         int get_type();
 
         void set_direction(bool dir);
+        void set_type(int type);
 
         bool can_move(Chunk chunk);
         bool is_alive();

@@ -213,7 +213,7 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
             }
             else if(input == control_keys[7]) // Shoot right
             {
-                events.make_ability_happen(market.get_current_ability(), manager, player.get_position());
+                events.make_ability_happen(market.get_current_ability(), manager, player.get_position(), current_chunk);
                 market.make_ability_used();
             }
 			else if (input == 27) // Pause menu con tasto esc
