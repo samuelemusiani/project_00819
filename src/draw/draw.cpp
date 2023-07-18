@@ -190,7 +190,6 @@ void Draw::drawStats(Statistics stats) {
     drawText(1, 50, "Level: " + nostd::to_string(stats.getLevel()));
     drawText(1, 70, "Jump: " + nostd::to_string(stats.getJumps()));
     drawText(1, 90, "Coins: " + nostd::to_string(stats.getCoins()));
-    refreshScreen();
 }
 
 void Draw::deleteStats() {

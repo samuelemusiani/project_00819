@@ -145,7 +145,6 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 	while (!exit){
         const char* control_keys = this->settings.getControlsKeys();
 
-		screen->drawStats(stats);
 		bool right; 
 		int input = this->screen->getinput();
 
@@ -270,6 +269,7 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() - phy::Point(0, 42)); 
 		}
+		this->screen->drawStats(stats);
 		this->screen->drawPlayer(player.get_position());
 
 
