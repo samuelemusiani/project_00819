@@ -8,6 +8,7 @@
 
 #include "../physics/collisions.hpp"
 #include "../entity/entity.hpp"
+#include "../engine/events.hpp"
 
 #include "../../etc/logs/logs.hpp"
 
@@ -127,6 +128,8 @@ bool Game::exitGame(){
 
 void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& stats, Manager& manager, Market& market){
 
+    Events events = Events();
+
 	this->screen->drawMap(map, 0);
 	this->screen->drawPlayer(player.get_position());
 	this->screen->nodel(true);
@@ -208,6 +211,10 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
             {
                  manager.player_shoot(player.get_position(), true, market.get_current_gun());
             }
+            else if(input == control_keys[7]) // Shoot right
+            {
+                events.make_ability_happen(market.get_current_ability(), manager, player.get_position());
+            }
 			else if (input == 27) // Pause menu con tasto esc
 			{
                 // The return value indicate if we have to quit the game
@@ -263,6 +270,11 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 			player.set_position(player.get_position() - phy::Point(0, 42)); 
 		}
 		this->screen->drawPlayer(player.get_position());
+
+
+        /* EVENTS */
+        events.refresh();
+        events.draw(this->screen);
 
 
         /* ENTITIES */
