@@ -195,7 +195,7 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
 
           if (epos.get_yPosition() == ppos.get_yPosition() &&
               distance <= MOVING_RADIOUS) {
-            if (distance <= 3) {
+            if (abs(distance) <= 3) {
               tmp->val.kill();
               this->shoot(epos, true, -1);
               this->shoot(epos, false, -1);
