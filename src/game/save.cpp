@@ -7,7 +7,7 @@ void Save::saveNewGame(Map& map, int& chunk, phy::Body& player,
         saveGame();
     }
     else {
-        Draw screen = Draw(SCREEN_HEIGHT, SCREEN_WIDTH);
+        Draw screen(SCREEN_HEIGHT, SCREEN_WIDTH);
         bool exit = false;
         // Check if there are already 5 saves
         if (File::countSaves() > 4) {
@@ -135,7 +135,7 @@ void Save::saveNewGame(Map& map, int& chunk, phy::Body& player,
 }
 
 void Save::saveGame(){
-    Draw local_screen = Draw(5, 20);
+    Draw local_screen(5, 20);
     local_screen.eraseScreen();
     local_screen.drawBox();
     local_screen.drawCenterText(2, "Game saved");
@@ -148,7 +148,7 @@ void Save::saveGame(){
 
 void Save::quitGame(Map& map, int& chunk, phy::Body& player, 
         Statistics& stats, Manager& manager, Market& market){
-    Draw quit_scr = Draw(15, 55);
+    Draw quit_scr(15, 55);
     quit_scr.eraseScreen();
     quit_scr.drawBox();
     quit_scr.drawCenterText(2, "Quit without saving?");

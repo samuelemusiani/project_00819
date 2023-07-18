@@ -69,7 +69,7 @@ void Market::set_save(nostd::string save) {
 }
 
 void Market::draw() {
-  Draw screen = Draw(SCREEN_HEIGHT, SCREEN_WIDTH);
+  Draw screen(SCREEN_HEIGHT, SCREEN_WIDTH);
   screen.nodel(false);
 
   int orizzontal_selection = 0;
@@ -240,7 +240,7 @@ void Market::draw() {
         }
       } else {
         // Can't buy the item
-        Draw win = Draw(SCREEN_HEIGHT / 4, SCREEN_WIDTH / 3);
+        Draw win(SCREEN_HEIGHT / 4, SCREEN_WIDTH / 3);
         win.clearScreen();
         win.nodel(false);
 

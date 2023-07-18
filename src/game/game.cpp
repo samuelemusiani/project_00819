@@ -403,7 +403,7 @@ bool Game::pauseGame(Map& map, int& current_chunk, phy::Body& player,
         Statistics& stats, Manager& manager, Market& market) {
     this->screen->nodel(false);
 
-    Draw local_screen = Draw(SCREEN_HEIGHT, 60, 0, (SCREEN_WIDTH - 60) / 2);
+    Draw local_screen(SCREEN_HEIGHT, 60, 0, (SCREEN_WIDTH - 60) / 2);
 
     bool resumed = false;
     bool exit = false;
@@ -510,7 +510,7 @@ bool Game::pauseGame(Map& map, int& current_chunk, phy::Body& player,
 void Game::over()
 {
 	this->screen->nodel(false);	
-	Draw over_win = Draw(8, 50);
+	Draw over_win(8, 50);
 	over_win.drawBox();
 	over_win.drawCenterText(2, "GAME OVER");
 	over_win.attrOn(COLOR_PAIR(1));
@@ -525,7 +525,7 @@ void Game::over()
 #ifdef USE_HACK
 
 void Game::hack(int& current_chunk, Statistics& stats){
-	Draw hack = Draw(20, 50);
+	Draw hack(20, 50);
 	hack.attrOn(COLOR_PAIR(2));
 	hack.drawBox();
 	hack.drawCenterText(2, "Hack Menu");

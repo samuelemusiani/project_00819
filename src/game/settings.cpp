@@ -62,7 +62,7 @@ void Settings::setControlsKeys(const char* s)
 }
 
 void Settings::drawFirstSettings(){
-    Draw screen = Draw(SCREEN_HEIGHT, SCREEN_WIDTH);
+    Draw screen(SCREEN_HEIGHT, SCREEN_WIDTH);
     // Variabili interne alla funzione
     int selectedOption = 0;
     bool saved = false;
