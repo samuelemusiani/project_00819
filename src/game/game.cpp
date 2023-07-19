@@ -148,20 +148,22 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 		bool right; 
 		int input = this->screen->getinput();
 
-		if (input == control_keys[3]) // jump right
+        bool is_player_on_a_platform = map.get_chunk(current_chunk).
+            is_there_a_platform(player.get_position() - phy::Point(0, 1));
 
+		if (input == control_keys[3] && is_player_on_a_platform) // jump right
 		{
 			which_key = 1;
 			cumulative++;
 			count_not_key = 0;
 		}
-		else if (input == control_keys[2]) // jump left
+		else if (input == control_keys[2] && is_player_on_a_platform) // jump left
 		{
 			which_key = 2;
 			cumulative++;
 			count_not_key = 0;
 		}
-		else if (input == control_keys[4]){ // jump vertical
+		else if (input == control_keys[4] && is_player_on_a_platform){ // jump vertical
 			which_key = 3;
 			cumulative++;
 			count_not_key = 0;
@@ -172,19 +174,19 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 			count_not_key++;
 			if(count_not_key > 30)
 			{
-				if (cumulative > 1 && which_key == 1 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+				if (cumulative > 1 && which_key == 1 && is_player_on_a_platform)
 					{
 						player.set_velocity(phy::Vector(JUMPF, 55));
 						stats.incrementJumps();
 					}
 
-				else if (cumulative > 1 && which_key == 2 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+				else if (cumulative > 1 && which_key == 2 && is_player_on_a_platform)
 					{
 						player.set_velocity(phy::Vector(JUMPF, 125));
 						stats.incrementJumps();
 					}
 
-				else if (cumulative > 1 && which_key == 3 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+				else if (cumulative > 1 && which_key == 3 && is_player_on_a_platform)
 					{
 						player.set_velocity(phy::Vector(JUMPF, 90));
 						stats.incrementJumps();
@@ -194,12 +196,12 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 		
 			if (input == control_keys[0]) // move player left
 			{
-				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+				if(is_player_on_a_platform)
 					player.set_position(player.get_position() - phy::Point(1, 0));
 			}
 			else if (input == control_keys[1]) // move player right
 			{
-				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+				if(is_player_on_a_platform)
 					player.set_position(player.get_position() + phy::Point(1, 0));
 			}
             else if(input == control_keys[5]) // Shoot left
