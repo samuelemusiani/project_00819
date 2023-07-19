@@ -32,7 +32,7 @@ phy::Body::Body(phy::PrecisePoint position, phy::Vector velocity, phy::Vector ac
 
 void phy::Body::set_position(phy::Point position)
 {
-	//Da fare l'overloadin dell = :)
+	//Da fare overload dell = :)
 
 	this->position.set_xPosition(position.get_xPosition());
 	this->position.set_yPosition(position.get_yPosition());
