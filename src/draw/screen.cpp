@@ -44,12 +44,11 @@ void Screen::init()
 {
 	setlocale(LC_ALL, "");
 	initscr();
+    start_color();
 	cbreak();
 	noecho();
 	curs_set(0);
 	start_color();
-	init_pair(2, COLOR_GREEN, COLOR_BLACK);
-	init_pair(1, COLOR_WHITE, COLOR_BLUE);
 	// Ridefinisco il colore nero a 0,0,0 per alcuni terminali che mostrano un colore diverso
 	init_color(COLOR_BLACK, 0, 0, 0);
 }

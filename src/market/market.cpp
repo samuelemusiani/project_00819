@@ -253,11 +253,10 @@ void Market::draw() {
         win.nodel(false);
 
         // This should probably go in draw to make it global
-        init_pair(3, COLOR_RED, COLOR_BLACK);
-        win.attrOn(COLOR_PAIR(3));
+        win.attrOn(COLOR_PAIR(1));
         win.drawCenterText(3, "You can't buy this item, you are poor!");
-        init_pair(4, COLOR_BLACK, COLOR_RED);
-        win.attrOn(COLOR_PAIR(4));
+        init_pair(21, COLOR_BLACK, COLOR_RED);
+        win.attrOn(COLOR_PAIR(21));
         win.drawCenterText(7, "Ok...");
         win.attrOff(COLOR_PAIR(1));
 

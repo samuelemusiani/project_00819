@@ -294,7 +294,15 @@ list_bullets Manager::bullets_collisions(list_bullets p, Statistics &stats) {
 }
 
 void Manager::draw_entities(Draw *screen) {
-  screen->drawPlayer(this->player_position);
+  // Tmp
+  if (this->is_player_invincible) {
+    srand(time(nullptr));
+    int color = 3 + rand() % 7;
+    screen->attrOn(COLOR_PAIR(color));
+    screen->drawPlayer(this->player_position);
+    screen->attrOff(COLOR_PAIR(color));
+  } else
+    screen->drawPlayer(this->player_position);
 
   list_enemies p = this->Enemies[this->current_chunk];
   while (p != nullptr) {
