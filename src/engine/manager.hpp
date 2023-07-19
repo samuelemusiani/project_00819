@@ -54,13 +54,13 @@ private:
   int reloading_gun;
 
   phy::Point player_position;
+  bool is_player_invincible;
 
   void add_enemy(int Chunk, Enemy enemy);
   void add_coin(int Chunk, Coin coin);
   void head_insert(int Chunk, Enemy enemy);
   void head_insert(int Chunk, Coin coin);
-  list_bullets bullets_collisions(list_bullets p, phy::Body &player,
-                                  Statistics &stats);
+  list_bullets bullets_collisions(list_bullets p, Statistics &stats);
   list_bullets delete_all_bullets(list_bullets p);
 
   void shoot(phy::Point position, bool direction, int type);
@@ -84,6 +84,7 @@ public:
 
   void stop_time();
   void unstop_time();
+  void make_player_invincible(bool apply);
 
   // Saving
   nostd::string get_entities_status();

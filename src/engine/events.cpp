@@ -7,11 +7,7 @@ void Events::make_ability_happen(Ability ability, Manager &manager,
   if (this->_start == 0 && this->_cooldown == 0) {
     switch (ability.get_type()) {
     case 0: { // Shild
-      this->_to_draw =
-          head_insert(this->_to_draw, '!', player_pos - phy::Point(1, 0), 0);
-      this->_to_draw =
-          head_insert(this->_to_draw, '!', player_pos + phy::Point(1, 0), 0);
-
+      manager.make_player_invincible(true);
       this->_ability_type = 0;
       this->_start = this->_time;
       break;
@@ -51,7 +47,10 @@ nostd::string Events::get_indicator() {
     unsigned long long int diff = this->_time - this->_cooldown;
     switch (this->_ability_type) {
     case 0:
-      this->_cooldown = 0; // Shild does not recharge
+      if (diff >= 1000)
+        this->_cooldown = 0;
+
+      indicator = (int)diff * 10 / 1000;
       break;
     case 1:
       if (diff >= 2000)
@@ -72,6 +71,9 @@ nostd::string Events::get_indicator() {
   } else if (this->_start != 0) {
     unsigned long long int diff = this->_time - this->_start;
     switch (this->_ability_type) {
+    case 0:
+      indicator = 10 - ((int)diff * 10 / 500);
+      break;
     case 2:
       indicator = 10 - ((int)diff * 10 / 1000);
       break;
@@ -92,8 +94,8 @@ void Events::update(Manager &manager) {
   if (this->_start != 0) {
     switch (this->_ability_type) {
     case 0:
-      if (diff >= 100) {
-        this->_to_draw = this->delete_type(this->_to_draw, 0);
+      if (diff >= 500) {
+        manager.make_player_invincible(false);
         this->_start = 0;
         this->_cooldown = this->_time;
       }

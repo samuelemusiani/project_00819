@@ -171,7 +171,8 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
             else
               tmp->val.set_direction(!tmp->val.get_direction());
 
-            if (tmp->val.get_position() == player.get_position())
+            if (!this->is_player_invincible &&
+                tmp->val.get_position() == player.get_position())
               stats.incrementHearts(-1);
           } else if (tmp->val.get_type() == 1) {
             const int SHOOTING_RADIOUS = 14;
@@ -236,13 +237,12 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
         tmp = tmp->next;
       }
 
-      this->Bullets = bullets_collisions(this->Bullets, player, stats);
+      this->Bullets = bullets_collisions(this->Bullets, stats);
     }
   }
 }
 
-list_bullets Manager::bullets_collisions(list_bullets p, phy::Body &player,
-                                         Statistics &stats) {
+list_bullets Manager::bullets_collisions(list_bullets p, Statistics &stats) {
   if (p != nullptr) {
     phy::Point pos = p->val.get_position();
 
@@ -267,13 +267,15 @@ list_bullets Manager::bullets_collisions(list_bullets p, phy::Body &player,
       have_to_go |= found;
     }
     // Player collision
-    if (pos == player.get_position()) {
+    if (pos == this->player_position) {
       have_to_go = true;
 
-      if (p->val.get_type() == 0)
-        stats.incrementHearts(-1);
-      else if (p->val.get_type() == 1)
-        stats.incrementHearts(-2);
+      if (!this->is_player_invincible) {
+        if (p->val.get_type() == 0)
+          stats.incrementHearts(-1);
+        else if (p->val.get_type() == 1)
+          stats.incrementHearts(-2);
+      }
     }
 
     have_to_go |= p->expiration == 0;
@@ -281,9 +283,9 @@ list_bullets Manager::bullets_collisions(list_bullets p, phy::Body &player,
     if (have_to_go) {
       list_bullets tmp = p->next;
       delete p;
-      return this->bullets_collisions(tmp, player, stats);
+      return this->bullets_collisions(tmp, stats);
     } else {
-      p->next = this->bullets_collisions(p->next, player, stats);
+      p->next = this->bullets_collisions(p->next, stats);
       return p;
     }
   }
@@ -400,6 +402,10 @@ Manager::get_all_entities_positions_in_chunk(int Chunk) {
 void Manager::stop_time() { this->must_stop_time = true; }
 
 void Manager::unstop_time() { this->must_stop_time = false; }
+
+void Manager::make_player_invincible(bool apply) {
+  this->is_player_invincible = apply;
+}
 
 list_bullets Manager::delete_all_bullets(list_bullets p) {
   if (p != nullptr) {
