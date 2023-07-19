@@ -1,10 +1,10 @@
 #include "../draw/draw.hpp"
 #include "../engine/random.hpp"
+#include "../entity/bullet.hpp"
 #include "../game/statistics.hpp"
 #include "../maps/map.hpp"
-#include "../physics/body.hpp"
 #include "../market/gun.hpp"
-#include "../entity/bullet.hpp"
+#include "../physics/body.hpp"
 
 #include "../../etc/logs/logs.hpp"
 #include "../../etc/nostd/vector.hpp"
@@ -52,6 +52,8 @@ private:
   int Global_Coins;
 
   int reloading_gun;
+
+  phy::Point player_position;
 
   void add_enemy(int Chunk, Enemy enemy);
   void add_coin(int Chunk, Coin coin);

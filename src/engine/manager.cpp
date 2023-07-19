@@ -150,6 +150,9 @@ void Manager::shoot(phy::Point position, bool direction, int bullet_type) {
 }
 
 void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
+
+  this->player_position = player.get_position();
+
   /* Enemy 0: If the player body-hit it the player take damage
    * Enemy 1: If the player is on his radius then he shoots at the player
    * Enemy 2: Follow the player and the explodes near him (like a creeper)
@@ -289,6 +292,8 @@ list_bullets Manager::bullets_collisions(list_bullets p, phy::Body &player,
 }
 
 void Manager::draw_entities(Draw *screen) {
+  screen->drawPlayer(this->player_position);
+
   list_enemies p = this->Enemies[this->current_chunk];
   while (p != nullptr) {
     if (p->val.is_alive())

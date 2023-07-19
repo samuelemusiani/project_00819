@@ -268,13 +268,10 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() - phy::Point(0, 42)); 
 		}
-		this->screen->drawStats(stats);
-		this->screen->drawPlayer(player.get_position());
 
         /* EVENTS */
         events.draw(this->screen);
         events.update(manager);
-
 
         /* ENTITIES */
 		manager.set_chunk(current_chunk);
@@ -284,6 +281,7 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 		manager.draw_entities(screen);
 
 		this->screen->drawMap(map, current_chunk);
+        this->screen->drawStats(stats);
 
         /* Ability cooldown */
         this->screen->drawText(1, SCREEN_WIDTH - 30, "Ability: " + events.get_indicator());
