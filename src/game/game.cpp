@@ -130,8 +130,6 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 
     Events events = Events();
 
-	this->screen->drawMap(map, 0);
-	this->screen->drawPlayer(player.get_position());
 	this->screen->nodel(true);
     
 	int entity_time= 0;
