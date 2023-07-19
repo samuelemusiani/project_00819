@@ -221,7 +221,7 @@ static bool hasJumped(phy::Body &body)
 
 	if (v.get_magnitude() < 0.1)
 		return false;
-	//Does this values make sense?
+	//Do this values make sense?
 	else if (180 <= v.get_direction() && v.get_direction() <= 360) 
 		return false;
 
@@ -246,7 +246,7 @@ static void borderCollision(phy::Body &body)
 		p.set_xPosition(0);
 		body.set_position(p);
 
-		// Make the player fall when he touch the wall
+		// Make the player fall when he touches the wall
 		body.set_velocity(phy::Vector(0));
 	}
 	else if (x > 147)
@@ -254,7 +254,7 @@ static void borderCollision(phy::Body &body)
 		p.set_xPosition(147);
 		body.set_position(p);
 
-		// Make the player fall when he touch the wall
+		// Make the player fall when he touches the wall
 		body.set_velocity(phy::Vector(0));
 	}
 }

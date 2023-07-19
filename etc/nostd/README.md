@@ -1,5 +1,5 @@
 # Use of `std` instead of `nostd`
-I your code you should always put `nostd::` before a string or a vector declaration. If you want to use the `std` implementation of vectors and strings you have to recompile with `cmake` specifying a custom value for the `STD` variable. The command should look like this:
+In your code you should always put `nostd::` before a string or a vector declaration. If you want to use the `std` implementation of vectors and strings you have to recompile with `cmake` specifying a custom value for the `STD` variable. The command should look like this:
 ```
 cmake -DSTD=ON ..
 ```

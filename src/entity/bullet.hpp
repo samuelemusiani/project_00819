@@ -14,7 +14,7 @@ public:
   bool get_direction();
   int get_type();
 
-  // This is orrible but I don't see another SIMPLE way of doin it
+  // This is horrible, but I don't see another SIMPLE way of doin it
   static int get_bullet_damage(int bullet_type);
 };
 

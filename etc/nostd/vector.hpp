@@ -45,7 +45,7 @@ namespace nostd
 
 	/*
 	   This function id used when the _size is equal to the _capacity.
-	   In this case the array on the heap need to be reallocate beacause 
+	   In this case the array on the heap need to be reallocated because
 	   some elements need to be inserted. The strategy for a reallocation is 
 	   simply to duplicate the array.
 	*/
@@ -59,38 +59,38 @@ namespace nostd
 	}
 
 	/*
-	   This is the more advance version of reallocate in which there is a 
-	   a input arguments to use to specify the capacity of the new vector.
+	   This is the more advance version of reallocate in which there is an
+	   input arguments to use to specify the capacity of the new vector.
 	   There are three cases:
 		   1) The new capacity is LARGER than the previous capacity: 
 		   In this case a new array will be created and all the old values are
 		   copied in to the new array.
 
-		   2) The new_capaciy is SMALLER than the previous capacity:
-		   In this case there is a reduction of the old array (but i can not 
-		   perform a reduction with realloc() so i simply create a new array):
+		   2) The new_capacity is SMALLER than the previous capacity:
+		   In this case there is a reduction of the old array (but I can not
+		   perform a reduction with realloc() so I simply create a new array):
 
-		   3) In the case of new_capaciy == previus capacity the function 
+		   3) In the case of new_capacity == previous capacity the function
 		   does simply nothing.
 	*/
 	template <typename T>
-	void vector<T>::reallocate(size_t new_capaciy)
+	void vector<T>::reallocate(size_t new_capacity)
 	{
-		if (new_capaciy >= 0 && this->_capacity != new_capaciy)
+		if (new_capacity >= 0 && this->_capacity != new_capacity)
 		{
 			//T* tmp = reinterpret_cast<T*> (::operator new (new_capaciy * sizeof(T)));
-			T* tmp = new T[new_capaciy];
+			T* tmp = new T[new_capacity];
 			
 			
-			this->_size = std::min(this->_size, new_capaciy);
+			this->_size = std::min(this->_size, new_capacity);
 
 			/*
-			   In this case a for loop may help if T has no trivial copy constructor 
+			   In this case a for loop may help if T has no trivial copy constructor,
 			   so we need to call it explicitly to avoid shallow copy.
 			 */
 
-			// std::memcpy(tmp, this->_buffer, std::min(this->_capacity, new_capaciy) * sizeof(T));
-			std::copy(this->_buffer, this->_buffer + std::min(this->_capacity, new_capaciy), tmp);
+			// std::memcpy(tmp, this->_buffer, std::min(this->_capacity, new_capacity) * sizeof(T));
+			std::copy(this->_buffer, this->_buffer + std::min(this->_capacity, new_capacity), tmp);
 
 			 // for(size_t i = 0; i < std::min(this->_capacity, new_capaciy); i++)
 				//  tmp[i] = this->_buffer[i];
@@ -98,7 +98,7 @@ namespace nostd
 			delete[] this->_buffer;
 
 			this->_buffer = tmp;
-			this->_capacity = new_capaciy;
+			this->_capacity = new_capacity;
 		}
 	}
 
@@ -180,7 +180,7 @@ namespace nostd
 		//Do I need to check if the reallocation has been done correctly?
 
 		// when entering a function data becomes an 
-		// lvalue so we need to move it.
+		// lvalue, so we need to move it.
 		this->_buffer[this->_size] = std::move(data);
 		this->_size++;
 	}
