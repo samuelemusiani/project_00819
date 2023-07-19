@@ -27,7 +27,6 @@ void Random::seedSrand(Seed seed, int chunk, int offset)
 int Random::generateEnemies(Seed seed, int chunk) {
 	seedSrand(seed, chunk, 11);
     return std::max(std::min(MAX_ENEMIES_IN_CHUNK, chunk / 2 + rand() % 3), 1);
-    // return (5 + chunk);
 }
 
 int Random::generateCoins(Seed seed, int chunk) {
@@ -39,15 +38,15 @@ int Random::generateChunk(Seed seed, int chunk) {
 	if(chunk == 0)
 	{
 		seedSrand(seed, chunk);
-		return (rand() % 2);
+		return (rand() % 10);
 	}
 	else
 	{
 		int previous = generateChunk(seed,chunk-1);
 		seedSrand(seed,chunk);
-		int random = rand() % 2;
+		int random = rand() % 10;
 		if(random == previous)
-			return (random + 1) % 2;
+			return (random + 1) % 10;
 		else
 			return random;
 	}
