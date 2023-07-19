@@ -25,7 +25,6 @@ Market::Market() : current_gun(0), current_ability(0), current_coins(0) {
 }
 
 Gun Market::get_current_gun() {
-  deb::debug(this->current_gun, nostd::to_string(__LINE__));
   return this->all_guns[this->current_gun];
 }
 
@@ -221,7 +220,6 @@ void Market::draw() {
           if (!this->guns_bought[vertical_selection])
             this->current_coins -= price;
 
-          deb::debug(vertical_selection);
           this->current_gun = vertical_selection;
           this->guns_bought[vertical_selection] = 1;
         } else if (orizzontal_selection == 1) {
