@@ -8,9 +8,12 @@ Market::Market() : current_gun(0), current_ability(0), current_coins(0) {
   this->all_guns[2] = Gun("Mitra", 25, 0, 1);
   this->all_guns[3] = Gun("TOO MUCH", 40, 2, 15);
 
-  this->all_abilities[0] = Ability("Shield", 4);
-  this->all_abilities[1] = Ability("Explosion", 8);
-  this->all_abilities[2] = Ability("No gravity", 10);
+  this->all_abilities[0] = Ability("Invincibility", 4, 0);
+  this->consumable_abilities[0] = 0;
+  this->all_abilities[1] = Ability("Reduce enemies", 8, 1);
+  this->consumable_abilities[1] = 1;
+  this->all_abilities[2] = Ability("Stop time", 10, 2);
+  this->consumable_abilities[2] = 1;
 
   this->all_health[0] = "1 Heart";
   this->all_health[1] = "Full life";
@@ -24,12 +27,17 @@ Market::Market() : current_gun(0), current_ability(0), current_coins(0) {
     this->abilities_bought[i] = 0;
 }
 
-Gun Market::get_current_gun() {
-  return this->all_guns[this->current_gun];
-}
+Gun Market::get_current_gun() { return this->all_guns[this->current_gun]; }
 
 Ability Market::get_current_ability() {
   return this->all_abilities[this->current_ability];
+}
+
+void Market::make_ability_used() {
+  if (this->consumable_abilities[this->current_ability]) {
+    this->abilities_bought[this->current_ability] = 0;
+    this->current_ability = 0; // I'm shure that it's free
+  }
 }
 
 void Market::open(Statistics &stats) {
@@ -121,7 +129,8 @@ void Market::draw() {
                       "Damage: \t\t" +
                           nostd::to_string(Bullet::get_bullet_damage(
                               gun.get_bullet_type())));
-      screen.drawText(20, 60, "Bullet type: \t" + nostd::to_string(2));
+      screen.drawText(
+          20, 60, "Bullet type: \t" + nostd::to_string(gun.get_bullet_type()));
 
       if (!this->guns_bought[vertical_selection]) {
         price = gun.get_price();
@@ -149,13 +158,12 @@ void Market::draw() {
       Ability ability = this->all_abilities[vertical_selection];
 
       screen.drawText(16, 60, "Name: \t\t" + ability.get_name());
-      screen.drawText(18, 60, "Type : \t\tNot set");
 
       if (!this->abilities_bought[vertical_selection]) {
         price = ability.get_price();
-        screen.drawText(20, 60, "Price: \t\t" + nostd::to_string(price));
+        screen.drawText(18, 60, "Price: \t\t" + nostd::to_string(price));
       } else
-        screen.drawText(20, 60, "Price: \t\t You already have this ability!");
+        screen.drawText(18, 60, "Price: \t\t You already have this ability!");
     } else if (orizzontal_selection == 2) {
       for (int i = 0; i < 11; i++)
         screen.drawText(30 + i, 66, this->poison_art[i]);
@@ -243,11 +251,10 @@ void Market::draw() {
         win.nodel(false);
 
         // This should probably go in draw to make it global
-        init_pair(3, COLOR_RED, COLOR_BLACK);
-        win.attrOn(COLOR_PAIR(3));
+        win.attrOn(COLOR_PAIR(1));
         win.drawCenterText(3, "You can't buy this item, you are poor!");
-        init_pair(4, COLOR_BLACK, COLOR_RED);
-        win.attrOn(COLOR_PAIR(4));
+        init_pair(21, COLOR_BLACK, COLOR_RED);
+        win.attrOn(COLOR_PAIR(21));
         win.drawCenterText(7, "Ok...");
         win.attrOff(COLOR_PAIR(1));
 

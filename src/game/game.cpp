@@ -8,6 +8,7 @@
 
 #include "../physics/collisions.hpp"
 #include "../entity/entity.hpp"
+#include "../engine/events.hpp"
 
 #include "../../etc/logs/logs.hpp"
 
@@ -127,8 +128,8 @@ bool Game::exitGame(){
 
 void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& stats, Manager& manager, Market& market){
 
-	this->screen->drawMap(map, 0);
-	this->screen->drawPlayer(player.get_position());
+    Events events = Events();
+
 	this->screen->nodel(true);
     
 	int entity_time= 0;
@@ -142,24 +143,25 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 	while (!exit){
         const char* control_keys = this->settings.getControlsKeys();
 
-		screen->drawStats(stats);
 		bool right; 
 		int input = this->screen->getinput();
 
-		if (input == control_keys[3]) // jump right
+        bool is_player_on_a_platform = map.get_chunk(current_chunk).
+            is_there_a_platform(player.get_position() - phy::Point(0, 1));
 
+		if (input == control_keys[3] && is_player_on_a_platform) // jump right
 		{
 			which_key = 1;
 			cumulative++;
 			count_not_key = 0;
 		}
-		else if (input == control_keys[2]) // jump left
+		else if (input == control_keys[2] && is_player_on_a_platform) // jump left
 		{
 			which_key = 2;
 			cumulative++;
 			count_not_key = 0;
 		}
-		else if (input == control_keys[4]){ // jump vertical
+		else if (input == control_keys[4] && is_player_on_a_platform){ // jump vertical
 			which_key = 3;
 			cumulative++;
 			count_not_key = 0;
@@ -170,19 +172,19 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 			count_not_key++;
 			if(count_not_key > 30)
 			{
-				if (cumulative > 1 && which_key == 1 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+				if (cumulative > 1 && which_key == 1 && is_player_on_a_platform)
 					{
 						player.set_velocity(phy::Vector(JUMPF, 55));
 						stats.incrementJumps();
 					}
 
-				else if (cumulative > 1 && which_key == 2 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+				else if (cumulative > 1 && which_key == 2 && is_player_on_a_platform)
 					{
 						player.set_velocity(phy::Vector(JUMPF, 125));
 						stats.incrementJumps();
 					}
 
-				else if (cumulative > 1 && which_key == 3 && map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+				else if (cumulative > 1 && which_key == 3 && is_player_on_a_platform)
 					{
 						player.set_velocity(phy::Vector(JUMPF, 90));
 						stats.incrementJumps();
@@ -192,12 +194,12 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 		
 			if (input == control_keys[0]) // move player left
 			{
-				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+				if(is_player_on_a_platform)
 					player.set_position(player.get_position() - phy::Point(1, 0));
 			}
 			else if (input == control_keys[1]) // move player right
 			{
-				if(map.get_chunk(current_chunk).is_there_a_platform(player.get_position() - phy::Point(0, 1)))
+				if(is_player_on_a_platform)
 					player.set_position(player.get_position() + phy::Point(1, 0));
 			}
             else if(input == control_keys[5]) // Shoot left
@@ -207,6 +209,10 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
             else if(input == control_keys[6]) // Shoot right
             {
                  manager.player_shoot(player.get_position(), true, market.get_current_gun());
+            }
+            else if(input == control_keys[7]) // Shoot right
+            {
+                events.make_ability_happen(market.get_current_ability(), manager, player.get_position(), current_chunk);
             }
 			else if (input == 27) // Pause menu con tasto esc
 			{
@@ -262,8 +268,10 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 			stats.setLevel(current_chunk);
 			player.set_position(player.get_position() - phy::Point(0, 42)); 
 		}
-		this->screen->drawPlayer(player.get_position());
 
+        /* EVENTS */
+        events.draw(this->screen);
+        events.update(manager);
 
         /* ENTITIES */
 		manager.set_chunk(current_chunk);
@@ -273,6 +281,13 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 		manager.draw_entities(screen);
 
 		this->screen->drawMap(map, current_chunk);
+        this->screen->drawStats(stats);
+
+        /* Ability cooldown */
+        this->screen->drawText(1, SCREEN_WIDTH - 30, "Ability: " + events.get_indicator());
+        this->screen->drawText(1, SCREEN_WIDTH - 11, '|');
+
+        this->screen->drawText(7, 1, market.get_current_ability().get_name());
 		this->screen->drawText(6, 1, market.get_current_gun().get_name());
 		this->screen->drawText(5, 1, nostd::to_string(current_chunk));
 		this->screen->drawText(4, 1, nostd::to_string(player.get_position().get_xPosition()));
@@ -642,7 +657,7 @@ int Game::setCustom(Draw* hack){
 		// se è backspace cancella l'ultimo carattere
 		else if (a == 127) set_chunk = set_chunk.substr(0, set_chunk.length() - 1);
 		hack->clearLine(4, 0);
-		hack->drawText(4, 25 - hack->center(set_chunk), set_chunk);
+		hack->drawCenterText(4, set_chunk);
 		a = hack->getinput();
 	}
 	if (a == 27) return -1;

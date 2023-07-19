@@ -2,7 +2,7 @@
 
 Manager::Manager(Map map)
     : Global_Entities(0), Global_Coins(0), Global_Enemies(0), current_chunk(-1),
-      Bullets(nullptr), reloading_gun(0) {
+      Bullets(nullptr), reloading_gun(0), must_stop_time(false) {
   this->map = map;
   this->seed = map.getSeed();
 }
@@ -150,93 +150,99 @@ void Manager::shoot(phy::Point position, bool direction, int bullet_type) {
 }
 
 void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
+
+  this->player_position = player.get_position();
+
   /* Enemy 0: If the player body-hit it the player take damage
    * Enemy 1: If the player is on his radius then he shoots at the player
    * Enemy 2: Follow the player and the explodes near him (like a creeper)
    */
 
-  if (time % 100 == 0) {
-    list_enemies tmp = this->Enemies[this->current_chunk];
-    Chunk chunk = map.get_chunk(this->current_chunk);
-    while (tmp != nullptr) {
-      if (tmp->val.is_alive()) {
-        if (tmp->val.get_type() == 0) {
-          if (tmp->val.can_move(chunk))
-            tmp->val.move();
-          else
-            tmp->val.set_direction(!tmp->val.get_direction());
+  if (!this->must_stop_time) {
 
-          if (tmp->val.get_position() == player.get_position())
-            stats.incrementHearts(-1);
-        } else if (tmp->val.get_type() == 1) {
-          const int SHOOTING_RADIOUS = 14;
-          phy::Point ppos = player.get_position();
-          phy::Point epos = tmp->val.get_position();
-
-          // the shooting for now is only orizzontal
-          int distance = epos.get_xPosition() - ppos.get_xPosition();
-          if (epos.get_yPosition() == ppos.get_yPosition() &&
-              abs(distance) <= SHOOTING_RADIOUS) {
-            shoot(epos, distance < 0, 0);
-          } else {
+    if (time % 100 == 0) {
+      list_enemies tmp = this->Enemies[this->current_chunk];
+      Chunk chunk = map.get_chunk(this->current_chunk);
+      while (tmp != nullptr) {
+        if (tmp->val.is_alive()) {
+          if (tmp->val.get_type() == 0) {
             if (tmp->val.can_move(chunk))
               tmp->val.move();
             else
               tmp->val.set_direction(!tmp->val.get_direction());
 
-            if (tmp->val.get_position() == player.get_position())
+            if (!this->is_player_invincible &&
+                tmp->val.get_position() == player.get_position())
               stats.incrementHearts(-1);
-          }
-        } else if (tmp->val.get_type() == 2) {
-          const int MOVING_RADIOUS = 24;
-          phy::Point ppos = player.get_position();
-          phy::Point epos = tmp->val.get_position();
-          int distance = epos.get_xPosition() - ppos.get_xPosition();
+          } else if (tmp->val.get_type() == 1) {
+            const int SHOOTING_RADIOUS = 14;
+            phy::Point ppos = player.get_position();
+            phy::Point epos = tmp->val.get_position();
 
-          if (epos.get_yPosition() == ppos.get_yPosition() &&
-              distance <= MOVING_RADIOUS) {
-            if (abs(distance) <= 3) {
-              tmp->val.kill();
-              this->shoot(epos, true, -1);
-              this->shoot(epos, false, -1);
+            // the shooting for now is only orizzontal
+            int distance = epos.get_xPosition() - ppos.get_xPosition();
+            if (epos.get_yPosition() == ppos.get_yPosition() &&
+                abs(distance) <= SHOOTING_RADIOUS) {
+              shoot(epos, distance < 0, 0);
             } else {
-              tmp->val.set_direction(distance < 0);
-
               if (tmp->val.can_move(chunk))
                 tmp->val.move();
+              else
+                tmp->val.set_direction(!tmp->val.get_direction());
+
+              if (tmp->val.get_position() == player.get_position())
+                stats.incrementHearts(-1);
             }
-          } else {
-            if (tmp->val.can_move(chunk))
-              tmp->val.move();
-            else
-              tmp->val.set_direction(!tmp->val.get_direction());
+          } else if (tmp->val.get_type() == 2) {
+            const int MOVING_RADIOUS = 24;
+            phy::Point ppos = player.get_position();
+            phy::Point epos = tmp->val.get_position();
+            int distance = epos.get_xPosition() - ppos.get_xPosition();
+
+            if (epos.get_yPosition() == ppos.get_yPosition() &&
+                distance <= MOVING_RADIOUS) {
+              if (abs(distance) <= 3) {
+                tmp->val.kill();
+                this->shoot(epos, true, -1);
+                this->shoot(epos, false, -1);
+              } else {
+                tmp->val.set_direction(distance < 0);
+
+                if (tmp->val.can_move(chunk))
+                  tmp->val.move();
+              }
+            } else {
+              if (tmp->val.can_move(chunk))
+                tmp->val.move();
+              else
+                tmp->val.set_direction(!tmp->val.get_direction());
+            }
           }
         }
+        tmp = tmp->next;
       }
-      tmp = tmp->next;
-    }
-  }
-
-  if (time % 20 == 0) {
-    this->reloading_gun = std::max(--this->reloading_gun, 0);
-
-    list_bullets tmp = this->Bullets;
-
-    while (tmp != nullptr) {
-      phy::Point tmp_pos = tmp->val.get_position();
-      tmp_pos = tmp_pos + (tmp->val.get_direction() ? phy::Point(1, 0)
-                                                    : phy::Point(-1, 0));
-      tmp->val.set_position(tmp_pos);
-      tmp->expiration--;
-      tmp = tmp->next;
     }
 
-    this->Bullets = bullets_collisions(this->Bullets, player, stats);
+    if (time % 20 == 0) {
+      this->reloading_gun = std::max(--this->reloading_gun, 0);
+
+      list_bullets tmp = this->Bullets;
+
+      while (tmp != nullptr) {
+        phy::Point tmp_pos = tmp->val.get_position();
+        tmp_pos = tmp_pos + (tmp->val.get_direction() ? phy::Point(1, 0)
+                                                      : phy::Point(-1, 0));
+        tmp->val.set_position(tmp_pos);
+        tmp->expiration--;
+        tmp = tmp->next;
+      }
+
+      this->Bullets = bullets_collisions(this->Bullets, stats);
+    }
   }
 }
 
-list_bullets Manager::bullets_collisions(list_bullets p, phy::Body &player,
-                                         Statistics &stats) {
+list_bullets Manager::bullets_collisions(list_bullets p, Statistics &stats) {
   if (p != nullptr) {
     phy::Point pos = p->val.get_position();
 
@@ -261,13 +267,15 @@ list_bullets Manager::bullets_collisions(list_bullets p, phy::Body &player,
       have_to_go |= found;
     }
     // Player collision
-    if (pos == player.get_position()) {
+    if (pos == this->player_position) {
       have_to_go = true;
 
-      if (p->val.get_type() == 0)
-        stats.incrementHearts(-1);
-      else if (p->val.get_type() == 1)
-        stats.incrementHearts(-2);
+      if (!this->is_player_invincible) {
+        if (p->val.get_type() == 0)
+          stats.incrementHearts(-1);
+        else if (p->val.get_type() == 1)
+          stats.incrementHearts(-2);
+      }
     }
 
     have_to_go |= p->expiration == 0;
@@ -275,9 +283,9 @@ list_bullets Manager::bullets_collisions(list_bullets p, phy::Body &player,
     if (have_to_go) {
       list_bullets tmp = p->next;
       delete p;
-      return this->bullets_collisions(tmp, player, stats);
+      return this->bullets_collisions(tmp, stats);
     } else {
-      p->next = this->bullets_collisions(p->next, player, stats);
+      p->next = this->bullets_collisions(p->next, stats);
       return p;
     }
   }
@@ -286,6 +294,16 @@ list_bullets Manager::bullets_collisions(list_bullets p, phy::Body &player,
 }
 
 void Manager::draw_entities(Draw *screen) {
+  // Tmp
+  if (this->is_player_invincible) {
+    srand(time(nullptr));
+    int color = 3 + rand() % 7;
+    screen->attrOn(COLOR_PAIR(color));
+    screen->drawPlayer(this->player_position);
+    screen->attrOff(COLOR_PAIR(color));
+  } else
+    screen->drawPlayer(this->player_position);
+
   list_enemies p = this->Enemies[this->current_chunk];
   while (p != nullptr) {
     if (p->val.is_alive())
@@ -387,6 +405,14 @@ Manager::get_all_entities_positions_in_chunk(int Chunk) {
     q = q->next;
   }
   return v;
+}
+
+void Manager::stop_time() { this->must_stop_time = true; }
+
+void Manager::unstop_time() { this->must_stop_time = false; }
+
+void Manager::make_player_invincible(bool apply) {
+  this->is_player_invincible = apply;
 }
 
 list_bullets Manager::delete_all_bullets(list_bullets p) {

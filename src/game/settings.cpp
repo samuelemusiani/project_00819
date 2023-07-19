@@ -203,10 +203,10 @@ void Settings::ControlKeys(Draw* screen){
                                 // This could be done a lot better but only if 
                                 // we start to use colors in the whole game
                                 screen->clearLine(6, 0);
-                                init_pair(2, COLOR_RED, COLOR_BLACK);
-                                screen->attrOn(COLOR_PAIR(2));
+                                init_pair(20, COLOR_RED, COLOR_BLACK);
+                                screen->attrOn(COLOR_PAIR(20));
                                 screen->drawCenterText(6, "THE KEY IS ALREADY IN USE");
-                                screen->attrOff(COLOR_PAIR(2));
+                                screen->attrOff(COLOR_PAIR(20));
                                 screen->getinput();
                             }
                         }

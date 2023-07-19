@@ -1,29 +1,16 @@
 #include "ability.hpp"
 #include <cstring>
 
-Ability::Ability()
-    : _name("Not set"), _price(20)
-{
+Ability::Ability() : _name("Not set"), _price(20) {}
 
+Ability::Ability(nostd::string name, int price, int type) {
+  this->_name = name;
+  this->_price = price;
+  this->_type = type;
 }
 
-Ability::Ability(nostd::string n)
-{
-    this->_name = n;
-}
+nostd::string Ability::get_name() { return this->_name; }
 
-Ability::Ability(nostd::string n, int p)
-{
-    this->_name = n;
-    this->_price = p;
-}
+int Ability::get_price() { return this->_price; }
 
-nostd::string Ability::get_name()
-{
-    return this->_name;
-}
-
-int Ability::get_price()
-{
-    return this->_price;
-}
+int Ability::get_type() { return this->_type; }
