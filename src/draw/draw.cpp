@@ -125,10 +125,6 @@ void Draw::drawVerticalLine(int x, int y1, int y2)
 	}
 }
 
-int Draw::center(nostd::string t){
-	return (t.length()/2);
-}
-
 void Draw::drawMap(Map map, int nChunk) {
 	this->drawPlatform(map.get_chunk(nChunk).get_platforms());
 }

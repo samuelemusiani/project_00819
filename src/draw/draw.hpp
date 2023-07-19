@@ -53,9 +53,6 @@ class Draw : public Screen{
         // Draw a vertical line in the x column delimited by y1 and y2
 		void drawVerticalLine(int x, int y1, int y2);
 
-        // I think this function can be deleted
-		int center(nostd::string t);
-
 		void drawMap(Map map, int nChunck);
 		void drawPlayer(phy::Point p);
 		void drawEntity(Entity entity);

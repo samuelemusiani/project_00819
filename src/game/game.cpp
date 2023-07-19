@@ -657,7 +657,7 @@ int Game::setCustom(Draw* hack){
 		// se è backspace cancella l'ultimo carattere
 		else if (a == 127) set_chunk = set_chunk.substr(0, set_chunk.length() - 1);
 		hack->clearLine(4, 0);
-		hack->drawText(4, 25 - hack->center(set_chunk), set_chunk);
+		hack->drawCenterText(4, set_chunk);
 		a = hack->getinput();
 	}
 	if (a == 27) return -1;
