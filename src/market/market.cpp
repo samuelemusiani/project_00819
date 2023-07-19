@@ -27,9 +27,7 @@ Market::Market() : current_gun(0), current_ability(0), current_coins(0) {
     this->abilities_bought[i] = 0;
 }
 
-Gun Market::get_current_gun() {
-  return this->all_guns[this->current_gun];
-}
+Gun Market::get_current_gun() { return this->all_guns[this->current_gun]; }
 
 Ability Market::get_current_ability() {
   return this->all_abilities[this->current_ability];
@@ -131,7 +129,8 @@ void Market::draw() {
                       "Damage: \t\t" +
                           nostd::to_string(Bullet::get_bullet_damage(
                               gun.get_bullet_type())));
-      screen.drawText(20, 60, "Bullet type: \t" + nostd::to_string(2));
+      screen.drawText(
+          20, 60, "Bullet type: \t" + nostd::to_string(gun.get_bullet_type()));
 
       if (!this->guns_bought[vertical_selection]) {
         price = gun.get_price();
