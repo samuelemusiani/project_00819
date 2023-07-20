@@ -53,7 +53,7 @@ void Game::run() {
                         setDifficulty();
                         Map map = Map();
                         int current_chunk = 0;
-                        phy::Body player = phy::Body(phy::Point(40, 20), phy::Vector(1, -90), phy::Vector(0, 0));
+                        phy::Body player = phy::Body(phy::Point(74, 3), phy::Vector(1, -90), phy::Vector(0, 0));
                         Statistics stats = Statistics();
                         Manager manager = Manager(map);
                         Market market = Market();
