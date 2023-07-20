@@ -19,23 +19,22 @@ Random::Random()
 
 }
 
-void Random::seedSrand(Seed seed, int chunk, int offset)
+void Random::seedSrand(int seed, int chunk, int offset)
 {;
-	srand(seed.getSeed() + chunk * offset);
+	srand(seed + chunk * offset);
 }
 
-int Random::generateEnemies(Seed seed, int chunk) {
+int Random::generateEnemies(int seed, int chunk) {
 	seedSrand(seed, chunk, 11);
     return std::max(std::min(MAX_ENEMIES_IN_CHUNK, chunk / 2 + rand() % 3), 1);
-    // return (5 + chunk);
 }
 
-int Random::generateCoins(Seed seed, int chunk) {
+int Random::generateCoins(int seed, int chunk) {
 	seedSrand(seed, chunk, 13);
 	return std::min(std::max(1, 3 + rand() % 4 - chunk / 3), MAX_COINS_IN_CHUNK);
 }
 
-int Random::generateChunk(Seed seed, int chunk) {
+int Random::generateChunk(int seed, int chunk) {
 	if(chunk == 0)
 	{
 		seedSrand(seed, chunk);
@@ -53,7 +52,7 @@ int Random::generateChunk(Seed seed, int chunk) {
 	}
 }
 
-int Random::generateEnemyType(Seed seed,int chunk,int num)
+int Random::generateEnemyType(int seed,int chunk,int num)
 {
 	seedSrand(seed,chunk,27 + num);
     int random = rand() % 100;

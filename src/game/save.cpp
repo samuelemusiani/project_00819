@@ -5,7 +5,6 @@ void Save::saveNewGame(Map& map, int& chunk, phy::Body& player,
     bool nosaved = false;
     if (File::isAlreadySaved(map)) {
         saveGame();
-        nosaved = true;
     }
     else {
         Draw screen(SCREEN_HEIGHT, SCREEN_WIDTH);

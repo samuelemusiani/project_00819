@@ -38,7 +38,7 @@ typedef node_bullet *list_bullets;
 class Manager {
 private:
   Map map;
-  Seed seed;
+  int seed;
   int current_chunk;
 
   bool must_stop_time;

@@ -10,7 +10,6 @@
 
 #include "chunk.hpp"
 #include "../../etc/nostd/string.hpp"
-#include "../engine/seed.hpp"
 #include <chrono>
 #include <ctime>
 #include <string>
@@ -25,14 +24,14 @@ class Map
     private:
         Chunk possible_chunks[NUM_MAPS];
         void initialize_chunks();
-		Seed seed;
+		int seed;
     public:
         Map();
 		Map(int seed);
         Chunk get_chunk(int n);
 		int getCoins(int n);
 		int getEnemies(int n);
-		Seed getSeed();
+		int getSeed();
 };
 
 #endif
