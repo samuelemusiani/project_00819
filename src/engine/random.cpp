@@ -65,18 +65,6 @@ int Random::generateEnemyType(Seed seed,int chunk,int num)
         return 3;
 }
 
-int Random::generateCoinType(Seed seed,int chunk,int num)
-{
-	seedSrand(seed,chunk,23 + num);
-    int random = rand() % 100;
-    if(random < (60 - chunk*2))
-        return 1;
-    else if(random < 85 - chunk)
-        return 2;
-    else
-        return 3;
-}
-
 phy::Point Random::generateEnemyPosition(Map map, int chunk,nostd::vector<phy::Point> entityPos)
 {
 	phy::Point point;
