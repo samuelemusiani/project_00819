@@ -300,7 +300,11 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
         if(stats.getHearts() <= 0)
         {
             this->over();
-            exit = true;
+            stats.setHearts(10);
+            stats.setCoins(0);
+            current_chunk = std::max(current_chunk - 2, 0);
+            stats.setLevel(current_chunk);
+            player.set_position(phy::Point(player.get_position().get_xPosition(), 2));
         }
 	}
 
@@ -527,14 +531,20 @@ void Game::over()
 	this->screen->nodel(false);	
 	Draw over_win(8, 50);
 	over_win.drawBox();
-	over_win.drawCenterText(2, "GAME OVER");
+	over_win.drawCenterText(2, "You died...");
 	over_win.attrOn(COLOR_PAIR(1));
-	over_win.drawCenterText(5, "Back to menu");
+	over_win.drawCenterText(5, "Keep going but with penalities");
 	over_win.attrOn(COLOR_PAIR(1));
 	over_win.refreshScreen();
-	over_win.getinput();
+
+    int input;
+    do {
+        input = over_win.getinput();
+    } while(input != 10);
+
     over_win.eraseScreen();
     over_win.deleteWin();
+    this->screen->nodel(true);
 }
 
 #ifdef USE_HACK
