@@ -258,7 +258,7 @@ list_bullets Manager::bullets_collisions(list_bullets p, Statistics &stats) {
     // Platform collision
     have_to_go |=
         this->map.get_chunk(this->current_chunk).is_there_a_platform(pos);
-    // EnemyEnemie collision
+    // Enemies collision
     {
       list_enemies enemy = get_all_enemies_in_chunk(this->current_chunk);
       bool found = false;
@@ -300,7 +300,6 @@ list_bullets Manager::bullets_collisions(list_bullets p, Statistics &stats) {
 }
 
 void Manager::draw_entities(Draw *screen) {
-  // Tmp
   if (this->is_player_invincible) {
     srand(time(nullptr));
     int color = 3 + rand() % 7;
@@ -511,10 +510,10 @@ static nostd::string compress_save(nostd::vector<bool> &v) {
   // We use a base 64 (26 lowercase letters, 26 uppercase letter + 10 digits
   // + 2 random SCII characters: !@)
   // The original string is in binary (base 2) and we convert to base 64, so
-  // we converto a chunk of 6 binary digit to 1 single digit.
-  // The lenght of the orignal vector could not be perfectly divisible by 6,
+  // we convert a chunk of 6 binary digit to 1 single digit.
+  // The length of the original vector could not be perfectly divisible by 6,
   // so when we need to decompress the string we don't know how many 0 were
-  // at the beggining. So at the end we append an integer that tell how many
+  // at the beginning. So at the end we append an integer that tell how many
   // 0 need to be removed to have a correct conversion.
 
   nostd::string s;
