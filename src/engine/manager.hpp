@@ -63,7 +63,7 @@ private:
   list_bullets bullets_collisions(list_bullets p, Statistics &stats);
   list_bullets delete_all_bullets(list_bullets p);
 
-  void shoot(phy::Point position, bool direction, int type);
+  void shoot(phy::Point position, bool direction, int type, int cumulative = 0);
 
 public:
   Manager(Map map);
@@ -71,7 +71,8 @@ public:
 
   void set_chunk(int Chunk);
   int collect_coin(phy::Point player_position);
-  void player_shoot(phy::Point position, bool direction, Gun gun);
+  void player_shoot(phy::Point position, bool direction, Gun gun,
+                    int cumulative = 0);
   void update_entities(int time, phy::Body &player, Statistics &stats);
   void
   draw_entities(Draw *screen); // This method must be called afther set_chunk()

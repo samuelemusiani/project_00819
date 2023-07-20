@@ -128,15 +128,17 @@ int Manager::collect_coin(phy::Point player_position) {
   return (collected_something ? 1 : 0);
 }
 
-void Manager::player_shoot(phy::Point position, bool direction, Gun gun) {
+void Manager::player_shoot(phy::Point position, bool direction, Gun gun,
+                           int cumulative) {
   if (reloading_gun == 0) {
-    this->shoot(position, direction, gun.get_bullet_type());
+    this->shoot(position, direction, gun.get_bullet_type(), cumulative);
 
     this->reloading_gun = gun.get_reloading_time();
   }
 }
 
-void Manager::shoot(phy::Point position, bool direction, int bullet_type) {
+void Manager::shoot(phy::Point position, bool direction, int bullet_type,
+                    int cumulative) {
   position = position + (direction ? phy::Point(1, 0) : phy::Point(-1, 0));
 
   list_bullets tmp = new node_bullet;
@@ -225,9 +227,9 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
 
     if (time % 20 == 0) {
 
-        // The call for bullets_collisions is done twice because the enemies 
-        // position are updated and if we also update the bullets positions in
-        // some cases the bullet will pass the enemy without hitting it
+      // The call for bullets_collisions is done twice because the enemies
+      // position are updated and if we also update the bullets positions in
+      // some cases the bullet will pass the enemy without hitting it
       this->Bullets = bullets_collisions(this->Bullets, stats);
 
       this->reloading_gun = std::max(--this->reloading_gun, 0);
@@ -236,8 +238,12 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
 
       while (tmp != nullptr) {
         phy::Point tmp_pos = tmp->val.get_position();
-        tmp_pos = tmp_pos + (tmp->val.get_direction() ? phy::Point(1, 0)
-                                                      : phy::Point(-1, 0));
+
+        if (tmp->val.get_direction().get_xComponent() > 0)
+          tmp_pos = tmp_pos + phy::Point(1, 0);
+        else
+          tmp_pos = tmp_pos + phy::Point(-1, 0);
+
         tmp->val.set_position(tmp_pos);
         tmp->expiration--;
         tmp = tmp->next;
