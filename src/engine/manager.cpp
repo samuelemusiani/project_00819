@@ -224,6 +224,12 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
     }
 
     if (time % 20 == 0) {
+
+        // The call for bullets_collisions is done twice because the enemies 
+        // position are updated and if we also update the bullets positions in
+        // some cases the bullet will pass the enemy without hitting it
+      this->Bullets = bullets_collisions(this->Bullets, stats);
+
       this->reloading_gun = std::max(--this->reloading_gun, 0);
 
       list_bullets tmp = this->Bullets;
@@ -254,14 +260,14 @@ list_bullets Manager::bullets_collisions(list_bullets p, Statistics &stats) {
         this->map.get_chunk(this->current_chunk).is_there_a_platform(pos);
     // EnemyEnemie collision
     {
-      list_enemies tmp = get_all_enemies_in_chunk(this->current_chunk);
+      list_enemies enemy = get_all_enemies_in_chunk(this->current_chunk);
       bool found = false;
-      while (tmp != nullptr && !found) {
-        if (tmp->val.get_position() == pos && tmp->val.is_alive()) {
-          tmp->val.kill();
+      while (enemy != nullptr && !found) {
+        if (enemy->val.get_position() == pos && enemy->val.is_alive()) {
+          enemy->val.hit(p->val.get_bullet_damage(p->val.get_type()));
           found = true;
         }
-        tmp = tmp->next;
+        enemy = enemy->next;
       }
 
       have_to_go |= found;
