@@ -18,7 +18,7 @@
 #ifndef MAPS_MAP
 #define MAPS_MAP
 
-#define NUM_MAPS 20
+#define NUM_MAPS 10
 
 class Map
 {

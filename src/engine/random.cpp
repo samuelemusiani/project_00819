@@ -38,15 +38,15 @@ int Random::generateChunk(Seed seed, int chunk) {
 	if(chunk == 0)
 	{
 		seedSrand(seed, chunk);
-		return (rand() % 10);
+		return (rand() % NUM_MAPS);
 	}
 	else
 	{
 		int previous = generateChunk(seed,chunk-1);
 		seedSrand(seed,chunk);
-		int random = rand() % 10;
+		int random = rand() % NUM_MAPS;
 		if(random == previous)
-			return (random + 1) % 10;
+			return (random + 1) % NUM_MAPS;
 		else
 			return random;
 	}
