@@ -26,9 +26,9 @@ bool Enemy::can_move(Chunk chunk) {
 
 bool Enemy::is_alive() { return this->_alive; }
 
-void Enemy::hit() {
-  this->_life--;
-  if (this->_life == 0)
+void Enemy::hit(int damage) {
+  this->_life -= damage;
+  if (this->_life <= 0)
     this->kill();
 }
 

@@ -27,7 +27,7 @@ public:
   bool is_alive();
 
   // Hit will decreases the life of the enemy
-  void hit();
+  void hit(int damage = 1);
   // Kill will instantly kills the enemy
   void kill();
   void move();
