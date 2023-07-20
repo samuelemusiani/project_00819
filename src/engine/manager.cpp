@@ -224,6 +224,12 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
     }
 
     if (time % 20 == 0) {
+
+        // The call for bullets_collisions is done twice because the enemies 
+        // position are updated and if we also update the bullets positions in
+        // some cases the bullet will pass the enemy without hitting it
+      this->Bullets = bullets_collisions(this->Bullets, stats);
+
       this->reloading_gun = std::max(--this->reloading_gun, 0);
 
       list_bullets tmp = this->Bullets;
