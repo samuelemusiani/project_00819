@@ -12,15 +12,13 @@
 
 #include "../../etc/logs/logs.hpp"
 
-#define JUMPF (1/(1+m_exp(-0.18 * (cumulative - 8)))*5)
-//#define JUMPF cumulative / (1 + cumulative)
+static double m_exp(double d) {
+	if (d >= 0) return exp(d);
+	else return 1/exp(-d);
+}
 
-double m_exp(double d)
-{
-	if (d >= 0)
-		return exp(d);
-	else
-		return 1/exp(-d);
+static double jump_function(int n) {
+    return (1/(1+m_exp(-0.18 * (n - 8)))*5);
 }
 
 Game::Game()
@@ -135,9 +133,14 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 
 	bool exit = false;
 	this->screen->nodel(true);
-	int cumulative = 0;
-	int count_not_key = 0;
-	int which_key = 0;
+
+	int jump_cumulative = 0;
+	int jump_count_not_key = 0;
+	int jump_which_key = 0;
+
+	int gun_cumulative = 0;
+	int gun_count_not_key = 0;
+	int gun_which_key = 0;
 
 	while (!exit){
         const char* control_keys = this->settings.getControlsKeys();
@@ -150,66 +153,93 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 
 		if (input == control_keys[3] && is_player_on_a_platform) // jump right
 		{
-			which_key = 1;
-			cumulative++;
-			count_not_key = 0;
+			jump_which_key = 1;
+			jump_cumulative++;
+			jump_count_not_key = 0;
 		}
 		else if (input == control_keys[2] && is_player_on_a_platform) // jump left
 		{
-			which_key = 2;
-			cumulative++;
-			count_not_key = 0;
+			jump_which_key = 2;
+			jump_cumulative++;
+			jump_count_not_key = 0;
 		}
 		else if (input == control_keys[4] && is_player_on_a_platform){ // jump vertical
-			which_key = 3;
-			cumulative++;
-			count_not_key = 0;
+			jump_which_key = 3;
+			jump_cumulative++;
+			jump_count_not_key = 0;
 
 		}
 		else
 		{
-			count_not_key++;
-			if(count_not_key > 30)
+			jump_count_not_key++;
+			if(jump_count_not_key > 30)
 			{
-				if (cumulative > 1 && which_key == 1 && is_player_on_a_platform)
+				if (jump_cumulative > 1 && jump_which_key == 1 && is_player_on_a_platform)
 					{
-						player.set_velocity(phy::Vector(JUMPF, 55));
+						player.set_velocity(phy::Vector(jump_function(jump_cumulative), 55));
 						stats.incrementJumps();
 					}
 
-				else if (cumulative > 1 && which_key == 2 && is_player_on_a_platform)
+				else if (jump_cumulative > 1 && jump_which_key == 2 && is_player_on_a_platform)
 					{
-						player.set_velocity(phy::Vector(JUMPF, 125));
+						player.set_velocity(phy::Vector(jump_function(jump_cumulative), 125));
 						stats.incrementJumps();
 					}
 
-				else if (cumulative > 1 && which_key == 3 && is_player_on_a_platform)
+				else if (jump_cumulative > 1 && jump_which_key == 3 && is_player_on_a_platform)
 					{
-						player.set_velocity(phy::Vector(JUMPF, 90));
+						player.set_velocity(phy::Vector(jump_function(jump_cumulative), 90));
 						stats.incrementJumps();
 					}
-				cumulative = 0;
+				jump_cumulative = 0;
 			}
 		
-			if (input == control_keys[0]) // move player left
+			if (input == control_keys[0] && is_player_on_a_platform) // move player left
 			{
-				if(is_player_on_a_platform)
-					player.set_position(player.get_position() - phy::Point(1, 0));
+                player.set_position(player.get_position() - phy::Point(1, 0));
 			}
-			else if (input == control_keys[1]) // move player right
+			else if (input == control_keys[1] && is_player_on_a_platform) // move player right
 			{
-				if(is_player_on_a_platform)
-					player.set_position(player.get_position() + phy::Point(1, 0));
+                player.set_position(player.get_position() + phy::Point(1, 0));
 			}
             else if(input == control_keys[5]) // Shoot left
             {
-                 manager.player_shoot(player.get_position(), false, market.get_current_gun());
+                Gun current_gun = market.get_current_gun();
+
+                // Grenade launcher
+                if(current_gun.get_bullet_type() == 2) {
+                    gun_cumulative++;
+                    gun_which_key = 0;;
+                    gun_count_not_key = 0;
+                } else
+                 manager.player_shoot(player.get_position(), false, current_gun);
             }
             else if(input == control_keys[6]) // Shoot right
             {
-                 manager.player_shoot(player.get_position(), true, market.get_current_gun());
+                Gun current_gun = market.get_current_gun();
+
+                // Grenade launcher
+                if(current_gun.get_bullet_type() == 2) {
+                    gun_cumulative++;
+                    gun_which_key = 0;;
+                    gun_count_not_key = 0;
+                } else
+                 manager.player_shoot(player.get_position(), true, current_gun);
+            } else {
+                gun_count_not_key++;
+                if(gun_count_not_key > 30)
+                {
+                    if (gun_cumulative > 1 && gun_which_key == 0) {
+                        // Spara la granta a sinistra
+                    }
+                    else if (gun_cumulative > 1 && gun_which_key == 1) {
+                        // Spara la granta a destra
+                    }
+                    gun_cumulative = 0;
+                }
             }
-            else if(input == control_keys[7]) // Shoot right
+            
+            if(input == control_keys[7]) // Ability
             {
                 events.make_ability_happen(market.get_current_ability(), manager, player.get_position(), current_chunk);
             }
@@ -291,9 +321,10 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
 		this->screen->drawText(5, 1, nostd::to_string(current_chunk));
 		this->screen->drawText(4, 1, nostd::to_string(player.get_position().get_xPosition()));
 		this->screen->drawText(4, 5, nostd::to_string(player.get_position().get_yPosition()));
-		this->screen->drawText(4, 140, nostd::to_string(JUMPF));
-		//this->screen->drawText(2, 140, nostd::to_string(1+pow(1.1, - cumulative/50)));
-		this->screen->drawText(6, 140, nostd::to_string(cumulative));
+		this->screen->drawText(4, 140, nostd::to_string(jump_function(jump_cumulative)));
+		this->screen->drawText(5, 140, nostd::to_string(jump_function(gun_cumulative)));
+		this->screen->drawText(6, 140, nostd::to_string(jump_cumulative));
+		this->screen->drawText(7, 140, nostd::to_string(gun_cumulative));
 		napms(5);
 
         if(stats.getHearts() <= 0)
