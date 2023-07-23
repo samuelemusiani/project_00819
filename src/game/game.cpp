@@ -50,7 +50,6 @@ void Game::run() {
         switch (sel) {
             case 0: { // The brackets are mandatory in order to call the
                       // destructor of each element when a game finish
-                        setDifficulty();
                         Map map = Map();
                         int current_chunk = 0;
                         phy::Body player = phy::Body(phy::Point(74, 3), phy::Vector(1, -90), phy::Vector(0, 0));
@@ -382,40 +381,6 @@ void Game::resume()
 		}
 	}
 	} while (deleted);
-}
-
-int Game::setDifficulty()
-{
-	this->screen->clearScreen();
-	this->screen->drawCenterText(3, "Select the difficulty");
-	nostd::string options[3] = {"Easy", "Medium", "Hard"};
-	int selected = 0;
-	bool choose = false;
-	while (!choose){
-		for (int i = 0; i < 3; i++)
-		{
-			this->screen->drawSquareAround(options[i], 20, 58 + 15*i);
-		}
-		this->screen->attrOn(COLOR_PAIR(1));
-		this->screen->drawText(20, 58 + 15*selected, options[selected]);
-		this->screen->attrOff(COLOR_PAIR(1));
-
-		switch (this->screen->getinput())
-		{
-			case KEY_LEFT:
-				if (selected == 0) selected = 2;
-				else selected = selected - 1;
-				break;
-			case KEY_RIGHT:
-				if (selected == 2) selected = 0;
-				else selected = selected + 1;
-				break;
-			case 10:
-				choose = true;
-				break;
-		}
-	}
-	return selected;
 }
 
 bool Game::pauseGame(Map& map, int& current_chunk, phy::Body& player, 
