@@ -162,12 +162,12 @@ void Draw::drawEntity(Bullet bullet) {
   if (bullet.get_type() == 0)
     symbol[0] = '-';
   else if (bullet.get_type() == -1) {
-    if (bullet.get_direction().get_xComponent() > 0)
+    if (bullet.get_velocity().get_xComponent() > 0)
       symbol[0] = ')';
     else
       symbol[0] = '(';
   } else if (bullet.get_type() == 1) {
-    if (bullet.get_direction().get_xComponent() > 0)
+    if (bullet.get_velocity().get_xComponent() > 0)
       symbol[0] = '>';
     else
       symbol[0] = '<';

@@ -230,10 +230,12 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
                 if(gun_count_not_key > 30)
                 {
                     if (gun_cumulative > 1 && gun_which_key == 0) {
-                        // Spara la granta a sinistra
+                        Gun current_gun = market.get_current_gun();
+                        manager.player_shoot(player.get_position(), false, current_gun, gun_cumulative);
                     }
                     else if (gun_cumulative > 1 && gun_which_key == 1) {
-                        // Spara la granta a destra
+                        Gun current_gun = market.get_current_gun();
+                        manager.player_shoot(player.get_position(), false, current_gun, gun_cumulative);
                     }
                     gun_cumulative = 0;
                 }

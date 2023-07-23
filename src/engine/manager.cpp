@@ -239,7 +239,7 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
       while (tmp != nullptr) {
         phy::Point tmp_pos = tmp->val.get_position();
 
-        if (tmp->val.get_direction().get_xComponent() > 0)
+        if (tmp->val.get_velocity().get_xComponent() > 0)
           tmp_pos = tmp_pos + phy::Point(1, 0);
         else
           tmp_pos = tmp_pos + phy::Point(-1, 0);

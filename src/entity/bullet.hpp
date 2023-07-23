@@ -6,13 +6,13 @@
 
 class Bullet : public Entity {
 private:
-  phy::Vector _direction;
+  phy::Vector _velocity;
   int _type;
 
 public:
   Bullet(phy::Point p, phy::Vector direction, int type);
 
-  phy::Vector get_direction();
+  phy::Vector get_velocity();
   int get_type();
 
   // This is horrible, but I don't see another SIMPLE way of doin it
