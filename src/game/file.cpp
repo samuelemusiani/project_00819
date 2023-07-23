@@ -83,7 +83,7 @@ bool File::isAlreadySaved(Map m)
 	if(openFile(file,"./save.txt","r"))
 	{
 		nostd::string buff;
-		nostd::string tmp = "Seed: "+nostd::to_string(m.getSeed().getSeed());
+		nostd::string tmp = "Seed: "+nostd::to_string(m.getSeed());
 		bool found = false;
 		while(!found && nostd::getline(file,buff))
 			if(buff == tmp)
@@ -100,7 +100,7 @@ void File::appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::s
 	std::fstream file;
 	if(openFile(file,"./save.txt","app")) {
 		file << "[ Name: " << name 
-             << " ]\nSeed: " << m.getSeed().getSeed() 
+             << " ]\nSeed: " << m.getSeed()
 		     << "\nChunk: " << chunk 
              << "\nPlayerPos: " << pos.get_xPosition() << "," << pos.get_yPosition()
              << "\nLastSave: " << dateAndTime() 
@@ -121,7 +121,7 @@ void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::s
 	{
 		nostd::string buff;
 		bool found=false;
-		nostd::string search = "Seed: "+nostd::to_string(m.getSeed().getSeed());
+		nostd::string search = "Seed: "+nostd::to_string(m.getSeed());
 		while(!found && nostd::getline(file,buff))
 		{
 			tmp << buff << "\n";
@@ -159,7 +159,7 @@ void File::saveMap(Map m, int chunk, phy::Point pos, Statistics stats, nostd::st
 			appendSave(m,chunk,pos, stats, entities, market, "Player"); // this shouldn't happen
 	}
 	else
-		updateSave(m,chunk,pos, stats, market, entities);
+		updateSave(m,chunk,pos, stats, entities, market);
 }
 
 void File::changeName(nostd::string oldName,nostd::string newName)

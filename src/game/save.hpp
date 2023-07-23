@@ -15,7 +15,7 @@ class Save {
     public: 
         void saveNewGame(Map& map, int& chunk, phy::Body& player, 
                 Statistics& stats, Manager& manager, Market& market);
-        void saveGame();
+        void game_saved_banner();
 
         void quitGame(Map& map, int& chunk, phy::Body& player, 
                 Statistics& stats, Manager& manager, Market& market);

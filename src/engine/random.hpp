@@ -8,7 +8,6 @@
 * random.hpp: class that generates random numbers for the map
 */
 
-#include "seed.hpp"
 #include "../maps/map.hpp"
 #include <cstdlib>
 
@@ -22,12 +21,11 @@
 class Random {
 	public:
 		Random();
-		static void seedSrand(Seed seed, int chunk, int offset=1);
-		static int generateEnemies(Seed seed, int chunk);
-		static int generateCoins(Seed seed, int chunk);
-		static int generateChunk(Seed seed, int chunk);
-        static int generateEnemyType(Seed seed,int chunk,int num);
-		static int generateCoinType(Seed seed,int chunk,int num);
+		static void seedSrand(int seed, int chunk, int offset=1);
+		static int generateEnemies(int seed, int chunk);
+		static int generateCoins(int seed, int chunk);
+		static int generateChunk(int seed, int chunk);
+        static int generateEnemyType(int seed,int chunk,int num);
 		static phy::Point generateEnemyPosition(Map map,int chunk,nostd::vector<phy::Point> entityPos);
 		static phy::Point generateCoinPosition(Map map,int chunk,nostd::vector<phy::Point> entityPos);
 		static bool is_there_an_entity(nostd::vector<phy::Point> entityPos,phy::Point pos);

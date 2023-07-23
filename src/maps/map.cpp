@@ -15,12 +15,12 @@
 
 Map::Map() {
 	srand(time(nullptr));
-	this->seed.setSeed(rand());
+	this->seed = rand();
 	initialize_chunks();
 }
 
 Map::Map(int seed) {
-	this->seed.setSeed(seed);
+	this->seed = seed;
 	initialize_chunks();
 }
 
@@ -75,7 +75,7 @@ int Map::getEnemies(int n) {
 	return Random::generateEnemies(this->seed, n);
 }
 
-Seed Map::getSeed()
+int Map::getSeed()
 {
 	return this->seed;
 }
