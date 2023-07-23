@@ -115,7 +115,6 @@ void File::appendSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::s
 void File::updateSave(Map m,int chunk,phy::Point pos, Statistics stats, nostd::string entities, nostd::string market)
 {
 	// the only way to do this is to rewrite the entire file
-	deb::debug("ok");
 	std::fstream file;
 	std::fstream tmp;
 	if(openFile(tmp,"./tmp.txt","w") && openFile(file,"./save.txt","r"))
@@ -160,7 +159,7 @@ void File::saveMap(Map m, int chunk, phy::Point pos, Statistics stats, nostd::st
 			appendSave(m,chunk,pos, stats, entities, market, "Player"); // this shouldn't happen
 	}
 	else
-		updateSave(m,chunk,pos, stats, market, entities);
+		updateSave(m,chunk,pos, stats, entities, market);
 }
 
 void File::changeName(nostd::string oldName,nostd::string newName)

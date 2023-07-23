@@ -4,7 +4,7 @@ void Save::saveNewGame(Map& map, int& chunk, phy::Body& player,
         Statistics& stats, Manager& manager, Market& market){
     bool nosaved = false;
     if (File::isAlreadySaved(map)) {
-        saveGame();
+        this->game_saved_banner();
     }
     else {
         Draw screen(SCREEN_HEIGHT, SCREEN_WIDTH);
@@ -134,7 +134,7 @@ void Save::saveNewGame(Map& map, int& chunk, phy::Body& player,
         File::saveMap(map, chunk, player.get_position(), stats, manager.get_entities_status(), market.get_save(), nome);
 }
 
-void Save::saveGame(){
+void Save::game_saved_banner(){
     Draw local_screen(5, 20);
     local_screen.eraseScreen();
     local_screen.drawBox();
