@@ -129,17 +129,16 @@ int Manager::collect_coin(phy::Point player_position) {
   return (collected_something ? 1 : 0);
 }
 
-void Manager::player_shoot(phy::Point position, phy::Vector velocity, Gun gun,
-                           int cumulative) {
+void Manager::player_shoot(phy::Point position, phy::Vector velocity, Gun gun) {
   if (reloading_gun == 0) {
-    this->shoot(position, velocity, gun.get_bullet_type(), cumulative);
+    this->shoot(position, velocity, gun.get_bullet_type());
 
     this->reloading_gun = gun.get_reloading_time();
   }
 }
 
-void Manager::shoot(phy::Point position, phy::Vector velocity, int bullet_type,
-                    int cumulative) {
+void Manager::shoot(phy::Point position, phy::Vector velocity,
+                    int bullet_type) {
   if (bullet_type != 2) {
     position.set_xPosition(position.get_xPosition() +
                            velocity.get_xComponent());
@@ -157,7 +156,10 @@ void Manager::shoot(phy::Point position, phy::Vector velocity, int bullet_type,
   } else {
     position = position + phy::Point(1, 1);
     list_bullets tmp = new node_bullet;
+
     tmp->val = Bullet(position, velocity, bullet_type);
+    tmp->next = this->Bullets;
+    this->Bullets = tmp;
   }
 }
 
@@ -195,7 +197,7 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
             int distance = epos.get_xPosition() - ppos.get_xPosition();
             if (epos.get_yPosition() == ppos.get_yPosition() &&
                 abs(distance) <= SHOOTING_RADIOUS) {
-              shoot(epos, distance < 0 ? phy::Vector(1, 0) : phy::Vector(-1, 0),
+              shoot(epos, distance < 0 ? phy::Vector(1, 0) : phy::Vector(1, 180),
                     0);
             } else {
               if (tmp->val.can_move(chunk))
@@ -217,7 +219,7 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
               if (abs(distance) <= 3) {
                 tmp->val.kill();
                 this->shoot(epos, phy::Vector(1, 0), -1);
-                this->shoot(epos, phy::Vector(-1, 0), -1);
+                this->shoot(epos, phy::Vector(1, 180), -1);
               } else {
                 tmp->val.set_direction(distance < 0);
 

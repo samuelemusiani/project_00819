@@ -203,7 +203,7 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
                     gun_which_key = 0;
                     gun_count_not_key = 0;
                 } else
-                 manager.player_shoot(player.get_position(), phy::Vector(-1, 0), current_gun);
+                 manager.player_shoot(player.get_position(), phy::Vector(1, 180), current_gun);
             }
             else if(input == control_keys[6]) // Shoot right
             {
@@ -222,11 +222,11 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
                 {
                     if (gun_cumulative > 1 && gun_which_key == 0) {
                         Gun current_gun = market.get_current_gun();
-                        manager.player_shoot(player.get_position(), phy::Vector(-1, 1), current_gun, gun_cumulative);
+                        manager.player_shoot(player.get_position(), phy::Vector(jump_function(gun_cumulative), 55), current_gun);
                     }
                     else if (gun_cumulative > 1 && gun_which_key == 1) {
                         Gun current_gun = market.get_current_gun();
-                        manager.player_shoot(player.get_position(), phy::Vector(1, 0), current_gun, gun_cumulative);
+                        manager.player_shoot(player.get_position(), phy::Vector(jump_function(gun_cumulative), 125), current_gun);
                     }
                     gun_cumulative = 0;
                 }
