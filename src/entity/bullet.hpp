@@ -10,7 +10,7 @@ private:
   int _type;
 
 public:
-  Bullet(phy::Point p, phy::Vector direction, int type);
+  Bullet(phy::Point p, phy::Vector velocity, int type);
 
   phy::Vector get_velocity();
   int get_type();

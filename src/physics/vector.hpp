@@ -31,6 +31,7 @@ namespace phy
 			Vector();
 			Vector(double magnitude);
 			Vector(double magnitude, int alpha);
+			Vector(bool magnitude) = delete;
 
 			void set_magnitude(double magnitude);
 			void set_direction(int alpha);	

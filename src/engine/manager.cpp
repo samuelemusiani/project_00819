@@ -1,4 +1,5 @@
 #include "manager.hpp"
+#include "jump_lib.hpp"
 
 Manager::Manager(Map map)
     : Global_Entities(0), Global_Coins(0), Global_Enemies(0), current_chunk(-1),
@@ -128,27 +129,36 @@ int Manager::collect_coin(phy::Point player_position) {
   return (collected_something ? 1 : 0);
 }
 
-void Manager::player_shoot(phy::Point position, bool direction, Gun gun,
+void Manager::player_shoot(phy::Point position, phy::Vector velocity, Gun gun,
                            int cumulative) {
   if (reloading_gun == 0) {
-    this->shoot(position, direction, gun.get_bullet_type(), cumulative);
+    this->shoot(position, velocity, gun.get_bullet_type(), cumulative);
 
     this->reloading_gun = gun.get_reloading_time();
   }
 }
 
-void Manager::shoot(phy::Point position, bool direction, int bullet_type,
+void Manager::shoot(phy::Point position, phy::Vector velocity, int bullet_type,
                     int cumulative) {
-  position = position + (direction ? phy::Point(1, 0) : phy::Point(-1, 0));
+  if (bullet_type != 2) {
+    position.set_xPosition(position.get_xPosition() +
+                           velocity.get_xComponent());
+    position.set_yPosition(position.get_yPosition() +
+                           velocity.get_yComponent());
 
-  list_bullets tmp = new node_bullet;
-  tmp->val = Bullet(position, direction, bullet_type);
+    list_bullets tmp = new node_bullet;
+    tmp->val = Bullet(position, velocity, bullet_type);
 
-  if (bullet_type == -1)
-    tmp->expiration = 10;
+    if (bullet_type == -1)
+      tmp->expiration = 10;
 
-  tmp->next = this->Bullets;
-  this->Bullets = tmp;
+    tmp->next = this->Bullets;
+    this->Bullets = tmp;
+  } else {
+    position = position + phy::Point(1, 1);
+    list_bullets tmp = new node_bullet;
+    tmp->val = Bullet(position, velocity, bullet_type);
+  }
 }
 
 void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
@@ -185,7 +195,8 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
             int distance = epos.get_xPosition() - ppos.get_xPosition();
             if (epos.get_yPosition() == ppos.get_yPosition() &&
                 abs(distance) <= SHOOTING_RADIOUS) {
-              shoot(epos, distance < 0, 0);
+              shoot(epos, distance < 0 ? phy::Vector(1, 0) : phy::Vector(-1, 0),
+                    0);
             } else {
               if (tmp->val.can_move(chunk))
                 tmp->val.move();
@@ -205,8 +216,8 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
                 distance <= MOVING_RADIOUS) {
               if (abs(distance) <= 3) {
                 tmp->val.kill();
-                this->shoot(epos, true, -1);
-                this->shoot(epos, false, -1);
+                this->shoot(epos, phy::Vector(1, 0), -1);
+                this->shoot(epos, phy::Vector(-1, 0), -1);
               } else {
                 tmp->val.set_direction(distance < 0);
 

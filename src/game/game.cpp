@@ -1,5 +1,4 @@
 #include <unistd.h>
-#include <cmath>
 
 #include "game.hpp"
 #include "menu.hpp"
@@ -9,17 +8,9 @@
 #include "../physics/collisions.hpp"
 #include "../entity/entity.hpp"
 #include "../engine/events.hpp"
+#include "../engine/jump_lib.hpp"
 
 #include "../../etc/logs/logs.hpp"
-
-static double m_exp(double d) {
-	if (d >= 0) return exp(d);
-	else return 1/exp(-d);
-}
-
-static double jump_function(int n) {
-    return (1/(1+m_exp(-0.18 * (n - 8)))*5);
-}
 
 Game::Game()
 {
@@ -209,10 +200,10 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
                 // Grenade launcher
                 if(current_gun.get_bullet_type() == 2) {
                     gun_cumulative++;
-                    gun_which_key = 0;;
+                    gun_which_key = 0;
                     gun_count_not_key = 0;
                 } else
-                 manager.player_shoot(player.get_position(), false, current_gun);
+                 manager.player_shoot(player.get_position(), phy::Vector(-1, 0), current_gun);
             }
             else if(input == control_keys[6]) // Shoot right
             {
@@ -221,21 +212,21 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
                 // Grenade launcher
                 if(current_gun.get_bullet_type() == 2) {
                     gun_cumulative++;
-                    gun_which_key = 0;;
+                    gun_which_key = 1;
                     gun_count_not_key = 0;
                 } else
-                 manager.player_shoot(player.get_position(), true, current_gun);
+                 manager.player_shoot(player.get_position(), phy::Vector(1, 0), current_gun);
             } else {
                 gun_count_not_key++;
                 if(gun_count_not_key > 30)
                 {
                     if (gun_cumulative > 1 && gun_which_key == 0) {
                         Gun current_gun = market.get_current_gun();
-                        manager.player_shoot(player.get_position(), false, current_gun, gun_cumulative);
+                        manager.player_shoot(player.get_position(), phy::Vector(-1, 1), current_gun, gun_cumulative);
                     }
                     else if (gun_cumulative > 1 && gun_which_key == 1) {
                         Gun current_gun = market.get_current_gun();
-                        manager.player_shoot(player.get_position(), false, current_gun, gun_cumulative);
+                        manager.player_shoot(player.get_position(), phy::Vector(1, 0), current_gun, gun_cumulative);
                     }
                     gun_cumulative = 0;
                 }
