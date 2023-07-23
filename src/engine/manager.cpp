@@ -240,9 +240,6 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
       }
     }
 
-    // The call for bullets_collisions is done twice because the enemies
-    // position are updated and if we also update the bullets positions in
-    // some cases the bullet will pass the enemy without hitting it
     this->Bullets = bullets_collisions(this->Bullets, stats);
 
     this->reloading_gun = std::max(--this->reloading_gun, 0);
@@ -285,15 +282,14 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
       }
       tmp = tmp->next;
     }
-
-    this->Bullets = bullets_collisions(this->Bullets, stats);
   }
 }
 
 list_bullets Manager::bullets_collisions(list_bullets p, Statistics &stats) {
-  // Bullets of type 2 have a different collision handler
   if (p != nullptr) {
     bool have_to_go = false;
+
+    // Bullets of type 2 have a different collision handler
     if (p->val.get_type() != 2) {
       phy::Point pos = p->val.get_position();
 
@@ -317,19 +313,13 @@ list_bullets Manager::bullets_collisions(list_bullets p, Statistics &stats) {
         have_to_go |= found;
       }
       // Player collision
-      if (pos == this->player_position) {
-        have_to_go = true;
-
-        if (!this->is_player_invincible) {
-          if (p->val.get_type() == 0)
-            stats.incrementHearts(-1);
-          else if (p->val.get_type() == 1)
-            stats.incrementHearts(-2);
-        }
+      if (pos == this->player_position && !this->is_player_invincible) {
+        have_to_go |= true;
+        stats.incrementHearts(-Bullet::get_bullet_damage(p->val.get_type()));
       }
     }
 
-    have_to_go = p->expiration <= 0;
+    have_to_go |= p->expiration <= 0;
 
     if (have_to_go) {
       list_bullets tmp = p->next;
