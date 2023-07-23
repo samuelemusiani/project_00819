@@ -1,6 +1,7 @@
 #include "manager.hpp"
-#include "jump_lib.hpp"
+#include "../physics/collisions.hpp"
 #include "../physics/constants.hpp"
+#include "jump_lib.hpp"
 
 Manager::Manager(Map map)
     : Global_Entities(0), Global_Coins(0), Global_Enemies(0), current_chunk(-1),
@@ -239,41 +240,39 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
       }
     }
 
-    if (time % 20 == 0) {
+    // The call for bullets_collisions is done twice because the enemies
+    // position are updated and if we also update the bullets positions in
+    // some cases the bullet will pass the enemy without hitting it
+    this->Bullets = bullets_collisions(this->Bullets, stats);
 
-      // The call for bullets_collisions is done twice because the enemies
-      // position are updated and if we also update the bullets positions in
-      // some cases the bullet will pass the enemy without hitting it
-      this->Bullets = bullets_collisions(this->Bullets, stats);
+    this->reloading_gun = std::max(--this->reloading_gun, 0);
 
-      this->reloading_gun = std::max(--this->reloading_gun, 0);
+    list_bullets tmp = this->Bullets;
 
-      list_bullets tmp = this->Bullets;
-
-      while (tmp != nullptr) {
+    while (tmp != nullptr) {
+      if (tmp->val.get_type() != 2 && time % 20 == 0) {
         phy::Point tmp_pos = tmp->val.get_position();
 
         tmp_pos.set_xPosition(tmp_pos.get_xPosition() +
                               tmp->val.get_velocity().get_xComponent());
         tmp_pos.set_yPosition(tmp_pos.get_yPosition() +
                               tmp->val.get_velocity().get_yComponent());
-
-        if (tmp->val.get_type() == 2)
-          tmp->val.set_velocity(tmp->val.get_velocity() +
-                                phy::Vector(phy::GRAVITY_ACCELERATION, -90));
-
-        tmp->val.set_position(tmp_pos);
         tmp->expiration--;
-        tmp = tmp->next;
+        tmp->val.set_position(tmp_pos);
+      } else if (tmp->val.get_type() == 2) {
+        phy::updateWithCollisions(tmp->val, 0.10,
+                                  this->map.get_chunk(this->current_chunk));
       }
-
-      this->Bullets = bullets_collisions(this->Bullets, stats);
+      tmp = tmp->next;
     }
+
+    this->Bullets = bullets_collisions(this->Bullets, stats);
   }
 }
 
 list_bullets Manager::bullets_collisions(list_bullets p, Statistics &stats) {
-  if (p != nullptr) {
+  // Bullets of type 2 have a different collision handler
+  if (p != nullptr && p->val.get_type() != 2) {
     phy::Point pos = p->val.get_position();
 
     bool have_to_go = false;

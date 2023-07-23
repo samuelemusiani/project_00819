@@ -160,6 +160,16 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 	}
 }
 
+void phy::updateWithCollisions(Bullet &bullet, double time, Chunk chunk)
+{
+    phy::Body tmp(bullet.get_precise_position(), bullet.get_velocity(), phy::Vector(phy::GRAVITY_ACCELERATION, -90));
+
+    updateWithCollisions(tmp, time, chunk);
+
+    bullet.set_position(tmp.get_precisePosition());
+    bullet.set_velocity(tmp.get_velocity());
+}
+
 // 0 -> no collision
 // 1 -> basic collision in the x direction (the body moved only on one block)
 // 2 -> basic collision in the y direction (the body moved only on one block)

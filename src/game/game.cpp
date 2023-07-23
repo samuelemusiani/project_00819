@@ -222,11 +222,11 @@ void Game::play(Map& map, int& current_chunk, phy::Body& player, Statistics& sta
                 {
                     if (gun_cumulative > 1 && gun_which_key == 0) {
                         Gun current_gun = market.get_current_gun();
-                        manager.player_shoot(player.get_position(), phy::Vector(jump_function(gun_cumulative), 125), current_gun);
+                        manager.player_shoot(player.get_position(), phy::Vector(jump_function(gun_cumulative), 130), current_gun);
                     }
                     else if (gun_cumulative > 1 && gun_which_key == 1) {
                         Gun current_gun = market.get_current_gun();
-                        manager.player_shoot(player.get_position(), phy::Vector(jump_function(gun_cumulative), 55), current_gun);
+                        manager.player_shoot(player.get_position(), phy::Vector(jump_function(gun_cumulative), 50), current_gun);
                     }
                     gun_cumulative = 0;
                 }

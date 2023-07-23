@@ -16,20 +16,26 @@ phy::PrecisePoint::PrecisePoint() : PrecisePoint(0, 0)
 
 }
 
-phy::PrecisePoint::PrecisePoint(double posX, double posY)
+phy::PrecisePoint::PrecisePoint(double x, double y)
 {
-	this->set_xPosition(posX);
-	this->set_yPosition(posY);
+	this->set_xPosition(x);
+	this->set_yPosition(y);
 }
 
-void phy::PrecisePoint::set_xPosition(double posX)
+phy::PrecisePoint::PrecisePoint(phy::Point p)
 {
-	this->posX = posX;
+	this->set_xPosition(p.get_xPosition());
+	this->set_yPosition(p.get_yPosition());
 }
 
-void phy::PrecisePoint::set_yPosition(double posY)
+void phy::PrecisePoint::set_xPosition(double x)
 {
-	this->posY = posY;
+	this->posX = x;
+}
+
+void phy::PrecisePoint::set_yPosition(double y)
+{
+	this->posY = y;
 }
 
 double phy::PrecisePoint::get_xPosition() 
