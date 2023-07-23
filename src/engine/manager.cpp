@@ -1,5 +1,6 @@
 #include "manager.hpp"
 #include "jump_lib.hpp"
+#include "../physics/constants.hpp"
 
 Manager::Manager(Map map)
     : Global_Entities(0), Global_Coins(0), Global_Enemies(0), current_chunk(-1),
@@ -197,8 +198,8 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
             int distance = epos.get_xPosition() - ppos.get_xPosition();
             if (epos.get_yPosition() == ppos.get_yPosition() &&
                 abs(distance) <= SHOOTING_RADIOUS) {
-              shoot(epos, distance < 0 ? phy::Vector(1, 0) : phy::Vector(1, 180),
-                    0);
+              shoot(epos,
+                    distance < 0 ? phy::Vector(1, 0) : phy::Vector(1, 180), 0);
             } else {
               if (tmp->val.can_move(chunk))
                 tmp->val.move();
@@ -252,10 +253,14 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
       while (tmp != nullptr) {
         phy::Point tmp_pos = tmp->val.get_position();
 
-        if (tmp->val.get_velocity().get_xComponent() > 0)
-          tmp_pos = tmp_pos + phy::Point(1, 0);
-        else
-          tmp_pos = tmp_pos + phy::Point(-1, 0);
+        tmp_pos.set_xPosition(tmp_pos.get_xPosition() +
+                              tmp->val.get_velocity().get_xComponent());
+        tmp_pos.set_yPosition(tmp_pos.get_yPosition() +
+                              tmp->val.get_velocity().get_yComponent());
+
+        if (tmp->val.get_type() == 2)
+          tmp->val.set_velocity(tmp->val.get_velocity() +
+                                phy::Vector(phy::GRAVITY_ACCELERATION, -90));
 
         tmp->val.set_position(tmp_pos);
         tmp->expiration--;

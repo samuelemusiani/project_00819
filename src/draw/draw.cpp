@@ -171,7 +171,9 @@ void Draw::drawEntity(Bullet bullet) {
       symbol[0] = '>';
     else
       symbol[0] = '<';
-  }
+  } else if (bullet.get_type() == 2)
+      symbol[0] = '*';
+
   mvwprintw(this->screen, OFFSET - pos.get_yPosition(), pos.get_xPosition() + 1,
             "%s", symbol);
 }

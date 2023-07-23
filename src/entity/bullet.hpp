@@ -15,6 +15,8 @@ public:
   phy::Vector get_velocity();
   int get_type();
 
+  void set_velocity(phy::Vector velocity);
+
   // This is horrible, but I don't see another SIMPLE way of doin it
   static int get_bullet_damage(int bullet_type);
 };

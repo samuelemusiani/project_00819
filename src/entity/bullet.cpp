@@ -7,6 +7,8 @@ phy::Vector Bullet::get_velocity() { return this->_velocity; }
 
 int Bullet::get_type() { return this->_type; }
 
+void Bullet::set_velocity(phy::Vector velocity) { this->_velocity = velocity; }
+
 int Bullet::get_bullet_damage(int bullet_type) {
   switch (bullet_type) {
   case 0:
