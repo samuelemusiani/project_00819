@@ -1,4 +1,7 @@
 #include "manager.hpp"
+#include "../physics/collisions.hpp"
+#include "../physics/constants.hpp"
+#include "jump_lib.hpp"
 
 Manager::Manager(Map map)
     : Global_Entities(0), Global_Coins(0), Global_Enemies(0), current_chunk(-1),
@@ -128,25 +131,38 @@ int Manager::collect_coin(phy::Point player_position) {
   return (collected_something ? 1 : 0);
 }
 
-void Manager::player_shoot(phy::Point position, bool direction, Gun gun) {
+void Manager::player_shoot(phy::Point position, phy::Vector velocity, Gun gun) {
   if (reloading_gun == 0) {
-    this->shoot(position, direction, gun.get_bullet_type());
+    this->shoot(position, velocity, gun.get_bullet_type());
 
     this->reloading_gun = gun.get_reloading_time();
   }
 }
 
-void Manager::shoot(phy::Point position, bool direction, int bullet_type) {
-  position = position + (direction ? phy::Point(1, 0) : phy::Point(-1, 0));
+void Manager::shoot(phy::Point position, phy::Vector velocity,
+                    int bullet_type) {
+  if (bullet_type != 2) {
+    position.set_xPosition(position.get_xPosition() +
+                           velocity.get_xComponent());
+    position.set_yPosition(position.get_yPosition() +
+                           velocity.get_yComponent());
 
-  list_bullets tmp = new node_bullet;
-  tmp->val = Bullet(position, direction, bullet_type);
+    list_bullets tmp = new node_bullet;
+    tmp->val = Bullet(position, velocity, bullet_type);
 
-  if (bullet_type == -1)
-    tmp->expiration = 10;
+    if (bullet_type == -1)
+      tmp->expiration = 10;
 
-  tmp->next = this->Bullets;
-  this->Bullets = tmp;
+    tmp->next = this->Bullets;
+    this->Bullets = tmp;
+  } else {
+    position = position + phy::Point(1, 1);
+    list_bullets tmp = new node_bullet;
+
+    tmp->val = Bullet(position, velocity, bullet_type);
+    tmp->next = this->Bullets;
+    this->Bullets = tmp;
+  }
 }
 
 void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
@@ -183,7 +199,8 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
             int distance = epos.get_xPosition() - ppos.get_xPosition();
             if (epos.get_yPosition() == ppos.get_yPosition() &&
                 abs(distance) <= SHOOTING_RADIOUS) {
-              shoot(epos, distance < 0, 0);
+              shoot(epos,
+                    distance < 0 ? phy::Vector(1, 0) : phy::Vector(1, 180), 0);
             } else {
               if (tmp->val.can_move(chunk))
                 tmp->val.move();
@@ -203,8 +220,8 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
                 distance <= MOVING_RADIOUS) {
               if (abs(distance) <= 3) {
                 tmp->val.kill();
-                this->shoot(epos, true, -1);
-                this->shoot(epos, false, -1);
+                this->shoot(epos, phy::Vector(1, 0), -1);
+                this->shoot(epos, phy::Vector(1, 180), -1);
               } else {
                 tmp->val.set_direction(distance < 0);
 
@@ -223,68 +240,86 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
       }
     }
 
-    if (time % 20 == 0) {
+    this->Bullets = bullets_collisions(this->Bullets, stats);
 
-        // The call for bullets_collisions is done twice because the enemies 
-        // position are updated and if we also update the bullets positions in
-        // some cases the bullet will pass the enemy without hitting it
-      this->Bullets = bullets_collisions(this->Bullets, stats);
+    this->reloading_gun = std::max(--this->reloading_gun, 0);
 
-      this->reloading_gun = std::max(--this->reloading_gun, 0);
+    list_bullets tmp = this->Bullets;
 
-      list_bullets tmp = this->Bullets;
-
-      while (tmp != nullptr) {
+    while (tmp != nullptr) {
+      if (tmp->val.get_type() != 2 && time % 20 == 0) {
         phy::Point tmp_pos = tmp->val.get_position();
-        tmp_pos = tmp_pos + (tmp->val.get_direction() ? phy::Point(1, 0)
-                                                      : phy::Point(-1, 0));
-        tmp->val.set_position(tmp_pos);
-        tmp->expiration--;
-        tmp = tmp->next;
-      }
 
-      this->Bullets = bullets_collisions(this->Bullets, stats);
+        tmp_pos.set_xPosition(tmp_pos.get_xPosition() +
+                              tmp->val.get_velocity().get_xComponent());
+        tmp_pos.set_yPosition(tmp_pos.get_yPosition() +
+                              tmp->val.get_velocity().get_yComponent());
+        tmp->expiration--;
+        tmp->val.set_position(tmp_pos);
+      } else if (tmp->val.get_type() == 2) {
+        Chunk chunk = this->map.get_chunk(this->current_chunk);
+        phy::updateWithCollisions(tmp->val, 0.10, chunk);
+
+        if (chunk.is_there_a_platform(tmp->val.get_position() -
+                                      phy::Point(0, 1))) {
+          tmp->expiration--;
+
+          if (tmp->expiration <= 0) {
+            this->shoot(tmp->val.get_position() + phy::Point(1, 0),
+                        phy::Vector(2, 0), -1);
+            this->shoot(tmp->val.get_position() - phy::Point(1, 0),
+                        phy::Vector(2, 180), -1);
+
+            this->shoot(tmp->val.get_position() + phy::Point(1, 0),
+                        phy::Vector(1, 0), -1);
+            this->shoot(tmp->val.get_position() - phy::Point(1, 0),
+                        phy::Vector(1, 180), -1);
+
+            this->shoot(tmp->val.get_position(), phy::Vector(1, 0), -1);
+            this->shoot(tmp->val.get_position(), phy::Vector(1, 180), -1);
+          }
+        }
+      }
+      tmp = tmp->next;
     }
   }
 }
 
 list_bullets Manager::bullets_collisions(list_bullets p, Statistics &stats) {
   if (p != nullptr) {
-    phy::Point pos = p->val.get_position();
-
     bool have_to_go = false;
-    // Bullets out of screen
-    have_to_go |= (pos.get_xPosition() < 0 || pos.get_xPosition() > 147);
-    // Platform collision
-    have_to_go |=
-        this->map.get_chunk(this->current_chunk).is_there_a_platform(pos);
-    // Enemies collision
-    {
-      list_enemies enemy = get_all_enemies_in_chunk(this->current_chunk);
-      bool found = false;
-      while (enemy != nullptr && !found) {
-        if (enemy->val.get_position() == pos && enemy->val.is_alive()) {
-          enemy->val.hit(p->val.get_bullet_damage(p->val.get_type()));
-          found = true;
+
+    // Bullets of type 2 have a different collision handler
+    if (p->val.get_type() != 2) {
+      phy::Point pos = p->val.get_position();
+
+      // Bullets out of screen
+      have_to_go |= (pos.get_xPosition() < 0 || pos.get_xPosition() > 147);
+      // Platform collision
+      have_to_go |=
+          this->map.get_chunk(this->current_chunk).is_there_a_platform(pos);
+      // Enemies collision
+      {
+        list_enemies enemy = get_all_enemies_in_chunk(this->current_chunk);
+        bool found = false;
+        while (enemy != nullptr && !found) {
+          if (enemy->val.get_position() == pos && enemy->val.is_alive()) {
+            enemy->val.hit(p->val.get_bullet_damage(p->val.get_type()));
+            found = true;
+          }
+          enemy = enemy->next;
         }
-        enemy = enemy->next;
+
+        have_to_go |= found;
       }
-
-      have_to_go |= found;
-    }
-    // Player collision
-    if (pos == this->player_position) {
-      have_to_go = true;
-
-      if (!this->is_player_invincible) {
-        if (p->val.get_type() == 0)
-          stats.incrementHearts(-1);
-        else if (p->val.get_type() == 1)
-          stats.incrementHearts(-2);
+      // Player collision
+      if (pos == this->player_position && !this->is_player_invincible) {
+        have_to_go |= true;
+        stats.incrementHearts(-Bullet::get_bullet_damage(p->val.get_type()));
       }
     }
 
-    have_to_go |= p->expiration == 0;
+    have_to_go |= p->expiration <= 0;
 
     if (have_to_go) {
       list_bullets tmp = p->next;

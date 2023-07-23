@@ -28,7 +28,7 @@ typedef node_coin *list_coins;
 
 struct node_bullet {
   // Avoid calling the default constructor
-  Bullet val = Bullet(phy::Point(0, 0), false, 0);
+  Bullet val = Bullet(phy::Point(0, 0), phy::Vector(-1, 0), 0);
   // Expiration if 0 make the bullets despawn
   int expiration = 300;
   node_bullet *next;
@@ -63,7 +63,7 @@ private:
   list_bullets bullets_collisions(list_bullets p, Statistics &stats);
   list_bullets delete_all_bullets(list_bullets p);
 
-  void shoot(phy::Point position, bool direction, int type);
+  void shoot(phy::Point position, phy::Vector direction, int type);
 
 public:
   Manager(Map map);
@@ -71,7 +71,7 @@ public:
 
   void set_chunk(int Chunk);
   int collect_coin(phy::Point player_position);
-  void player_shoot(phy::Point position, bool direction, Gun gun);
+  void player_shoot(phy::Point position, phy::Vector direction, Gun gun);
   void update_entities(int time, phy::Body &player, Statistics &stats);
   void
   draw_entities(Draw *screen); // This method must be called afther set_chunk()

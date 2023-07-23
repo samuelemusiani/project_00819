@@ -21,7 +21,7 @@ void Enemy::set_type(int type) { this->_type = type; }
 bool Enemy::can_move(Chunk chunk) {
   phy::Point next_pos =
       this->_direction ? phy::Point(1, -1) : phy::Point(-1, -1);
-  return chunk.is_there_a_platform(this->_position + next_pos);
+  return chunk.is_there_a_platform(this->get_position() + next_pos);
 }
 
 bool Enemy::is_alive() { return this->_alive; }

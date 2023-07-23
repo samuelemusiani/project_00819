@@ -23,9 +23,10 @@ namespace phy
 
 		public:
 			PrecisePoint();
-			PrecisePoint(double posX, double posY);
-			void set_xPosition(double posX);
-			void set_yPosition(double posY);
+			PrecisePoint(double x, double y);
+			PrecisePoint(phy::Point p);
+			void set_xPosition(double x);
+			void set_yPosition(double y);
 			double get_xPosition();
 			double get_yPosition();
 

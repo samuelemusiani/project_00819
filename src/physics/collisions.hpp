@@ -12,11 +12,13 @@
 
 #include "body.hpp"
 #include "../maps/chunk.hpp"
+#include "../entity/bullet.hpp"
 
 #ifndef PHYSICS_COLLISIONS
 #define PHYSICS_COLLISIONS
 namespace phy
 {
 	void updateWithCollisions(phy::Body &body, double time, Chunk chunk);
+	void updateWithCollisions(Bullet &bullet, double time, Chunk chunk);
 }
 #endif

@@ -1,11 +1,13 @@
 #include "bullet.hpp"
 
-Bullet::Bullet(phy::Point p, bool direction, int type)
-    : Entity(p), _direction(direction), _type(type) {}
+Bullet::Bullet(phy::Point p, phy::Vector velocity, int type)
+    : Entity(p), _velocity(velocity), _type(type) {}
 
-bool Bullet::get_direction() { return this->_direction; }
+phy::Vector Bullet::get_velocity() { return this->_velocity; }
 
 int Bullet::get_type() { return this->_type; }
+
+void Bullet::set_velocity(phy::Vector velocity) { this->_velocity = velocity; }
 
 int Bullet::get_bullet_damage(int bullet_type) {
   switch (bullet_type) {

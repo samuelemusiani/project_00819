@@ -119,7 +119,7 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 			// 1 -> basic collision in the x direction 
 			// (the body moved only on one block)
 			case 1:
-				body.set_velocity(phy::Vector(0));
+				body.set_velocity(phy::Vector(0.0));
 				body.set_position(phy::Point(old_xPos, new_yPos));
 				break;
 
@@ -133,7 +133,7 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 				else if (90 < direction && direction < 170)
 					body.set_velocity(phy::Vector(velocity.get_magnitude() / 3, velocity.get_direction() + 90));
 				else
-					body.set_velocity(phy::Vector(0));
+					body.set_velocity(phy::Vector(0.0));
 
 				body.set_position(phy::Point(new_xPos, old_yPos));
 				break;
@@ -158,6 +158,16 @@ void phy::updateWithCollisions(phy::Body &body, double time, Chunk chunk)
 				break;
 		}
 	}
+}
+
+void phy::updateWithCollisions(Bullet &bullet, double time, Chunk chunk)
+{
+    phy::Body tmp(bullet.get_precise_position(), bullet.get_velocity(), phy::Vector(phy::GRAVITY_ACCELERATION, -90));
+
+    updateWithCollisions(tmp, time, chunk);
+
+    bullet.set_position(tmp.get_precisePosition());
+    bullet.set_velocity(tmp.get_velocity());
 }
 
 // 0 -> no collision
@@ -247,7 +257,7 @@ static void borderCollision(phy::Body &body)
 		body.set_position(p);
 
 		// Make the player fall when he touches the wall
-		body.set_velocity(phy::Vector(0));
+		body.set_velocity(phy::Vector(0.0));
 	}
 	else if (x > 147)
 	{
@@ -255,6 +265,6 @@ static void borderCollision(phy::Body &body)
 		body.set_position(p);
 
 		// Make the player fall when he touches the wall
-		body.set_velocity(phy::Vector(0));
+		body.set_velocity(phy::Vector(0.0));
 	}
 }
