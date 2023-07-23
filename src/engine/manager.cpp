@@ -260,8 +260,28 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
         tmp->expiration--;
         tmp->val.set_position(tmp_pos);
       } else if (tmp->val.get_type() == 2) {
-        phy::updateWithCollisions(tmp->val, 0.10,
-                                  this->map.get_chunk(this->current_chunk));
+        Chunk chunk = this->map.get_chunk(this->current_chunk);
+        phy::updateWithCollisions(tmp->val, 0.10, chunk);
+
+        if (chunk.is_there_a_platform(tmp->val.get_position() -
+                                      phy::Point(0, 1))) {
+          tmp->expiration--;
+
+          if (tmp->expiration <= 0) {
+            this->shoot(tmp->val.get_position() + phy::Point(1, 0),
+                        phy::Vector(2, 0), -1);
+            this->shoot(tmp->val.get_position() - phy::Point(1, 0),
+                        phy::Vector(2, 180), -1);
+
+            this->shoot(tmp->val.get_position() + phy::Point(1, 0),
+                        phy::Vector(1, 0), -1);
+            this->shoot(tmp->val.get_position() - phy::Point(1, 0),
+                        phy::Vector(1, 180), -1);
+
+            this->shoot(tmp->val.get_position(), phy::Vector(1, 0), -1);
+            this->shoot(tmp->val.get_position(), phy::Vector(1, 180), -1);
+          }
+        }
       }
       tmp = tmp->next;
     }
@@ -272,42 +292,44 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
 
 list_bullets Manager::bullets_collisions(list_bullets p, Statistics &stats) {
   // Bullets of type 2 have a different collision handler
-  if (p != nullptr && p->val.get_type() != 2) {
-    phy::Point pos = p->val.get_position();
-
+  if (p != nullptr) {
     bool have_to_go = false;
-    // Bullets out of screen
-    have_to_go |= (pos.get_xPosition() < 0 || pos.get_xPosition() > 147);
-    // Platform collision
-    have_to_go |=
-        this->map.get_chunk(this->current_chunk).is_there_a_platform(pos);
-    // Enemies collision
-    {
-      list_enemies enemy = get_all_enemies_in_chunk(this->current_chunk);
-      bool found = false;
-      while (enemy != nullptr && !found) {
-        if (enemy->val.get_position() == pos && enemy->val.is_alive()) {
-          enemy->val.hit(p->val.get_bullet_damage(p->val.get_type()));
-          found = true;
+    if (p->val.get_type() != 2) {
+      phy::Point pos = p->val.get_position();
+
+      // Bullets out of screen
+      have_to_go |= (pos.get_xPosition() < 0 || pos.get_xPosition() > 147);
+      // Platform collision
+      have_to_go |=
+          this->map.get_chunk(this->current_chunk).is_there_a_platform(pos);
+      // Enemies collision
+      {
+        list_enemies enemy = get_all_enemies_in_chunk(this->current_chunk);
+        bool found = false;
+        while (enemy != nullptr && !found) {
+          if (enemy->val.get_position() == pos && enemy->val.is_alive()) {
+            enemy->val.hit(p->val.get_bullet_damage(p->val.get_type()));
+            found = true;
+          }
+          enemy = enemy->next;
         }
-        enemy = enemy->next;
+
+        have_to_go |= found;
       }
+      // Player collision
+      if (pos == this->player_position) {
+        have_to_go = true;
 
-      have_to_go |= found;
-    }
-    // Player collision
-    if (pos == this->player_position) {
-      have_to_go = true;
-
-      if (!this->is_player_invincible) {
-        if (p->val.get_type() == 0)
-          stats.incrementHearts(-1);
-        else if (p->val.get_type() == 1)
-          stats.incrementHearts(-2);
+        if (!this->is_player_invincible) {
+          if (p->val.get_type() == 0)
+            stats.incrementHearts(-1);
+          else if (p->val.get_type() == 1)
+            stats.incrementHearts(-2);
+        }
       }
     }
 
-    have_to_go |= p->expiration == 0;
+    have_to_go = p->expiration <= 0;
 
     if (have_to_go) {
       list_bullets tmp = p->next;
