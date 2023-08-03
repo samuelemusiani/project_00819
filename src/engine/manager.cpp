@@ -132,7 +132,7 @@ int Manager::collect_coin(phy::Point player_position) {
 }
 
 void Manager::player_shoot(phy::Point position, phy::Vector velocity, Gun gun) {
-  if (reloading_gun == 0) {
+  if (this->reloading_gun == 0) {
     this->shoot(position, velocity, gun.get_bullet_type());
 
     this->reloading_gun = gun.get_reloading_time();
@@ -242,7 +242,8 @@ void Manager::update_entities(int time, phy::Body &player, Statistics &stats) {
 
     this->Bullets = bullets_collisions(this->Bullets, stats);
 
-    this->reloading_gun = std::max(--this->reloading_gun, 0);
+    if (time % 30 == 0)
+      this->reloading_gun = std::max(--this->reloading_gun, 0);
 
     list_bullets tmp = this->Bullets;
 
