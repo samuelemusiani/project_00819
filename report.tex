@@ -54,13 +54,14 @@ specifico la suddivisione è stata la seguente:
     dei tasti di gioco, calibrazione della tastiera e altre impostazioni 
     specifiche di minori. Infine la classe \texttt{Statistcs} che si occupa di 
     tenere traccia della vita, delle moenete e in generale delle statiche del 
-    giocatore. (RIGHE: 1196)
+    giocatore. (RIGHE: 1317)
 
   \item \emph{O. Ayache}: Implementazione delle classi \texttt{Screen} e 
     \texttt{Draw} che hanno il compito di nascondere completamente tutte le 
-    funzioni di \texttt{ncurses}\footnote{\texttt{Ncurses} è la libreria esterna usata per gestire la grafica su terminale del gioco} in due semplici e comode 
-    classi in modo che tutte le classi avente necessità di disegnare sullo 
-    schermo potessero semplicemente interfacciarsi a loro, senza usare 
+    funzioni di \texttt{ncurses}\footnote{\texttt{Ncurses} è la libreria esterna 
+    usata per gestire la grafica su terminale del gioco} in due semplici e 
+    comode classi in modo che tutte le classi avente necessità di disegnare 
+    sullo schermo potessero semplicemente interfacciarsi a loro, senza usare 
     direttamente la libreria \texttt{ncurses}. Questo ha permesso di aggiungere 
     un livello di astrazione maggiore che nascondesse l'implementazione a basso 
     livello della libreria. La classe \texttt{Entity} è una generica entità nel
@@ -73,14 +74,14 @@ specifico la suddivisione è stata la seguente:
     \texttt{Events} si occupa della gestione delle e della loro integrazione con
     la partita. (RIGHE: 920)
 
-  \item L. Peronese: Implementazione delle mappe tramite la classe \texttt{Map}
-    insieme alle classi \texttt{Chunk} e \texttt{Platform}. Queste ultime sono
-    frammenti più piccoli che composti formano una mappa infinita  e facilmente 
-    utilizzabile attraverso la classe apposita. Il salvataggio delle partite, 
-    delle impostazioni, come i tasti personalizzati, e la calibrazione è 
-    delegato alla classe \texttt{File}. Questa classe si occupa della effettiva 
-    scrittura su disco ed è quindi invisibile all'utente in quanto chiamata da 
-    altre classi. Inoltre si occupa di leggere i salvataggi quando 
+  \item \emph{L. Peronese}: Implementazione delle mappe tramite la classe 
+    \texttt{Map} insieme alle classi \texttt{Chunk} e \texttt{Platform}. Queste 
+    ultime sono frammenti più piccoli che composti formano una mappa infinita  e 
+    facilmente utilizzabile attraverso la classe apposita. Il salvataggio delle 
+    partite, delle impostazioni, come i tasti personalizzati, e la calibrazione 
+    è delegato alla classe \texttt{File}. Questa classe si occupa della 
+    effettiva scrittura su disco ed è quindi invisibile all'utente in quanto 
+    chiamata da altre classi. Inoltre si occupa di leggere i salvataggi quando 
     il gioco viene riaperto o è necessario caricare una partita precedentemente 
     salvata. La classe \texttt{Random} viene usata come interfaccia dalle altre
     classi in qualsisi momento sia necessario generare numeri casuali per avere
@@ -89,7 +90,29 @@ specifico la suddivisione è stata la seguente:
     libreria di funzioni \texttt{logs} in quanto permettono di scrivere su file 
     stringhe arbitrarie. (RIGHE: 834)
 
-  \item S. Musiani:
+  \item \emph{S. Musiani}: Implementazione della libraria di fisica per la 
+    simulazione di oggetti, gravità, velocità e salti. Distinta del namespace 
+    \texttt{phy} comprende le seguenti classi: \texttt{Point} per rappresentare 
+    un punto su un piano bidimensionale; \texttt{PrecisesPoint} per 
+    rappresentare un punto su un piano bidimensionale il più precisamente 
+    possibile, cioè senza approssimazioni; \texttt{Vector} per la 
+    rappresentazione di un vettore; \texttt{Body} per la simulazione di un 
+    corpo che ha una posizione, una velocità e una accelerazione. Sono inoltre 
+    presenti delle costanti nel file \texttt{constants.hpp}, come 
+    l'accelerazione della gravità in gioco e delle funzioni per simulare le 
+    collisioni tra oggetti nel file \texttt{collisions.cpp}. La scrittura della 
+    classe \texttt{Manager} che tiene traccia e gestisce tutte le entità nel 
+    gioco come monete, proiettili e nemici. Tiene traccia della loro morte, dei 
+    loro movimenti e dei loro comportamenti, anche in relazione al giocatore. 
+    Comunica inoltre con la classe per il salvataggio su file in modo da 
+    memorizzare lo stato delle entità efficientemente.
+
+    Essendo da specifiche proibito l'utilizzo della standar library di \CC\ e in
+    particolare tutte le classi che facilitano l'allocazione di memoria e la 
+    gestione di essa, sono state reimplementate le classi \texttt{string} e 
+    \texttt{vector} in particolare entrambi sotto il namespace \texttt{nostd}. 
+    Esse fanno quello che ci si aspetta e sono una implementazione personale 
+    delle classi di libreria. (RIGHE: 1436)
 \end{itemize}
 
 \section{Scelte implementative}
