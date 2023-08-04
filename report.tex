@@ -1,0 +1,97 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+
+\def\CC{{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\tiny\bf ++}}}
+
+\title{\textbf{Jump king}\\
+\vspace{0.2cm}\normalsize Relazione del progetto per il corso di Programmazione\\
+\normalsize Università di Bologna
+}
+
+\author{
+  E. Argonni,
+  O. Ayache,
+  L. Peronese,
+  S. Musiani
+}
+
+\date{2022 - 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduzione}
+\emph{Jump king} è un gioco platform a scorrimento verticale illimitato 
+in grafica ASCII completamente realizzato in \CC. L'esecuzione del gioco 
+avviene interamente all'interno di un terminale, dove è possibile eseguire tutte
+le azioni necessarie attraverso la tastiera. Sono presenti diversi tipi di 
+nemici e armi, queste ultime acquistabili in un apposito market tramite le 
+monete raccolte durante la partita. Essendo centrale nel gameplay la meccanica 
+di salto, è stata implementata quest'ultima in modo che si possa scegliere, in 
+funzione del tempo di pressione dell'apposito tasto, la forza del salto. È stato
+inoltre previsto un pannello per calibrare la tastiera in modo che l'esperienza
+di gioco sia il più simile possibile su tutti i dispositivi in cui viene 
+giocato.
+
+\section{Spartizione dei ruoli}
+Essendo il progetto sviluppato su più classi, è stato possibile lavorare 
+parallelamente suddividendo il lavoro tra tutti i componenti del gruppo. Nello 
+specifico la suddivisione è stata la seguente:
+\begin{itemize}
+  \item \emph{E. Argonni}: Implementazione della classe \texttt{Game}, ovvero la 
+    classe più importante di tutto il gioco in quanto si interfaccia con tutte 
+    le restanti classi. Grazie ad essa infatti c'è una coesione tra tutte le 
+    porzioni di codice sviluppate separatamente. Al suo interno è possibile 
+    trovare la funzione che contiene il loop principale in cui si  svolge una 
+    partita. \texttt{Menu} è la classe adibita alla gestione del menu iniziale 
+    di gioco ed è inoltre responsabile dell'animazione a inizio gioco.
+    \texttt{Save} è classe che si occupa di interagire con l'utente quando è 
+    necessario salvare una partita. Si occupa però solo dell'aspetto grafico, 
+    mentre la classe che esegue l'effettivo salvataggio su file è differente. 
+    La \texttt{Settings} invece si occupa delle impostazioni: personalizzazzione 
+    dei tasti di gioco, calibrazione della tastiera e altre impostazioni 
+    specifiche di minori. Infine la classe \texttt{Statistcs} che si occupa di 
+    tenere traccia della vita, delle moenete e in generale delle statiche del 
+    giocatore. (RIGHE: 1196)
+
+  \item \emph{O. Ayache}: Implementazione delle classi \texttt{Screen} e 
+    \texttt{Draw} che hanno il compito di nascondere completamente tutte le 
+    funzioni di \texttt{ncurses}\footnote{\texttt{Ncurses} è la libreria esterna usata per gestire la grafica su terminale del gioco} in due semplici e comode 
+    classi in modo che tutte le classi avente necessità di disegnare sullo 
+    schermo potessero semplicemente interfacciarsi a loro, senza usare 
+    direttamente la libreria \texttt{ncurses}. Questo ha permesso di aggiungere 
+    un livello di astrazione maggiore che nascondesse l'implementazione a basso 
+    livello della libreria. La classe \texttt{Entity} è una generica entità nel
+    gioco che grazie all'eredità fornita dal paradigma OOP è la classe padre di
+    \texttt{Enemy}, \texttt{Coin} e \texttt{Bullet} che da sole sono già 
+    autoesplicative. La classe \texttt{Market} si occupa di disegnare tutto il 
+    menu relativo al negozio e di fornire all'utente un metodo facile per 
+    l'acquisto di armi e abilità. Qeueste ultime sono rappresentate grazie a
+    delle classi apposite: \texttt{Gun} e \texttt{Ability}. Infine la classe 
+    \texttt{Events} si occupa della gestione delle e della loro integrazione con
+    la partita. (RIGHE: 920)
+
+  \item L. Peronese: Implementazione delle mappe tramite la classe \texttt{Map}
+    insieme alle classi \texttt{Chunk} e \texttt{Platform}. Queste ultime sono
+    frammenti più piccoli che composti formano una mappa infinita  e facilmente 
+    utilizzabile attraverso la classe apposita. Il salvataggio delle partite, 
+    delle impostazioni, come i tasti personalizzati, e la calibrazione è 
+    delegato alla classe \texttt{File}. Questa classe si occupa della effettiva 
+    scrittura su disco ed è quindi invisibile all'utente in quanto chiamata da 
+    altre classi. Inoltre si occupa di leggere i salvataggi quando 
+    il gioco viene riaperto o è necessario caricare una partita precedentemente 
+    salvata. La classe \texttt{Random} viene usata come interfaccia dalle altre
+    classi in qualsisi momento sia necessario generare numeri casuali per avere
+    un luogo unico dove vengono gestiti i \emph{seed}. Per fare debug, in quanto
+    lo \texttt{stdout} è occupato dalla grafica del gioco, è stata scritta la 
+    libreria di funzioni \texttt{logs} in quanto permettono di scrivere su file 
+    stringhe arbitrarie. (RIGHE: 834)
+
+  \item S. Musiani:
+\end{itemize}
+
+\section{Scelte implementative}
+
+\end{document}
