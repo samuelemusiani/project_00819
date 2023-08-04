@@ -117,5 +117,35 @@ specifico la suddivisione è stata la seguente:
 \end{itemize}
 
 \section{Scelte implementative}
+\subsection{Screen e Draw}
+Per semplificare il più possibile le operazioni di disegno su schermo e in 
+generale tutto quello che riguardasse la grafica sono state create queste due
+classi per nascondere completamente la libreria \texttt{ncurses}. In particolare
+la classe \texttt{Screen} implementa solo le operazioni base che si possono fare
+su uno schermo come inizializzarlo, cancellarlo, impostarne la dimensione ecc.
+La classe è creata in modo che tutte le volte che un oggetto \texttt{Screen} 
+viene creato automaticamente un nuova finestra di \texttt{ncurses} viene 
+allocata.
+
+La classe \texttt{Draw} estende \texttt{Screen} ereditando tutti i metodi base
+per gestire lo schermo, ma implementando a sua volta tutti i metodi necessari 
+per disegnare. In particolare quelli necessari per scrivere a schermo stringhe, 
+interi o semplici caratteri. Vengono inoltre forniti metodi per disegnare figure 
+quali linee e rettangoli. Sono presenti anche i metodi per disegnare la mappa, 
+il giocatore e tutti i tipi di entità quali nemici, proiettili e monete.
+
+\subsection{Market, Ability, Gun e Events}
+Le armi, allo stesso modo delle abilità, sono rappresentate da una classe 
+specifica, rispettivamente \texttt{Gun} e \texttt{Ability}, dove vengono
+differenziate per i parametri al loro intero. Per esempio il nome, il costo e il 
+tempo di ricarica di un'arma. Questo permette di implementare una sola volta 
+tutte le funzioni che necessitano di avere in input armi o abilità e fare i 
+controlli necessari per distinguerle al loro intero.
+
+Eventes è la classe che gestisce le abilità e il loro tempo di ricarica. Queste
+ultime, infatti, dopo essere acquistate rimangono al giocatore, che però le può
+utilizzare solo successivamente a ogni periodo di ricarica. Una barra in alto a
+destra nella schermata di gioco mostra se si può utilizzare l'abilità, se si sta
+scaricando o se si sta caricando.
 
 \end{document}
