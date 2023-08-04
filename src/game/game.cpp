@@ -279,10 +279,6 @@ void Game::play(Map &map, int &current_chunk, phy::Body &player,
       player.set_position(player.get_position() - phy::Point(0, 42));
     }
 
-    /* EVENTS */
-    events.draw(this->screen);
-    events.update(manager);
-
     /* ENTITIES */
     manager.set_chunk(current_chunk);
     manager.update_entities(entity_time, player, stats);

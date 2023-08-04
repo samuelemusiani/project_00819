@@ -1,6 +1,6 @@
 #include "events.hpp"
 
-Events::Events() : _time(0), _start(0), _cooldown(0), _to_draw(nullptr) {}
+Events::Events() : _time(0), _start(0), _cooldown(0) {}
 
 void Events::make_ability_happen(Ability ability, Manager &manager,
                                  phy::Point player_pos, int chunk) {
@@ -113,38 +113,4 @@ void Events::update(Manager &manager) {
   }
 
   this->_time++;
-}
-
-void Events::draw(Draw *screen) {
-  drawable *d = this->_to_draw;
-  int deb_counter = 0;
-  while (d != nullptr) {
-    screen->drawText(OFFSET - d->pos.get_yPosition(),
-                     d->pos.get_xPosition() + 1, d->val);
-    d = d->next;
-    deb_counter++;
-  }
-}
-
-drawable *Events::head_insert(drawable *head, char val, phy::Point pos,
-                              int type) {
-  drawable *tmp = new drawable;
-  tmp->val = val;
-  tmp->pos = pos;
-  tmp->type = type;
-  tmp->next = this->_to_draw;
-  return tmp;
-}
-
-drawable *Events::delete_type(drawable *head, int type) {
-  if (head == nullptr)
-    return head;
-  if (head->type == type) {
-    drawable *tmp = this->delete_type(head->next, type);
-    delete head;
-    return tmp;
-  } else {
-    head->next = delete_type(head->next, type);
-    return head;
-  }
 }
