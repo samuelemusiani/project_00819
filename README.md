@@ -4,14 +4,14 @@
 
 ## Build from source
 
-Il progetto utilizza 'cmake' come sistema di build. La compilazione dovrebbe
+Il progetto utilizza `cmake` come sistema di build. La compilazione dovrebbe
 quindi essere triviale e necessitare solo sei comandi seguenti seguiti nella
-directory 'build/':
+directory `build/`:
 ```sh
 $ cmake ..
 $ make
 ```
-Il progetto fa un uso estensivo della libraria 'ncurses', è perciò necessario
+Il progetto fa un uso estensivo della libraria `ncurses`, è perciò necessario
 installarla con il metodo che si preferisce:
 
 ### MacOS
