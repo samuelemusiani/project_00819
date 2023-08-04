@@ -42,7 +42,7 @@ specifico la suddivisione è stata la seguente:
 \begin{itemize}
   \item \emph{E. Argonni}: Implementazione della classe \texttt{Game}, ovvero la 
     classe più importante di tutto il gioco in quanto si interfaccia con tutte 
-    le restanti classi. Grazie ad essa infatti c'è una coesione tra tutte le 
+    le restanti classi. Grazie a essa infatti c'è una coesione tra tutte le 
     porzioni di codice sviluppate separatamente. Al suo interno è possibile 
     trovare la funzione che contiene il loop principale in cui si  svolge una 
     partita. \texttt{Menu} è la classe adibita alla gestione del menu iniziale 
@@ -50,10 +50,10 @@ specifico la suddivisione è stata la seguente:
     \texttt{Save} è classe che si occupa di interagire con l'utente quando è 
     necessario salvare una partita. Si occupa però solo dell'aspetto grafico, 
     mentre la classe che esegue l'effettivo salvataggio su file è differente. 
-    La \texttt{Settings} invece si occupa delle impostazioni: personalizzazzione 
+    La \texttt{Settings} invece si occupa delle impostazioni: personalizzazione 
     dei tasti di gioco, calibrazione della tastiera e altre impostazioni 
-    specifiche di minori. Infine la classe \texttt{Statistcs} che si occupa di 
-    tenere traccia della vita, delle moenete e in generale delle statiche del 
+    specifiche minori. Infine la classe \texttt{Statistcs} che si occupa di 
+    tenere traccia della vita, delle monete e in generale delle statiche del 
     giocatore. (RIGHE: 1317)
 
   \item \emph{O. Ayache}: Implementazione delle classi \texttt{Screen} e 
@@ -69,7 +69,7 @@ specifico la suddivisione è stata la seguente:
     \texttt{Enemy}, \texttt{Coin} e \texttt{Bullet} che da sole sono già 
     autoesplicative. La classe \texttt{Market} si occupa di disegnare tutto il 
     menu relativo al negozio e di fornire all'utente un metodo facile per 
-    l'acquisto di armi e abilità. Qeueste ultime sono rappresentate grazie a
+    l'acquisto di armi e abilità. Queste ultime sono rappresentate grazie a
     delle classi apposite: \texttt{Gun} e \texttt{Ability}. Infine la classe 
     \texttt{Events} si occupa della gestione delle e della loro integrazione con
     la partita. (RIGHE: 920)
@@ -84,10 +84,10 @@ specifico la suddivisione è stata la seguente:
     chiamata da altre classi. Inoltre si occupa di leggere i salvataggi quando 
     il gioco viene riaperto o è necessario caricare una partita precedentemente 
     salvata. La classe \texttt{Random} viene usata come interfaccia dalle altre
-    classi in qualsisi momento sia necessario generare numeri casuali per avere
+    classi in qualsiasi momento sia necessario generare numeri casuali per avere
     un luogo unico dove vengono gestiti i \emph{seed}. Per fare debug, in quanto
     lo \texttt{stdout} è occupato dalla grafica del gioco, è stata scritta la 
-    libreria di funzioni \texttt{logs} in quanto permettono di scrivere su file 
+    libreria di funzioni \texttt{logs} che permettono di scrivere su file 
     stringhe arbitrarie. (RIGHE: 834)
 
   \item \emph{S. Musiani}: Implementazione della libraria di fisica per la 
@@ -109,10 +109,11 @@ specifico la suddivisione è stata la seguente:
 
     Essendo da specifiche proibito l'utilizzo della standar library di \CC\ e in
     particolare tutte le classi che facilitano l'allocazione di memoria e la 
-    gestione di essa, sono state reimplementate le classi \texttt{string} e 
+    gestione di essa, sono state re-implementate le classi \texttt{string} e 
     \texttt{vector} in particolare entrambi sotto il namespace \texttt{nostd}. 
     Esse fanno quello che ci si aspetta e sono una implementazione personale 
-    delle classi di libreria. (RIGHE: 1436)
+    delle classi di libreria. La classe \texttt{string} è stata realizzata con 
+    \emph{L. Peronese}. (RIGHE: 1436)
 \end{itemize}
 
 \section{Scelte implementative}
