@@ -1,5 +1,5 @@
-#include "entity.hpp"
 #include "../physics/vector.hpp"
+#include "entity.hpp"
 
 #ifndef ENTITY_BULLET
 #define ENTITY_BULLET

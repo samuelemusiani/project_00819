@@ -18,7 +18,7 @@ private:
   int current_hearts;
 
   const nostd::string summenues[MARKET_MAX_SUBMENUS] = {"Guns", "Abilities",
-                                                  "Health"};
+                                                        "Health"};
 
   Gun all_guns[MARKET_MAX_GUN];
   bool guns_bought[MARKET_MAX_GUN];
@@ -46,9 +46,9 @@ private:
                                      "  (__)       ()__________)"};
 
   const nostd::string poison_art[11] = {
-      "     _____",        "    [IIIII]",        "     )\"\"\"(",
-      "    /     \\",      "   /       \\",      "   |`-...-'|",
-      "   |asprin |",      " _ |`-...-'j    _",  "(\\)`-.___.(I) _(/)",
+      "     _____",        "    [IIIII]",       "     )\"\"\"(",
+      "    /     \\",      "   /       \\",     "   |`-...-'|",
+      "   |asprin |",      " _ |`-...-'j    _", "(\\)`-.___.(I) _(/)",
       "  (I)  (/)(I)(\\)", "     (I)        "
 
   };

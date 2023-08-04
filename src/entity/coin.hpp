@@ -4,14 +4,13 @@
 #define ENTITY_COIN
 
 class Coin : public Entity {
-    protected:
-        bool collected;
+protected:
+  bool collected;
 
-    public:
-        Coin(phy::Point p);
+public:
+  Coin(phy::Point p);
 
-        void make_collected();
-        bool is_collected();
-
+  void make_collected();
+  bool is_collected();
 };
 #endif
