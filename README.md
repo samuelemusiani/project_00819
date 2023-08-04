@@ -1,21 +1,33 @@
-# Progetto realizzato per il corso di programamzione
-## by Lollo, Lele, Omar, Samu
+# Jump king
+
+## Progetto realizzato per il corso di Algoritmi
 
 ## Build from source
-Per compilare bisogna essere nella cartella `build/` e dare i comandi
+
+Il progetto utilizza 'cmake' come sistema di build. La compilazione dovrebbe
+quindi essere triviale e necessitare solo sei comandi seguenti seguiti nella
+directory 'build/':
+```sh
+$ cmake ..
+$ make
 ```
-cmake ..
-make
-```
-## MacOS
-Per MacOS installare la libreria ncurses tramite homebrew con il comando
-```
-brew install ncurses
+Il progetto fa un uso estensivo della libraria 'ncurses', è perciò necessario
+installarla con il metodo che si preferisce:
+
+### MacOS
+
+```sh
+$ brew install ncurses
 ```
 
-## Linux
-Per sistemi linux installare la libreria ncurses con il seguente comando
+### Debian
+
+```sh
+$ apt install ncurses-dev
 ```
-Debian based: sudo apt install ncurses-dev
-Arch based: sudo pacman -S ncurses
+
+### Arch
+
+```sh
+$ Arch pacman -S ncurses
 ```
