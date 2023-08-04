@@ -68,5 +68,5 @@ double stod(nostd::string s);
 
 /* Should I put this here? */
 std::istream &getline(std::istream &is, nostd::string &str, char delim = '\n');
-}
+} // namespace nostd
 #endif

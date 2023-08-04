@@ -205,5 +205,5 @@ template <typename T> vector<T> &vector<T>::operator=(const vector<T> &other) {
   }
   return *this;
 }
-}
+} // namespace nostd
 #endif
