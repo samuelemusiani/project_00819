@@ -41,3 +41,6 @@ src/physics/test/TEST
 *.exe
 *.out
 *.app
+
+# Pdf for report
+*.pdf
