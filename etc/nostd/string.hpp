@@ -3,9 +3,6 @@
 
 #ifndef NOSTD_STRING
 #define NOSTD_STRING
-
-#ifndef USE_STD_STRING
-
 namespace nostd {
 class string;
 }
@@ -71,18 +68,5 @@ double stod(nostd::string s);
 
 /* Should I put this here? */
 std::istream &getline(std::istream &is, nostd::string &str, char delim = '\n');
-} // namespace nostd
-
-#else // USO STD COME SUPPORTO
-
-#include <string>
-
-namespace nostd {
-class string : public std::string {
-public:
-  string(const char *pippo);
-};
-} // namespace nostd
-
-#endif
+}
 #endif

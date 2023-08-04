@@ -4,7 +4,6 @@
 #ifndef NOSTD_VECTOR
 #define NOSTD_VECTOR
 
-#ifndef USE_STD_VECTOR
 namespace nostd {
 template <typename T> class vector {
 private:
@@ -206,12 +205,5 @@ template <typename T> vector<T> &vector<T>::operator=(const vector<T> &other) {
   }
   return *this;
 }
-} // namespace nostd
-#else // USO STD COME SUPPORTO
-#include <vector>
-
-namespace nostd {
-template <typename T> class vector : public std::vector<T> {};
-} // namespace nostd
-#endif
+}
 #endif

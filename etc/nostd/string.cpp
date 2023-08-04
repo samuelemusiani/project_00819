@@ -2,8 +2,6 @@
 #include <cmath>
 #include <cstring>
 
-#ifndef USE_STD_STRING
-
 /* PRIVATE */
 
 void nostd::string::clear() {
@@ -333,9 +331,3 @@ std::istream &nostd::getline(std::istream &is, nostd::string &str, char delim) {
 
   return is;
 }
-
-#else
-
-nostd::string::string(const char *pippo) : std::string(pippo) {}
-
-#endif
