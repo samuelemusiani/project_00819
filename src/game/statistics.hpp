@@ -1,3 +1,14 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Argonni Emanuele #0001078626
+ *
+ * statistics.hpp: Class that keep track of the
+ * statistics such as coins and player life
+ */
+
 #ifndef STATISTICS_HPP
 #define STATISTICS_HPP
 

@@ -1,3 +1,14 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Argonni Emanuele #0001078626
+ *
+ * game.cpp: Primary game class that interact with
+ * all other classes
+ */
+
 #include <unistd.h>
 
 #include "file.hpp"

@@ -1,3 +1,13 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Argonni Emanuele #0001078626
+ *
+ * settings.cpp: Class for the settings menu
+ */
+
 #include "settings.hpp"
 #include "../../etc/logs/logs.hpp"
 #include "file.hpp"

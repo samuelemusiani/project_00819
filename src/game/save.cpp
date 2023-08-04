@@ -1,3 +1,13 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Argonni Emanuele #0001078626
+ *
+ * save.cpp: Class for the saving menu
+ */
+
 #include "save.hpp"
 
 void Save::saveNewGame(Map &map, int &chunk, phy::Body &player,

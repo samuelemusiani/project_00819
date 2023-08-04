@@ -1,3 +1,13 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Argonni Emanuele #0001078626
+ *
+ * menu.cpp: Class that draw the main menu
+ */
+
 #include "menu.hpp"
 
 Menu::Menu() {
