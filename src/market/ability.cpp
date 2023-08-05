@@ -1,3 +1,14 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Ayache Omar #0001068895
+ *
+ * ability.cpp: Class that describe
+ * an ability
+ */
+
 #include "ability.hpp"
 #include <cstring>
 

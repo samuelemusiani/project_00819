@@ -1,3 +1,14 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Ayache Omar #0001068895
+ *
+ * enemy.cpp: Class that implements
+ * an enemy extending Entity
+ */
+
 #include "enemy.hpp"
 
 Enemy::Enemy(int type, phy::Point p, bool dir)

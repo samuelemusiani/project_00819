@@ -1,3 +1,14 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Ayache Omar #0001068895
+ *
+ * events.hpp: Class that implements
+ * the abilities in game
+ */
+
 #include "../market/ability.hpp"
 #include "../physics/point.hpp"
 #include "manager.hpp"

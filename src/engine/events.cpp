@@ -1,3 +1,14 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Ayache Omar #0001068895
+ *
+ * events.cpp: Class that implements
+ * the abilities in game
+ */
+
 #include "events.hpp"
 
 Events::Events() : _time(0), _start(0), _cooldown(0) {}

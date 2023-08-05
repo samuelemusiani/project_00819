@@ -1,3 +1,14 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Ayache Omar #0001068895
+ *
+ * screen.hpp: Class that hides ncurses
+ * and implements basic screen operations
+ */
+
 #include <ncurses.h>
 
 #ifndef DRAW_SCREEN

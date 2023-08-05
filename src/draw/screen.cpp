@@ -1,3 +1,14 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Ayache Omar #0001068895
+ *
+ * screen.cpp: Class that hides ncurses
+ * and implements basic screen operations
+ */
+
 #include "screen.hpp"
 #include <locale.h>
 #include <unistd.h>

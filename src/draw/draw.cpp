@@ -1,3 +1,15 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Ayache Omar #0001068895
+ *
+ * draw.cpp: Class to extend Screen and
+ * implement all the methods needed in
+ * order to draw on the screen
+ */
+
 #include "draw.hpp"
 #include <cstring>
 

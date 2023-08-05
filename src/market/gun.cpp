@@ -1,3 +1,13 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Ayache Omar #0001068895
+ *
+ * gun.cpp: Class that describe a gun
+ */
+
 #include "gun.hpp"
 #include <cstring>
 
