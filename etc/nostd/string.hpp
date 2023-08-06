@@ -1,3 +1,15 @@
+/*
+ * Alma Mater Studiorum - University of Bologna
+ * First cycle degree in Computer Science
+ * Computer Programming - 00819
+ *
+ * Author: Musiani Samuele #0001069143
+ * Author: Peronese Lorenzo #0001081726
+ *
+ * string.hpp: Personal implementation of
+ * the C++ standard library's string
+ */
+
 #include <istream>
 #include <ostream>
 
