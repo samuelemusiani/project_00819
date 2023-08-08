@@ -174,4 +174,17 @@ La classe \texttt{Body} è una semplice rappresentazione di un corpo puntiforme
 privo di massa con la capacità di muoversi nello spazio: incorpora quindi tutti 
 i campi necessari per la posizione, velocità e accelerazione.
 
+Le collisioni tra il giocatore e le piattaforme presenti nella mappa sono 
+gestite sempre dalla libraria di fisica. In particolare sono calcolate partendo 
+dalla posizione attuale del giocatore, successivamente si aggiorna la sua 
+posizione in base alla sua velocità e accelerazione. Si esegue quindi un 
+confronto tra la vecchia posizione e la nuova, controllando che nello 
+spostamento il giocatore non abbia colliso con nessun oggetto. Nel caso però una
+collisione si sia verificata, viene spostato il giocatore nel punto della 
+collisione e vengono aggiornate velocità e accelerazione per rendere 
+approssimativamente l'effetto del trasferimento di energia cinetica avvenuto 
+durante la collisione, nonostante il calcolo dell'energia non sia effettivamente
+eseguito.
+
+
 \end{document}
