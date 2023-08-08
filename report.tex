@@ -142,10 +142,36 @@ tempo di ricarica di un'arma. Questo permette di implementare una sola volta
 tutte le funzioni che necessitano di avere in input armi o abilità e fare i 
 controlli necessari per distinguerle al loro intero.
 
-Eventes è la classe che gestisce le abilità e il loro tempo di ricarica. Queste
+Events è la classe che gestisce le abilità e il loro tempo di ricarica. Queste
 ultime, infatti, dopo essere acquistate rimangono al giocatore, che però le può
 utilizzare solo successivamente a ogni periodo di ricarica. Una barra in alto a
 destra nella schermata di gioco mostra se si può utilizzare l'abilità, se si sta
 scaricando o se si sta caricando.
+
+\subsection{Fisica}
+Tutta la libraria di fisica si ragruppa sotto lo stesso \texttt{namespace} 
+denominato \texttt{phy}. Lo scopo di questa libraria è finalizzato soltanto alla
+simulazione dei salti del giocatore e al movimento dei proiettili, soprattutto
+quelli più complessi come quelli prodotti dal \textit{lancia granate}. Sono
+quindi presenti solo gli elementi necessari a simulare il movimento di un punto
+nello spazio dotato di posizione, velocità e accelerazione. La posizione in 
+particolare è rappresentata dalla classe \texttt{Point} e sia la velocità che 
+l'accelerazione, in quanto vettori, vengono rappresentati mediante la classe
+\texttt{Vector}\footnote{Attenzione a non confodersi con i nomi della classi. 
+Quella citata è più precisamente la classe \texttt{phy::Vector}, in quanto 
+esiste anche la re-implementazione del vettore della libreria standar di \CC\ 
+che invece è identificata dal \texttt{namespace nostd}}. Durante i test si è 
+notato però che alcuni oggetti avevano necessità di memorizzare la loro 
+posizione tramite stadi intermedi, senza quindi seguire forzatamente la 
+rappresentazione intera della posizione fornita dalla classe \texttt{Point}. È 
+quindi stata creata una ulteriore classe apposita identificata come 
+\texttt{PrecisesPoint}. Non si è deciso di rimuovere completamente la precedente \texttt{Point} per una questione di ottimizzazione: fornendo una 
+rappresentazione estremamente più precisa della posizione, la classe 
+\texttt{PrecisesPoint} è necessariamente più pesane in memoria e più complessa 
+da gestire. Dove quindi era possibile evitarla si è continuato a fare uso della 
+semplice rappresentazione intera della posizione fornita dalla classe originale.
+La classe \texttt{Body} è una semplice rappresentazione di un corpo puntiforme 
+privo di massa con la capacità di muoversi nello spazio: incorpora quindi tutti 
+i campi necessari per la posizione, velocità e accelerazione.
 
 \end{document}
