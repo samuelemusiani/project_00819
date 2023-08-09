@@ -148,6 +148,42 @@ utilizzare solo successivamente a ogni periodo di ricarica. Una barra in alto a
 destra nella schermata di gioco mostra se si può utilizzare l'abilità, se si sta
 scaricando o se si sta caricando.
 
+
+\subsection{Random}
+Fulcro di questa classe è il \texttt{seed}, ovvero un intero generato 
+casualmente all'avvio di una nuova partita e che viene associato a essa; grazie 
+a questo dato, la classe \texttt{Random} genera l'ordine dei chunk, la posizione 
+delle monete e gli attributi dei nemici utilizzando la generazione di numeri 
+casuali inclusa in \CC. Questo metodo ci garantisce la assoluta unicità di ogni 
+partita e semplifica molto il salvataggio: non è infatti necessario salvare gli
+infiniti valori associati all'ordine dei chunk e alla posizione delle entità, ma 
+sarà sufficiente memorizzare il seed associato alla mappa, in quanto le funzioni 
+pseudocasuali presenti nel linguaggio generano la stessa sequenza di numeri a 
+partire dallo stesso seed.
+
+\subsection{Map, Chunk, Platform}
+Queste tre classi si occupano della gestione della mappa di gioco. La classe 
+\texttt{Platform} definisce una singola piattaforma nel gioco, che possiede come 
+attributi la lunghezza e le coordinate in cui si trova. La classe \texttt{Chunk} 
+invece rappresenta una sezione del livello di gioco e come attributo possiede 
+un vettore di oggetti \texttt{Platform}; la gestione delle collisioni si 
+interfaccia con questa classe per conoscere se in un certo punto c'è una 
+piattaforma. La classe \texttt{Map} infine rappresenta il livello generale del 
+gioco; qui vengono inizializzati i 10 chunk che vengono selezionati in maniera 
+randomica per formare l'infinita mappa di gioco; ogni mappa è caratterizzata da 
+un \texttt{seed} univoco.
+
+\subsection{File}
+La classe \texttt{File} è preposta ad interfacciarsi con i salvataggi, sia dei 
+progressi che delle impostazioni. Nel file \texttt{save.txt} vengono scritti e 
+aggiornati tutti i valori della partita attuale, quindi nome, seed, posizione 
+nella mappa del giocatore, entità, oggetti acquistati nel market e valori delle 
+statistiche; invece, nel file \texttt{settings.txt} vengono memorizzati i tasti
+scelti dal giocatore per i comandi di gioco e le sue preferenze riguardo a 
+volume e sensibilità. Oltre a svolgere la funzione di scrittura, la classe si 
+occupa anche di leggere i file e trasferire i dati alla classe Game per 
+ricaricare impostazioni e salvataggi memorizzati in precedenti partite.
+
 \subsection{Fisica}
 Tutta la libraria di fisica si ragruppa sotto lo stesso \texttt{namespace} 
 denominato \texttt{phy}. Lo scopo di questa libraria è finalizzato soltanto alla
@@ -186,39 +222,5 @@ collisione e vengono aggiornate velocità e accelerazione per rendere
 approssimativamente l'effetto del trasferimento di energia cinetica avvenuto 
 durante la collisione, nonostante il calcolo dell'energia non sia effettivamente
 eseguito.
-
-\subsection{Random}
-Fulcro di questa classe è il \texttt{seed}, ovvero un intero generato casualmente
-all'avvio di una nuova partita e che viene associato ad essa; grazie a questo dato,
-la classe \texttt{Random} genera l'ordine dei chunk, la posizione delle monete e
-gli attributi dei nemici utilizzando la generazione di numeri casuali di C++
-(funzioni \texttt{srand()} e \texttt{rand()}).
-Questo metodo ci garantisce la assoluta randomicità di ogni partita e semplifica
-molto il salvataggio: per salvare questi valori, che sono potenzialmente infiniti,
-sarà sufficiente memorizzare il seed associato alla mappa, perchè dando in input lo
-stesso valore alla funzione \texttt{srand()}, i numeri generati da \texttt{rand()}
-sono sempre gli stessi e la generazione sarà la medesima.
-
-\subsection{Map, Chunk, Platform}
-Queste tre classi si occupano della gestione della mappa di gioco.
-La classe \texttt{Platform} definisce una singola piattaforma nel gioco, che possiede
-come attributi la lunghezza e le coordinate in cui si trova.
-La classe \texttt{Chunk} invece rappresenta una sezione del livello di gioco e come
-attributo possiede un vettore di oggetti \texttt{Platform}; la gestione delle collisioni
-si interfaccia con questa classe per conoscere se in un certo punto c'è una piattaforma.
-La classe \texttt{Map} infine rappresenta il livello generale del gioco; qui vengono
-inizializzati i 10 chunk che vengono selezionati in maniera randomica per formare l'infinita
-mappa di gioco; ogni mappa è caratterizzata da un \texttt{seed} univoco.
-
-\subsection{File}
-La classe \texttt{File} è preposta ad interfacciarsi con i salvataggi, sia dei progressi
-che delle impostazioni.
-Nel file \texttt{save.txt} vengono scritti e aggiornati tutti i valori della partita attuale,
-quindi nome, seed, posizione nella mappa del giocatore, entità, oggetti acquistati nel market
-e valori delle statistiche; invece, nel file \texttt{settings.txt} vengono memorizzati i tasti
-scelti dal giocatore per i comandi di gioco e le sue preferenze riguardo a volume e sensibilità.
-Oltre a svolgere la funzione di scrittura, la classe si occupa anche di leggere i file
-e trasferire i dati alla classe Game per ricaricare impostazioni e salvataggi memorizzati
-in precedenti partite.
 
 \end{document}
