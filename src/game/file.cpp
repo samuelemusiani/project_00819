@@ -30,7 +30,6 @@ void File::initSettings(Settings &sett) {
   if (!exist(file, "./settings.txt")) {
     if (openFile(file, "./settings.txt", "w")) {
       file << "[ KeyBindings ]\n";
-      // TEMPORANEO
       file << sett.getControlsKeys();
       file << "\n\n[ Preferences "
               "]\nCalibration=-1\nVolume=10\nSensitivity=10\n\n";
