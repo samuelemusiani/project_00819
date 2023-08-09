@@ -92,17 +92,17 @@ void Map::initialize_chunks() {
   this->possible_chunks[6].add_platform(phy::Point(22, 33), 21);
   this->possible_chunks[6].add_platform(phy::Point(96, 33), 15);
   this->possible_chunks[6].add_platform(phy::Point(127, 29), 14);
-  this->possible_chunks[6].add_platform(phy::Point(1, 27), 14);
+  this->possible_chunks[6].add_platform(phy::Point(1, 29), 14);
   this->possible_chunks[6].add_platform(phy::Point(96, 24), 15);
-  this->possible_chunks[6].add_platform(phy::Point(20, 21), 19);
+  this->possible_chunks[6].add_platform(phy::Point(20, 24), 19);
   this->possible_chunks[6].add_platform(phy::Point(128, 19), 14);
-  this->possible_chunks[6].add_platform(phy::Point(1, 16), 12);
+  this->possible_chunks[6].add_platform(phy::Point(1, 19), 12);
   this->possible_chunks[6].add_platform(phy::Point(97, 13), 15);
-  this->possible_chunks[6].add_platform(phy::Point(21, 11), 15);
-  this->possible_chunks[6].add_platform(phy::Point(127, 8), 12);
+  this->possible_chunks[6].add_platform(phy::Point(21, 13), 15);
+  this->possible_chunks[6].add_platform(phy::Point(127, 5), 12);
   this->possible_chunks[6].add_platform(phy::Point(1, 5), 13);
-  this->possible_chunks[6].add_platform(phy::Point(0, 1), 40);
-  this->possible_chunks[6].add_platform(phy::Point(96, 1), 43);
+  this->possible_chunks[6].add_platform(phy::Point(0, 3), 40);
+  this->possible_chunks[6].add_platform(phy::Point(96, 3), 43);
 
   // 8th chunk
   this->possible_chunks[7].add_platform(phy::Point(59, 38), 31);
