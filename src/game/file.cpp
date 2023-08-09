@@ -43,7 +43,6 @@ void File::saveSettings(Settings &sett) {
   std::fstream file;
   if (openFile(file, "./settings.txt", "w")) {
     file << "[ KeyBindings ]\n";
-    // TEMPORANEO
     file << sett.getControlsKeys();
 
     file << "\n\n[ Preferences ]\nCalibration=" << sett.getCalibration()
@@ -303,7 +302,6 @@ Statistics File::getStatistics(nostd::string name) {
       for (int i = 0; i < 5; i++)
         nostd::getline(file, buff);
 
-      // I can't think tonight...forgive me
       int pos_space[5];
       int i = 0;
       int k = 0;
