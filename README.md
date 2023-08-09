@@ -1,6 +1,6 @@
 # Jump king
 
-## Progetto realizzato per il corso di Algoritmi
+## Progetto realizzato per il corso di Programmazione
 
 ## Build from source
 
