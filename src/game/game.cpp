@@ -27,9 +27,14 @@ Game::Game() {
   this->screen = new Draw(SCREEN_HEIGHT, SCREEN_WIDTH);
   screen->init();
   File::initSettings(settings);
+
+  this->audio.play_music("music.mp3");
 }
 
-Game::~Game() { delete this->screen; }
+Game::~Game() {
+  delete this->screen;
+  this->audio.stop_music();
+}
 
 void Game::run() {
   Menu menu = Menu();
