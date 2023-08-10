@@ -5,7 +5,8 @@
 
 Manager::Manager(Map map)
     : Global_Entities(0), Global_Coins(0), Global_Enemies(0), current_chunk(-1),
-      Bullets(nullptr), reloading_gun(0), must_stop_time(false) {
+      Bullets(nullptr), reloading_gun(0), must_stop_time(false),
+      is_player_invincible(false) {
   this->map = map;
   this->seed = map.getSeed();
 }
