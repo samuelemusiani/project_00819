@@ -8,6 +8,11 @@ As this project use submodules, in order to clone the full repo you must run:
 $ git clone --recursive https://github.com/musianisamuele/project_00819.git
 ```
 
+## Music
+In order hear the music in game we have to download the file from the binaries
+section on Github and place it in the same directory as the **JumpKing** 
+executable.
+
 ## Build from source
 
 Il progetto utilizza `cmake` come sistema di build. La compilazione dovrebbe
