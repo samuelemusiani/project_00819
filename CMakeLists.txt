@@ -5,6 +5,8 @@ project(
   DESCRIPTION "Game written in c++ for the programming course"
   LANGUAGES C CXX)
 
+set (CMAKE_CXX_STANDARD 14)
+
 add_executable(JumpKing)
 add_subdirectory(src)
 add_subdirectory(etc)
