@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(
     project_00819
-    VERSION 0.0.1
+    VERSION 1.0.0
     DESCRIPTION "Game written in c++ for the programming course"
     LANGUAGES CXX)
 
@@ -37,6 +37,9 @@ file(GLOB_RECURSE ETC_LOGS_FILES etc/logs/*.cpp)
 # NOSTD
 file(GLOB_RECURSE ETC_NOSTD_FILES etc/nostd/*.cpp)
 
+# NOSTD
+file(GLOB_RECURSE ETC_AUDIO_FILES etc/audio/*.cpp)
+
 add_executable(
     game
     src/main.cpp
@@ -48,7 +51,9 @@ add_executable(
     ${ETC_LOGS_FILES}
     ${ETC_NOSTD_FILES}
     ${SRC_ENTITY_FILES}
-    ${SRC_MARKET_FILES})
+    ${SRC_MARKET_FILES}
+    ${ETC_AUDIO_FILES}
+)
 
 target_link_libraries(game ${CURSES_LIBRARIES})
 target_compile_features(game PRIVATE cxx_std_14)
