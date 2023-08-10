@@ -3,15 +3,21 @@
 ## Progetto realizzato per il corso di Programmazione
 
 ## Clone
-As this project use submodules, in order to clone the full repo you must run:
+Il progetto utilizza i sottomoduli di git. È quindi necessario clonare la 
+repository tramite il seguente comando.
 ```sh
 $ git clone --recursive https://github.com/musianisamuele/project_00819.git
 ```
+Se si è già clonata la repository si possono sempre aggiornare i sottomoduli 
+tramite il comando:
+```sh
+git submodule init && git submodule update
+```
 
 ## Music
-In order hear the music in game we have to download the file from the binaries
-section on Github and place it in the same directory as the **JumpKing** 
-executable.
+Nel gioco è presente della musica, che però non è inclusa direttamente con git.
+Essa va scaricata manualmente dalla apposita sezione su Github riguardante i 
+binari.
 
 ## Build from source
 
