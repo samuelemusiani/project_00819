@@ -24,6 +24,8 @@ public:
 
   void play_music(nostd::string path);
   void stop_music();
+
+  void set_volume(int level);
   // bool play_fx(nostd::string s);
   // bool stop();
 };

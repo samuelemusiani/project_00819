@@ -8,7 +8,9 @@
  * settings.hpp: Class for the settings menu
  */
 
+#include "../../etc/audio/audio.hpp"
 #include "../draw/draw.hpp"
+
 #include <ncurses.h>
 #include <string>
 
@@ -59,7 +61,7 @@ public:
   void setVolume(int n);
   void setSensitivity(int n);
 
-  void drawFirstSettings();
+  void drawFirstSettings(Audio &audio);
 };
 
 #endif

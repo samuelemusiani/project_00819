@@ -10,6 +10,10 @@ Audio::Audio() {
     this->_is_engine_inizilized = false;
   } else
     this->_is_engine_inizilized = true;
+
+  result = ma_engine_set_volume(&this->_engine, 0.5);
+  if (result != MA_SUCCESS)
+    deb::debug("Could set engine audio volume");
 }
 
 Audio::~Audio() {
@@ -54,4 +58,16 @@ void Audio::stop_music() {
   deb::debug("Waiting for music thread to stop");
   this->_music_thread.join();
   deb::debug("Music thread stopped");
+}
+
+void Audio::set_volume(int level) {
+  level = std::max(level, 0);
+  level = std::min(level, 20);
+
+  ma_result result;
+  result = ma_engine_set_volume(&this->_engine, level / 20.0);
+
+  if (result != MA_SUCCESS) {
+    deb::debug("Could not change volume level");
+  }
 }

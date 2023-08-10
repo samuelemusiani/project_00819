@@ -26,9 +26,10 @@
 Game::Game() {
   this->screen = new Draw(SCREEN_HEIGHT, SCREEN_WIDTH);
   screen->init();
-  File::initSettings(settings);
+  File::initSettings(this->settings);
 
   this->audio.play_music("music.mp3");
+  audio.set_volume(this->settings.getVolume());
 }
 
 Game::~Game() {
@@ -66,7 +67,7 @@ void Game::run() {
       break;
     }
     case 2: {
-      this->settings.drawFirstSettings();
+      this->settings.drawFirstSettings(this->audio);
       break;
     }
     case 3: {
@@ -490,7 +491,7 @@ bool Game::pauseGame(Map &map, int &current_chunk, phy::Body &player,
       break;
     }
     case 2: {
-      this->settings.drawFirstSettings();
+      this->settings.drawFirstSettings(this->audio);
       break;
     }
     case 3: {

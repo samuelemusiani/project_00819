@@ -40,7 +40,7 @@ void Settings::setControlsKeys(int pos, char val) { this->keybinds[pos] = val; }
 
 void Settings::setControlsKeys(const char *s) { strcpy(this->keybinds, s); }
 
-void Settings::drawFirstSettings() {
+void Settings::drawFirstSettings(Audio &audio) {
   Draw screen(SCREEN_HEIGHT, SCREEN_WIDTH);
   // Variabili interne alla funzione
   int selectedOption = 0;
@@ -90,6 +90,7 @@ void Settings::drawFirstSettings() {
         volume_level += delta;
         volume_level = std::min(20, volume_level);
         volume_level = std::max(0, volume_level);
+        audio.set_volume(volume_level);
       } else if (selectedOption == 3) {
         sensitivity_level += delta;
         sensitivity_level = std::min(20, sensitivity_level);
