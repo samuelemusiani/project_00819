@@ -2,6 +2,23 @@
 
 ## Progetto realizzato per il corso di Programmazione
 
+## Clone
+Il progetto utilizza i sottomoduli di git. È quindi necessario clonare la 
+repository tramite il seguente comando.
+```sh
+$ git clone --recursive https://github.com/musianisamuele/project_00819.git
+```
+Se si è già clonata la repository si possono sempre aggiornare i sottomoduli 
+tramite il comando:
+```sh
+git submodule init && git submodule update
+```
+
+## Music
+Nel gioco è presente della musica, che però non è inclusa direttamente con git.
+Essa va scaricata manualmente dalla apposita sezione su Github riguardante i 
+binari.
+
 ## Build from source
 
 Il progetto utilizza `cmake` come sistema di build. La compilazione dovrebbe

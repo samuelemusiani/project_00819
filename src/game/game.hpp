@@ -24,10 +24,13 @@
 #include "../physics/point.hpp"
 #include "../physics/vector.hpp"
 
+#include "../../etc/audio/audio.hpp"
+
 class Game {
 private:
   Draw *screen;
   Settings settings;
+  Audio audio;
 
 #ifdef USE_HACK
   bool fly = false;

@@ -1,0 +1,3 @@
+[submodule "etc/audio/miniaudio"]
+	path = etc/audio/miniaudio
+	url = https://github.com/musianisamuele/miniaudio.git
