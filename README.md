@@ -22,9 +22,9 @@ binari.
 ## Build from source
 
 Il progetto utilizza `cmake` come sistema di build. La compilazione dovrebbe
-quindi essere triviale e necessitare solo sei comandi seguenti seguiti nella
-directory `build/`:
+quindi essere triviale e necessitare solo dei seguenti comandi:
 ```sh
+$ cd build
 $ cmake ..
 $ make
 ```
