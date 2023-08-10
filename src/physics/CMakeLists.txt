@@ -1,0 +1,13 @@
+add_library(
+  lib_physics
+  body.hpp
+  vector.hpp
+  constants.hpp
+  vector.cpp
+  collisions.hpp
+  collisions.cpp
+  precisePoint.cpp
+  body.cpp
+  point.hpp
+  point.cpp
+  precisePoint.hpp)
