@@ -2,6 +2,12 @@
 
 ## Progetto realizzato per il corso di Programmazione
 
+## Clone
+As this project use submodules, in order to clone the full repo you must run:
+```sh
+$ git clone --recursive https://github.com/musianisamuele/project_00819.git
+```
+
 ## Build from source
 
 Il progetto utilizza `cmake` come sistema di build. La compilazione dovrebbe
