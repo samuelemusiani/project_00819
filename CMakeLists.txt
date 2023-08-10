@@ -9,11 +9,6 @@ add_executable(JumpKing)
 add_subdirectory(src)
 add_subdirectory(etc)
 
-# if(HACK) add_compile_definitions(USE_HACK) endif(HACK)
-#
-# if(STD) add_compile_definitions(USE_STD_VECTOR)
-# add_compile_definitions(USE_STD_STRING) endif(STD)
-#
-# if(STD_VECTOR) add_compile_definitions(USE_STD_VECTOR) endif(STD_VECTOR)
-#
-# if(STD_STRING) add_compile_definitions(USE_STD_STRING) endif(STD_STRING)
+if(HACK)
+  add_compile_definitions(USE_HACK)
+endif(HACK)
