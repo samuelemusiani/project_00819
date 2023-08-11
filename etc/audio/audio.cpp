@@ -13,7 +13,7 @@ Audio::Audio() {
 
   result = ma_engine_set_volume(&this->_engine, 0.5);
   if (result != MA_SUCCESS)
-    deb::debug("Could set engine audio volume");
+    deb::debug("Could not set engine audio volume");
 }
 
 Audio::~Audio() {
@@ -36,7 +36,9 @@ void Audio::_play_music(nostd::string s) {
   if (result != MA_SUCCESS) {
     deb::debug("Could not init the sound from file. This may be due to the "
                "file not be present");
-    deb::debug("Could load: " + s);
+    deb::debug("Could not load: " + s);
+
+    return;
   }
 
   ma_sound_set_looping(&music, MA_TRUE);
@@ -44,6 +46,8 @@ void Audio::_play_music(nostd::string s) {
 
   if (result != MA_SUCCESS) {
     deb::debug("Could not play the sound required");
+
+    return;
   }
 
   while (!this->_need_to_stop_music) {
