@@ -9,4 +9,4 @@ add_subdirectory(maps)
 add_subdirectory(engine)
 add_subdirectory(market)
 
-target_link_libraries(JumpKing lib_physics lib_market)
+target_link_libraries(JumpKing lib_physics)
