@@ -314,19 +314,6 @@ void Game::play(Map &map, int &current_chunk, phy::Body &player,
                            "Ability: " + events.get_indicator());
     this->screen->drawText(1, SCREEN_WIDTH - 11, '|');
 
-    this->screen->drawText(7, 1, market.get_current_ability().get_name());
-    this->screen->drawText(6, 1, market.get_current_gun().get_name());
-    this->screen->drawText(5, 1, nostd::to_string(current_chunk));
-    this->screen->drawText(
-        4, 1, nostd::to_string(player.get_position().get_xPosition()));
-    this->screen->drawText(
-        4, 5, nostd::to_string(player.get_position().get_yPosition()));
-    this->screen->drawText(4, 140,
-                           nostd::to_string(jump_function(jump_cumulative)));
-    this->screen->drawText(5, 140,
-                           nostd::to_string(jump_function(gun_cumulative)));
-    this->screen->drawText(6, 140, nostd::to_string(jump_cumulative));
-    this->screen->drawText(7, 140, nostd::to_string(gun_cumulative));
     napms(5);
 
     if (stats.getHearts() <= 0) {
