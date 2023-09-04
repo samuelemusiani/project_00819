@@ -135,44 +135,46 @@ quali linee e rettangoli. Sono presenti anche i metodi per disegnare la mappa,
 il giocatore e tutti i tipi di entità quali nemici, proiettili e monete.
 
 \subsection{Game}
-La classe principale del videogioco è \texttt{Game}, la quale gestisce l’interazione
-con le altre classi e il flusso complessivo del gioco. La funzione \textsc{run} gestisce 
-il menu principale del gioco e consente all’utente di scegliere tra diverse opzioni 
-come giocare, riprendere una partita salvata, accedere alle impostazioni o uscire dal gioco. 
-La funzione \textsc{play} è responsabile del progresso di gioco e permette l’interazione tra 
-il giocatore, le entità, le piattaforme e le statistiche. Tramite i controlli da tastiera, 
-il giocatore può muoversi, saltare, sparare e accedere al market. La classe gestisce 
-l’aggiornamento della posizione del giocatore e delle entità, la collisione con le piattaforme
-e consente di mettere in pausa il gioco per accedere alle opzioni come le impostazioni, 
-i salvataggi e il market.
+La classe principale del videogioco è \texttt{Game}, la quale gestisce 
+l’interazione con le altre classi e il flusso complessivo del gioco. La funzione 
+\textsc{run} è la prima a essere chiamata e ha il compito di far partire tutto
+il gioco. In particolare esegue il menu principale del gioco che permette 
+all’utente di scegliere tra diverse opzioni come giocare, riprendere una partita salvata, accedere alle impostazioni o uscire dal gioco. La funzione 
+\textsc{play} racchiude il ciclo principale in cui una partita viene svolta. È
+infatti responsabile del progresso di gioco e gestisce l’interazione tra il 
+giocatore, le entità, le piattaforme e le statistiche. Tramite i controlli da 
+tastiera, il giocatore può muoversi, saltare, sparare e accedere al market. 
+La classe gestisce l’aggiornamento della posizione del giocatore e delle entità, la collisione con le piattaforme e consente di mettere in pausa il gioco per 
+accedere alle opzioni come le impostazioni, i salvataggi e il market.
 
 \subsection{Menu}
-La classe \texttt{Menu} gestisce il menu principale del videogioco e contribuisce 
-a creare un’esperienza di gioco coinvolgente sin dai primi istanti di avvio del gioco. 
-È infatti responsabile dell’animazione di intro del gioco e della gestione del menu principale,
-consentendo all’utente di scegliere fra le opzioni disponibili. La funzione getselectedoption()
-in particolare gestisce la navigazione dell’utente all’interno del menu e rende possibile la
-scelta delle opzioni con facilità evidenziando visivamente l’opzione selezionata. 
+La classe \texttt{Menu} gestisce il menu principale del videogioco e 
+contribuisce a creare un’esperienza coinvolgente sin dai primi istanti di avvio. 
+È infatti responsabile dell’animazione di intro del gioco e della gestione del 
+menu principale, consentendo all’utente di scegliere fra le opzioni disponibili.
+La funzione \textsc{getselectedoption} in particolare gestisce la navigazione 
+dell’utente all’interno del menu e rende possibile la scelta delle opzioni con 
+facilità evidenziando visivamente l’opzione selezionata. 
 
 
 \subsection{Statistics}
-La classe \texttt{Statisitcs} fornisce la struttura per la gestione delle statistiche del gioco.
-Permette all’utente, durante l’esecuzione del gioco, di avere un’interfaccia in cui poter controllare 
-in tempo reale le statistiche di gioco, il numero di coins disponibili, la quantità di vite possedute,
-il livello a cui si trova, e il numero totale di salti nelle sessione attuale di gioco. 
-La classe consente l’incremento e il decremento dei singoli valori \textit{coins, hearth, levels}, 
-ma permette anche l’assegnazione diretta di valori personalizzati delle statistiche per consentire
-il caricamento dei salvataggi delle sessioni precedenti.
+La classe \texttt{Statisitcs} fornisce la struttura per la gestione delle 
+statistiche del gioco. Permette all’utente, durante l’esecuzione del gioco, di 
+avere un’interfaccia in cui poter controllare in tempo reale le statistiche di 
+gioco, il numero di monete disponibili, la quantità di vite possedute, il 
+livello a cui si trova e il numero totale di salti effettuati.
 
 \subsection{Settings}
-La classe \texttt{Settings} fornisce un'interfaccia intuitiva per la gestione delle opzioni
-di configurazione del gioco. Consente all’utente di personalizzare la propria esperienza 
-di gioco regolando diversi parametri come la sensibilità del salto, il livello del volume 
-e i tasti di controllo del personaggio. Inoltre, è possibile effettuare la calibrazione 
-della velocità della propria tastiera (frequenza di ripetizione). Grazie all’interfaccia 
-grafica l’utente può navigare fra le varie opzioni utilizzando l’input da tastiera. 
-Una volta che l’utente ha effettuato le modifiche desiderate ed è uscito dalle impostazioni, 
-le preferenze vengono automaticamente salvate e memorizzate per le sessioni di gioco successive.
+La classe \texttt{Settings} fornisce un'interfaccia intuitiva per la gestione 
+delle opzioni di configurazione del gioco. Consente all’utente di personalizzare 
+la propria esperienza regolando diversi parametri come la sensibilità del salto, 
+il volume della musica e i tasti di controllo del personaggio. Inoltre, è 
+possibile effettuare la calibrazione della velocità della propria tastiera con 
+cui viene ricaricata la forza di un salto. Grazie all’interfaccia grafica 
+l’utente può navigare tra le varie opzioni utilizzando input da tastiera. Una 
+volta che l’utente ha effettuato le modifiche desiderate ed è uscito dalle 
+impostazioni, modifiche vengono automaticamente salvate e memorizzate per le 
+sessioni di gioco successive.
 
 \subsection{Market, Ability, Gun e Events}
 Le armi, allo stesso modo delle abilità, sono rappresentate da una classe 
