@@ -33,7 +33,8 @@
 #define DRAW_DRAW
 
 class Draw : public Screen {
-private:
+private: 
+  int playerColor = 0;
   void drawPlatform(nostd::vector<Platform> plat);
 
 public:
@@ -71,6 +72,7 @@ public:
   void drawEntity(Coin coint);
   void drawEntity(Bullet bullet);
 
+  void setPlayerColor(int color);
   void drawStats(Statistics stats);
   void deleteStats();
 };

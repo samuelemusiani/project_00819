@@ -15,17 +15,14 @@
 
 Draw::Draw(int height, int width, int posY, int posX)
     : Screen(height, width, posY, posX) {
-
+  // Coore utilizzato nel menu per i bottoni
   init_pair(1, COLOR_WHITE, COLOR_BLUE);
-  init_pair(2, COLOR_GREEN, COLOR_BLACK);
-
-  init_pair(3, COLOR_WHITE, COLOR_BLACK);
-  init_pair(4, COLOR_RED, COLOR_BLACK);
-  init_pair(5, COLOR_CYAN, COLOR_BLACK);
-  init_pair(6, COLOR_GREEN, COLOR_BLACK);
-  init_pair(7, COLOR_YELLOW, COLOR_BLACK);
-  init_pair(8, COLOR_MAGENTA, COLOR_BLACK);
-  init_pair(9, COLOR_BLUE, COLOR_BLACK);
+  // colori per la piattaforme
+  init_pair(2, COLOR_RED, COLOR_BLACK);
+  init_pair(3, COLOR_BLUE, COLOR_BLACK);
+  init_pair(4, COLOR_CYAN, COLOR_BLACK);
+  init_pair(5, COLOR_MAGENTA, COLOR_BLACK);
+  init_pair(6, COLOR_YELLOW, COLOR_BLACK);
 }
 
 void Draw::drawText(int posY, int posX, nostd::string s) {
@@ -141,8 +138,10 @@ void Draw::drawMap(Map map, int nChunk) {
 }
 
 void Draw::drawPlayer(phy::Point p) {
+  attrOn(COLOR_PAIR(playerColor));
   mvwprintw(this->screen, OFFSET - p.get_yPosition(), p.get_xPosition() + 1,
             "@");
+  attrOff(COLOR_PAIR(playerColor));
 }
 
 void Draw::drawEntity(Entity entity) {
@@ -209,10 +208,16 @@ void Draw::deleteStats() {
 }
 
 void Draw::drawPlatform(nostd::vector<Platform> plat) {
+  
+  int num = rand() % 5 +2;
   for (int i = 0; i < plat.size(); i++) {
     for (int j = 0; j < plat[i].get_length(); j++) {
+      attrOn(COLOR_PAIR(num));
       mvwprintw(this->screen, OFFSET - plat[i].get_position().get_yPosition(),
                 plat[i].get_position().get_xPosition() + j + 1, "=");
+      attrOff(COLOR_PAIR(num));
     }
   }
 }
+
+void Draw::setPlayerColor(int color) { this -> playerColor = color; }
