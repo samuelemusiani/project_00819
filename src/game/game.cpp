@@ -292,7 +292,6 @@ void Game::play(Map &map, int &current_chunk, phy::Body &player,
       player.set_position(player.get_position() + phy::Point(0, 42));
     } else if (player.get_position().get_yPosition() >= 42) {
       current_chunk++;
-      srand(time(NULL));
       stats.setLevel(current_chunk);
       player.set_position(player.get_position() - phy::Point(0, 42));
     }

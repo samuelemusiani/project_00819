@@ -22,8 +22,8 @@ private:
   nostd::string controls[8] = {
       "Move left: ",     "Move right: ", "Jump left: ",   "Jump right: ",
       "Jump vertical: ", "Shoot left: ", "Shoot right: ", "Special: "};
-  nostd::string options[5] = {"Controls", "Calibration", "Audio",
-                              "Sensibility", "Player color"};
+  nostd::string options[4] = {"Controls", "Calibration", "Audio",
+                              "Sensibility"};
 
   // It's a string for semplicity in I/O. The last char is \0
   char keybinds[9];

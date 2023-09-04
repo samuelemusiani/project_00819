@@ -138,10 +138,8 @@ void Draw::drawMap(Map map, int nChunk) {
 }
 
 void Draw::drawPlayer(phy::Point p) {
-  attrOn(COLOR_PAIR(playerColor));
   mvwprintw(this->screen, OFFSET - p.get_yPosition(), p.get_xPosition() + 1,
             "@");
-  attrOff(COLOR_PAIR(playerColor));
 }
 
 void Draw::drawEntity(Entity entity) {
@@ -208,8 +206,7 @@ void Draw::deleteStats() {
 }
 
 void Draw::drawPlatform(nostd::vector<Platform> plat) {
-  
-  int num = rand() % 5 +2;
+  int num = rand() % 5 + 2;
   for (int i = 0; i < plat.size(); i++) {
     for (int j = 0; j < plat[i].get_length(); j++) {
       attrOn(COLOR_PAIR(num));
@@ -219,5 +216,3 @@ void Draw::drawPlatform(nostd::vector<Platform> plat) {
     }
   }
 }
-
-void Draw::setPlayerColor(int color) { this -> playerColor = color; }

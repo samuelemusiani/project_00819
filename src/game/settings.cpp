@@ -51,7 +51,7 @@ void Settings::drawFirstSettings(Audio &audio) {
 
     // Disegno le opzioni
     screen.drawCenterText(3, "Settings");
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 4; i++) {
       screen.drawText(10 + 3 * i, 45, options[i]);
     }
 
@@ -71,11 +71,6 @@ void Settings::drawFirstSettings(Audio &audio) {
       screen.drawText(16 + i * 3, 65 + 21, "]");
     }
 
-    
-    screen.attrOn(COLOR_PAIR(player_color));
-    screen.drawText(22, 75, "@");
-    screen.attrOff(COLOR_PAIR(player_color));
-
     screen.refreshScreen();
 
     int input = screen.getinput();
@@ -85,7 +80,7 @@ void Settings::drawFirstSettings(Audio &audio) {
     else if (input == KEY_DOWN) {
       // 3 Rapprenta il numero di opzioni (4 - 1). Andrebbe in una variabile a
       // parte
-      selectedOption = std::min(4, selectedOption + 1);
+      selectedOption = std::min(3, selectedOption + 1);
     } else if (input == KEY_LEFT || input == KEY_RIGHT) {
       int delta = input == KEY_LEFT ? -1 : 1;
 
@@ -101,11 +96,6 @@ void Settings::drawFirstSettings(Audio &audio) {
         sensitivity_level = std::min(20, sensitivity_level);
         sensitivity_level = std::max(0, sensitivity_level);
       }
-      else if (selectedOption == 4){
-        player_color += delta;
-        player_color = std::min(6 , player_color);
-        player_color = std::max(0, player_color);
-      }
     } else if (input == 10) {
       if (selectedOption == 0)
         this->ControlKeys(&screen);
@@ -116,7 +106,6 @@ void Settings::drawFirstSettings(Audio &audio) {
 
       // In realtà andrebbe fatto un check se le impostazioni
       // sono state salvate e quindi aggiungere un tastos
-      screen.setPlayerColor(player_color);
       File::saveSettings(*this);
       saved = true;
     }
