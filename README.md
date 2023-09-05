@@ -25,8 +25,7 @@ Il progetto utilizza `cmake` come sistema di build. La compilazione dovrebbe
 quindi essere triviale e necessitare solo dei seguenti comandi:
 ```sh
 $ cd build
-$ cmake ..
-$ make
+$ cmake .. $ make
 ```
 Il progetto fa un uso estensivo della libraria `ncurses`, è perciò necessario
 installarla con il metodo che si preferisce:
@@ -50,6 +49,10 @@ $ Arch pacman -S ncurses
 ```
 
 ## Comandi di gioco
+Di seguito sono riportati i comandi predefini di gioco. Si noti che è sempre
+possibile personalizzarli entrando nello specifico menù che si trova nelle
+impostazioni.
+
 - `s`: Muove il giocatore a sinistra
 - `d`: Muove il giocatore a destra
 - `a`: Salto a sinistra
