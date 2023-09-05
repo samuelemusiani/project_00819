@@ -48,3 +48,13 @@ $ apt install ncurses-dev
 ```sh
 $ Arch pacman -S ncurses
 ```
+
+## Comandi di gioco
+- `s`: Muove il giocatore a sinistra
+- `d`: Muove il giocatore a destra
+- `a`: Salto a sinistra
+- `f`: Salta a destra
+- `w`: Sparo a sinistra
+- `e`: Sparo a destra
+- `m`: Abilità
+- `ESC`: Mette in pausa il gioco
