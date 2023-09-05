@@ -11,7 +11,7 @@ $ git clone --recursive https://github.com/musianisamuele/project_00819.git
 Se si è già clonata la repository si possono sempre aggiornare i sottomoduli 
 tramite il comando:
 ```sh
-git submodule init && git submodule update
+$ git submodule init && git submodule update
 ```
 
 ## Music
