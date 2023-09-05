@@ -1,4 +1,4 @@
-# Jump king
+# Only jump
 
 ## Progetto realizzato per il corso di Programmazione
 

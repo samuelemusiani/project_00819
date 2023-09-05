@@ -1,5 +1,5 @@
 target_sources(
-  JumpKing
+  OnlyJump
   PUBLIC manager.cpp
          events.hpp
          events.cpp

@@ -1,5 +1,5 @@
 target_sources(
-  JumpKing
+  OnlyJump
   PUBLIC enemy.hpp
          bullet.hpp
          coin.hpp

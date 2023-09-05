@@ -1,5 +1,5 @@
 target_sources(
-  JumpKing
+  OnlyJump
   PUBLIC credits.cpp
          credits.hpp
          file.cpp

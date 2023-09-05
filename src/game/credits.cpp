@@ -19,7 +19,7 @@ int Credits::drawCredits(Draw *screen) {
   nostd::string developers[4] = {"@SuperMitic", "@musianisamuele",
                                  "@lorenzoperonese", "@Jabbar03"};
   nostd::string creditstext[6] = {
-      "JumpKing Game",
+      "OnlyJump Game",
       "Alma Mater Studiorum Bologna University: project-00819",
       "This game has been developed",
       "in the year 2023 by",
