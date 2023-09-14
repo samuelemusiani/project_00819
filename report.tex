@@ -52,7 +52,7 @@ specifico la suddivisione è stata la seguente:
     mentre la classe che esegue l'effettivo salvataggio su file è differente. 
     La \texttt{Settings} invece si occupa delle impostazioni: personalizzazione 
     dei tasti di gioco, calibrazione della tastiera e altre impostazioni 
-    specifiche minori. Infine la classe \texttt{Statistcs} che si occupa di 
+    specifiche minori. Infine la classe \texttt{Statistics} che si occupa di 
     tenere traccia della vita, delle monete e in generale delle statiche del 
     giocatore.
 
@@ -65,7 +65,7 @@ specifico la suddivisione è stata la seguente:
     direttamente la libreria \texttt{ncurses}. Questo ha permesso di aggiungere 
     un livello di astrazione maggiore che nascondesse l'implementazione a basso 
     livello della libreria. La classe \texttt{Entity} è una generica entità nel
-    gioco che grazie all'eredità fornita dal paradigma OOP è la classe padre di
+    gioco che grazie all'ereditarietà fornita dal paradigma OOP è la classe padre di
     \texttt{Enemy}, \texttt{Coin} e \texttt{Bullet} che da sole sono già 
     autoesplicative. La classe \texttt{Market} si occupa di disegnare tutto il 
     menu relativo al negozio e di fornire all'utente un metodo facile per 
@@ -184,7 +184,7 @@ specifica, rispettivamente \texttt{Gun} e \texttt{Ability}, dove vengono
 differenziate per i parametri al loro intero. Per esempio il nome, il costo e il 
 tempo di ricarica di un'arma. Questo permette di implementare una sola volta 
 tutte le funzioni che necessitano di avere in input armi o abilità e fare i 
-controlli necessari per distinguerle al loro intero.
+controlli necessari per distinguerle al loro interno.
 
 Events è la classe che gestisce le abilità e il loro tempo di ricarica. Queste
 ultime, infatti, dopo essere acquistate rimangono al giocatore, che però le può
@@ -230,7 +230,7 @@ ricaricare impostazioni e salvataggi memorizzati in precedenti partite.
 
 \subsection{Fisica}
 Tutta la libraria di fisica si ragruppa sotto lo stesso \texttt{namespace} 
-denominato \texttt{phy}. Lo scopo di questa libraria è finalizzato soltanto alla
+denominato \texttt{phy}. Lo scopo di questa libreria è finalizzato soltanto alla
 simulazione dei salti del giocatore e al movimento dei proiettili, soprattutto
 quelli più complessi come quelli prodotti dal \textit{lancia granate}. Sono
 quindi presenti solo gli elementi necessari a simulare il movimento di un punto

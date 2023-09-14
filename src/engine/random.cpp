@@ -16,7 +16,6 @@
 Random::Random() {}
 
 void Random::seedSrand(int seed, int chunk, int offset) {
-  ;
   srand(seed + chunk * offset);
 }
 

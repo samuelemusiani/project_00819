@@ -45,11 +45,11 @@ $ apt install ncurses-dev
 ### Arch
 
 ```sh
-$ Arch pacman -S ncurses
+$ pacman -S ncurses
 ```
 
 ## Comandi di gioco
-Di seguito sono riportati i comandi predefini di gioco. Si noti che è sempre
+Di seguito sono riportati i comandi predefiniti di gioco. Si noti che è sempre
 possibile personalizzarli entrando nello specifico menù che si trova nelle
 impostazioni.
 
