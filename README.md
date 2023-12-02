@@ -25,7 +25,8 @@ Il progetto utilizza `cmake` come sistema di build. La compilazione dovrebbe
 quindi essere triviale e necessitare solo dei seguenti comandi:
 ```sh
 $ cd build
-$ cmake .. $ make
+$ cmake .. 
+$ make
 ```
 Il progetto fa un uso estensivo della libraria `ncurses`, è perciò necessario
 installarla con il metodo che si preferisce:
