@@ -6,7 +6,7 @@
 Il progetto utilizza i sottomoduli di git. È quindi necessario clonare la 
 repository tramite il seguente comando.
 ```sh
-$ git clone --recursive https://github.com/musianisamuele/project_00819.git
+$ git clone --recursive https://github.com/samuelemusiani/project_00819.git
 ```
 Se si è già clonata la repository si possono sempre aggiornare i sottomoduli 
 tramite il comando:

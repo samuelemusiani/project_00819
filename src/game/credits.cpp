@@ -16,7 +16,7 @@ int Credits::drawCredits(Draw *screen) {
 
   screen->clearScreen();
 
-  nostd::string developers[4] = {"@SuperMitic", "@musianisamuele",
+  nostd::string developers[4] = {"@SuperMitic", "@samuelemusiani",
                                  "@lorenzoperonese", "@Jabbar03"};
   nostd::string creditstext[6] = {
       "OnlyJump Game",
@@ -122,9 +122,9 @@ void Credits::openGithub(int developer) {
     break;
   case 1:
 #ifdef __APPLE__
-    system("open https://github.com/musianisamuele");
+    system("open https://github.com/samuelemusiani");
 #elif __linux__
-    system("xdg-open https://github.com/musianisamuele");
+    system("xdg-open https://github.com/samuelemusiani");
 #endif
     break;
   case 2:
